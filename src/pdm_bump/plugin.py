@@ -41,10 +41,10 @@ class BumpCommand(BaseCommand):
                     elif options.pre in ["rc", "c"]:
                         next_version = version.next_release_candidate()
                     else:
-                        log(termui.red("E1"))
+                        log(termui.red("Invalid pre-release: {}. Must be one of alpha, beta, rc or c".format(options.pre)))
                         return
                 else:
-                    log(termui.red("E2"))
+                    log(termui.red("No pre-release kind set. Please provide one of the following values: alpha, beta, rc, c"))
                     return
             elif "no-pre-release" == options.what:
                 next_version = Version("{major}.{minor}.{micro}".format(
@@ -53,17 +53,17 @@ class BumpCommand(BaseCommand):
                     micro=version.micro
                 ))
             else:
-                log(termui.red("E3"))
+                log(termui.red("Invalid version part to bump: {}. Must be one of major, minor, micro, pre-release or no-prerelease.".format(options.what)))
                 return
         
         else:
-            log(termui.red("E4"))
+            log(termui.red("No version part to bump set. Please provide on of the following values: major, minor, micro, pre-release or no-prerelease"))
             return
 
         if next_version is not None:
             project.pyproject["project"]["version"] = str(next_version)
             project.write_pyproject(True)
         else:
-            return log(termui.red("E5"))
+            log(termui.red("Failed to update version: No version set in pyproject.toml"))
             return
 
