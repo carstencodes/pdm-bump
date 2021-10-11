@@ -31,6 +31,10 @@ class Config:
         config: dict[str, Any] = self.__project.pyproject
         return _get_config_value(config, *keys)
 
+    def get_config_value(self, *keys: str) -> Optional[Any]:
+        config: dict[str, Any] = self.__project.config
+        return _get_config_value(config, *keys)
+
     def set_pyproject_value(self, value: Any, *keys: str) -> None:
         config: dict[str, Any] = self.__project.pyproject
         _set_config_value(config, value, *keys)
