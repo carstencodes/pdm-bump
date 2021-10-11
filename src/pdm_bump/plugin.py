@@ -1,10 +1,43 @@
 from argparse import ArgumentParser, Namespace
-from typing import Optional, cast
+from typing import Optional, Union, cast
 from pdm.cli.commands.base import BaseCommand
 from pdm import termui
 from pdm.core import Project
 from pep440_version_utils import Version
 from .config import Config
+
+def _do_bump(version: Version, what: Optional[str], pre: Optional[str]) -> Union[Version, str]:
+    if what is not None:
+        if "major" == what:
+            return version.next_major()
+        elif "minor" == what:
+            return version.next_minor()
+        elif "micro" == what:
+            return version.next_micro()
+        elif "pre-release" == what:
+            if pre is not None:
+                if "alpha" == pre:
+                    return version.next_alpha()
+                elif "beta" == pre:
+                    return version.next_beta()
+                elif pre in ["rc", "c"]:
+                    return version.next_release_candidate()
+                else:
+                    return "Invalid pre-release: {}. Must be one of alpha, beta, rc or c".format(pre)
+            else:
+                return "No pre-release kind set. Please provide one of the following values: alpha, beta, rc, c"
+        elif "no-pre-release" == what:
+            return Version("{major}.{minor}.{micro}".format(
+                major=version.major,
+                minor=version.minor,
+                micro=version.micro
+            ))
+        else:
+            return "Invalid version part to bump: {}. Must be one of major, minor, micro, pre-release or no-prerelease.".format(what)
+    
+    else:
+        return "No version part to bump set. Please provide on of the following values: major, minor, micro, pre-release or no-pre-release"
+
 
 class BumpCommand(BaseCommand):
     def add_arguments(self, parser: ArgumentParser) -> None:
@@ -24,45 +57,17 @@ class BumpCommand(BaseCommand):
 
         version: Version = Version(version_value)
         next_version: Optional[Version] = None
-        if options.what is not None:
-            if "major" == options.what:
-                next_version = version.next_major()
-            elif "minor" == options.what:
-                next_version = version.next_minor()
-            elif "micro" == options.what:
-                next_version = version.next_micro()
-            elif "pre-release" == options.what:
-                if options.pre is not None:
-                    if "alpha" == options.pre:
-                        next_version = version.next_alpha()
-                    elif "beta" == options.pre:
-                        next_version = version.next_beta()
-                    elif options.pre in ["rc", "c"]:
-                        next_version = version.next_release_candidate()
-                    else:
-                        log(termui.red("Invalid pre-release: {}. Must be one of alpha, beta, rc or c".format(options.pre)))
-                        return
-                else:
-                    log(termui.red("No pre-release kind set. Please provide one of the following values: alpha, beta, rc, c"))
-                    return
-            elif "no-pre-release" == options.what:
-                next_version = Version("{major}.{minor}.{micro}".format(
-                    major=version.major,
-                    minor=version.minor,
-                    micro=version.micro
-                ))
-            else:
-                log(termui.red("Invalid version part to bump: {}. Must be one of major, minor, micro, pre-release or no-prerelease.".format(options.what)))
-                return
-        
-        else:
-            log(termui.red("No version part to bump set. Please provide on of the following values: major, minor, micro, pre-release or no-prerelease"))
-            return
 
-        if next_version is not None:
-            config.set_pyproject_value(str(next_version), "project, version")
-            project.write_pyproject(True)
+        result: Union[Version, str] = _do_bump(version, options.what, options.pre)
+        
+        if not isinstance(result, str):
+            next_version = cast(Optional[Version], result)
+            if next_version is not None:
+                config.set_pyproject_value(str(next_version), "project, version")
+                project.write_pyproject(True)
+            else:
+                log (termui.red("Failed to update version: No version set in {}".format(termui.blue(project.pyproject_file))))
         else:
-            log(termui.red("Failed to update version: No version set in pyproject.toml"))
-            return
+            log (termui.red(str(result)))
+        
 
