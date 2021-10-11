@@ -35,6 +35,13 @@ class Config:
         config: dict[str, Any] = self.__project.config
         return _get_config_value(config, *keys)
 
+    def get_config_or_pyproject_value(self, *keys: str) -> Optional[Any]:
+        config1: dict[str, Any] = self.__project.config
+        config2: dict[str, Any] = self.__project.pyproject
+        py_project_keys: list[str] = ["tool", "pdm", "plugins"] + list(keys)
+
+        return _get_config_value(config1, *keys) or _get_config_value(config2, *tuple(py_project_keys))
+
     def set_pyproject_value(self, value: Any, *keys: str) -> None:
         config: dict[str, Any] = self.__project.pyproject
         _set_config_value(config, value, *keys)
