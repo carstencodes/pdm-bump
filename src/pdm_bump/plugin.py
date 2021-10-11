@@ -1,9 +1,10 @@
 from argparse import ArgumentParser, Namespace
-from typing import Optional
+from typing import Optional, cast
 from pdm.cli.commands.base import BaseCommand
 from pdm import termui
 from pdm.core import Project
 from pep440_version_utils import Version
+from .config import Config
 
 class BumpCommand(BaseCommand):
     def add_arguments(self, parser: ArgumentParser) -> None:
@@ -13,11 +14,9 @@ class BumpCommand(BaseCommand):
         parser.description = "Bumps the version to a next version according to PEP440."
 
     def handle(self, project: Project, options: Namespace) -> None:
-        version_value: Optional[str] = None
         log = project.core.ui.echo
-        config: dict = project.pyproject
-        if "project" in config and "version" in config["project"]:
-            version_value = str(config["project"]["version"])
+        config: Config = Config(project.pyproject)
+        version_value: Optional[str] = cast(Optional[str], config.get_pyproject_value("project", "version"))
 
         if version_value is None:
             log (termui.red("Cannot find version in {}".format(termui.bold(project.pyproject_file))))
@@ -61,7 +60,7 @@ class BumpCommand(BaseCommand):
             return
 
         if next_version is not None:
-            project.pyproject["project"]["version"] = str(next_version)
+            config.set_pyproject_value(str(next_version), "project, version")
             project.write_pyproject(True)
         else:
             log(termui.red("Failed to update version: No version set in pyproject.toml"))
