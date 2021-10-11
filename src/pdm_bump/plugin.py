@@ -47,12 +47,11 @@ class BumpCommand(BaseCommand):
         parser.description = "Bumps the version to a next version according to PEP440."
 
     def handle(self, project: Project, options: Namespace) -> None:
-        log = project.core.ui.echo
         config: Config = Config(project.pyproject)
         version_value: Optional[str] = cast(Optional[str], config.get_pyproject_value("project", "version"))
 
         if version_value is None:
-            log (termui.red("Cannot find version in {}".format(termui.bold(project.pyproject_file))))
+            self._log_error(project, "Cannot find version in {}".format(termui.bold(project.pyproject_file)))
             return
 
         version: Version = Version(version_value)
@@ -66,8 +65,12 @@ class BumpCommand(BaseCommand):
                 config.set_pyproject_value(str(next_version), "project, version")
                 project.write_pyproject(True)
             else:
-                log (termui.red("Failed to update version: No version set in {}".format(termui.blue(project.pyproject_file))))
+                self._log_error("Failed to update version: No version set in {}".format(termui.bold(project.pyproject_file)))
         else:
-            log (termui.red(str(result)))
+            self._log_error(project, str(result))
+
+    def _log_error(self, project: Project, message: str) -> None:
+        formatted_message: str = termui.red(message)
+        project.core.ui.echo(formatted_message)
         
 
