@@ -7,7 +7,7 @@ authors = [
     {name = "Carsten Igel", email = "cig@bite-that-bit.de"},
 ]
 dependencies = [
-    "pdm~=1.8",
+    "pdm~=1.12",
     "pep440-version-utils~=0.3",
 ]
 requires-python = ">=3.8"
