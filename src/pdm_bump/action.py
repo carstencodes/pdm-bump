@@ -2,9 +2,10 @@ from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
 from typing import Any, Dict, List, Tuple, cast
 
-from .version import Version, Pep440VersionFormatter
+from .version import Pep440VersionFormatter, Version
 
 _formatter = Pep440VersionFormatter()
+
 
 class PreviewMismatchError(BaseException):
     pass
@@ -24,91 +25,76 @@ class VersionModifier(ABC):
 
 
 class _PreReleaseIncrementingVersionModified(VersionModifier):
-    
     def __init__(self, version: Version, increment_micro: bool = True) -> None:
         super().__init__(version)
         self.__increment_micro = increment_micro
-    
+
     @abstractmethod
     def create_new_version(self) -> Version:
         raise NotImplementedError()
-    
+
     def _get_next_release(self) -> Tuple[int, ...]:
         micro = self.current_version.micro
         if self.__increment_micro:
             micro = micro + 1
-        
+
         ret: List[int] = []
         for val in self.current_version.release:
             ret.append(val)
-            
+
         while len(ret) < 3:
             ret.append(0)
-            
+
         ret[2] = micro
-        
+
         return tuple(ret)
 
 
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
-    
     def create_new_version(self) -> Version:
         pre: Tuple[str, int] = ("a", 1)
         if self.current_version.preview is not None:
             if not self.current_version.is_alpha:
-                raise PreviewMismatchError(f"{_formatter.format(self.current_version)} is not an alpha version.")
+                raise PreviewMismatchError(
+                    f"{_formatter.format(self.current_version)} is not an alpha version."
+                )
             pre = cast(Tuple[str, int], self.create_new_version.pre)
             pre = (pre[0], pre[1] + 1)
-            
+
         return Version(
-            self.current_version.epoch,
-            self._get_next_release(),
-            pre,
-            None,
-            None,
-            None
+            self.current_version.epoch, self._get_next_release(), pre, None, None, None
         )
 
 
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
-    
     def create_new_version(self) -> Version:
         pre: Tuple[str, int] = ("b", 1)
         if self.current_version.preview is not None:
             if self.current_version.is_release_candidate:
-                raise PreviewMismatchError(f"{_formatter.format(self.current_version)} is neither an alpha nor a beta version.")
+                raise PreviewMismatchError(
+                    f"{_formatter.format(self.current_version)} is neither an alpha nor a beta version."
+                )
             if self.current_version.is_beta:
                 pre = cast(Tuple[str, int], self.create_new_version.pre)
                 pre = (pre[0], pre[1] + 1)
-        
-            
+
         return Version(
-            self.current_version.epoch,
-            self._get_next_release(),
-            pre,
-            None,
-            None,
-            None
+            self.current_version.epoch, self._get_next_release(), pre, None, None, None
         )
-        
-        
-class ReleaseCandidateIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
-    
+
+
+class ReleaseCandidateIncrementingVersionModifier(
+    _PreReleaseIncrementingVersionModified
+):
     def create_new_version(self) -> Version:
         pre: Tuple[str, int] = ("rc", 1)
         if self.current_version.preview is not None:
             if self.current_version.is_release_candidate:
                 pre = cast(Tuple[str, int], self.create_new_version.pre)
                 pre = (pre[0], pre[1] + 1)
-        
-            
+
         return Version(
-            self.current_version.epoch,
-            self._get_next_release(),
-            pre,
-            None,
-            None,
-            None
+            self.current_version.epoch, self._get_next_release(), pre, None, None, None
         )
 
 
