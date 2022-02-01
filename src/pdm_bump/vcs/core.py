@@ -26,6 +26,10 @@ class VcsProvider(ABC):
         self.__path = __pathlike_to_path(path)
         
     @property
+    def is_available(self) -> bool:
+        return False
+        
+    @property
     def current_path(self) -> Path:
         return self.__path
     
@@ -121,3 +125,22 @@ class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
 vcs_providers = VcsProviderRegistry()
 
 vcs_provider = vcs_providers.register
+
+class DefaultVcsProvider(VcsProvider):
+    @property
+    def is_available(self) -> bool:
+        return True
+    
+    @property
+    def is_clean(self) -> bool:
+        return True
+    
+    def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+        pass
+    
+    def create_tag_from_string(self, version_formatted: str) -> None:
+        pass
+
+
+class VcsProviderError(Exception):
+    pass

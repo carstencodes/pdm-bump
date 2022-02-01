@@ -1,1 +1,2 @@
-from .core import vcs_provider, vcs_providers, VcsProvider
+from .core import vcs_provider, vcs_providers, VcsProvider, DefaultVcsProvider, VcsProviderFactory
+__all__ = ( "vcs_provider", "vcs_providers", "VcsProvider", "VcsProviderFactory", "DefaultVcsProvider" )
