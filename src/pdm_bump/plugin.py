@@ -49,6 +49,9 @@ def _do_bump(
 
 
 class BumpCommand(BaseCommand):
+    name: str = "bump"
+    description: str = "Bumps the version to a next version according to PEP440."
+    
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
             "what",
@@ -67,7 +70,6 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "--dry-run", action="store_false", help="Do not perform a log-in"
         )
-        parser.description = "Bumps the version to a next version according to PEP440."
 
     def handle(self, project: Project, options: Namespace) -> None:
         config: Config = Config(project.pyproject)

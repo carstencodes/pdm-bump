@@ -4,4 +4,4 @@ from .plugin import BumpCommand as _Command
 
 
 def main(core: _Core) -> None:
-    core.register_command(_Command, "bump")
+    core.register_command(_Command)
