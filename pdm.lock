@@ -46,7 +46,7 @@ dependencies = [
 
 [[package]]
 name = "pdm"
-version = "1.12.7"
+version = "1.12.8"
 requires_python = ">=3.7"
 summary = "Python Development Master"
 dependencies = [
@@ -56,7 +56,7 @@ dependencies = [
     "packaging",
     "pdm-pep517<0.11,>=0.9",
     "pep517>=0.11.0",
-    "pip<22,>=20.1",
+    "pip>=20.1",
     "platformdirs",
     "python-dotenv>=0.15",
     "pythonfinder",
@@ -92,8 +92,8 @@ dependencies = [
 
 [[package]]
 name = "pip"
-version = "21.3.1"
-requires_python = ">=3.6"
+version = "22.0.3"
+requires_python = ">=3.7"
 summary = "The PyPA recommended tool for installing Python packages."
 
 [[package]]
@@ -146,13 +146,13 @@ summary = "Python 2 and 3 compatibility utilities"
 
 [[package]]
 name = "tomli"
-version = "2.0.0"
+version = "2.0.1"
 requires_python = ">=3.7"
 summary = "A lil' TOML parser"
 
 [[package]]
 name = "tomlkit"
-version = "0.8.0"
+version = "0.9.2"
 requires_python = ">=3.6,<4.0"
 summary = "Style preserving TOML library"
 
@@ -194,9 +194,9 @@ content_hash = "sha256:78d53bd79653c71278d7debe8dfde6a3a0e234338d9c394de6cf4489e
     {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
     {file = "packaging-20.9.tar.gz", hash = "sha256:5b327ac1320dc863dca72f4514ecc086f31186744b84a230374cc1fd776feae5"},
 ]
-"pdm 1.12.7" = [
-    {file = "pdm-1.12.7-py3-none-any.whl", hash = "sha256:6925e2863c081289ba82f2b6165c95d145d2135589c919ac49fc066ab433f31c"},
-    {file = "pdm-1.12.7.tar.gz", hash = "sha256:efedebb9b006eb07a8800a6afe0989cea4254e9a0ccd9fdbb41ab744a34f3484"},
+"pdm 1.12.8" = [
+    {file = "pdm-1.12.8-py3-none-any.whl", hash = "sha256:daf150fbe9bb4aa77626619e55dfaa5f1a60c4fc5ee7464798513b26f6c3034f"},
+    {file = "pdm-1.12.8.tar.gz", hash = "sha256:760f83289d208ddb01d4b58f0087ad2943f937f17dff454e35129d779133a490"},
 ]
 "pdm-pep517 0.10.2" = [
     {file = "pdm_pep517-0.10.2-py3-none-any.whl", hash = "sha256:f4ae4d3aceefe2d8e41d2a6da417adc70102a7d2bc0965b88a79d1caadbe6259"},
@@ -210,9 +210,9 @@ content_hash = "sha256:78d53bd79653c71278d7debe8dfde6a3a0e234338d9c394de6cf4489e
     {file = "pep517-0.12.0-py2.py3-none-any.whl", hash = "sha256:dd884c326898e2c6e11f9e0b64940606a93eb10ea022a2e067959f3a110cf161"},
     {file = "pep517-0.12.0.tar.gz", hash = "sha256:931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0"},
 ]
-"pip 21.3.1" = [
-    {file = "pip-21.3.1-py3-none-any.whl", hash = "sha256:deaf32dcd9ab821e359cd8330786bcd077604b5c5730c0b096eda46f95c24a2d"},
-    {file = "pip-21.3.1.tar.gz", hash = "sha256:fd11ba3d0fdb4c07fbc5ecbba0b1b719809420f25038f8ee3cd913d3faa3033a"},
+"pip 22.0.3" = [
+    {file = "pip-22.0.3-py3-none-any.whl", hash = "sha256:c146f331f0805c77017c6bb9740cec4a49a0d4582d0c3cc8244b057f83eca359"},
+    {file = "pip-22.0.3.tar.gz", hash = "sha256:f29d589df8c8ab99c060e68ad294c4a9ed896624f6368c5349d70aa581b333d0"},
 ]
 "platformdirs 2.4.1" = [
     {file = "platformdirs-2.4.1-py3-none-any.whl", hash = "sha256:1d7385c7db91728b83efd0ca99a5afb296cab9d0ed8313a45ed8ba17967ecfca"},
@@ -242,13 +242,13 @@ content_hash = "sha256:78d53bd79653c71278d7debe8dfde6a3a0e234338d9c394de6cf4489e
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
-"tomli 2.0.0" = [
-    {file = "tomli-2.0.0-py3-none-any.whl", hash = "sha256:b5bde28da1fed24b9bd1d4d2b8cba62300bfb4ec9a6187a957e8ddb9434c5224"},
-    {file = "tomli-2.0.0.tar.gz", hash = "sha256:c292c34f58502a1eb2bbb9f5bbc9a5ebc37bee10ffb8c2d6bbdfa8eb13cc14e1"},
+"tomli 2.0.1" = [
+    {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
+    {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
-"tomlkit 0.8.0" = [
-    {file = "tomlkit-0.8.0-py3-none-any.whl", hash = "sha256:b824e3466f1d475b2b5f1c392954c6cb7ea04d64354ff7300dc7c14257dc85db"},
-    {file = "tomlkit-0.8.0.tar.gz", hash = "sha256:29e84a855712dfe0e88a48f6d05c21118dbafb283bb2eed614d46f80deb8e9a1"},
+"tomlkit 0.9.2" = [
+    {file = "tomlkit-0.9.2-py3-none-any.whl", hash = "sha256:daf4f9c5f2fbf6b861d6adfc51940b98dee36c13e1d88749a6dc9fb280fff304"},
+    {file = "tomlkit-0.9.2.tar.gz", hash = "sha256:ebd982d61446af95a1e082b103e250cb9e6d152eae2581d4a07d31a70b34ab0f"},
 ]
 "wheel 0.37.1" = [
     {file = "wheel-0.37.1-py2.py3-none-any.whl", hash = "sha256:4bdcd7d840138086126cd09254dc6195fb4fc6f01c050a1d7236f2630db1d22a"},
