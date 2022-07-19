@@ -17,7 +17,7 @@ def _do_bump(
             return version.next_major()
         elif "minor" == what:
             return version.next_minor()
-        elif "micro" == what:
+        elif "micro" == what or "patch" == what:
             return version.next_micro()
         elif "pre-release" == what:
             if pre is not None:
@@ -40,7 +40,7 @@ def _do_bump(
                 )
             )
         else:
-            return "Invalid version part to bump: {}. Must be one of major, minor, micro, pre-release or no-prerelease.".format(
+            return "Invalid version part to bump: {}. Must be one of major, minor, micro/patch, pre-release or no-prerelease.".format(
                 what
             )
 
