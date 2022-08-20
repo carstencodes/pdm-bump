@@ -1,6 +1,6 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, cast
+from typing import List, Optional, Tuple, Literal, cast
 
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
@@ -23,7 +23,7 @@ class Version:
     release: Tuple[int, ...] = field()
     preview: Optional[Tuple[str, int]] = field()
     post: Optional[Tuple[str, int]] = field()
-    dev: Optional[Tuple[str, int]] = field()
+    dev: Optional[Tuple[Literal["dev"], int]] = field()
     local: Optional[str] = field()
 
     @property
@@ -119,7 +119,7 @@ class Pep440VersionFormatter:
             parts.append(f".post{version.post}")
 
         if version.is_development_version:
-            parts.append(f".dev{version.dev}")
+            parts.append(f".dev{list(version.dev)[1]}")
 
         if version.is_local_version:
             parts.append(f"+{version.local}")
