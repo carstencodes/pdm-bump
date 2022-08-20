@@ -11,7 +11,13 @@ from .version import Version, Pep440VersionFormatter
 from .config import Config
 from .logging import logger
 
-from .action import VersionModifier, VersionModifierFactory, create_actions, ActionCollection
+from .action import (
+    VersionModifier,
+    VersionModifierFactory,
+    create_actions,
+    ActionCollection,
+)
+
 
 def _do_bump(
     version: Version, what: Optional[str], pre: Optional[str]
@@ -79,22 +85,31 @@ class BumpCommand(BaseCommand):
             help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
         )
         parser.add_argument(
-            "--dry-run", "-n", action="store_true", help="Do not store incremented version"
+            "--dry-run",
+            "-n",
+            action="store_true",
+            help="Do not store incremented version",
         )
         parser.add_argument(
-            "--micro", action="store_true", help="When setting pre-release, specifies whether micro version shall be incremented as well"
+            "--micro",
+            action="store_true",
+            help="When setting pre-release, specifies whether micro version shall be incremented as well",
         )
         parser.add_argument(
-            "--reset", action="store_true", help="When setting epoch, reset version to 1.0.0"
+            "--reset",
+            action="store_true",
+            help="When setting epoch, reset version to 1.0.0",
         )
         parser.add_argument(
-            "--remove", action="store_true", help="When incrementing major, minor, micro or epoch, remove all pre-release parts"
+            "--remove",
+            action="store_true",
+            help="When incrementing major, minor, micro or epoch, remove all pre-release parts",
         )
 
     def handle(self, project: Project, options: Namespace) -> None:
         config: Config = Config(project.pyproject)
         self._setup_logger(options.verbose)
-        
+
         version_value: Optional[str] = cast(
             Optional[str], config.get_pyproject_value("project", "version")
         )
@@ -109,46 +124,52 @@ class BumpCommand(BaseCommand):
         version: Version = Version(version_value)
 
         actions: ActionCollection = self._get_actions(
-            options.micro, options.reset, options.remove)
-        
-        
-        modifier: VersionModifier = self._get_action(actions, version, options.what, options.pre)
-        
+            options.micro, options.reset, options.remove
+        )
+
+        modifier: VersionModifier = self._get_action(
+            actions, version, options.what, options.pre
+        )
+
         result: Version = modifier.create_new_version()
 
         config.set_pyproject_value(str(next_version), "project, version")
         if not options.dry_run:
             project.write_pyproject(True)
-    
-    def _get_action(self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]) -> VersionModifier:
+
+    def _get_action(
+        self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]
+    ) -> VersionModifier:
         modifierFactory: VersionModifierFactory
         if pre is not None:
             modifierFactory = actions.get_action_with_option(what, pre)
         else:
             modifierFactory = actions.get_action(what)
-            
+
         modifier: VersionModifier = modifierFactory(version)
         return modifier
-        
-            
-    def _get_actions(self, increment_micro: bool, reset_version: bool, remove_parts: bool) -> ActionCollection:
+
+    def _get_actions(
+        self, increment_micro: bool, reset_version: bool, remove_parts: bool
+    ) -> ActionCollection:
         actions: ActionCollection = create_actions(
-            increment_micro=increment_micro, 
+            increment_micro=increment_micro,
             reset_version=reset_version,
-            remove_parts=remove_parts)
-        
+            remove_parts=remove_parts,
+        )
+
         return actions
 
     def _log_error(self, project: Project, message: str) -> None:
         formatted_message: str = termui.red(message)
         project.core.ui.echo(formatted_message)
-        
+
     def _setup_logger(self, verbosity_level: int) -> None:
         log_levels: Final[Tuple[int, int, int]] = (WARN, INFO, DEBUG)
         log_level_id: int = min(verbosity_level, len(log_levels) - 1)
         log_level: int = log_levels[log_level_id]
         logger.setLevel(log_level)
-        
+
     def _version_to_string(self, version: Version) -> str:
         result: str = Pep440VersionFormatter().format(version)
         return result
