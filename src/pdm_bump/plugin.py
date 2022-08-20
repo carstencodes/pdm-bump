@@ -5,11 +5,13 @@ from logging import DEBUG, INFO, WARN
 from pdm import termui
 from pdm.cli.commands.base import BaseCommand
 from pdm.core import Project
-from pep440_version_utils import Version
+
+from .version import Version, Pep440VersionFormatter
 
 from .config import Config
 from .logging import logger
 
+from .action import VersionModifier, VersionModifierFactory, create_actions, ActionCollection
 
 def _do_bump(
     version: Version, what: Optional[str], pre: Optional[str]
@@ -79,6 +81,15 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "--dry-run", "-n", action="store_true", help="Do not store incremented version"
         )
+        parser.add_argument(
+            "--micro", action="store_true", help="When setting pre-release, specifies whether micro version shall be incremented as well"
+        )
+        parser.add_argument(
+            "--reset", action="store_true", help="When setting epoch, reset version to 1.0.0"
+        )
+        parser.add_argument(
+            "--remove", action="store_true", help="When incrementing major, minor, micro or epoch, remove all pre-release parts"
+        )
 
     def handle(self, project: Project, options: Namespace) -> None:
         config: Config = Config(project.pyproject)
@@ -96,23 +107,37 @@ class BumpCommand(BaseCommand):
             return
 
         version: Version = Version(version_value)
-        next_version: Optional[Version] = None
 
-        result: Union[Version, str] = _do_bump(version, options.what, options.pre)
+        actions: ActionCollection = self._get_actions(
+            options.micro, options.reset, options.remove)
+        
+        
+        modifier: VersionModifier = self._get_action(actions, version, options.what, options.pre)
+        
+        result: Version = modifier.create_new_version()
 
-        if not isinstance(result, str):
-            next_version = cast(Optional[Version], result)
-            if next_version is not None:
-                config.set_pyproject_value(str(next_version), "project, version")
-                project.write_pyproject(True)
-            else:
-                self._log_error(
-                    "Failed to update version: No version set in {}".format(
-                        termui.bold(project.pyproject_file)
-                    )
-                )
+        config.set_pyproject_value(str(next_version), "project, version")
+        if not options.dry_run:
+            project.write_pyproject(True)
+    
+    def _get_action(self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]) -> VersionModifier:
+        modifierFactory: VersionModifierFactory
+        if pre is not None:
+            modifierFactory = actions.get_action_with_option(what, pre)
         else:
-            self._log_error(project, str(result))
+            modifierFactory = actions.get_action(what)
+            
+        modifier: VersionModifier = modifierFactory(version)
+        return modifier
+        
+            
+    def _get_actions(self, increment_micro: bool, reset_version: bool, remove_parts: bool) -> ActionCollection:
+        actions: ActionCollection = create_actions(
+            increment_micro=increment_micro, 
+            reset_version=reset_version,
+            remove_parts=remove_parts)
+        
+        return actions
 
     def _log_error(self, project: Project, message: str) -> None:
         formatted_message: str = termui.red(message)
@@ -123,3 +148,7 @@ class BumpCommand(BaseCommand):
         log_level_id: int = min(verbosity_level, len(log_levels) - 1)
         log_level: int = log_levels[log_level_id]
         logger.setLevel(log_level)
+        
+    def _version_to_string(self, version: Version) -> str:
+        result: str = Pep440VersionFormatter().format(version)
+        return result
