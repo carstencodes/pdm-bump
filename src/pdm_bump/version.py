@@ -27,8 +27,8 @@ NonNegativeInteger = Annotated[int, NonNegative]
 class Version:
     epoch: NonNegativeInteger = field()
     release: Tuple[NonNegativeInteger, ...] = field()
-    preview: Optional[Tuple[str, NonNegativeInteger]] = field()
-    post: Optional[Tuple[str, NonNegativeInteger]] = field()
+    preview: Optional[Tuple[[Literal["a", "b", "c", "alpha", "beta", "rc"]], NonNegativeInteger]] = field()
+    post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field()
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
     local: Optional[str] = field()
 
@@ -122,7 +122,7 @@ class Pep440VersionFormatter:
             parts.append(str(part) for part in version.preview)
 
         if version.is_post_release:
-            parts.append(f".post{version.post}")
+            parts.append(f".post{list(version.post)[1]}")
 
         if version.is_development_version:
             parts.append(f".dev{list(version.dev)[1]}")
