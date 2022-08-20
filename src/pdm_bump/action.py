@@ -36,7 +36,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         letter, name = self.pre_release_part
         pre: Tuple[str, int] = (letter, 1)
         if self.current_version.preview is not None:
-            if not self.current_version.is_alpha:
+            if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} is not an {name} version."
                 )
@@ -49,6 +49,10 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
     
     @abstractproperty
     def pre_release_part(self) -> Tuple[str, str]: 
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def _is_valid_preview_version(self) -> bool:
         raise NotImplementedError()
 
     def _get_next_release(self) -> Tuple[int, ...]:
@@ -72,19 +76,30 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(self) -> Tuple[str, str]:
         return ("a", "alpha")
+    
+    def _is_valid_preview_version(self) -> bool:
+        return self.current_version.is_alpha
 
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(self) -> Tuple[str, str]:
-        return ("b", "beta")
-
+        return ("b", "alpha or beta")
+    
+    def _is_valid_preview_version(self) -> bool:
+        return self.current_version.is_alpha or \
+               self.current_version.is_beta
 
 class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
     @property
     def pre_release_part(self) -> Tuple[str, str]:
-        return ("rc", "release candidate")
+        return ("rc", "pre-release")
+    
+    def _is_valid_preview_version(self) -> bool:
+        return self.current_version.is_alpha or \
+               self.current_version.is_beta or \
+               self.current_version.is_release_candidate
 
 
 class _NonFinalPartsRemovingVersionModifier(VersionModifier):
