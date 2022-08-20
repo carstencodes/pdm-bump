@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, Namespace
-from typing import Optional, Union, cast
+from typing import Optional, Union, Tuple, Final, cast
+from logging import DEBUG, INFO, WARN
 
 from pdm import termui
 from pdm.cli.commands.base import BaseCommand
@@ -76,11 +77,13 @@ class BumpCommand(BaseCommand):
             help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
         )
         parser.add_argument(
-            "--dry-run", action="store_false", help="Do not perform a log-in"
+            "--dry-run", "-n", action="store_true", help="Do not store incremented version"
         )
 
     def handle(self, project: Project, options: Namespace) -> None:
         config: Config = Config(project.pyproject)
+        self._setup_logger(options.verbose)
+        
         version_value: Optional[str] = cast(
             Optional[str], config.get_pyproject_value("project", "version")
         )
@@ -114,3 +117,9 @@ class BumpCommand(BaseCommand):
     def _log_error(self, project: Project, message: str) -> None:
         formatted_message: str = termui.red(message)
         project.core.ui.echo(formatted_message)
+        
+    def _setup_logger(self, verbosity_level: int) -> None:
+        log_levels: Final[Tuple[int, int, int]] = (WARN, INFO, DEBUG)
+        log_level_id: int = min(verbosity_level, len(log_levels) - 1)
+        log_level: int = log_levels[log_level_id]
+        logger.setLevel(log_level)
