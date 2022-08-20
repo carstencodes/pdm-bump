@@ -7,6 +7,7 @@ from pdm.core import Project
 from pep440_version_utils import Version
 
 from .config import Config
+from .logging import logger
 
 
 def _do_bump(

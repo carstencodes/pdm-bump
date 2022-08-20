@@ -5,6 +5,8 @@ from typing import List, Optional, Tuple, cast
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
 
+from .logging import logger
+
 
 class VersionParserError(ValueError):
     pass

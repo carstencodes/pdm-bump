@@ -3,6 +3,7 @@ from dataclasses import asdict as dataclass_to_dict
 from typing import Any, Dict, List, Tuple, cast
 
 from .version import Pep440VersionFormatter, Version
+from .logging import logger
 
 _formatter = Pep440VersionFormatter()
 
