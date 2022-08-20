@@ -260,7 +260,7 @@ class ActionCollection(Dict[str, ActionChoice]):
     def get_action(self, action: str) -> VersionModifierFactory:
         if action in self.keys():
             choice: ActionChoice = self[action]
-            if isinstance(choice, VersionModifierFactory):
+            if not isinstance(choice, str):
                 return cast(VersionModifierFactory, choice)
 
         raise ValueError(f"{action} is not a valid command")
@@ -270,12 +270,11 @@ class ActionCollection(Dict[str, ActionChoice]):
     ) -> VersionModifierFactory:
         if action in self.keys():
             choice: ActionChoice = self[action]
-            if isinstance(choice, _NestedMappingTable):
+            if not isinstance(choice, str):
                 table: _NestedMappingTable = cast(_NestedMappingTable, choice)
                 if option in table.keys():
                     choice = table[option]
-                    if isinstance(choice, VersionModifierFactory):
-                        return cast(VersionModifierFactory, choice)
+                    return cast(VersionModifierFactory, choice)
 
                 raise ValueError(f"{option} is not a valid option")
 
