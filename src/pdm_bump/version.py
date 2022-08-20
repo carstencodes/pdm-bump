@@ -28,7 +28,7 @@ class Version:
     epoch: NonNegativeInteger = field()
     release: Tuple[NonNegativeInteger, ...] = field()
     preview: Optional[
-        Tuple[[Literal["a", "b", "c", "alpha", "beta", "rc"]], NonNegativeInteger]
+        Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger]
     ] = field()
     post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field()
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
