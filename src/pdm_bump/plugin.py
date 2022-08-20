@@ -56,7 +56,7 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "what",
             action="store",
-            choices=["major", "minor", "micro", "pre-release", "no-pre-release"],
+            choices=["major", "minor", "micro", "patch", "pre-release", "no-pre-release"],
             default=None,
             help="The part of the version to bump according to PEP 440: major.minor.micro.",
         )
