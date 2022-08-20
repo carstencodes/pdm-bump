@@ -4,6 +4,7 @@ from typing import (
     AnyStr,
     Callable,
     Dict,
+    Iterator,
     NamedTuple,
     Optional,
     Tuple,
@@ -68,7 +69,7 @@ class VcsProviderFactory(ABC):
         raise NotImplementedError()
 
     @abstractproperty
-    def vcs_fs_root(self) -> VcsFileSystemIdentifier:
+    def vcs_fs_root(self) -> Iterator[VcsFileSystemIdentifier]:
         raise NotImplementedError()
 
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
@@ -102,14 +103,18 @@ class VcsProviderFactory(ABC):
         return self._is_valid_fs_root_file(file_path)
 
     def _is_valid_root(self, path: Path) -> bool:
-        fs_root: VcsFileSystemIdentifier = self.vcs_fs_root
-        is_valid_root_by_file: bool = fs_root.file_name is None or self._file_exists(
-            path, fs_root.file_name
-        )
-        is_valid_root_by_dir: bool = fs_root.dir_name is None or self._dir_exists(
-            path, fs_root.dir_name
-        )
-        return is_valid_root_by_dir and is_valid_root_by_file
+        is_repository_root = False
+        for fs_root in self.vcs_fs_root:
+            is_valid_root_by_file: bool = fs_root.file_name is None or self._file_exists(
+                path, fs_root.file_name
+            )
+            is_valid_root_by_dir: bool = fs_root.dir_name is None or self._dir_exists(
+                path, fs_root.dir_name
+            )
+            is_repository_root = is_repository_root or \
+                (is_valid_root_by_dir and is_valid_root_by_file)
+        
+        return is_repository_root
 
 
 class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
