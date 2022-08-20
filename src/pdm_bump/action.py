@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import Any, Dict, List, Tuple, Final, cast
+from typing import Any, Dict, List, Tuple, Final, Union, Type, Callable, cast
 
 from .version import Pep440VersionFormatter, Version, NonNegativeInteger
 from .logging import logger
@@ -249,3 +249,50 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
         constructional_args["post"] = ("post", post_version)
 
         return Version(**constructional_args)
+
+
+VersionModifierFactory: Type = Callable[[Version],VersionModifier]
+_NestedMappingTable: Type = Dict[str, VersionModifierFactory]
+ActionChoice: Type = Union[_NestedMappingTable, VersionModifierFactory]
+
+
+class ActionCollection(Dict[str, ActionChoice]):
+    def get_action(self, action: str) -> VersionModifierFactory:
+        if action in self.keys():
+            choice: ActionChoice = self[action]
+            if isinstance(choice, VersionModifierFactory):
+                return cast(VersionModifierFactory, choice)
+        
+        raise ValueError(f"{action} is not a valid command")
+    
+    def get_action_with_option(self, action:str, option: str) -> VersionModifierFactory:
+        if action in self.keys():
+            choice: ActionChoice = self[action]
+            if isinstance(choice, _NestedMappingTable):
+                table: _NestedMappingTable = cast(_NestedMappingTable, choice)
+                if option in table.keys():
+                    choice = table[option]
+                    if isinstance(choice, VersionModifierFactory):
+                        return cast(VersionModifierFactory, choice)
+                
+                raise ValueError(f"{option} is not a valid option")
+            
+        raise ValueError(f"{action} is not a valid command")
+
+def create_actions(*, remove_parts: bool = True, reset_version: bool = True, increment_micro: bool = False) -> ActionCollection:
+    return ActionCollection({
+        "major": lambda v: MajorIncrementingVersionModifier(v, remove_parts),
+        "minor": lambda v: MinorIncrementingVersionModifier(v, remove_parts),
+        "micro": lambda v: MicroIncrementingVersionModifier(v, remove_parts),
+        "patch": lambda v: MicroIncrementingVersionModifier(v, remove_parts),
+        "pre-release": {
+            "alpha": lambda v: AlphaIncrementingVersionModifier(v, increment_micro),
+            "beta": lambda v: BetaIncrementingVersionModifier(v, increment_micro),
+            "rc": lambda v: ReleaseCandidateIncrementingVersionModifier(v, increment_micro),
+            "c": lambda v: ReleaseCandidateIncrementingVersionModifier(v, increment_micro),
+        },
+        "no-pre-release": lambda v: FinalizingVersionModifier(v),
+        "epoch": lambda v: EpochIncrementingVersionModifier(v, remove_parts, reset_version),
+        "dev": lambda v: DevelopmentVersionIncrementingVersionModifier(v),
+        "post": lambda v: PostVersionIncrementingVersionModifier(v),
+    })
