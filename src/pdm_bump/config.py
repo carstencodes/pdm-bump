@@ -1,7 +1,7 @@
 from typing import Any, Optional, cast
 
 from pdm.core import Project
-from .logging import logger 
+from .logging import logger
 
 
 def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:

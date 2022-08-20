@@ -27,7 +27,9 @@ NonNegativeInteger = Annotated[int, NonNegative]
 class Version:
     epoch: NonNegativeInteger = field()
     release: Tuple[NonNegativeInteger, ...] = field()
-    preview: Optional[Tuple[[Literal["a", "b", "c", "alpha", "beta", "rc"]], NonNegativeInteger]] = field()
+    preview: Optional[
+        Tuple[[Literal["a", "b", "c", "alpha", "beta", "rc"]], NonNegativeInteger]
+    ] = field()
     post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field()
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
     local: Optional[str] = field()

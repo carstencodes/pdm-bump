@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import Any, Dict, List, Tuple, cast
+from typing import Any, Dict, List, Tuple, Final, cast
 
-from .version import Pep440VersionFormatter, Version
+from .version import Pep440VersionFormatter, Version, NonNegativeInteger
 from .logging import logger
 
 _formatter = Pep440VersionFormatter()
@@ -34,33 +34,33 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         letter: str
         name: str
         letter, name = self.pre_release_part
-        pre: Tuple[str, int] = (letter, 1)
+        pre: Tuple[str, NonNegativeInteger] = (letter, 1)
         if self.current_version.preview is not None:
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} is not an {name} version."
                 )
-            pre = cast(Tuple[str, int], self.create_new_version.pre)
+            pre = cast(Tuple[str, NonNegativeInteger], self.create_new_version.pre)
             pre = (pre[0], pre[1] + 1)
 
         return Version(
             self.current_version.epoch, self._get_next_release(), pre, None, None, None
         )
-    
+
     @abstractproperty
-    def pre_release_part(self) -> Tuple[str, str]: 
+    def pre_release_part(self) -> Tuple[str, str]:
         raise NotImplementedError()
-    
+
     @abstractmethod
     def _is_valid_preview_version(self) -> bool:
         raise NotImplementedError()
 
-    def _get_next_release(self) -> Tuple[int, ...]:
+    def _get_next_release(self) -> Tuple[NonNegativeInteger, ...]:
         micro = self.current_version.micro
         if self.__increment_micro:
             micro = micro + 1
 
-        ret: List[int] = []
+        ret: List[NonNegativeInteger] = []
         for val in self.current_version.release:
             ret.append(val)
 
@@ -76,18 +76,19 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(self) -> Tuple[str, str]:
         return ("a", "alpha")
-    
+
     def _is_valid_preview_version(self) -> bool:
         return self.current_version.is_alpha
+
 
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(self) -> Tuple[str, str]:
         return ("b", "alpha or beta")
-    
+
     def _is_valid_preview_version(self) -> bool:
-        return self.current_version.is_alpha or \
-               self.current_version.is_beta
+        return self.current_version.is_alpha or self.current_version.is_beta
+
 
 class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
@@ -95,11 +96,13 @@ class ReleaseCandidateIncrementingVersionModifier(
     @property
     def pre_release_part(self) -> Tuple[str, str]:
         return ("rc", "pre-release")
-    
+
     def _is_valid_preview_version(self) -> bool:
-        return self.current_version.is_alpha or \
-               self.current_version.is_beta or \
-               self.current_version.is_release_candidate
+        return (
+            self.current_version.is_alpha
+            or self.current_version.is_beta
+            or self.current_version.is_release_candidate
+        )
 
 
 class _NonFinalPartsRemovingVersionModifier(VersionModifier):
@@ -117,7 +120,7 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
     @staticmethod
     def _create_new_constructional_args(
-        release: Tuple[int, ...], epoch: int = 0
+        release: Tuple[NonNegativeInteger, ...], epoch: NonNegativeInteger = 0
     ) -> Dict[str, Any]:
         return {
             "epoch": epoch,
@@ -131,27 +134,31 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     @abstractproperty
-    def release_part(self) -> int:
+    def release_part(self) -> NonNegativeInteger:
         raise NotImplementedError()
 
     def create_new_version(self):
         construction_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
 
-        next_release: Tuple[int, ...] = self._update_release_version_part(
-            self.release_part
-        )
+        next_release: Tuple[
+            NonNegativeInteger, ...
+        ] = self._update_release_version_part(self.release_part)
 
         if self.remove_non_final_parts:
-            construction_args = _NonFinalPartsRemovingVersionModifier._create_new_constructional_args(
-                next_release, self.current_version.epoch
+            construction_args = (
+                _NonFinalPartsRemovingVersionModifier._create_new_constructional_args(
+                    next_release, self.current_version.epoch
+                )
             )
         else:
             construction_args["release"] = next_release
 
         return Version(**construction_args)
 
-    def _update_release_version_part(self, part_id: int) -> Tuple[int, ...]:
-        release_part: List[int] = list(self.current_version.release)
+    def _update_release_version_part(
+        self, part_id: NonNegativeInteger
+    ) -> Tuple[NonNegativeInteger, ...]:
+        release_part: List[NonNegativeInteger] = list(self.current_version.release)
         for i in range(len(release_part)):
             if i == part_id:
                 release_part[i] = release_part[i] + 1
@@ -175,23 +182,23 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
 
 class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
-    __MAJOR_PART = 0
+    __MAJOR_PART: Final[NonNegativeInteger] = 0
 
     @property
-    def release_part(self) -> int:
+    def release_part(self) -> NonNegativeInteger:
         return self.__MAJOR_PART
 
 
 class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
-    __MINOR_PART = 1
+    __MINOR_PART: Final[NonNegativeInteger] = 1
 
     @property
-    def release_part(self) -> int:
+    def release_part(self) -> NonNegativeInteger:
         return self.__MINOR_PART
 
 
 class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
-    __MICRO_PART = 2
+    __MICRO_PART: Final[NonNegativeInteger] = 2
 
     @property
     def release_part(self) -> int:

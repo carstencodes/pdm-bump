@@ -52,12 +52,19 @@ def _do_bump(
 class BumpCommand(BaseCommand):
     name: str = "bump"
     description: str = "Bumps the version to a next version according to PEP440."
-    
+
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
             "what",
             action="store",
-            choices=["major", "minor", "micro", "patch", "pre-release", "no-pre-release"],
+            choices=[
+                "major",
+                "minor",
+                "micro",
+                "patch",
+                "pre-release",
+                "no-pre-release",
+            ],
             default=None,
             help="The part of the version to bump according to PEP 440: major.minor.micro.",
         )

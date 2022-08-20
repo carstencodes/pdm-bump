@@ -105,15 +105,16 @@ class VcsProviderFactory(ABC):
     def _is_valid_root(self, path: Path) -> bool:
         is_repository_root = False
         for fs_root in self.vcs_fs_root:
-            is_valid_root_by_file: bool = fs_root.file_name is None or self._file_exists(
-                path, fs_root.file_name
+            is_valid_root_by_file: bool = (
+                fs_root.file_name is None or self._file_exists(path, fs_root.file_name)
             )
             is_valid_root_by_dir: bool = fs_root.dir_name is None or self._dir_exists(
                 path, fs_root.dir_name
             )
-            is_repository_root = is_repository_root or \
-                (is_valid_root_by_dir and is_valid_root_by_file)
-        
+            is_repository_root = is_repository_root or (
+                is_valid_root_by_dir and is_valid_root_by_file
+            )
+
         return is_repository_root
 
 
