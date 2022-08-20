@@ -107,7 +107,7 @@ class BumpCommand(BaseCommand):
         )
 
     def handle(self, project: Project, options: Namespace) -> None:
-        config: Config = Config(project.pyproject)
+        config: Config = Config(project)
         self._setup_logger(options.verbose)
 
         version_value: Optional[str] = cast(
@@ -121,7 +121,7 @@ class BumpCommand(BaseCommand):
             )
             return
 
-        version: Version = Version(version_value)
+        version: Version = Version.from_string(version_value)
 
         actions: ActionCollection = self._get_actions(
             options.micro, options.reset, options.remove
@@ -133,7 +133,9 @@ class BumpCommand(BaseCommand):
 
         result: Version = modifier.create_new_version()
 
-        config.set_pyproject_value(str(next_version), "project, version")
+        next_version: str = self._version_to_string(result)
+
+        config.set_pyproject_value(next_version, "project", "version")
         if not options.dry_run:
             project.write_pyproject(True)
 
