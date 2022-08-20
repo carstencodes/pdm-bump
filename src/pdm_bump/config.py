@@ -22,6 +22,7 @@ def _set_config_value(config: dict[str, Any], value: Any, *keys: str) -> None:
         front: str = keys[0]
         if front not in config.keys():
             config[front] = {}
+        config = config[front]
         keys = tuple(keys[1:])
 
     front: str = keys[0]
