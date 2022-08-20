@@ -216,3 +216,29 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         constructional_args["epoch"] = self.current_version.epoch + 1
 
         return Version(**constructional_args)
+
+
+class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
+    def create_new_version(self) -> Version:
+        dev_version: NonNegativeInteger = 1
+        if self.current_version.is_development_version:
+            _, dev_version = self.current_version.dev
+            dev_version = dev_version + 1
+
+        constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        constructional_args["dev"] = ("dev", dev_version)
+
+        return Version(**constructional_args)
+
+
+class PostVersionIncrementingVersionModifier(VersionModifier):
+    def create_new_version(self) -> Version:
+        post_version: NonNegativeInteger = 1
+        if self.current_version.is_post_release:
+            _, post_version = self.current_version.post
+            post_version = post_version + 1
+
+        constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        constructional_args["post"] = ("post", post_version)
+
+        return Version(**constructional_args)
