@@ -38,11 +38,11 @@ def _get_rich_logger() -> Logger:
     styles.update(
         {
             "logging.level.notset": Style(dim=True),
-            "logging.level.debug": Style(dim=True, color="grey"),
+            "logging.level.debug": Style(dim=True, color="bright_black"),
             "logging.level.info": Style(color="blue"),
             "logging.level.warning": Style(color="yellow"),
-            "logging.level.error": Style(color="red"),
-            "logging.level.critical": Style(color="brown", bold=True, reverse=True),
+            "logging.level.error": Style(color="bright_red"),
+            "logging.level.critical": Style(color="red"),
         }
     )
     logging_theme: Theme = Theme(styles)
