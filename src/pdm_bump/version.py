@@ -1,9 +1,11 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple, Literal, cast
+from typing import Annotated
 
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
+from annotated_types import Ge
 
 from .logging import logger
 
@@ -16,26 +18,30 @@ __ALPHA_PART: Tuple[str, ...] = ("a", "alpha")
 __BETA_PART: Tuple[str, ...] = ("b", "beta")
 __RC_PART: Tuple[str, ...] = ("c", "rc")
 
+NonNegative = Ge(0)
+
+NonNegativeInteger = Annotated[int, NonNegative]
+
 
 @dataclass
 class Version:
-    epoch: int = field()
-    release: Tuple[int, ...] = field()
-    preview: Optional[Tuple[str, int]] = field()
-    post: Optional[Tuple[str, int]] = field()
-    dev: Optional[Tuple[Literal["dev"], int]] = field()
+    epoch: NonNegativeInteger = field()
+    release: Tuple[NonNegativeInteger, ...] = field()
+    preview: Optional[Tuple[str, NonNegativeInteger]] = field()
+    post: Optional[Tuple[str, NonNegativeInteger]] = field()
+    dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
     local: Optional[str] = field()
 
     @property
-    def major(self) -> int:
+    def major(self) -> NonNegativeInteger:
         return self.release[0] if len(self.release) >= 1 else 0
 
     @property
-    def minor(self) -> int:
+    def minor(self) -> NonNegativeInteger:
         return self.release[1] if len(self.release) >= 2 else 0
 
     @property
-    def micro(self) -> int:
+    def micro(self) -> NonNegativeInteger:
         return self.release[2] if len(self.release) >= 3 else 0
 
     @property

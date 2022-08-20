@@ -1,4 +1,10 @@
 [[package]]
+name = "annotated-types"
+version = "0.2.0"
+requires_python = ">=3.7.0,<4.0.0"
+summary = "Reusable constraint types to use with typing.Annotated"
+
+[[package]]
 name = "blinker"
 version = "1.4"
 summary = "Fast, simple object-to-object and broadcast signaling"
@@ -247,9 +253,13 @@ dependencies = [
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:4aaac71830694277006a602d173884d9020bce111633a0ebca63c5a45417028d"
+content_hash = "sha256:5a14a30d6ea24d35f473018f0b197fb53423804e42c62014de0b78ac7ab0e9e2"
 
 [metadata.files]
+"annotated-types 0.2.0" = [
+    {url = "https://files.pythonhosted.org/packages/1d/3f/bd2fb1eb48062ee269d8c9692bb1c900d14f781ea760e40d7fadb4698265/annotated_types-0.2.0-py3-none-any.whl", hash = "sha256:5e7d2e6f477b7abe7b44c1903bb5fb86320fa2fa41837d8e9a81c7beb999a079"},
+    {url = "https://files.pythonhosted.org/packages/de/b9/314ad264b5630f6f7c8a37baea52042b47bab959bd96d90e79743a771473/annotated-types-0.2.0.tar.gz", hash = "sha256:82afd5f40c1e77066b7cf54209c7160a5a30b91108d6dead943c64a511b10918"},
+]
 "blinker 1.4" = [
     {url = "https://files.pythonhosted.org/packages/1b/51/e2a9f3b757eb802f61dc1f2b09c8c99f6eb01cf06416c0671253536517b6/blinker-1.4.tar.gz", hash = "sha256:471aee25f3992bd325afa3772f1063dbdbbca947a041b8b89466dc00d606f8b6"},
 ]
