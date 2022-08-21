@@ -20,46 +20,6 @@ from .action import (
     PRERELEASE_OPTIONS,
 )
 
-
-def _do_bump(
-    version: Version, what: Optional[str], pre: Optional[str]
-) -> Union[Version, str]:
-    if what is not None:
-        if "major" == what:
-            return version.next_major()
-        elif "minor" == what:
-            return version.next_minor()
-        elif "micro" == what or "patch" == what:
-            return version.next_micro()
-        elif "pre-release" == what:
-            if pre is not None:
-                if "alpha" == pre:
-                    return version.next_alpha()
-                elif "beta" == pre:
-                    return version.next_beta()
-                elif pre in ["rc", "c"]:
-                    return version.next_release_candidate()
-                else:
-                    return "Invalid pre-release: {}. Must be one of alpha, beta, rc or c".format(
-                        pre
-                    )
-            else:
-                return "No pre-release kind set. Please provide one of the following values: alpha, beta, rc, c"
-        elif "no-pre-release" == what:
-            return Version(
-                "{major}.{minor}.{micro}".format(
-                    major=version.major, minor=version.minor, micro=version.micro
-                )
-            )
-        else:
-            return "Invalid version part to bump: {}. Must be one of major, minor, micro/patch, pre-release or no-prerelease.".format(
-                what
-            )
-
-    else:
-        return "No version part to bump set. Please provide on of the following values: major, minor, micro, pre-release or no-pre-release"
-
-
 class BumpCommand(BaseCommand):
     name: str = "bump"
     description: str = "Bumps the version to a next version according to PEP440."
