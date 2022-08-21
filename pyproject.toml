@@ -52,16 +52,19 @@ legacy_tox_ini = """
 minversion = 3.25.0
 requires = tox-pdm
 skip_missing_interpreters = false
-env_list = py{39, 310}
+envlist = py{39, 310}
 isolated_build = true
+
 
 [testenv]
 setenv = 
     PDM_IGNORE_SAVED_PYTHON="1"
 deps = pdm
+passenv = 
+    PYTHONPATH
 commands =
     pdm install --dev
-    pytest tests
+    pytest
 """
 
 [project.entry-points.pdm]
