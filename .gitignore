@@ -6,3 +6,5 @@ pdm_bump.egg-info/
 .package.log
 .package.lock
 **/__pycache__/**/*.pyc
+pytest.*.xml
+.coverage
