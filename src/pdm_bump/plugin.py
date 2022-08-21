@@ -16,6 +16,8 @@ from .action import (
     VersionModifierFactory,
     create_actions,
     ActionCollection,
+    COMMAND_NAMES,
+    PRERELEASE_OPTIONS,
 )
 
 
@@ -66,21 +68,14 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "what",
             action="store",
-            choices=[
-                "major",
-                "minor",
-                "micro",
-                "patch",
-                "pre-release",
-                "no-pre-release",
-            ],
+            choices=[c for c in COMMAND_NAMES],
             default=None,
             help="The part of the version to bump according to PEP 440: major.minor.micro.",
         )
         parser.add_argument(
             "--pre",
             action="store",
-            choices=["alpha", "beta", "rc", "c"],
+            choices=[p for p in PRERELEASE_OPTIONS],
             default=None,
             help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
         )

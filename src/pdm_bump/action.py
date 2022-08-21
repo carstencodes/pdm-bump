@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import Any, Dict, List, Tuple, Final, Union, Type, Callable, cast
+from typing import Any, Dict, List, Tuple, Final, Union, Type, Callable, Set, cast
 
 from .version import Pep440VersionFormatter, Version, NonNegativeInteger
 from .logging import logger
@@ -281,6 +281,22 @@ class ActionCollection(Dict[str, ActionChoice]):
         raise ValueError(f"{action} is not a valid command")
 
 
+COMMAND_NAME_MAJOR_INCREMENT: Final[str] = "major"
+COMMAND_NAME_MINOR_INCREMENT: Final[str] = "minor"
+COMMAND_NAME_MICRO_INCREMENT: Final[str] = "micro"
+COMMAND_NAME_PATCH_INCREMENT: Final[str] = "patch"
+COMMAND_NAME_EPOCH_INCREMENT: Final[str] = "epoch"
+COMMAND_NAME_NO_PRERELEASE: Final[str] = "no-pre-release"
+COMMAND_NAME_PRERELEASE: Final[str] = "pre-release"
+COMMAND_NAME_DEV_INCREMENT: Final[str] = "dev"
+COMMAND_NAME_POST_INCREMENT: Final[str] = "post"
+
+PRE_RELEASE_OPTION_ALPHA: Final[str] = "alpha"
+PRE_RELEASE_OPTION_BETA: Final[str] = "beta"
+PRE_RELEASE_OPTION_RC: Final[str] = "rc"
+PRE_RELEASE_OPTION_RC_ALT: Final[str] = "c"
+
+
 def create_actions(
     *,
     remove_parts: bool = True,
@@ -289,25 +305,65 @@ def create_actions(
 ) -> ActionCollection:
     return ActionCollection(
         {
-            "major": lambda v: MajorIncrementingVersionModifier(v, remove_parts),
-            "minor": lambda v: MinorIncrementingVersionModifier(v, remove_parts),
-            "micro": lambda v: MicroIncrementingVersionModifier(v, remove_parts),
-            "patch": lambda v: MicroIncrementingVersionModifier(v, remove_parts),
-            "pre-release": {
-                "alpha": lambda v: AlphaIncrementingVersionModifier(v, increment_micro),
-                "beta": lambda v: BetaIncrementingVersionModifier(v, increment_micro),
-                "rc": lambda v: ReleaseCandidateIncrementingVersionModifier(
+            COMMAND_NAME_MAJOR_INCREMENT: lambda v: MajorIncrementingVersionModifier(
+                v, remove_parts
+            ),
+            COMMAND_NAME_MINOR_INCREMENT: lambda v: MinorIncrementingVersionModifier(
+                v, remove_parts
+            ),
+            COMMAND_NAME_MICRO_INCREMENT: lambda v: MicroIncrementingVersionModifier(
+                v, remove_parts
+            ),
+            COMMAND_NAME_PATCH_INCREMENT: lambda v: MicroIncrementingVersionModifier(
+                v, remove_parts
+            ),
+            COMMAND_NAME_PRERELEASE: {
+                PRE_RELEASE_OPTION_ALPHA: lambda v: AlphaIncrementingVersionModifier(
                     v, increment_micro
                 ),
-                "c": lambda v: ReleaseCandidateIncrementingVersionModifier(
+                PRE_RELEASE_OPTION_BETA: lambda v: BetaIncrementingVersionModifier(
+                    v, increment_micro
+                ),
+                PRE_RELEASE_OPTION_RC: lambda v: ReleaseCandidateIncrementingVersionModifier(
+                    v, increment_micro
+                ),
+                PRE_RELEASE_OPTION_RC_ALT: lambda v: ReleaseCandidateIncrementingVersionModifier(
                     v, increment_micro
                 ),
             },
-            "no-pre-release": lambda v: FinalizingVersionModifier(v),
-            "epoch": lambda v: EpochIncrementingVersionModifier(
+            COMMAND_NAME_NO_PRERELEASE: lambda v: FinalizingVersionModifier(v),
+            COMMAND_NAME_EPOCH_INCREMENT: lambda v: EpochIncrementingVersionModifier(
                 v, remove_parts, reset_version
             ),
-            "dev": lambda v: DevelopmentVersionIncrementingVersionModifier(v),
-            "post": lambda v: PostVersionIncrementingVersionModifier(v),
+            COMMAND_NAME_DEV_INCREMENT: lambda v: DevelopmentVersionIncrementingVersionModifier(
+                v
+            ),
+            COMMAND_NAME_POST_INCREMENT: lambda v: PostVersionIncrementingVersionModifier(
+                v
+            ),
         }
     )
+
+
+COMMAND_NAMES: Final[Set[str]] = frozenset(
+    [
+        COMMAND_NAME_MAJOR_INCREMENT,
+        COMMAND_NAME_MINOR_INCREMENT,
+        COMMAND_NAME_MICRO_INCREMENT,
+        COMMAND_NAME_PATCH_INCREMENT,
+        COMMAND_NAME_PRERELEASE,
+        COMMAND_NAME_NO_PRERELEASE,
+        COMMAND_NAME_EPOCH_INCREMENT,
+        COMMAND_NAME_DEV_INCREMENT,
+        COMMAND_NAME_POST_INCREMENT,
+    ]
+)
+
+PRERELEASE_OPTIONS: Final[Set[str]] = frozenset(
+    [
+        PRE_RELEASE_OPTION_ALPHA,
+        PRE_RELEASE_OPTION_BETA,
+        PRE_RELEASE_OPTION_RC,
+        PRE_RELEASE_OPTION_RC_ALT,
+    ]
+)
