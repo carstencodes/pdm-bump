@@ -7,7 +7,7 @@ from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
 from annotated_types import Ge
 
-from .logging import logger
+from .logging import traced_function
 
 
 class VersionParserError(ValueError):
@@ -112,6 +112,7 @@ class Version:
 
 
 class Pep440VersionFormatter:
+    @traced_function
     def format(self, version: Version) -> str:
         parts: List[str] = []
 

@@ -3,7 +3,7 @@ from dataclasses import asdict as dataclass_to_dict
 from typing import Any, Dict, List, Tuple, Final, Union, Type, Callable, Set, cast
 
 from .version import Pep440VersionFormatter, Version, NonNegativeInteger
-from .logging import logger
+from .logging import logger, traced_function
 
 _formatter = Pep440VersionFormatter()
 
@@ -30,6 +30,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         super().__init__(version)
         self.__increment_micro = increment_micro
 
+    @traced_function
     def create_new_version(self) -> Version:
         letter: str
         name: str
@@ -137,6 +138,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def release_part(self) -> NonNegativeInteger:
         raise NotImplementedError()
 
+    @traced_function
     def create_new_version(self):
         construction_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
 
@@ -172,6 +174,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(self, version: Version) -> None:
         super().__init__(version, True)
 
+    @traced_function
     def create_new_version(self) -> Version:
         constructional_args: Dict[
             str, Any
@@ -212,6 +215,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         super().__init__(version, remove_parts)
         self.__reset_version = reset_version
 
+    @traced_function
     def create_new_version(self) -> Version:
         constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
 
@@ -226,6 +230,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
 
 class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
+    @traced_function
     def create_new_version(self) -> Version:
         dev_version: NonNegativeInteger = 1
         if self.current_version.is_development_version:
@@ -239,6 +244,7 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
 
 
 class PostVersionIncrementingVersionModifier(VersionModifier):
+    @traced_function
     def create_new_version(self) -> Version:
         post_version: NonNegativeInteger = 1
         if self.current_version.is_post_release:
@@ -257,6 +263,7 @@ ActionChoice: Type = Union[_NestedMappingTable, VersionModifierFactory]
 
 
 class ActionCollection(Dict[str, ActionChoice]):
+    @traced_function
     def get_action(self, action: str) -> VersionModifierFactory:
         if action in self.keys():
             choice: ActionChoice = self[action]
@@ -265,6 +272,7 @@ class ActionCollection(Dict[str, ActionChoice]):
 
         raise ValueError(f"{action} is not a valid command")
 
+    @traced_function
     def get_action_with_option(
         self, action: str, option: str
     ) -> VersionModifierFactory:

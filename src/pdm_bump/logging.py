@@ -56,8 +56,8 @@ def _get_rich_logger() -> Logger:
     std_out_handler.addFilter(_ErrorWarningsFilter(True))
     std_err_handler.addFilter(_ErrorWarningsFilter(False))
 
-    logger.addFilter(std_out_handler)
-    logger.addFilter(std_err_handler)
+    logger.addHandler(std_out_handler)
+    logger.addHandler(std_err_handler)
 
     return logger
 
@@ -76,3 +76,14 @@ def _get_std_logger() -> Logger:
 
 
 logger: Logger = _get_std_logger() if not HAS_RICH else _get_rich_logger()
+
+
+def traced_function(f):
+    def tracing_function(*args, **kwargs):
+        try:
+            logger.debug("%s: Entering function", f.__qualname__ or f.__name__)
+            return f(*args, **kwargs)
+        finally:
+            logger.debug("%s: Exiting function", f.__qualname__ or f.__name__)
+
+    return tracing_function

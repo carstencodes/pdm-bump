@@ -1,6 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from typing import Optional, Union, Tuple, Final, cast
-from logging import DEBUG, INFO, WARN
+from logging import DEBUG, INFO
+from traceback import format_exc as get_traceback
 
 from pdm import termui
 from pdm.cli.commands.base import BaseCommand
@@ -9,7 +10,7 @@ from pdm.core import Project
 from .version import Version, Pep440VersionFormatter
 
 from .config import Config
-from .logging import logger
+from .logging import logger, traced_function
 
 from .action import (
     VersionModifier,
@@ -20,10 +21,12 @@ from .action import (
     PRERELEASE_OPTIONS,
 )
 
+
 class BumpCommand(BaseCommand):
     name: str = "bump"
     description: str = "Bumps the version to a next version according to PEP440."
 
+    @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
             "what",
@@ -60,20 +63,23 @@ class BumpCommand(BaseCommand):
             action="store_true",
             help="When incrementing major, minor, micro or epoch, remove all pre-release parts",
         )
+        parser.add_argument(
+            "--trace",
+            action="store_true",
+            help="Enable debug output"
+        )
 
+    @traced_function
     def handle(self, project: Project, options: Namespace) -> None:
         config: Config = Config(project)
-        self._setup_logger(options.verbose)
+        self._setup_logger(options.trace)
 
         version_value: Optional[str] = cast(
             Optional[str], config.get_pyproject_value("project", "version")
         )
 
         if version_value is None:
-            self._log_error(
-                project,
-                "Cannot find version in {}".format(termui.bold(project.pyproject_file)),
-            )
+            logger.error("Cannot find version in %s", project.pyproject_file)
             return
 
         version: Version = Version.from_string(version_value)
@@ -86,14 +92,23 @@ class BumpCommand(BaseCommand):
             actions, version, options.what, options.pre
         )
 
-        result: Version = modifier.create_new_version()
+        result: Version
+        try:
+            result = modifier.create_new_version()
+        except ValueError:
+            logger.exception("Failed to update version to next version", exc_info=False)
+            logger.debug("Exception occurred: %s", get_traceback())
+            raise SystemExit(1)
 
         next_version: str = self._version_to_string(result)
 
         config.set_pyproject_value(next_version, "project", "version")
         if not options.dry_run:
             project.write_pyproject(True)
+        else:
+            logger.info("Would write new version %s", next_version)
 
+    @traced_function
     def _get_action(
         self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]
     ) -> VersionModifier:
@@ -106,6 +121,7 @@ class BumpCommand(BaseCommand):
         modifier: VersionModifier = modifierFactory(version)
         return modifier
 
+    @traced_function
     def _get_actions(
         self, increment_micro: bool, reset_version: bool, remove_parts: bool
     ) -> ActionCollection:
@@ -117,16 +133,11 @@ class BumpCommand(BaseCommand):
 
         return actions
 
-    def _log_error(self, project: Project, message: str) -> None:
-        formatted_message: str = termui.red(message)
-        project.core.ui.echo(formatted_message)
+    @traced_function
+    def _setup_logger(self, be_verbose: bool) -> None:
+        logger.setLevel(DEBUG if be_verbose else INFO)
 
-    def _setup_logger(self, verbosity_level: int) -> None:
-        log_levels: Final[Tuple[int, int, int]] = (WARN, INFO, DEBUG)
-        log_level_id: int = min(verbosity_level, len(log_levels) - 1)
-        log_level: int = log_levels[log_level_id]
-        logger.setLevel(log_level)
-
+    @traced_function
     def _version_to_string(self, version: Version) -> str:
         result: str = Pep440VersionFormatter().format(version)
         return result
