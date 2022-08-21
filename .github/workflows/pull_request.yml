@@ -1,0 +1,70 @@
+name: PullRequest validation
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - 3.9
+          - 3.10
+        pdm-version:
+          - 2.1.2
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@main
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64   
+          version: ${{ matrix.pdm-version }}
+          prerelease: true    
+          enable-pep582: true
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Install production dependencies
+        run: pdm install --prod
+      - name: Build wheel
+        run: pdm build
+  
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - 3.9
+          - 3.10
+        pdm-version:
+          - 2.1.2
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@main
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64   
+          version: ${{ matrix.pdm-version }}
+          prerelease: true    
+          enable-pep582: true
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Install production dependencies
+        run: pdm install --dev
+      - name: Build wheel
+        run: pdm run tests
+
+  # TODO Linter: pylint
+  # TODO Linter: flake8
