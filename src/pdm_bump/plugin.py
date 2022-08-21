@@ -3,7 +3,6 @@ from typing import Optional, Union, Tuple, Final, cast
 from logging import DEBUG, INFO
 from traceback import format_exc as get_traceback
 
-from pdm import termui
 from pdm.cli.commands.base import BaseCommand
 from pdm.core import Project
 
