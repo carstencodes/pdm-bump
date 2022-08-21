@@ -39,6 +39,8 @@ codestyle = [
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
 ]
+[tool.pdm.scripts]
+tests = "pytest --cache-clear --junit-xml=pytest.result.xml --cov=src --cov-report xml:pytest.coverage.xml --cov-report term"
 
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]
