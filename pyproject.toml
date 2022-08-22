@@ -12,7 +12,7 @@ dependencies = [
     "annotated-types>=0.2.0",
 ]
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = {file = "LICENSE"}
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
