@@ -39,14 +39,23 @@ codestyle = [
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
 ]
-[tool.pdm.scripts]
-tests = "pytest --cache-clear --junit-xml=pytest.result.xml --cov=src --cov-report xml:pytest.coverage.xml --cov-report term"
 
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]
 junit_suite_name = "pdm-bump"
 pythonpath = [ "src" ]
 minversion = "7.0.0"
+addopts = [
+    "--cache-clear", 
+    "--junit-xml",
+    "pytest.result.xml", 
+    "--cov=src", 
+    "--cov-branch",
+    "--cov-report", 
+    "xml:pytest.coverage.xml", 
+    "--cov-report", 
+    "term",
+]
 
 [tool.tox]
 legacy_tox_ini = """
@@ -61,12 +70,19 @@ isolated_build = true
 [testenv]
 setenv = 
     PDM_IGNORE_SAVED_PYTHON="1"
+whitelist_externals = 
+    mv
+    mkdir
 deps = pdm
 passenv = 
     PYTHONPATH
 commands =
     pdm install --dev
     pytest
+commands_pre = 
+    mkdir -p {toxinidir}/results/{envname}
+commands_post = 
+    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/
 """
 
 [project.entry-points.pdm]
