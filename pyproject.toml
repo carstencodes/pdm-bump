@@ -32,17 +32,26 @@ test = [
     "tox-pdm>=0.6.0",
     "pytest-cov>=3.0.0",
 ]
-codestyle = [
+checkstlye = [
     "flake8>=3.9.2",
     "flake518>=1.2.3",
     "mypy>=0.971",
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
 ]
-coding = [
+formatting = [
     "black>=22.6.0",
     "isort>=5.10.1",
 ]
+
+[tool.pdm.scripts]
+flake = "flake518 --exit-zero src/"
+mypy = "mypy src/"
+pylint = "pylint --exit-zero src/"
+check-style = { composite = ["flake", "pylint", "mypy"] }
+isort = "isort src/"
+black = "black src/"
+format = { composite = [ "isort", "black" ] }
 
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]

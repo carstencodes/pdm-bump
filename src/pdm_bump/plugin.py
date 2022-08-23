@@ -36,14 +36,14 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "what",
             action="store",
-            choices=[c for c in COMMAND_NAMES],
+            choices=list(COMMAND_NAMES),
             default=None,
             help="The part of the version to bump according to PEP 440: major.minor.micro.",
         )
         parser.add_argument(
             "--pre",
             action="store",
-            choices=[p for p in PRERELEASE_OPTIONS],
+            choices=list(PRERELEASE_OPTIONS),
             default=None,
             help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
         )
@@ -96,10 +96,10 @@ class BumpCommand(BaseCommand):
         result: Version
         try:
             result = modifier.create_new_version()
-        except ValueError:
+        except ValueError as exc:
             logger.exception("Failed to update version to next version", exc_info=False)
             logger.debug("Exception occurred: %s", get_traceback())
-            raise SystemExit(1)
+            raise SystemExit(1) from exc
 
         next_version: str = self._version_to_string(result)
 
@@ -113,13 +113,13 @@ class BumpCommand(BaseCommand):
     def _get_action(
         self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]
     ) -> VersionModifier:
-        modifierFactory: VersionModifierFactory
+        modifier_factory: VersionModifierFactory
         if pre is not None:
-            modifierFactory = actions.get_action_with_option(what, pre)
+            modifier_factory = actions.get_action_with_option(what, pre)
         else:
-            modifierFactory = actions.get_action(what)
+            modifier_factory = actions.get_action(what)
 
-        modifier: VersionModifier = modifierFactory(version)
+        modifier: VersionModifier = modifier_factory(version)
         return modifier
 
     @traced_function

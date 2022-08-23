@@ -65,7 +65,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
                 Tuple[
                     Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
                 ],
-                self.create_new_version.pre,
+                self.current_version.preview,
             )
             pre = (pre[0], pre[1] + 1)
 

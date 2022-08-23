@@ -16,7 +16,7 @@ from typing import Dict, Final, Optional, Tuple
 
 def _get_has_rich():
     try:
-        import rich # noqa F401
+        import rich  # noqa F401
     except ImportError:
         return False
     else:
@@ -35,6 +35,7 @@ if HAS_RICH:
 class _ErrorWarningsFilter(Filter):
     def __init__(self, invert: Optional[bool] = False) -> None:
         self.__invert: bool = invert or False
+        super().__init__()
 
     def filter(self, record: LogRecord) -> bool:
         warning_and_above: Tuple[int, ...] = (WARN, WARNING, ERROR, CRITICAL)
@@ -48,7 +49,7 @@ class _ErrorWarningsFilter(Filter):
 def _get_rich_logger() -> Logger:
     logger: Logger = getLogger("pdm-bump")
 
-    styles: Dict[str, StyleType] = dict()
+    styles: Dict[str, StyleType] = {}
     styles.update(DEFAULT_STYLES)
     styles.update(
         {
@@ -94,12 +95,12 @@ def _get_std_logger() -> Logger:
 logger: Logger = _get_std_logger() if not HAS_RICH else _get_rich_logger()
 
 
-def traced_function(f):
+def traced_function(fun):
     def tracing_function(*args, **kwargs):
         try:
-            logger.debug("%s: Entering function", f.__qualname__ or f.__name__)
-            return f(*args, **kwargs)
+            logger.debug("%s: Entering function", fun.__qualname__ or fun.__name__)
+            return fun(*args, **kwargs)
         finally:
-            logger.debug("%s: Exiting function", f.__qualname__ or f.__name__)
+            logger.debug("%s: Exiting function", fun.__qualname__ or fun.__name__)
 
     return tracing_function
