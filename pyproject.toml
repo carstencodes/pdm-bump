@@ -82,7 +82,7 @@ legacy_tox_ini = """
 minversion = 3.25.0
 requires = tox-pdm
 skip_missing_interpreters = false
-envlist = py{39, 310}
+envlist = py{39, 310, 311}
 isolated_build = true
 skipsdist = true
 
