@@ -1,7 +1,8 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, Literal, cast
+from typing import List, Optional, Tuple, Literal, Any, cast
 from typing import Annotated
+from functools import total_ordering
 
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
@@ -23,7 +24,8 @@ NonNegative = Ge(0)
 NonNegativeInteger = Annotated[int, NonNegative]
 
 
-@dataclass
+@dataclass(eq=False, order=False, frozen=True)
+@total_ordering
 class Version:
     epoch: NonNegativeInteger = field()
     release: Tuple[NonNegativeInteger, ...] = field()
@@ -79,6 +81,32 @@ class Version:
             pre: Tuple[str, int] = cast(Tuple[str, int], self.preview)
             return pre[0] in valid_parts
         return False
+
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Version):
+            raise ValueError(f"{other} must be an instance of Version")
+        other_version: Version = cast(Version, other)
+        return (
+            self.release == other_version.release
+            and self.preview == other_version.preview
+            and self.post == other_version.dev
+            and self.dev == other_version.dev
+            and self.local == other_version.local
+        )
+
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Version):
+            raise ValueError(f"{other} must be an instance of Version")
+        other_version: Version = cast(Version, other)
+        my_data = (self.release, self.preview, self.post, self.dev, self.local)
+        other_data = (
+            other_version.release,
+            other_version.preview,
+            other_version.post,
+            other_version.dev,
+            other_version.local,
+        )
+        return my_data < other_data
 
     @staticmethod
     def default() -> "Version":
