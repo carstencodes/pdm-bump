@@ -39,6 +39,9 @@ codestyle = [
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
 ]
+coding = [
+    "isort>=5.10.1",
+]
 
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]
@@ -56,6 +59,9 @@ addopts = [
     "--cov-report", 
     "term",
 ]
+filterwarnings = [
+    "ignore::DeprecationWarning "
+]
 
 [tool.tox]
 legacy_tox_ini = """
@@ -65,6 +71,7 @@ requires = tox-pdm
 skip_missing_interpreters = false
 envlist = py{39, 310}
 isolated_build = true
+skipsdist = true
 
 
 [testenv]
@@ -73,7 +80,11 @@ setenv =
 whitelist_externals = 
     mv
     mkdir
+    pytest
+    pdm
+    python
 deps = pdm
+recreate = true
 passenv = 
     PYTHONPATH
 commands =
