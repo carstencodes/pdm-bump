@@ -62,11 +62,7 @@ class BumpCommand(BaseCommand):
             action="store_true",
             help="When incrementing major, minor, micro or epoch, remove all pre-release parts",
         )
-        parser.add_argument(
-            "--trace",
-            action="store_true",
-            help="Enable debug output"
-        )
+        parser.add_argument("--trace", action="store_true", help="Enable debug output")
 
     @traced_function
     def handle(self, project: Project, options: Namespace) -> None:
