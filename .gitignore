@@ -8,3 +8,4 @@ pdm_bump.egg-info/
 **/__pycache__/**/*.pyc
 pytest.*.xml
 .coverage
+results/
