@@ -5,6 +5,15 @@ requires_python = ">=3.7.0,<4.0.0"
 summary = "Reusable constraint types to use with typing.Annotated"
 
 [[package]]
+name = "arrow"
+version = "1.2.1"
+requires_python = ">=3.6"
+summary = "Better dates & times for Python"
+dependencies = [
+    "python-dateutil>=2.7.0",
+]
+
+[[package]]
 name = "astroid"
 version = "2.11.7"
 requires_python = ">=3.6.2"
@@ -82,8 +91,8 @@ summary = "The Real First Universal Charset Detector. Open, modern and actively 
 
 [[package]]
 name = "click"
-version = "8.1.3"
-requires_python = ">=3.7"
+version = "8.0.3"
+requires_python = ">=3.6"
 summary = "Composable command line interface toolkit"
 dependencies = [
     "colorama; platform_system == \"Windows\"",
@@ -162,6 +171,39 @@ dependencies = [
     "mccabe<0.7.0,>=0.6.0",
     "pycodestyle<2.8.0,>=2.7.0",
     "pyflakes<2.4.0,>=2.3.0",
+]
+
+[[package]]
+name = "gitlint"
+version = "0.17.0"
+requires_python = ">=3.6"
+summary = "Git commit message linter written in python, checks your commit messages for style."
+dependencies = [
+    "gitlint-core[trusted-deps]==0.17.0",
+]
+
+[[package]]
+name = "gitlint-core"
+version = "0.17.0"
+requires_python = ">=3.6"
+summary = "Git commit message linter written in python, checks your commit messages for style."
+dependencies = [
+    "Click>=8",
+    "arrow>=1",
+    "sh>=1.13.0; sys_platform != \"win32\"",
+]
+
+[[package]]
+name = "gitlint-core"
+version = "0.17.0"
+extras = ["trusted-deps"]
+requires_python = ">=3.6"
+summary = "Git commit message linter written in python, checks your commit messages for style."
+dependencies = [
+    "Click==8.0.3",
+    "arrow==1.2.1",
+    "gitlint-core==0.17.0",
+    "sh==1.14.2; sys_platform != \"win32\"",
 ]
 
 [[package]]
@@ -374,6 +416,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "python-dateutil"
+version = "2.8.2"
+requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+summary = "Extensions to the standard Python datetime module"
+dependencies = [
+    "six>=1.5",
+]
+
+[[package]]
 name = "python-dotenv"
 version = "0.19.2"
 requires_python = ">=3.5"
@@ -419,6 +470,11 @@ name = "setuptools"
 version = "65.1.1"
 requires_python = ">=3.7"
 summary = "Easily download, build, install, upgrade, and uninstall Python packages"
+
+[[package]]
+name = "sh"
+version = "1.14.2"
+summary = "Python subprocess replacement"
 
 [[package]]
 name = "shellingham"
@@ -517,12 +573,16 @@ summary = "Module for decorators, wrappers and monkey patching."
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d12c08ab"
+content_hash = "sha256:3c003204959c6f64c4751c0b047898d55a8eed84e88e0ea204866a80e211f4c7"
 
 [metadata.files]
 "annotated-types 0.2.0" = [
     {url = "https://files.pythonhosted.org/packages/1d/3f/bd2fb1eb48062ee269d8c9692bb1c900d14f781ea760e40d7fadb4698265/annotated_types-0.2.0-py3-none-any.whl", hash = "sha256:5e7d2e6f477b7abe7b44c1903bb5fb86320fa2fa41837d8e9a81c7beb999a079"},
     {url = "https://files.pythonhosted.org/packages/de/b9/314ad264b5630f6f7c8a37baea52042b47bab959bd96d90e79743a771473/annotated-types-0.2.0.tar.gz", hash = "sha256:82afd5f40c1e77066b7cf54209c7160a5a30b91108d6dead943c64a511b10918"},
+]
+"arrow 1.2.1" = [
+    {url = "https://files.pythonhosted.org/packages/25/e2/85d4a709a3ea58f8e36b4db9eb7927560a2fa4b6f8f362fb6475962fec51/arrow-1.2.1.tar.gz", hash = "sha256:c2dde3c382d9f7e6922ce636bf0b318a7a853df40ecb383b29192e6c5cc82840"},
+    {url = "https://files.pythonhosted.org/packages/f4/97/a6b394b0ee6c9a7f645308f3a205c6cfe4fc804aac1bf29e4aebb5cd5a16/arrow-1.2.1-py3-none-any.whl", hash = "sha256:6b2914ef3997d1fd7b37a71ce9dd61a6e329d09e1c7b44f4d3099ca4a5c0933e"},
 ]
 "astroid 2.11.7" = [
     {url = "https://files.pythonhosted.org/packages/47/fa/cedd4cf37634b2fcc3773cedd0a9ca05fed2fa014d3d03815b04b7738ade/astroid-2.11.7.tar.gz", hash = "sha256:bb24615c77f4837c707669d16907331374ae8a964650a66999da3f5ca68dc946"},
@@ -575,9 +635,9 @@ content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d
     {url = "https://files.pythonhosted.org/packages/a1/34/44964211e5410b051e4b8d2869c470ae8a68ae274953b1c7de6d98bbcf94/charset-normalizer-2.1.1.tar.gz", hash = "sha256:5a3d016c7c547f69d6f81fb0db9449ce888b418b5b9952cc5e6e66843e9dd845"},
     {url = "https://files.pythonhosted.org/packages/db/51/a507c856293ab05cdc1db77ff4bc1268ddd39f29e7dc4919aa497f0adbec/charset_normalizer-2.1.1-py3-none-any.whl", hash = "sha256:83e9a75d1911279afd89352c68b45348559d1fc0506b054b346651b5e7fee29f"},
 ]
-"click 8.1.3" = [
-    {url = "https://files.pythonhosted.org/packages/59/87/84326af34517fca8c58418d148f2403df25303e02736832403587318e9e8/click-8.1.3.tar.gz", hash = "sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e"},
-    {url = "https://files.pythonhosted.org/packages/c2/f1/df59e28c642d583f7dacffb1e0965d0e00b218e0186d7858ac5233dce840/click-8.1.3-py3-none-any.whl", hash = "sha256:bb4d8133cb15a609f44e8213d9b391b0809795062913b383c62be0ee95b1db48"},
+"click 8.0.3" = [
+    {url = "https://files.pythonhosted.org/packages/48/58/c8aa6a8e62cc75f39fee1092c45d6b6ba684122697d7ce7d53f64f98a129/click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
+    {url = "https://files.pythonhosted.org/packages/f4/09/ad003f1e3428017d1c3da4ccc9547591703ffea548626f47ec74509c5824/click-8.0.3.tar.gz", hash = "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"},
 ]
 "colorama 0.4.5" = [
     {url = "https://files.pythonhosted.org/packages/2b/65/24d033a9325ce42ccbfa3ca2d0866c7e89cc68e5b9d92ecaba9feef631df/colorama-0.4.5.tar.gz", hash = "sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4"},
@@ -662,6 +722,14 @@ content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d
 "flake8 3.9.2" = [
     {url = "https://files.pythonhosted.org/packages/9e/47/15b267dfe7e03dca4c4c06e7eadbd55ef4dfd368b13a0bab36d708b14366/flake8-3.9.2.tar.gz", hash = "sha256:07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b"},
     {url = "https://files.pythonhosted.org/packages/fc/80/35a0716e5d5101e643404dabd20f07f5528a21f3ef4032d31a49c913237b/flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
+]
+"gitlint 0.17.0" = [
+    {url = "https://files.pythonhosted.org/packages/92/15/8850b30ac84e47ae7af0d50b63da171c19a63fa947139efa8de7a3cbc9a6/gitlint-0.17.0.tar.gz", hash = "sha256:8c10c6b404d255b43ddc4a2f5f13bcb10284bc162adfb2c03b10708309009189"},
+    {url = "https://files.pythonhosted.org/packages/c8/50/a759ace81525668830a23840e6a8d5d8562f202aef39decca9388f10614f/gitlint-0.17.0-py2.py3-none-any.whl", hash = "sha256:46469d5db3f3bca72fa946c159d0733dc8c75211309477676295cf2d80d177b4"},
+]
+"gitlint-core 0.17.0" = [
+    {url = "https://files.pythonhosted.org/packages/64/dd/d8f1226885b107bda6b97b63566381a37d61187562f32eae77e71e8fa261/gitlint_core-0.17.0-py2.py3-none-any.whl", hash = "sha256:cb99ccd736a698b910385211203bda94bf4ce29086d0c08f8f58a18c40a98377"},
+    {url = "https://files.pythonhosted.org/packages/91/77/2fc5418edff33060dd7a51aa323ee7d3df11503952b8e4e46ee65d18d815/gitlint-core-0.17.0.tar.gz", hash = "sha256:772dfd33effaa8515ca73e901466aa938c19ced894bec6783d19691f57429691"},
 ]
 "idna 3.3" = [
     {url = "https://files.pythonhosted.org/packages/04/a2/d918dcd22354d8958fe113e1a3630137e0fc8b44859ade3063982eacd2a4/idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
@@ -873,6 +941,10 @@ content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d
     {url = "https://files.pythonhosted.org/packages/20/49/b3e0edec68d81846f519c602ac38af9db86e1e71275528b3e814ae236063/pytest_cov-3.0.0-py3-none-any.whl", hash = "sha256:578d5d15ac4a25e5f961c938b85a05b09fdaae9deef3bb6de9a6e766622ca7a6"},
     {url = "https://files.pythonhosted.org/packages/61/41/e046526849972555928a6d31c2068410e47a31fb5ab0a77f868596811329/pytest-cov-3.0.0.tar.gz", hash = "sha256:e7f0f5b1617d2210a2cabc266dfe2f4c75a8d32fb89eafb7ad9d06f6d076d470"},
 ]
+"python-dateutil 2.8.2" = [
+    {url = "https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
+    {url = "https://files.pythonhosted.org/packages/4c/c4/13b4776ea2d76c115c1d1b84579f3764ee6d57204f6be27119f13a61d0a9/python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
+]
 "python-dotenv 0.19.2" = [
     {url = "https://files.pythonhosted.org/packages/0e/f1/0317f4b2c5284075a2154fe95539b43c0acecbcb86fe80fcb2645803edd9/python_dotenv-0.19.2-py2.py3-none-any.whl", hash = "sha256:32b2bdc1873fd3a3c346da1c6db83d0053c3c62f28f1f38516070c4c8971b1d3"},
     {url = "https://files.pythonhosted.org/packages/49/62/4f25667e10561303a34cb89e3187c35985c0889b99f6f1468aaf17fbb03e/python-dotenv-0.19.2.tar.gz", hash = "sha256:a5de49a31e953b45ff2d2fd434bbc2670e8db5273606c1e737cc6b93eff3655f"},
@@ -896,6 +968,10 @@ content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d
 "setuptools 65.1.1" = [
     {url = "https://files.pythonhosted.org/packages/6d/1e/ff7c90e2a0514cef2ed4fb7d49944d45674fe7c7a305d6553a5025ae09fa/setuptools-65.1.1-py3-none-any.whl", hash = "sha256:1c664b23706b753986b0f4b13e20bb82177ab29450d5b4d5d6d244c34a2235bd"},
     {url = "https://files.pythonhosted.org/packages/a6/0f/a0c589e2ae4aa45000d6917d248e64c8805ef3a35c134a43194e6d7abbd0/setuptools-65.1.1.tar.gz", hash = "sha256:201d7b596b0685f2dd3aaf231a637ffda51fc61323631d915e5c55b79d2d8115"},
+]
+"sh 1.14.2" = [
+    {url = "https://files.pythonhosted.org/packages/7a/c3/0836b7b975d09428d90f926dc1f86e2d76d721cf79bd6659838761c35f85/sh-1.14.2-py2.py3-none-any.whl", hash = "sha256:4921ac9c1a77ec8084bdfaf152fe14138e2b3557cc740002c1a97076321fce8a"},
+    {url = "https://files.pythonhosted.org/packages/80/39/ed280d183c322453e276a518605b2435f682342f2c3bcf63228404d36375/sh-1.14.2.tar.gz", hash = "sha256:9d7bd0334d494b2a4609fe521b2107438cdb21c0e469ffeeb191489883d6fe0d"},
 ]
 "shellingham 1.4.0" = [
     {url = "https://files.pythonhosted.org/packages/76/94/7a764d57d0f46534e0022e651da6547bc5cfe7b6372e7e0ed1dde6f5cb67/shellingham-1.4.0-py2.py3-none-any.whl", hash = "sha256:536b67a0697f2e4af32ab176c00a50ac2899c5a05e0d8e2dadac8e58888283f9"},

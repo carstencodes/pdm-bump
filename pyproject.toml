@@ -43,6 +43,9 @@ formatting = [
     "black>=22.6.0",
     "isort>=5.10.1",
 ]
+release = [
+    "gitlint>=0.17.0",
+]
 
 [tool.pdm.scripts]
 flake = "flake518 --exit-zero src/"
