@@ -36,11 +36,11 @@ codestyle = [
     "flake8>=3.9.2",
     "flake518>=1.2.3",
     "mypy>=0.971",
-    "black>=22.6.0",
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
 ]
 coding = [
+    "black>=22.6.0",
     "isort>=5.10.1",
 ]
 
