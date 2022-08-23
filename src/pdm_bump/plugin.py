@@ -1,24 +1,16 @@
 from argparse import ArgumentParser, Namespace
-from typing import Optional, Union, Tuple, Final, cast
 from logging import DEBUG, INFO
 from traceback import format_exc as get_traceback
+from typing import Final, Optional, Tuple, Union, cast
 
 from pdm.cli.commands.base import BaseCommand
 from pdm.core import Project
 
-from .version import Version, Pep440VersionFormatter
-
+from .action import (COMMAND_NAMES, PRERELEASE_OPTIONS, ActionCollection,
+                     VersionModifier, VersionModifierFactory, create_actions)
 from .config import Config
 from .logging import logger, traced_function
-
-from .action import (
-    VersionModifier,
-    VersionModifierFactory,
-    create_actions,
-    ActionCollection,
-    COMMAND_NAMES,
-    PRERELEASE_OPTIONS,
-)
+from .version import Pep440VersionFormatter, Version
 
 
 class BumpCommand(BaseCommand):

@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import Any, Dict, List, Tuple, Final, Union, Type, Callable, Set, cast
+from typing import (Any, Callable, Dict, Final, List, Set, Tuple, Type, Union,
+                    cast)
 
-from .version import Pep440VersionFormatter, Version, NonNegativeInteger
 from .logging import logger, traced_function
+from .version import NonNegativeInteger, Pep440VersionFormatter, Version
 
 _formatter = Pep440VersionFormatter()
 

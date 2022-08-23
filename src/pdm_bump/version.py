@@ -1,12 +1,11 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, Literal, Any, cast
-from typing import Annotated
 from functools import total_ordering
+from typing import Annotated, Any, List, Literal, Optional, Tuple, cast
 
+from annotated_types import Ge
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
-from annotated_types import Ge
 
 from .logging import traced_function
 

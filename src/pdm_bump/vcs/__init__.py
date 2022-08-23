@@ -1,10 +1,5 @@
-from .core import (
-    DefaultVcsProvider,
-    VcsProvider,
-    VcsProviderFactory,
-    vcs_provider,
-    vcs_providers,
-)
+from .core import (DefaultVcsProvider, VcsProvider, VcsProviderFactory,
+                   vcs_provider, vcs_providers)
 
 __all__ = (
     "vcs_provider",

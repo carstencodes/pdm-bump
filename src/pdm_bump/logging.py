@@ -1,7 +1,7 @@
-from typing import Final, Optional, Tuple, Dict
-from logging import Logger, Handler, StreamHandler, Filter, getLogger, LogRecord
-from logging import WARN, WARNING, ERROR, CRITICAL
+from logging import (CRITICAL, ERROR, WARN, WARNING, Filter, Handler, Logger,
+                     LogRecord, StreamHandler, getLogger)
 from sys import stderr, stdout
+from typing import Dict, Final, Optional, Tuple
 
 try:
     import rich
@@ -12,9 +12,9 @@ else:
 
 if HAS_RICH:
     from rich.console import Console
-    from rich.theme import Theme, StyleType, Style
     from rich.default_styles import DEFAULT_STYLES
     from rich.logging import RichHandler
+    from rich.theme import Style, StyleType, Theme
 
 
 class _ErrorWarningsFilter(Filter):
