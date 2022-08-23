@@ -10,7 +10,6 @@ from typing import (
     List,
     Literal,
     Tuple,
-    Type,
     Union,
     cast,
 )

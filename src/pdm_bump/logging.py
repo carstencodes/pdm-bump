@@ -16,7 +16,7 @@ from typing import Dict, Final, Optional, Tuple
 
 def _get_has_rich():
     try:
-        import rich
+        import rich # noqa F401
     except ImportError:
         return False
     else:
@@ -80,8 +80,8 @@ def _get_rich_logger() -> Logger:
 def _get_std_logger() -> Logger:
     logger: Logger = getLogger("pdm-bump")
     # mypy: No overload variant of "StreamHandler" matches argument type "Handler"
-    std_out: Handler = StreamHandler(stream=std_out)  # type: ignore
-    std_err: Handler = StreamHandler(stream=std_err)  # type: ignore
+    std_out: Handler = StreamHandler(stream=stdout)  # type: ignore
+    std_err: Handler = StreamHandler(stream=stderr)  # type: ignore
 
     std_out.addFilter(_ErrorWarningsFilter(True))
     std_err.addFilter(_ErrorWarningsFilter(False))

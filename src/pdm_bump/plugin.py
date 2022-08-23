@@ -1,10 +1,9 @@
 from argparse import ArgumentParser, Namespace
 from logging import DEBUG, INFO
 from traceback import format_exc as get_traceback
-from typing import Final, Optional, Protocol, Tuple, Union, cast
+from typing import Optional, Protocol, cast
 
 from pdm.cli.commands.base import BaseCommand
-from pdm.core import Project
 
 from .action import (
     COMMAND_NAMES,
