@@ -3,12 +3,15 @@ from logging import (CRITICAL, ERROR, WARN, WARNING, Filter, Handler, Logger,
 from sys import stderr, stdout
 from typing import Dict, Final, Optional, Tuple
 
-try:
-    import rich
-except ImportError:
-    HAS_RICH: Final[bool] = False
-else:
-    HAS_RICH: Final[bool] = True
+def _get_has_rich():
+    try:
+        import rich
+    except ImportError:
+        return False
+    else:
+        return True
+
+HAS_RICH: Final[bool] = _get_has_rich() 
 
 if HAS_RICH:
     from rich.console import Console
@@ -22,7 +25,7 @@ class _ErrorWarningsFilter(Filter):
         self.__invert: bool = invert or False
 
     def filter(self, record: LogRecord) -> bool:
-        warning_and_above: Tuple[int] = (WARN, WARNING, ERROR, CRITICAL)
+        warning_and_above: Tuple[int, ...] = (WARN, WARNING, ERROR, CRITICAL)
         return (
             record.levelno in warning_and_above
             if not self.__invert
@@ -64,8 +67,9 @@ def _get_rich_logger() -> Logger:
 
 def _get_std_logger() -> Logger:
     logger: Logger = getLogger("pdm-bump")
-    std_out: Handler = StreamHandler(stream=std_out)
-    std_err: Handler = StreamHandler(stream=std_err)
+    #mypy: No overload variant of "StreamHandler" matches argument type "Handler"
+    std_out: Handler = StreamHandler(stream=std_out) #type: ignore
+    std_err: Handler = StreamHandler(stream=std_err) #type: ignore
 
     std_out.addFilter(_ErrorWarningsFilter(True))
     std_err.addFilter(_ErrorWarningsFilter(False))

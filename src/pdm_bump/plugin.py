@@ -1,16 +1,25 @@
 from argparse import ArgumentParser, Namespace
 from logging import DEBUG, INFO
 from traceback import format_exc as get_traceback
-from typing import Final, Optional, Tuple, Union, cast
+from typing import Final, Optional, Tuple, Union, Protocol, cast
 
 from pdm.cli.commands.base import BaseCommand
 from pdm.core import Project
 
 from .action import (COMMAND_NAMES, PRERELEASE_OPTIONS, ActionCollection,
                      VersionModifier, VersionModifierFactory, create_actions)
-from .config import Config
+from .config import Config, ConfigHolder
 from .logging import logger, traced_function
 from .version import Pep440VersionFormatter, Version
+
+
+class _ProjectLike(ConfigHolder, Protocol):
+    @property
+    def pyproject_file(self) -> str:
+        pass
+    
+    def write_pyproject(self, show_message: bool) -> None:
+        pass
 
 
 class BumpCommand(BaseCommand):
@@ -57,7 +66,7 @@ class BumpCommand(BaseCommand):
         parser.add_argument("--trace", action="store_true", help="Enable debug output")
 
     @traced_function
-    def handle(self, project: Project, options: Namespace) -> None:
+    def handle(self, project: _ProjectLike, options: Namespace) -> None:
         config: Config = Config(project)
         self._setup_logger(options.trace)
 

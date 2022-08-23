@@ -114,15 +114,15 @@ class Version:
     @staticmethod
     def from_string(version: str) -> "Version":
         try:
-            version: BaseVersion = BaseVersion(version)
+            _version: BaseVersion = BaseVersion(version)
 
             return Version(
-                version.epoch,
-                version.release,
-                version.pre,
-                version.post,
-                version.dev,
-                version.local,
+                _version.epoch,
+                _version.release,
+                cast(Optional[Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], int]], _version.pre),
+                ("post", _version.post[1]) if _version.post is not None else None,
+                ("dev", _version.dev[1]) if _version.dev is not None else None,
+                _version.local,
             )
         except InvalidVersion as error:
             raise VersionParserError(
@@ -149,12 +149,12 @@ class Pep440VersionFormatter:
         parts.append(".".join(str(part) for part in version.release))
 
         if version.preview is not None:
-            parts.append(str(part) for part in version.preview)
+            parts.extend(str(part) for part in version.preview)
 
-        if version.is_post_release:
+        if version.post is not None:
             parts.append(f".post{list(version.post)[1]}")
 
-        if version.is_development_version:
+        if version.dev is not None:
             parts.append(f".dev{list(version.dev)[1]}")
 
         if version.is_local_version:

@@ -1,40 +1,51 @@
-from typing import Any, Optional, cast
+from typing import Any, Optional, Protocol, cast
 
 from pdm.core import Project
 
 from .logging import logger, traced_function
 
 
+class ConfigHolder(Protocol):
+    @property
+    def pyproject(self) -> dict[str, Any]:
+        pass
+
+    @property
+    def config(self) -> dict[str, Any]:
+        pass
+
 @traced_function
 def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:
+    front: str
     while len(keys) > 1:
-        front: str = keys[0]
+        front = keys[0]
         if front in config.keys():
             config = cast(dict[str, Any], config[front])
             keys = tuple(keys[1:])
         else:
             return None
 
-    front: str = keys[0]
+    front = keys[0]
     return None if front not in config.keys() else config[front]
 
 
 @traced_function
 def _set_config_value(config: dict[str, Any], value: Any, *keys: str) -> None:
+    front: str
     while len(keys) > 1:
-        front: str = keys[0]
+        front = keys[0]
         if front not in config.keys():
             config[front] = {}
         config = config[front]
         keys = tuple(keys[1:])
 
-    front: str = keys[0]
+    front = keys[0]
     config[front] = value
 
 
 class Config:
-    def __init__(self, project: Project) -> None:
-        self.__project = project
+    def __init__(self, project: ConfigHolder) -> None:
+        self.__project: ConfigHolder = project
 
     @traced_function
     def get_pyproject_value(self, *keys: str) -> Optional[Any]:

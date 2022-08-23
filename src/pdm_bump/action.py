@@ -1,7 +1,14 @@
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import (Any, Callable, Dict, Final, List, Set, Tuple, Type, Union,
-                    cast)
+from typing import (Any, Callable, Dict, Final, List, FrozenSet, Tuple, Type, Union,
+                    Literal, cast)
+
+import sys
+if sys.version_info >= (3, 10, 0):
+    # suspicious mypy behavior
+    from typing import TypeAlias #type: ignore
+else:
+    from typing_extensions import TypeAlias
 
 from .logging import logger, traced_function
 from .version import NonNegativeInteger, Pep440VersionFormatter, Version
@@ -33,16 +40,16 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
-        letter: str
+        letter: Literal['a', 'b', 'c', 'alpha', 'beta', 'rc']
         name: str
         letter, name = self.pre_release_part
-        pre: Tuple[str, NonNegativeInteger] = (letter, 1)
+        pre: Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], NonNegativeInteger] = (letter, 1)
         if self.current_version.preview is not None:
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} is not an {name} version."
                 )
-            pre = cast(Tuple[str, NonNegativeInteger], self.create_new_version.pre)
+            pre = cast(Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], NonNegativeInteger], self.create_new_version.pre)
             pre = (pre[0], pre[1] + 1)
 
         return Version(
@@ -50,7 +57,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         )
 
     @abstractproperty
-    def pre_release_part(self) -> Tuple[str, str]:
+    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
         raise NotImplementedError()
 
     @abstractmethod
@@ -76,7 +83,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
-    def pre_release_part(self) -> Tuple[str, str]:
+    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
         return ("a", "alpha")
 
     def _is_valid_preview_version(self) -> bool:
@@ -85,7 +92,7 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
-    def pre_release_part(self) -> Tuple[str, str]:
+    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
         return ("b", "alpha or beta")
 
     def _is_valid_preview_version(self) -> bool:
@@ -96,7 +103,7 @@ class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
     @property
-    def pre_release_part(self) -> Tuple[str, str]:
+    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
         return ("rc", "pre-release")
 
     def _is_valid_preview_version(self) -> bool:
@@ -234,7 +241,7 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         dev_version: NonNegativeInteger = 1
-        if self.current_version.is_development_version:
+        if self.current_version.dev is not None:
             _, dev_version = self.current_version.dev
             dev_version = dev_version + 1
 
@@ -248,7 +255,7 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         post_version: NonNegativeInteger = 1
-        if self.current_version.is_post_release:
+        if self.current_version.post is not None:
             _, post_version = self.current_version.post
             post_version = post_version + 1
 
@@ -258,9 +265,9 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
         return Version(**constructional_args)
 
 
-VersionModifierFactory: Type = Callable[[Version], VersionModifier]
-_NestedMappingTable: Type = Dict[str, VersionModifierFactory]
-ActionChoice: Type = Union[_NestedMappingTable, VersionModifierFactory]
+VersionModifierFactory: TypeAlias = Callable[[Version], VersionModifier]
+_NestedMappingTable: TypeAlias = Dict[str, VersionModifierFactory]
+ActionChoice: TypeAlias = Union[_NestedMappingTable, VersionModifierFactory]
 
 
 class ActionCollection(Dict[str, ActionChoice]):
@@ -354,7 +361,7 @@ def create_actions(
     )
 
 
-COMMAND_NAMES: Final[Set[str]] = frozenset(
+COMMAND_NAMES: Final[FrozenSet[str]] = frozenset(
     [
         COMMAND_NAME_MAJOR_INCREMENT,
         COMMAND_NAME_MINOR_INCREMENT,
@@ -368,7 +375,7 @@ COMMAND_NAMES: Final[Set[str]] = frozenset(
     ]
 )
 
-PRERELEASE_OPTIONS: Final[Set[str]] = frozenset(
+PRERELEASE_OPTIONS: Final[FrozenSet[str]] = frozenset(
     [
         PRE_RELEASE_OPTION_ALPHA,
         PRE_RELEASE_OPTION_BETA,
