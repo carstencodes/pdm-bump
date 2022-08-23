@@ -119,7 +119,10 @@ class Version:
             return Version(
                 _version.epoch,
                 _version.release,
-                cast(Optional[Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], int]], _version.pre),
+                cast(
+                    Optional[Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], int]],
+                    _version.pre,
+                ),
                 ("post", _version.post[1]) if _version.post is not None else None,
                 ("dev", _version.dev[1]) if _version.dev is not None else None,
                 _version.local,

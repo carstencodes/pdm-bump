@@ -1,7 +1,18 @@
-from logging import (CRITICAL, ERROR, WARN, WARNING, Filter, Handler, Logger,
-                     LogRecord, StreamHandler, getLogger)
+from logging import (
+    CRITICAL,
+    ERROR,
+    WARN,
+    WARNING,
+    Filter,
+    Handler,
+    Logger,
+    LogRecord,
+    StreamHandler,
+    getLogger,
+)
 from sys import stderr, stdout
 from typing import Dict, Final, Optional, Tuple
+
 
 def _get_has_rich():
     try:
@@ -11,7 +22,8 @@ def _get_has_rich():
     else:
         return True
 
-HAS_RICH: Final[bool] = _get_has_rich() 
+
+HAS_RICH: Final[bool] = _get_has_rich()
 
 if HAS_RICH:
     from rich.console import Console
@@ -67,9 +79,9 @@ def _get_rich_logger() -> Logger:
 
 def _get_std_logger() -> Logger:
     logger: Logger = getLogger("pdm-bump")
-    #mypy: No overload variant of "StreamHandler" matches argument type "Handler"
-    std_out: Handler = StreamHandler(stream=std_out) #type: ignore
-    std_err: Handler = StreamHandler(stream=std_err) #type: ignore
+    # mypy: No overload variant of "StreamHandler" matches argument type "Handler"
+    std_out: Handler = StreamHandler(stream=std_out)  # type: ignore
+    std_err: Handler = StreamHandler(stream=std_err)  # type: ignore
 
     std_out.addFilter(_ErrorWarningsFilter(True))
     std_err.addFilter(_ErrorWarningsFilter(False))

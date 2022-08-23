@@ -13,7 +13,7 @@ def _get_version(name: str) -> str:
     except PackageNotFoundError:
         # Only occurs in development, since package is not installed properly
         return "0.0.0"
-    
+
 
 __version__: Final[str] = _get_version(__package__ or __name__)
 

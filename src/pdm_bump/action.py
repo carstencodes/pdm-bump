@@ -1,12 +1,23 @@
+import sys
 from abc import ABC, abstractmethod, abstractproperty
 from dataclasses import asdict as dataclass_to_dict
-from typing import (Any, Callable, Dict, Final, List, FrozenSet, Tuple, Type, Union,
-                    Literal, cast)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Final,
+    FrozenSet,
+    List,
+    Literal,
+    Tuple,
+    Type,
+    Union,
+    cast,
+)
 
-import sys
 if sys.version_info >= (3, 10, 0):
     # suspicious mypy behavior
-    from typing import TypeAlias #type: ignore
+    from typing import TypeAlias  # type: ignore
 else:
     from typing_extensions import TypeAlias
 
@@ -40,16 +51,23 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
-        letter: Literal['a', 'b', 'c', 'alpha', 'beta', 'rc']
+        letter: Literal["a", "b", "c", "alpha", "beta", "rc"]
         name: str
         letter, name = self.pre_release_part
-        pre: Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], NonNegativeInteger] = (letter, 1)
+        pre: Tuple[
+            Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
+        ] = (letter, 1)
         if self.current_version.preview is not None:
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} is not an {name} version."
                 )
-            pre = cast(Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], NonNegativeInteger], self.create_new_version.pre)
+            pre = cast(
+                Tuple[
+                    Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
+                ],
+                self.create_new_version.pre,
+            )
             pre = (pre[0], pre[1] + 1)
 
         return Version(
@@ -57,7 +75,9 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         )
 
     @abstractproperty
-    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
+    def pre_release_part(
+        self,
+    ) -> Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
         raise NotImplementedError()
 
     @abstractmethod
@@ -83,7 +103,9 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
-    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
+    def pre_release_part(
+        self,
+    ) -> Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
         return ("a", "alpha")
 
     def _is_valid_preview_version(self) -> bool:
@@ -92,7 +114,9 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
-    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
+    def pre_release_part(
+        self,
+    ) -> Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
         return ("b", "alpha or beta")
 
     def _is_valid_preview_version(self) -> bool:
@@ -103,7 +127,9 @@ class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
     @property
-    def pre_release_part(self) -> Tuple[Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], str]:
+    def pre_release_part(
+        self,
+    ) -> Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
         return ("rc", "pre-release")
 
     def _is_valid_preview_version(self) -> bool:

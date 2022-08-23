@@ -1,7 +1,17 @@
 from abc import ABC, abstractmethod, abstractproperty
 from pathlib import Path
-from typing import (AnyStr, Callable, Dict, Iterator, NamedTuple, Optional,
-                    Tuple, Type, Union, cast)
+from typing import (
+    AnyStr,
+    Callable,
+    Dict,
+    Iterator,
+    NamedTuple,
+    Optional,
+    Tuple,
+    Type,
+    Union,
+    cast,
+)
 
 from ..version import Pep440VersionFormatter, Version
 

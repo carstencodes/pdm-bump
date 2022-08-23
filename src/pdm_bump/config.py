@@ -14,6 +14,7 @@ class ConfigHolder(Protocol):
     def config(self) -> dict[str, Any]:
         pass
 
+
 @traced_function
 def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:
     front: str

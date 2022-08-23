@@ -7,9 +7,11 @@ from .plugin import BumpCommand as _Command
 
 
 class _CoreLike(Protocol):
-    def register_command(self, command: Type[_Command], name: Optional[str] = None) -> None:
+    def register_command(
+        self, command: Type[_Command], name: Optional[str] = None
+    ) -> None:
         pass
-    
+
     @staticmethod
     def add_config(name: str, config_item: _ConfigItem) -> None:
         pass
