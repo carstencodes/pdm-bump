@@ -87,7 +87,7 @@ skipsdist = true
 [testenv]
 setenv = 
     PDM_IGNORE_SAVED_PYTHON="1"
-whitelist_externals = 
+allowlist_externals = 
     mv
     mkdir
     pytest

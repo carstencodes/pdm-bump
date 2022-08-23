@@ -517,7 +517,7 @@ summary = "Module for decorators, wrappers and monkey patching."
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:cea6604c04663b5de64743e8174726763c9cb75023ed748693a0540e3063ec93"
+content_hash = "sha256:d05c4234f241c91df9d6fb526621a21b4356c7e276dc6f083fae8881d12c08ab"
 
 [metadata.files]
 "annotated-types 0.2.0" = [
