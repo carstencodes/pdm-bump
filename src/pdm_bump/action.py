@@ -61,7 +61,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} "
                     # Weird behavior of sonarlint, pylint and flake8
-                    # Variable is declared as unused, if used only in 
+                    # Variable is declared as unused, if used only in
                     # formatted string
                     + "is not an " + name + " version."
                 )
