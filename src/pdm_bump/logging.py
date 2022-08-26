@@ -11,7 +11,7 @@ from logging import (
     getLogger,
 )
 from sys import stderr, stdout
-from typing import Dict, Final, Optional, Tuple
+from typing import Any, Dict, Final, Optional, Tuple, cast
 
 
 def _get_has_rich():
@@ -33,6 +33,9 @@ if HAS_RICH:
     from rich.theme import Style, StyleType, Theme
 
 
+TRACE: Final[int] = 5
+
+
 # Justification: Only one method to override
 class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
     def __init__(self, invert: Optional[bool] = False) -> None:
@@ -48,15 +51,24 @@ class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
         )
 
 
-def _get_rich_logger() -> Logger:
-    _logger: Logger = getLogger("pdm-bump")
+class TracingLogger(Logger):
+    def trace(self, msg: str, *args: Any, **kwargs) -> None:
+        self.log(TRACE, msg, *args, **kwargs)
+
+
+Logger.manager.setLoggerClass(TracingLogger)
+
+
+def _get_rich_logger() -> TracingLogger:
+    _logger: TracingLogger = cast(TracingLogger, getLogger("pdm-bump"))
 
     styles: Dict[str, StyleType] = {}
     styles.update(DEFAULT_STYLES)
     styles.update(
         {
             "logging.level.notset": Style(dim=True),
-            "logging.level.debug": Style(dim=True, color="bright_black"),
+            "logging.level.trace": Style(dim=True, color="bright_black"),
+            "logging.level.debug": Style(dim=True, color="white"),
             "logging.level.info": Style(color="blue"),
             "logging.level.warning": Style(color="yellow"),
             "logging.level.error": Style(color="bright_red"),
@@ -80,8 +92,8 @@ def _get_rich_logger() -> Logger:
     return _logger
 
 
-def _get_std_logger() -> Logger:
-    _logger: Logger = getLogger("pdm-bump")
+def _get_std_logger() -> TracingLogger:
+    _logger: TracingLogger = cast(TracingLogger, getLogger("pdm-bump"))
     # mypy: No overload variant of "StreamHandler"
     #       matches argument type "Handler"
     std_out: Handler = StreamHandler(stream=stdout)  # type: ignore
@@ -92,21 +104,24 @@ def _get_std_logger() -> Logger:
 
     _logger.addHandler(std_out)
     _logger.addHandler(std_err)
+
     return _logger
 
 
-logger: Logger = _get_std_logger() if not HAS_RICH else _get_rich_logger()
+logger: TracingLogger = (
+    _get_std_logger() if not HAS_RICH else _get_rich_logger()
+)
 
 
 def traced_function(fun):
     def tracing_function(*args, **kwargs):
         try:
-            logger.debug(
+            logger.trace(
                 "%s: Entering function", fun.__qualname__ or fun.__name__
             )
             return fun(*args, **kwargs)
         finally:
-            logger.debug(
+            logger.trace(
                 "%s: Exiting function", fun.__qualname__ or fun.__name__
             )
 

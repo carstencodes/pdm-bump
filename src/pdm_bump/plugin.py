@@ -14,7 +14,7 @@ from .action import (
     create_actions,
 )
 from .config import Config, ConfigHolder
-from .logging import logger, traced_function
+from .logging import TRACE, logger, traced_function
 from .version import Pep440VersionFormatter, Version
 
 
@@ -79,13 +79,16 @@ class BumpCommand(BaseCommand):
             + "remove all pre-release parts",
         )
         parser.add_argument(
-            "--trace", action="store_true", help="Enable debug output"
+            "--trace", action="store_true", help="Enable trace output"
+        )
+        parser.add_argument(
+            "--debug", action="store_true", help="Enable debug output"
         )
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
         config: Config = Config(project)
-        self._setup_logger(options.trace)
+        self._setup_logger(options.trace, options.debug)
 
         version_value: Optional[str] = cast(
             Optional[str], config.get_pyproject_value("project", "version")
@@ -153,8 +156,13 @@ class BumpCommand(BaseCommand):
         return actions
 
     @traced_function
-    def _setup_logger(self, be_verbose: bool) -> None:
-        logger.setLevel(DEBUG if be_verbose else INFO)
+    def _setup_logger(self, trace: bool, debug: bool) -> None:
+        level: int = INFO
+        if debug:
+            level = DEBUG
+        if trace:
+            level = TRACE
+        logger.setLevel(level)
 
     @traced_function
     def _version_to_string(self, version: Version) -> str:
