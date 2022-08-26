@@ -26,7 +26,7 @@ else:
 _formatter = Pep440VersionFormatter()
 
 
-class PreviewMismatchError(BaseException):
+class PreviewMismatchError(Exception):
     pass
 
 
