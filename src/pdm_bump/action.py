@@ -51,8 +51,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         letter: Literal["a", "b", "c", "alpha", "beta", "rc"]
-        # Justification: False positive
-        name: str  # pylint: disable=W0612
+        name: str
         letter, name = self.pre_release_part
         pre: Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
@@ -61,7 +60,10 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
                     f"{_formatter.format(self.current_version)} "
-                    + "is not an {name} version."
+                    # Weird behavior of sonarlint, pylint and flake8
+                    # Variable is declared as unused, if used only in 
+                    # formatted string
+                    + "is not an " + name + " version."
                 )
             pre = cast(
                 Tuple[
