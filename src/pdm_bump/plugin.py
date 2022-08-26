@@ -21,9 +21,11 @@ from .version import Pep440VersionFormatter, Version
 class _ProjectLike(ConfigHolder, Protocol):
     @property
     def pyproject_file(self) -> str:
+        # Method empty: Only a protocol stub
         pass
 
     def write_pyproject(self, show_message: bool) -> None:
+        # Method empty: Only a protocol stub
         pass
 
 

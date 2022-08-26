@@ -172,9 +172,11 @@ class DefaultVcsProvider(VcsProvider):
         return True
 
     def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+        # Must not be provided
         pass
 
     def create_tag_from_string(self, version_formatted: str) -> None:
+        # Must not be provided
         pass
 
 

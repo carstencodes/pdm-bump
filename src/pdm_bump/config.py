@@ -6,10 +6,12 @@ from .logging import logger, traced_function
 class ConfigHolder(Protocol):
     @property
     def pyproject(self) -> dict[str, Any]:
+        # Method empty: Only a protocol stub
         pass
 
     @property
     def config(self) -> dict[str, Any]:
+        # Method empty: Only a protocol stub
         pass
 
 

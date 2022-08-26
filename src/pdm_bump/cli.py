@@ -10,10 +10,12 @@ class _CoreLike(Protocol):
     def register_command(
         self, command: Type[_Command], name: Optional[str] = None
     ) -> None:
+        # Method empty: Only a protocol stub
         pass
 
     @staticmethod
     def add_config(name: str, config_item: _ConfigItem) -> None:
+        # Method empty: Only a protocol stub
         pass
 
 
