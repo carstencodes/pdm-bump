@@ -29,7 +29,9 @@ class _ProjectLike(ConfigHolder, Protocol):
 
 class BumpCommand(BaseCommand):
     name: str = "bump"
-    description: str = "Bumps the version to a next version according to PEP440."
+    description: str = (
+        "Bumps the version to a next version according to PEP440."
+    )
 
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
@@ -38,14 +40,19 @@ class BumpCommand(BaseCommand):
             action="store",
             choices=list(COMMAND_NAMES),
             default=None,
-            help="The part of the version to bump according to PEP 440: major.minor.micro.",
+            help="The part of the version to bump according to PEP 440: "
+            + "major.minor.micro.",
         )
         parser.add_argument(
             "--pre",
             action="store",
             choices=list(PRERELEASE_OPTIONS),
             default=None,
-            help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
+            help="Sets a pre-release on the current version."
+            + " If a pre-release is set, it can be removed "
+            + "using the final option. A new pre-release "
+            + "must greater then the current version."
+            + " See PEP440 for details.",
         )
         parser.add_argument(
             "--dry-run",
@@ -56,7 +63,9 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "--micro",
             action="store_true",
-            help="When setting pre-release, specifies whether micro version shall be incremented as well",
+            help="When setting pre-release, specifies "
+            + "whether micro version shall "
+            + "be incremented as well",
         )
         parser.add_argument(
             "--reset",
@@ -66,9 +75,12 @@ class BumpCommand(BaseCommand):
         parser.add_argument(
             "--remove",
             action="store_true",
-            help="When incrementing major, minor, micro or epoch, remove all pre-release parts",
+            help="When incrementing major, minor, micro or epoch, "
+            + "remove all pre-release parts",
         )
-        parser.add_argument("--trace", action="store_true", help="Enable debug output")
+        parser.add_argument(
+            "--trace", action="store_true", help="Enable debug output"
+        )
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
@@ -97,7 +109,9 @@ class BumpCommand(BaseCommand):
         try:
             result = modifier.create_new_version()
         except ValueError as exc:
-            logger.exception("Failed to update version to next version", exc_info=False)
+            logger.exception(
+                "Failed to update version to next version", exc_info=False
+            )
             logger.debug("Exception occurred: %s", get_traceback())
             raise SystemExit(1) from exc
 
@@ -111,7 +125,11 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _get_action(
-        self, actions: ActionCollection, version: Version, what: str, pre: Optional[str]
+        self,
+        actions: ActionCollection,
+        version: Version,
+        what: str,
+        pre: Optional[str],
     ) -> VersionModifier:
         modifier_factory: VersionModifierFactory
         if pre is not None:

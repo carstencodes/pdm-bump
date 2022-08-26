@@ -1,5 +1,5 @@
 import sys
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from dataclasses import asdict as dataclass_to_dict
 from typing import (
     Any,
@@ -14,14 +14,14 @@ from typing import (
     cast,
 )
 
+from .logging import logger, traced_function
+from .version import NonNegativeInteger, Pep440VersionFormatter, Version
+
 if sys.version_info >= (3, 10, 0):
     # suspicious mypy behavior
     from typing import TypeAlias  # type: ignore
 else:
     from typing_extensions import TypeAlias
-
-from .logging import logger, traced_function
-from .version import NonNegativeInteger, Pep440VersionFormatter, Version
 
 _formatter = Pep440VersionFormatter()
 
@@ -51,7 +51,8 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         letter: Literal["a", "b", "c", "alpha", "beta", "rc"]
-        name: str
+        # Justification: False positive
+        name: str  # pylint: disable=W0612
         letter, name = self.pre_release_part
         pre: Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
@@ -59,21 +60,29 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         if self.current_version.preview is not None:
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
-                    f"{_formatter.format(self.current_version)} is not an {name} version."
+                    f"{_formatter.format(self.current_version)} "
+                    + "is not an {name} version."
                 )
             pre = cast(
                 Tuple[
-                    Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
+                    Literal["a", "b", "c", "alpha", "beta", "rc"],
+                    NonNegativeInteger,
                 ],
                 self.current_version.preview,
             )
             pre = (pre[0], pre[1] + 1)
 
         return Version(
-            self.current_version.epoch, self._get_next_release(), pre, None, None, None
+            self.current_version.epoch,
+            self._get_next_release(),
+            pre,
+            None,
+            None,
+            None,
         )
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def pre_release_part(
         self,
     ) -> Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
@@ -167,24 +176,27 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
 
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
-    @abstractproperty
+    @property
+    @abstractmethod
     def release_part(self) -> NonNegativeInteger:
         raise NotImplementedError()
 
     @traced_function
     def create_new_version(self):
-        construction_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        construction_args: Dict[str, Any] = dataclass_to_dict(
+            self.current_version
+        )
 
         next_release: Tuple[
             NonNegativeInteger, ...
         ] = self._update_release_version_part(self.release_part)
 
         if self.remove_non_final_parts:
-            construction_args = (
-                _NonFinalPartsRemovingVersionModifier._create_new_constructional_args(
-                    next_release, self.current_version.epoch
-                )
-            )
+            construction_args = _NonFinalPartsRemovingVersionModifier.\
+                    _create_new_constructional_args(
+                        next_release,
+                        self.current_version.epoch
+                    )
         else:
             construction_args["release"] = next_release
 
@@ -193,8 +205,10 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def _update_release_version_part(
         self, part_id: NonNegativeInteger
     ) -> Tuple[NonNegativeInteger, ...]:
-        release_part: List[NonNegativeInteger] = list(self.current_version.release)
-        for i in range(len(release_part)):
+        release_part: List[NonNegativeInteger] = list(
+            self.current_version.release
+        )
+        for i in range(len(release_part)):  # pylint: disable=C0200
             if i == part_id:
                 release_part[i] = release_part[i] + 1
             elif i > part_id:
@@ -211,8 +225,10 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def create_new_version(self) -> Version:
         constructional_args: Dict[
             str, Any
-        ] = _NonFinalPartsRemovingVersionModifier._create_new_constructional_args(
-            self.current_version.release, self.current_version.epoch
+        ] = _NonFinalPartsRemovingVersionModifier.\
+                _create_new_constructional_args(
+                    self.current_version.release,
+                    self.current_version.epoch
         )
         return Version(**constructional_args)
 
@@ -243,14 +259,19 @@ class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
 
 class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(
-        self, version: Version, remove_parts: bool = True, reset_version: bool = True
+        self,
+        version: Version,
+        remove_parts: bool = True,
+        reset_version: bool = True,
     ):
         super().__init__(version, remove_parts)
         self.__reset_version = reset_version
 
     @traced_function
     def create_new_version(self) -> Version:
-        constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        constructional_args: Dict[str, Any] = dataclass_to_dict(
+            self.current_version
+        )
 
         if self.__reset_version or self.remove_non_final_parts:
             constructional_args = dataclass_to_dict(Version.default())
@@ -270,7 +291,9 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
             _, dev_version = self.current_version.dev
             dev_version = dev_version + 1
 
-        constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        constructional_args: Dict[str, Any] = dataclass_to_dict(
+            self.current_version
+        )
         constructional_args["dev"] = ("dev", dev_version)
 
         return Version(**constructional_args)
@@ -284,7 +307,9 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
             _, post_version = self.current_version.post
             post_version = post_version + 1
 
-        constructional_args: Dict[str, Any] = dataclass_to_dict(self.current_version)
+        constructional_args: Dict[str, Any] = dataclass_to_dict(
+            self.current_version
+        )
         constructional_args["post"] = ("post", post_version)
 
         return Version(**constructional_args)
@@ -346,42 +371,56 @@ def create_actions(
 ) -> ActionCollection:
     return ActionCollection(
         {
-            COMMAND_NAME_MAJOR_INCREMENT: lambda v: MajorIncrementingVersionModifier(
-                v, remove_parts
-            ),
-            COMMAND_NAME_MINOR_INCREMENT: lambda v: MinorIncrementingVersionModifier(
-                v, remove_parts
-            ),
-            COMMAND_NAME_MICRO_INCREMENT: lambda v: MicroIncrementingVersionModifier(
-                v, remove_parts
-            ),
-            COMMAND_NAME_PATCH_INCREMENT: lambda v: MicroIncrementingVersionModifier(
-                v, remove_parts
-            ),
+            COMMAND_NAME_MAJOR_INCREMENT: lambda v:
+                MajorIncrementingVersionModifier(
+                    v, remove_parts
+                ),
+            COMMAND_NAME_MINOR_INCREMENT: lambda v:
+                MinorIncrementingVersionModifier(
+                    v, remove_parts
+                ),
+            COMMAND_NAME_MICRO_INCREMENT: lambda v:
+                MicroIncrementingVersionModifier(
+                    v, remove_parts
+                ),
+            COMMAND_NAME_PATCH_INCREMENT: lambda v:
+                MicroIncrementingVersionModifier(
+                    v, remove_parts
+                ),
             COMMAND_NAME_PRERELEASE: {
-                PRE_RELEASE_OPTION_ALPHA: lambda v: AlphaIncrementingVersionModifier(
-                    v, increment_micro
+                PRE_RELEASE_OPTION_ALPHA: lambda v:
+                    AlphaIncrementingVersionModifier(
+                        v, increment_micro
+                    ),
+                PRE_RELEASE_OPTION_BETA: lambda v:
+                    BetaIncrementingVersionModifier(
+                        v, increment_micro
+                    ),
+                PRE_RELEASE_OPTION_RC: lambda v:
+                    ReleaseCandidateIncrementingVersionModifier(
+                        v, increment_micro
+                    ),
+                PRE_RELEASE_OPTION_RC_ALT: lambda v:
+                    ReleaseCandidateIncrementingVersionModifier(
+                        v, increment_micro
+                    ),
+                },
+            COMMAND_NAME_NO_PRERELEASE: lambda v:  # pylint: disable=W0108
+                FinalizingVersionModifier(
+                    v
                 ),
-                PRE_RELEASE_OPTION_BETA: lambda v: BetaIncrementingVersionModifier(
-                    v, increment_micro
+            COMMAND_NAME_EPOCH_INCREMENT: lambda v:
+                EpochIncrementingVersionModifier(
+                    v, remove_parts, reset_version
                 ),
-                PRE_RELEASE_OPTION_RC: lambda v: ReleaseCandidateIncrementingVersionModifier(
-                    v, increment_micro
+            COMMAND_NAME_DEV_INCREMENT: lambda v:  # pylint: disable=W0108
+                DevelopmentVersionIncrementingVersionModifier(
+                    v
                 ),
-                PRE_RELEASE_OPTION_RC_ALT: lambda v: ReleaseCandidateIncrementingVersionModifier(
-                    v, increment_micro
+            COMMAND_NAME_POST_INCREMENT: lambda v:  # pylint: disable=W0108
+                PostVersionIncrementingVersionModifier(
+                    v
                 ),
-            },
-            COMMAND_NAME_NO_PRERELEASE: lambda v: FinalizingVersionModifier(v),
-            COMMAND_NAME_EPOCH_INCREMENT: lambda v: EpochIncrementingVersionModifier(
-                v, remove_parts, reset_version
-            ),
-            COMMAND_NAME_DEV_INCREMENT: lambda v: DevelopmentVersionIncrementingVersionModifier(
-                v
-            ),
-            COMMAND_NAME_POST_INCREMENT: lambda v: PostVersionIncrementingVersionModifier(
-                v
-            ),
         }
     )
 

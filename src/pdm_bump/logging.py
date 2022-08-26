@@ -16,7 +16,8 @@ from typing import Dict, Final, Optional, Tuple
 
 def _get_has_rich():
     try:
-        import rich  # noqa F401
+        # Justification: Required to find module, not more
+        import rich  # noqa: F401 pylint: disable=C0415,W0611
     except ImportError:
         return False
     else:
@@ -32,7 +33,8 @@ if HAS_RICH:
     from rich.theme import Style, StyleType, Theme
 
 
-class _ErrorWarningsFilter(Filter):
+# Justification: Only one method to override
+class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
     def __init__(self, invert: Optional[bool] = False) -> None:
         self.__invert: bool = invert or False
         super().__init__()
@@ -47,7 +49,7 @@ class _ErrorWarningsFilter(Filter):
 
 
 def _get_rich_logger() -> Logger:
-    logger: Logger = getLogger("pdm-bump")
+    _logger: Logger = getLogger("pdm-bump")
 
     styles: Dict[str, StyleType] = {}
     styles.update(DEFAULT_STYLES)
@@ -72,24 +74,25 @@ def _get_rich_logger() -> Logger:
     std_out_handler.addFilter(_ErrorWarningsFilter(True))
     std_err_handler.addFilter(_ErrorWarningsFilter(False))
 
-    logger.addHandler(std_out_handler)
-    logger.addHandler(std_err_handler)
+    _logger.addHandler(std_out_handler)
+    _logger.addHandler(std_err_handler)
 
-    return logger
+    return _logger
 
 
 def _get_std_logger() -> Logger:
-    logger: Logger = getLogger("pdm-bump")
-    # mypy: No overload variant of "StreamHandler" matches argument type "Handler"
+    _logger: Logger = getLogger("pdm-bump")
+    # mypy: No overload variant of "StreamHandler"
+    #       matches argument type "Handler"
     std_out: Handler = StreamHandler(stream=stdout)  # type: ignore
     std_err: Handler = StreamHandler(stream=stderr)  # type: ignore
 
     std_out.addFilter(_ErrorWarningsFilter(True))
     std_err.addFilter(_ErrorWarningsFilter(False))
 
-    logger.addHandler(std_out)
-    logger.addHandler(std_err)
-    return logger
+    _logger.addHandler(std_out)
+    _logger.addHandler(std_err)
+    return _logger
 
 
 logger: Logger = _get_std_logger() if not HAS_RICH else _get_rich_logger()
@@ -98,9 +101,13 @@ logger: Logger = _get_std_logger() if not HAS_RICH else _get_rich_logger()
 def traced_function(fun):
     def tracing_function(*args, **kwargs):
         try:
-            logger.debug("%s: Entering function", fun.__qualname__ or fun.__name__)
+            logger.debug(
+                "%s: Entering function", fun.__qualname__ or fun.__name__
+            )
             return fun(*args, **kwargs)
         finally:
-            logger.debug("%s: Exiting function", fun.__qualname__ or fun.__name__)
+            logger.debug(
+                "%s: Exiting function", fun.__qualname__ or fun.__name__
+            )
 
     return tracing_function

@@ -24,6 +24,10 @@ requires = ["pdm-pep517"]
 build-backend = "pdm.pep517.api"
 
 [tool]
+[tool.black]
+line-length = 79
+target-version = [ "py39" ]
+
 [tool.pdm]
 [tool.pdm.dev-dependencies]
 test = [
@@ -50,11 +54,18 @@ release = [
 [tool.pdm.scripts]
 flake = "flake518 --exit-zero src/"
 mypy = "mypy src/"
-pylint = "pylint --exit-zero src/"
+pylint = "pylint src/"
 check-style = { composite = ["flake", "pylint", "mypy"] }
 isort = "isort src/"
 black = "black src/"
 format = { composite = [ "isort", "black" ] }
+
+[tool.pylint.MAIN]
+fail-under = 9
+ignore = "vcs"
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [ "C0114", "C0115", "C0116" ]
 
 [tool.pytest.ini_options]
 testpaths = [ "tests" ]

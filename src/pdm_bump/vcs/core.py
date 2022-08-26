@@ -26,7 +26,9 @@ def __pathlike_to_path(path: _Pathlike) -> Path:
     if isinstance(path, bytes):
         return cast(bytes, path).decode("utf-8")
 
-    raise ValueError(f"'{path}' must be a valid path, string or bytes instance")
+    raise ValueError(
+        f"'{path}' must be a valid path, string or bytes instance"
+    )
 
 
 class VcsFileSystemIdentifier(NamedTuple):
@@ -76,7 +78,9 @@ class VcsProviderFactory(ABC):
         real_path: Path = __pathlike_to_path(path)
         return self.find_repository_root_from_path(real_path)
 
-    def find_repository_root_from_path(self, path: Path) -> Optional[VcsProvider]:
+    def find_repository_root_from_path(
+        self, path: Path
+    ) -> Optional[VcsProvider]:
         if not path.is_dir():
             raise ValueError(f"{path} must refer to a directory.")
 
@@ -106,10 +110,12 @@ class VcsProviderFactory(ABC):
         is_repository_root = False
         for fs_root in self.vcs_fs_root:
             is_valid_root_by_file: bool = (
-                fs_root.file_name is None or self._file_exists(path, fs_root.file_name)
+                fs_root.file_name is None
+                or self._file_exists(path, fs_root.file_name)
             )
-            is_valid_root_by_dir: bool = fs_root.dir_name is None or self._dir_exists(
-                path, fs_root.dir_name
+            is_valid_root_by_dir: bool = (
+                fs_root.dir_name is None
+                or self._dir_exists(path, fs_root.dir_name)
             )
             is_repository_root = is_repository_root or (
                 is_valid_root_by_dir and is_valid_root_by_file
@@ -123,10 +129,14 @@ class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
         real_path: Path = __pathlike_to_path(path)
         return self.find_repository_root_by_path(real_path)
 
-    def find_repository_root_by_path(self, path: Path) -> Optional[VcsProvider]:
+    def find_repository_root_by_path(
+        self, path: Path
+    ) -> Optional[VcsProvider]:
         for _, value in self.items():
             factory: VcsProviderFactory = value()
-            result: Optional[VcsProvider] = factory.find_repository_root_from_path(path)
+            result: Optional[
+                VcsProvider
+            ] = factory.find_repository_root_from_path(path)
             if result is not None:
                 return result
 

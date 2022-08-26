@@ -29,7 +29,9 @@ class Version:
     epoch: NonNegativeInteger = field()
     release: Tuple[NonNegativeInteger, ...] = field()
     preview: Optional[
-        Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger]
+        Tuple[
+            Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
+        ]
     ] = field()
     post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field()
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
@@ -65,7 +67,9 @@ class Version:
 
     @property
     def is_alpha(self) -> bool:
-        return self.preview is not None and self.__compare_preview(__ALPHA_PART)
+        return self.preview is not None and self.__compare_preview(
+            __ALPHA_PART
+        )
 
     @property
     def is_beta(self) -> bool:
@@ -120,10 +124,16 @@ class Version:
                 _version.epoch,
                 _version.release,
                 cast(
-                    Optional[Tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], int]],
+                    Optional[
+                        Tuple[
+                            Literal["a", "b", "c", "alpha", "beta", "rc"], int
+                        ]
+                    ],
                     _version.pre,
                 ),
-                ("post", _version.post[1]) if _version.post is not None else None,
+                ("post", _version.post[1])
+                if _version.post is not None
+                else None,
                 ("dev", _version.dev[1]) if _version.dev is not None else None,
                 _version.local,
             )
@@ -141,7 +151,8 @@ class Version:
             return False
 
 
-class Pep440VersionFormatter:
+# Justification: Only method to provide
+class Pep440VersionFormatter:  # pylint: disable=R0903
     @traced_function
     def format(self, version: Version) -> str:
         parts: List[str] = []

@@ -6,8 +6,12 @@ from .core import VcsFileSystemIdentifier, VcsProviderFactory
 
 
 class GitCommonVcsProviderFactory(VcsProviderFactory):
-    __git_dir_provider = VcsFileSystemIdentifier(file_name=None, dir_name=".git")
-    __git_wt_file_provider = VcsFileSystemIdentifier(file_name=".git", dir_name=None)
+    __git_dir_provider = VcsFileSystemIdentifier(
+        file_name=None, dir_name=".git"
+    )
+    __git_wt_file_provider = VcsFileSystemIdentifier(
+        file_name=".git", dir_name=None
+    )
 
     @abstractmethod
     def _create_provider(self, path: Path) -> VcsProvider:

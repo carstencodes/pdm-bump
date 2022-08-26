@@ -30,7 +30,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
 
             dirty_files = [
-                ln for ln in out.splitlines() if not ln.strip().startswith(b"??")
+                ln
+                for ln in out.splitlines()
+                if not ln.strip().startswith(b"??")
             ]
 
             return len(dirty_files) == 0
