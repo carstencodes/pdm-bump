@@ -175,6 +175,9 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
         }
 
 
+_NFPR: TypeAlias = _NonFinalPartsRemovingVersionModifier
+
+
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     @property
     @abstractmethod
@@ -192,11 +195,10 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         ] = self._update_release_version_part(self.release_part)
 
         if self.remove_non_final_parts:
-            construction_args = _NonFinalPartsRemovingVersionModifier.\
-                    _create_new_constructional_args(
-                        next_release,
-                        self.current_version.epoch
-                    )
+            # Using type alias due to line length enforced by black
+            construction_args = _NFPR._create_new_constructional_args(  # noqa: E501 pylint: disable=W0212
+                next_release, self.current_version.epoch
+            )
         else:
             construction_args["release"] = next_release
 
@@ -224,11 +226,11 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         constructional_args: Dict[
-            str, Any
-        ] = _NonFinalPartsRemovingVersionModifier.\
-                _create_new_constructional_args(
-                    self.current_version.release,
-                    self.current_version.epoch
+            str,
+            Any
+            # Using type alias due to line length enforced by black
+        ] = _NFPR._create_new_constructional_args(  # noqa: E501 pylint: disable=W0212
+            self.current_version.release, self.current_version.epoch
         )
         return Version(**constructional_args)
 
@@ -362,6 +364,17 @@ PRE_RELEASE_OPTION_BETA: Final[str] = "beta"
 PRE_RELEASE_OPTION_RC: Final[str] = "rc"
 PRE_RELEASE_OPTION_RC_ALT: Final[str] = "c"
 
+_next_major: TypeAlias = MajorIncrementingVersionModifier
+_next_minor: TypeAlias = MinorIncrementingVersionModifier
+_next_micro: TypeAlias = MicroIncrementingVersionModifier
+_next_alpha: TypeAlias = AlphaIncrementingVersionModifier
+_next_beta: TypeAlias = BetaIncrementingVersionModifier
+_next_rc: TypeAlias = ReleaseCandidateIncrementingVersionModifier
+_no_pre: TypeAlias = FinalizingVersionModifier
+_next_dev: TypeAlias = DevelopmentVersionIncrementingVersionModifier
+_next_post: TypeAlias = PostVersionIncrementingVersionModifier
+_next_epoch: TypeAlias = EpochIncrementingVersionModifier
+
 
 def create_actions(
     *,
@@ -371,56 +384,45 @@ def create_actions(
 ) -> ActionCollection:
     return ActionCollection(
         {
-            COMMAND_NAME_MAJOR_INCREMENT: lambda v:
-                MajorIncrementingVersionModifier(
-                    v, remove_parts
-                ),
-            COMMAND_NAME_MINOR_INCREMENT: lambda v:
-                MinorIncrementingVersionModifier(
-                    v, remove_parts
-                ),
-            COMMAND_NAME_MICRO_INCREMENT: lambda v:
-                MicroIncrementingVersionModifier(
-                    v, remove_parts
-                ),
-            COMMAND_NAME_PATCH_INCREMENT: lambda v:
-                MicroIncrementingVersionModifier(
-                    v, remove_parts
-                ),
+            COMMAND_NAME_MAJOR_INCREMENT: lambda v: _next_major(
+                v, remove_parts
+            ),
+            COMMAND_NAME_MINOR_INCREMENT: lambda v: _next_minor(
+                v, remove_parts
+            ),
+            COMMAND_NAME_MICRO_INCREMENT: lambda v: _next_micro(
+                v, remove_parts
+            ),
+            COMMAND_NAME_PATCH_INCREMENT: lambda v: _next_micro(
+                v, remove_parts
+            ),
             COMMAND_NAME_PRERELEASE: {
-                PRE_RELEASE_OPTION_ALPHA: lambda v:
-                    AlphaIncrementingVersionModifier(
-                        v, increment_micro
-                    ),
-                PRE_RELEASE_OPTION_BETA: lambda v:
-                    BetaIncrementingVersionModifier(
-                        v, increment_micro
-                    ),
-                PRE_RELEASE_OPTION_RC: lambda v:
-                    ReleaseCandidateIncrementingVersionModifier(
-                        v, increment_micro
-                    ),
-                PRE_RELEASE_OPTION_RC_ALT: lambda v:
-                    ReleaseCandidateIncrementingVersionModifier(
-                        v, increment_micro
-                    ),
-                },
-            COMMAND_NAME_NO_PRERELEASE: lambda v:  # pylint: disable=W0108
-                FinalizingVersionModifier(
-                    v
+                PRE_RELEASE_OPTION_ALPHA: lambda v: _next_alpha(
+                    v, increment_micro
                 ),
-            COMMAND_NAME_EPOCH_INCREMENT: lambda v:
-                EpochIncrementingVersionModifier(
-                    v, remove_parts, reset_version
+                PRE_RELEASE_OPTION_BETA: lambda v: _next_beta(
+                    v, increment_micro
                 ),
-            COMMAND_NAME_DEV_INCREMENT: lambda v:  # pylint: disable=W0108
-                DevelopmentVersionIncrementingVersionModifier(
-                    v
+                PRE_RELEASE_OPTION_RC: lambda v: _next_rc(v, increment_micro),
+                PRE_RELEASE_OPTION_RC_ALT: lambda v: _next_rc(
+                    v, increment_micro
                 ),
-            COMMAND_NAME_POST_INCREMENT: lambda v:  # pylint: disable=W0108
-                PostVersionIncrementingVersionModifier(
-                    v
-                ),
+            },
+            # Justifications: Explicit call of type, line too long due to noqa
+            COMMAND_NAME_NO_PRERELEASE: lambda v: _no_pre(  # noqa: E501 pylint: disable=W0108
+                v
+            ),
+            COMMAND_NAME_EPOCH_INCREMENT: lambda v: _next_epoch(
+                v, remove_parts, reset_version
+            ),
+            # Justifications: Explicit call of type, line too long due to noqa
+            COMMAND_NAME_DEV_INCREMENT: lambda v: _next_dev(  # noqa: E501 pylint: disable=W0108
+                v
+            ),
+            # Justifications: Explicit call of type, line too long due to noqa
+            COMMAND_NAME_POST_INCREMENT: lambda v: _next_post(  # noqa: E501 pylint: disable=W0108
+                v
+            ),
         }
     )
 
