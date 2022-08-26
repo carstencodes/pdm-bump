@@ -11,7 +11,7 @@ from logging import (
     getLogger,
 )
 from sys import stderr, stdout
-from typing import Any, Dict, Final, Optional, Tuple, cast
+from typing import Any, Dict, Final, Mapping, Optional, Tuple, cast
 
 
 def _get_has_rich():
@@ -54,6 +54,28 @@ class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
 class TracingLogger(Logger):
     def trace(self, msg: str, *args: Any, **kwargs) -> None:
         self.log(TRACE, msg, *args, **kwargs)
+
+    # Justification: Overriding inherited method
+    def makeRecord(  # pylint: disable=R0913
+        self,
+        name: str,
+        level: int,
+        fn: str,
+        lno: int,
+        msg: Any,
+        args: Any,
+        exc_info: Any,
+        func: Optional[str] = None,
+        extra: Optional[Mapping[str, Any]] = None,
+        sinfo: Optional[str] = None,
+    ) -> LogRecord:
+        record: LogRecord = super().makeRecord(
+            name, level, fn, lno, msg, args, exc_info, func, extra, sinfo
+        )
+        if level == TRACE:
+            record.levelname = "TRACE"
+
+        return record
 
 
 Logger.manager.setLoggerClass(TracingLogger)
