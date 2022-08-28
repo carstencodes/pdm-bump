@@ -64,7 +64,7 @@ jobs:
       - name: Install production dependencies
         run: pdm install --dev
       - name: Run unit tests
-        run: pdm run tests
+        run: pdm run pytest
 
   # TODO Linter: pylint
   # TODO Linter: flake8
