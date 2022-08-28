@@ -139,7 +139,7 @@ def _get_std_logger() -> TracingLogger:
     return _logger
 
 
-logger: TracingLogger = (
+logger: Final[TracingLogger] = (
     _get_std_logger() if not HAS_RICH else _get_rich_logger()
 )
 

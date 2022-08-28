@@ -21,6 +21,7 @@ from typing import (
     Tuple,
     Union,
     cast,
+    final,
 )
 
 from .logging import logger, traced_function
@@ -122,6 +123,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         return tuple(ret)
 
 
+@final
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(
@@ -133,6 +135,7 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
         return self.current_version.is_alpha
 
 
+@final
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     @property
     def pre_release_part(
@@ -144,6 +147,7 @@ class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
         return self.current_version.is_alpha or self.current_version.is_beta
 
 
+@final
 class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
@@ -232,6 +236,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         return tuple(release_part)
 
 
+@final
 class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(self, version: Version) -> None:
         super().__init__(version, True)
@@ -248,6 +253,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         return Version(**constructional_args)
 
 
+@final
 class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
     __MAJOR_PART: Final[NonNegativeInteger] = 0
 
@@ -256,6 +262,7 @@ class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
         return self.__MAJOR_PART
 
 
+@final
 class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
     __MINOR_PART: Final[NonNegativeInteger] = 1
 
@@ -264,6 +271,7 @@ class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
         return self.__MINOR_PART
 
 
+@final
 class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
     __MICRO_PART: Final[NonNegativeInteger] = 2
 
@@ -272,6 +280,7 @@ class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
         return self.__MICRO_PART
 
 
+@final
 class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(
         self,
@@ -298,6 +307,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         return Version(**constructional_args)
 
 
+@final
 class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
@@ -314,6 +324,7 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
         return Version(**constructional_args)
 
 
+@final
 class PostVersionIncrementingVersionModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
@@ -335,6 +346,7 @@ _NestedMappingTable: TypeAlias = Dict[str, VersionModifierFactory]
 ActionChoice: TypeAlias = Union[_NestedMappingTable, VersionModifierFactory]
 
 
+@final
 class ActionCollection(Dict[str, ActionChoice]):
     @traced_function
     def get_action(self, action: str) -> VersionModifierFactory:

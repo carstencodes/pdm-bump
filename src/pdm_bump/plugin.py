@@ -10,7 +10,7 @@
 from argparse import ArgumentParser, Namespace
 from logging import DEBUG, INFO
 from traceback import format_exc as get_traceback
-from typing import Optional, Protocol, cast
+from typing import Final, Optional, Protocol, cast, final
 
 from pdm.cli.commands.base import BaseCommand
 
@@ -38,9 +38,10 @@ class _ProjectLike(ConfigHolder, Protocol):
         pass
 
 
+@final
 class BumpCommand(BaseCommand):
-    name: str = "bump"
-    description: str = (
+    name: Final[str] = "bump"
+    description: Final[str] = (
         "Bumps the version to a next version according to PEP440."
     )
 
