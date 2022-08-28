@@ -41,9 +41,9 @@ class _ProjectLike(ConfigHolder, Protocol):
 @final
 class BumpCommand(BaseCommand):
     name: Final[str] = "bump"
-    description: Final[str] = (
-        "Bumps the version to a next version according to PEP440."
-    )
+    description: Final[
+        str
+    ] = "Bumps the version to a next version according to PEP440."
 
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
