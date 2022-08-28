@@ -184,7 +184,7 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
     ) -> Dict[str, Any]:
         return {
             "epoch": epoch,
-            "release": release,
+            "release_tuple": release,
             "preview": None,
             "post": None,
             "dev": None,
@@ -217,7 +217,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
                 next_release, self.current_version.epoch
             )
         else:
-            construction_args["release"] = next_release
+            construction_args["release_tuple"] = next_release
 
         return Version(**construction_args)
 
@@ -300,7 +300,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         if self.__reset_version or self.remove_non_final_parts:
             constructional_args = dataclass_to_dict(Version.default())
             if not self.__reset_version:
-                constructional_args["release"] = self.current_version.release
+                constructional_args["release_tuple"] = self.current_version.release
 
         constructional_args["epoch"] = self.current_version.epoch + 1
 
