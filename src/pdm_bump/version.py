@@ -38,16 +38,20 @@ NonNegativeInteger = Annotated[int, NonNegative]
 @dataclass(eq=False, order=False, frozen=True)
 @total_ordering
 class Version:
-    epoch: NonNegativeInteger = field()
-    release_tuple: Tuple[NonNegativeInteger, ...] = field()
+    epoch: NonNegativeInteger = field(default=0)
+    release_tuple: Tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
     preview: Optional[
         Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
         ]
-    ] = field()
-    post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field()
-    dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
-    local: Optional[str] = field()
+    ] = field(default=None)
+    post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field(
+        default=None
+    )
+    dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field(
+        default=None
+    )
+    local: Optional[str] = field(default=None)
 
     def __post_init__(self):
         if self.is_pre_release and not self.is_development_version:
