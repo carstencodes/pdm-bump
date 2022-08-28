@@ -49,6 +49,13 @@ class Version:
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field()
     local: Optional[str] = field()
 
+    def __post_init__(self):
+        if self.is_pre_release and not self.is_development_version:
+            if self.preview[0] not in ["a", "b", "c", "alpha", "beta", "rc"]:
+                raise ValueError(
+                    f"Invalid pre-release identifier {self.preview[0]}"
+                )
+
     @property
     def major(self) -> NonNegativeInteger:
         return self.release_tuple[0] if len(self.release_tuple) >= 1 else 0
@@ -153,10 +160,8 @@ class Version:
                     ],
                     _version.pre,
                 ),
-                ("post", _version.post[1])
-                if _version.post is not None
-                else None,
-                ("dev", _version.dev[1]) if _version.dev is not None else None,
+                ("post", _version.post) if _version.post is not None else None,
+                ("dev", _version.dev) if _version.dev is not None else None,
                 _version.local,
             )
         except InvalidVersion as error:
