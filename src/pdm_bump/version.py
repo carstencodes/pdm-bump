@@ -25,10 +25,6 @@ class VersionParserError(ValueError):
     pass
 
 
-__ALPHA_PART: Tuple[str, ...] = ("a", "alpha")
-__BETA_PART: Tuple[str, ...] = ("b", "beta")
-__RC_PART: Tuple[str, ...] = ("c", "rc")
-
 NonNegative = Ge(0)
 
 NonNegativeInteger = Annotated[int, NonNegative]
@@ -100,16 +96,19 @@ class Version:
 
     @property
     def is_alpha(self) -> bool:
+        __ALPHA_PART: Tuple[str, ...] = ("a", "alpha")
         return self.preview is not None and self.__compare_preview(
             __ALPHA_PART
         )
 
     @property
     def is_beta(self) -> bool:
+        __BETA_PART: Tuple[str, ...] = ("b", "beta")
         return self.preview is not None and self.__compare_preview(__BETA_PART)
 
     @property
     def is_release_candidate(self) -> bool:
+        __RC_PART: Tuple[str, ...] = ("c", "rc")
         return self.preview is not None and self.__compare_preview(__RC_PART)
 
     def __compare_preview(self, valid_parts: Tuple[str, ...]) -> bool:
