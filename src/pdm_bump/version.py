@@ -11,7 +11,7 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from functools import total_ordering
-from typing import Annotated, Any, List, Literal, Optional, Tuple, cast
+from typing import Annotated, Any, List, Literal, Optional, Tuple, cast, final
 
 from annotated_types import Ge
 from packaging.version import InvalidVersion
@@ -20,6 +20,7 @@ from packaging.version import Version as BaseVersion
 from .logging import traced_function
 
 
+@final
 class VersionParserError(ValueError):
     pass
 
@@ -33,11 +34,12 @@ NonNegative = Ge(0)
 NonNegativeInteger = Annotated[int, NonNegative]
 
 
+@final
 @dataclass(eq=False, order=False, frozen=True)
 @total_ordering
 class Version:
     epoch: NonNegativeInteger = field()
-    release: Tuple[NonNegativeInteger, ...] = field()
+    release_tuple: Tuple[NonNegativeInteger, ...] = field()
     preview: Optional[
         Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
@@ -49,15 +51,25 @@ class Version:
 
     @property
     def major(self) -> NonNegativeInteger:
-        return self.release[0] if len(self.release) >= 1 else 0
+        return self.release_tuple[0] if len(self.release_tuple) >= 1 else 0
 
     @property
     def minor(self) -> NonNegativeInteger:
-        return self.release[1] if len(self.release) >= 2 else 0
+        return self.release_tuple[1] if len(self.release_tuple) >= 2 else 0
 
     @property
     def micro(self) -> NonNegativeInteger:
-        return self.release[2] if len(self.release) >= 3 else 0
+        return self.release_tuple[2] if len(self.release_tuple) >= 3 else 0
+
+    @property
+    def release(
+        self,
+    ) -> Tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger,]:
+        return (
+            self.major,
+            self.minor,
+            self.micro,
+        )
 
     @property
     def is_pre_release(self) -> bool:
@@ -161,6 +173,7 @@ class Version:
             return False
 
 
+@final
 # Justification: Only method to provide
 class Pep440VersionFormatter:  # pylint: disable=R0903
     @traced_function
