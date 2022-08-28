@@ -47,6 +47,7 @@ checkstlye = [
 formatting = [
     "black>=22.6.0",
     "isort>=5.10.1",
+    "licenseheaders>=0.8.8",
 ]
 release = [
     "gitlint>=0.17.0",
@@ -59,7 +60,8 @@ pylint = "pylint src/"
 check-style = { composite = ["flake", "pylint", "mypy"] }
 isort = "isort src/"
 black = "black src/"
-format = { composite = [ "isort", "black" ] }
+copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -t ./.licenseheader.j2 -E .py"
+format = { composite = [ "copyright-headers", "isort", "black" ] }
 
 [tool.pylint.MAIN]
 fail-under = 9

@@ -1,3 +1,12 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict as dataclass_to_dict
@@ -63,7 +72,9 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
                     # Weird behavior of sonarlint, pylint and flake8
                     # Variable is declared as unused, if used only in
                     # formatted string
-                    + "is not an " + name + " version."
+                    + "is not an "
+                    + name
+                    + " version."
                 )
             pre = cast(
                 Tuple[

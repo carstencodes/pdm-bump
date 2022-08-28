@@ -1,3 +1,13 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
+
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from functools import total_ordering
