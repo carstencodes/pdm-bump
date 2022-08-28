@@ -1,3 +1,12 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
 from subprocess import CalledProcessError
 from typing import List
 
@@ -30,7 +39,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
 
             dirty_files = [
-                ln for ln in out.splitlines() if not ln.strip().startswith(b"??")
+                ln
+                for ln in out.splitlines()
+                if not ln.strip().startswith(b"??")
             ]
 
             return len(dirty_files) == 0

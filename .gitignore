@@ -2,3 +2,10 @@
 dist/
 __pypackages__/
 pdm_bump.egg-info/
+**/__pycache__/**.tox
+.package.log
+.package.lock
+**/__pycache__/**/*.pyc
+pytest.*.xml
+.coverage
+results/

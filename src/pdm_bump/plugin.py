@@ -1,106 +1,182 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
 from argparse import ArgumentParser, Namespace
-from typing import Optional, Union, cast
+from logging import DEBUG, INFO
+from traceback import format_exc as get_traceback
+from typing import Final, Optional, Protocol, cast, final
 
-from pdm import termui
 from pdm.cli.commands.base import BaseCommand
-from pdm.core import Project
-from pep440_version_utils import Version
 
-from .config import Config
-
-
-def _do_bump(
-    version: Version, what: Optional[str], pre: Optional[str]
-) -> Union[Version, str]:
-    if what is not None:
-        if "major" == what:
-            return version.next_major()
-        elif "minor" == what:
-            return version.next_minor()
-        elif "micro" == what or "patch" == what:
-            return version.next_micro()
-        elif "pre-release" == what:
-            if pre is not None:
-                if "alpha" == pre:
-                    return version.next_alpha()
-                elif "beta" == pre:
-                    return version.next_beta()
-                elif pre in ["rc", "c"]:
-                    return version.next_release_candidate()
-                else:
-                    return "Invalid pre-release: {}. Must be one of alpha, beta, rc or c".format(
-                        pre
-                    )
-            else:
-                return "No pre-release kind set. Please provide one of the following values: alpha, beta, rc, c"
-        elif "no-pre-release" == what:
-            return Version(
-                "{major}.{minor}.{micro}".format(
-                    major=version.major, minor=version.minor, micro=version.micro
-                )
-            )
-        else:
-            return "Invalid version part to bump: {}. Must be one of major, minor, micro/patch, pre-release or no-prerelease.".format(
-                what
-            )
-
-    else:
-        return "No version part to bump set. Please provide on of the following values: major, minor, micro, pre-release or no-pre-release"
+from .action import (
+    COMMAND_NAMES,
+    PRERELEASE_OPTIONS,
+    ActionCollection,
+    VersionModifier,
+    VersionModifierFactory,
+    create_actions,
+)
+from .config import Config, ConfigHolder
+from .logging import TRACE, logger, traced_function
+from .version import Pep440VersionFormatter, Version
 
 
+class _ProjectLike(ConfigHolder, Protocol):
+    @property
+    def pyproject_file(self) -> str:
+        # Method empty: Only a protocol stub
+        pass
+
+    def write_pyproject(self, show_message: bool) -> None:
+        # Method empty: Only a protocol stub
+        pass
+
+
+@final
 class BumpCommand(BaseCommand):
+    name: Final[str] = "bump"
+    description: Final[
+        str
+    ] = "Bumps the version to a next version according to PEP440."
+
+    @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
             "what",
             action="store",
-            choices=["major", "minor", "micro", "pre-release", "no-pre-release"],
+            choices=list(COMMAND_NAMES),
             default=None,
-            help="The part of the version to bump according to PEP 440: major.minor.micro.",
+            help="The part of the version to bump according to PEP 440: "
+            + "major.minor.micro.",
         )
         parser.add_argument(
             "--pre",
             action="store",
-            choices=["alpha", "beta", "rc", "c"],
+            choices=list(PRERELEASE_OPTIONS),
             default=None,
-            help="Sets a pre-release on the current version. If a pre-release is set, it can be removed using the final option. A new pre-release must greater then the current version. See PEP440 for details.",
+            help="Sets a pre-release on the current version."
+            + " If a pre-release is set, it can be removed "
+            + "using the final option. A new pre-release "
+            + "must greater then the current version."
+            + " See PEP440 for details.",
         )
         parser.add_argument(
-            "--dry-run", action="store_false", help="Do not perform a log-in"
+            "--dry-run",
+            "-n",
+            action="store_true",
+            help="Do not store incremented version",
         )
-        parser.description = "Bumps the version to a next version according to PEP440."
+        parser.add_argument(
+            "--micro",
+            action="store_true",
+            help="When setting pre-release, specifies "
+            + "whether micro version shall "
+            + "be incremented as well",
+        )
+        parser.add_argument(
+            "--reset",
+            action="store_true",
+            help="When setting epoch, reset version to 1.0.0",
+        )
+        parser.add_argument(
+            "--remove",
+            action="store_true",
+            help="When incrementing major, minor, micro or epoch, "
+            + "remove all pre-release parts",
+        )
+        parser.add_argument(
+            "--trace", action="store_true", help="Enable trace output"
+        )
+        parser.add_argument(
+            "--debug", action="store_true", help="Enable debug output"
+        )
 
-    def handle(self, project: Project, options: Namespace) -> None:
-        config: Config = Config(project.pyproject)
+    @traced_function
+    def handle(self, project: _ProjectLike, options: Namespace) -> None:
+        config: Config = Config(project)
+        self._setup_logger(options.trace, options.debug)
+
         version_value: Optional[str] = cast(
             Optional[str], config.get_pyproject_value("project", "version")
         )
 
         if version_value is None:
-            self._log_error(
-                project,
-                "Cannot find version in {}".format(termui.bold(project.pyproject_file)),
-            )
+            logger.error("Cannot find version in %s", project.pyproject_file)
             return
 
-        version: Version = Version(version_value)
-        next_version: Optional[Version] = None
+        version: Version = Version.from_string(version_value)
 
-        result: Union[Version, str] = _do_bump(version, options.what, options.pre)
+        actions: ActionCollection = self._get_actions(
+            options.micro, options.reset, options.remove
+        )
 
-        if not isinstance(result, str):
-            next_version = cast(Optional[Version], result)
-            if next_version is not None:
-                config.set_pyproject_value(str(next_version), "project, version")
-                project.write_pyproject(True)
-            else:
-                self._log_error(
-                    "Failed to update version: No version set in {}".format(
-                        termui.bold(project.pyproject_file)
-                    )
-                )
+        modifier: VersionModifier = self._get_action(
+            actions, version, options.what, options.pre
+        )
+
+        result: Version
+        try:
+            result = modifier.create_new_version()
+        except ValueError as exc:
+            logger.exception(
+                "Failed to update version to next version", exc_info=False
+            )
+            logger.debug("Exception occurred: %s", get_traceback())
+            raise SystemExit(1) from exc
+
+        next_version: str = self._version_to_string(result)
+
+        config.set_pyproject_value(next_version, "project", "version")
+        if not options.dry_run:
+            project.write_pyproject(True)
         else:
-            self._log_error(project, str(result))
+            logger.info("Would write new version %s", next_version)
 
-    def _log_error(self, project: Project, message: str) -> None:
-        formatted_message: str = termui.red(message)
-        project.core.ui.echo(formatted_message)
+    @traced_function
+    def _get_action(
+        self,
+        actions: ActionCollection,
+        version: Version,
+        what: str,
+        pre: Optional[str],
+    ) -> VersionModifier:
+        modifier_factory: VersionModifierFactory
+        if pre is not None:
+            modifier_factory = actions.get_action_with_option(what, pre)
+        else:
+            modifier_factory = actions.get_action(what)
+
+        modifier: VersionModifier = modifier_factory(version)
+        return modifier
+
+    @traced_function
+    def _get_actions(
+        self, increment_micro: bool, reset_version: bool, remove_parts: bool
+    ) -> ActionCollection:
+        actions: ActionCollection = create_actions(
+            increment_micro=increment_micro,
+            reset_version=reset_version,
+            remove_parts=remove_parts,
+        )
+
+        return actions
+
+    @traced_function
+    def _setup_logger(self, trace: bool, debug: bool) -> None:
+        level: int = INFO
+        if debug:
+            level = DEBUG
+        if trace:
+            level = TRACE
+        logger.setLevel(level)
+
+    @traced_function
+    def _version_to_string(self, version: Version) -> str:
+        result: str = Pep440VersionFormatter().format(version)
+        return result

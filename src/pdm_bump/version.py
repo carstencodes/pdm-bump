@@ -1,40 +1,86 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
+
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
-from typing import List, Optional, Tuple, cast
+from functools import total_ordering
+from typing import Annotated, Any, List, Literal, Optional, Tuple, cast, final
 
+from annotated_types import Ge
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
 
+from .logging import traced_function
 
+
+@final
 class VersionParserError(ValueError):
     pass
 
 
-__ALPHA_PART: Tuple[str, ...] = ("a", "alpha")
-__BETA_PART: Tuple[str, ...] = ("b", "beta")
-__RC_PART: Tuple[str, ...] = ("c", "rc")
+NonNegative = Ge(0)
+
+NonNegativeInteger = Annotated[int, NonNegative]
 
 
-@dataclass
+@final
+@dataclass(eq=False, order=False, frozen=True)
+@total_ordering
 class Version:
-    epoch: int = field()
-    release: Tuple[int, ...] = field()
-    preview: Optional[Tuple[str, int]] = field()
-    post: Optional[Tuple[str, int]] = field()
-    dev: Optional[Tuple[str, int]] = field()
-    local: Optional[str] = field()
+    epoch: NonNegativeInteger = field(
+        default=0, repr=True, hash=True, compare=True
+    )
+    release_tuple: Tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
+    preview: Optional[
+        Tuple[
+            Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
+        ]
+    ] = field(default=None, repr=True, hash=True, compare=True)
+    post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field(
+        default=None, repr=True, hash=True, compare=True
+    )
+    dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field(
+        default=None, repr=True, hash=True, compare=True
+    )
+    local: Optional[str] = field(
+        default=None, repr=True, hash=True, compare=True
+    )
+
+    def __post_init__(self):
+        if self.is_pre_release and not self.is_development_version:
+            if self.preview[0] not in ["a", "b", "c", "alpha", "beta", "rc"]:
+                raise ValueError(
+                    f"Invalid pre-release identifier {self.preview[0]}"
+                )
 
     @property
-    def major(self) -> int:
-        return self.release[0] if len(self.release) >= 1 else 0
+    def major(self) -> NonNegativeInteger:
+        return self.release_tuple[0] if len(self.release_tuple) >= 1 else 0
 
     @property
-    def minor(self) -> int:
-        return self.release[1] if len(self.release) >= 2 else 0
+    def minor(self) -> NonNegativeInteger:
+        return self.release_tuple[1] if len(self.release_tuple) >= 2 else 0
 
     @property
-    def micro(self) -> int:
-        return self.release[2] if len(self.release) >= 3 else 0
+    def micro(self) -> NonNegativeInteger:
+        return self.release_tuple[2] if len(self.release_tuple) >= 3 else 0
+
+    @property
+    def release(
+        self,
+    ) -> Tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger,]:
+        return (
+            self.major,
+            self.minor,
+            self.micro,
+        )
 
     @property
     def is_pre_release(self) -> bool:
@@ -54,14 +100,19 @@ class Version:
 
     @property
     def is_alpha(self) -> bool:
-        return self.preview is not None and self.__compare_preview(__ALPHA_PART)
+        __ALPHA_PART: Tuple[str, ...] = ("a", "alpha")
+        return self.preview is not None and self.__compare_preview(
+            __ALPHA_PART
+        )
 
     @property
     def is_beta(self) -> bool:
+        __BETA_PART: Tuple[str, ...] = ("b", "beta")
         return self.preview is not None and self.__compare_preview(__BETA_PART)
 
     @property
     def is_release_candidate(self) -> bool:
+        __RC_PART: Tuple[str, ...] = ("c", "rc")
         return self.preview is not None and self.__compare_preview(__RC_PART)
 
     def __compare_preview(self, valid_parts: Tuple[str, ...]) -> bool:
@@ -70,6 +121,44 @@ class Version:
             return pre[0] in valid_parts
         return False
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Version):
+            raise ValueError(f"{other} must be an instance of Version")
+        other_version: Version = cast(Version, other)
+        return (
+            self.epoch == other.epoch
+            and self.release == other_version.release
+            and self.preview == other_version.preview
+            and self.post == other_version.post
+            and self.dev == other_version.dev
+            and self.local == other_version.local
+        )
+
+    def __lt__(self, other: Any) -> bool:
+        if not isinstance(other, Version):
+            raise ValueError(f"{other} must be an instance of Version")
+        other_version: Version = cast(Version, other)
+        my_data = (
+            self.epoch,
+            self.release,
+            self.preview,
+            self.post,
+            self.dev,
+            self.local,
+        )
+        other_data = (
+            other_version.epoch,
+            other_version.release,
+            other_version.preview,
+            other_version.post,
+            other_version.dev,
+            other_version.local,
+        )
+        return my_data < other_data
+
+    def __str__(self) -> str:
+        return Pep440VersionFormatter().format(self)
+
     @staticmethod
     def default() -> "Version":
         return Version(0, (1,), None, None, None, None)
@@ -77,15 +166,22 @@ class Version:
     @staticmethod
     def from_string(version: str) -> "Version":
         try:
-            version: BaseVersion = BaseVersion(version)
+            _version: BaseVersion = BaseVersion(version)
 
             return Version(
-                version.epoch,
-                version.release,
-                version.pre,
-                version.post,
-                version.dev,
-                version.local,
+                _version.epoch,
+                _version.release,
+                cast(
+                    Optional[
+                        Tuple[
+                            Literal["a", "b", "c", "alpha", "beta", "rc"], int
+                        ]
+                    ],
+                    _version.pre,
+                ),
+                ("post", _version.post) if _version.post is not None else None,
+                ("dev", _version.dev) if _version.dev is not None else None,
+                _version.local,
             )
         except InvalidVersion as error:
             raise VersionParserError(
@@ -101,7 +197,10 @@ class Version:
             return False
 
 
-class Pep440VersionFormatter:
+@final
+# Justification: Only method to provide
+class Pep440VersionFormatter:  # pylint: disable=R0903
+    @traced_function
     def format(self, version: Version) -> str:
         parts: List[str] = []
 
@@ -111,13 +210,13 @@ class Pep440VersionFormatter:
         parts.append(".".join(str(part) for part in version.release))
 
         if version.preview is not None:
-            parts.append(str(part) for part in version.preview)
+            parts.extend(str(part) for part in version.preview)
 
-        if version.is_post_release:
-            parts.append(f".post{version.post}")
+        if version.post is not None:
+            parts.append(f".post{list(version.post)[1]}")
 
-        if version.is_development_version:
-            parts.append(f".dev{version.dev}")
+        if version.dev is not None:
+            parts.append(f".dev{list(version.dev)[1]}")
 
         if version.is_local_version:
             parts.append(f"+{version.local}")

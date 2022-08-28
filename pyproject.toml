@@ -1,27 +1,127 @@
 [project]
 name = "pdm-bump"
-version = "0.4.6"
+version = "0.5.0"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
     {name = "Carsten Igel", email = "cig@bite-that-bit.de"},
 ]
 dependencies = [
-    "pdm~=1.12",
+    "pdm>=2.00",
     "pep440-version-utils~=0.3",
+    "annotated-types>=0.2.0",
+    "typing-extensions>=4; python_version<='3.9'",
 ]
-requires-python = ">=3.8"
-license = {text = "MIT"}
+requires-python = ">=3.9"
+license = {file = "LICENSE"}
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
 
+[project.optional-dependencies]
 [build-system]
 requires = ["pdm-pep517"]
 build-backend = "pdm.pep517.api"
 
 [tool]
+[tool.black]
+line-length = 79
+target-version = [ "py39" ]
+
 [tool.pdm]
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=7.1.2",
+    "tox>=3.25.1",
+    "tox-pdm>=0.6.0",
+    "pytest-cov>=3.0.0",
+    "pytest-subtests>=0.8.0",
+]
+checkstlye = [
+    "flake8>=3.9.2",
+    "flake518>=1.2.3",
+    "mypy>=0.971",
+    "pylint>=2.14.5",
+    "pycodestyle>=2.7.0",
+]
+formatting = [
+    "black>=22.6.0",
+    "isort>=5.10.1",
+    "licenseheaders>=0.8.8",
+]
+release = [
+    "gitlint>=0.17.0",
+]
+
+[tool.pdm.scripts]
+flake = "flake518 --exit-zero src/"
+mypy = "mypy src/"
+pylint = "pylint src/"
+check-style = { composite = ["flake", "pylint", "mypy"] }
+isort = "isort src/"
+black = "black src/"
+copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -t ./.licenseheader.j2 -E .py"
+format = { composite = [ "copyright-headers", "isort", "black" ] }
+
+[tool.pylint.MAIN]
+fail-under = 9
+ignore = "vcs"
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [ "C0114", "C0115", "C0116" ]
+
+[tool.pytest.ini_options]
+testpaths = [ "tests" ]
+junit_suite_name = "pdm-bump"
+pythonpath = [ "src" ]
+minversion = "7.0.0"
+addopts = [
+    "--cache-clear", 
+    "--junit-xml",
+    "pytest.result.xml", 
+    "--cov=src", 
+    "--cov-branch",
+    "--cov-report", 
+    "xml:pytest.coverage.xml", 
+    "--cov-report", 
+    "term",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning "
+]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+minversion = 3.25.0
+requires = tox-pdm
+skip_missing_interpreters = false
+envlist = py{39, 310, 311}
+isolated_build = true
+skipsdist = true
+
+
+[testenv]
+setenv = 
+    PDM_IGNORE_SAVED_PYTHON="1"
+allowlist_externals = 
+    mv
+    mkdir
+    pytest
+    pdm
+    python
+deps = pdm
+recreate = true
+passenv = 
+    PYTHONPATH
+commands =
+    pdm install --dev
+    pytest
+commands_pre = 
+    mkdir -p {toxinidir}/results/{envname}
+commands_post = 
+    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/
+"""
 
 [project.entry-points.pdm]
 pdm-bump = "pdm_bump:main"
