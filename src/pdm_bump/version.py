@@ -34,20 +34,24 @@ NonNegativeInteger = Annotated[int, NonNegative]
 @dataclass(eq=False, order=False, frozen=True)
 @total_ordering
 class Version:
-    epoch: NonNegativeInteger = field(default=0)
+    epoch: NonNegativeInteger = field(
+        default=0, repr=True, hash=True, compare=True
+    )
     release_tuple: Tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
     preview: Optional[
         Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
         ]
-    ] = field(default=None)
+    ] = field(default=None, repr=True, hash=True, compare=True)
     post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field(
-        default=None
+        default=None, repr=True, hash=True, compare=True
     )
     dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field(
-        default=None
+        default=None, repr=True, hash=True, compare=True
     )
-    local: Optional[str] = field(default=None)
+    local: Optional[str] = field(
+        default=None, repr=True, hash=True, compare=True
+    )
 
     def __post_init__(self):
         if self.is_pre_release and not self.is_development_version:
@@ -122,9 +126,10 @@ class Version:
             raise ValueError(f"{other} must be an instance of Version")
         other_version: Version = cast(Version, other)
         return (
-            self.release == other_version.release
+            self.epoch == other.epoch
+            and self.release == other_version.release
             and self.preview == other_version.preview
-            and self.post == other_version.dev
+            and self.post == other_version.post
             and self.dev == other_version.dev
             and self.local == other_version.local
         )
@@ -133,8 +138,16 @@ class Version:
         if not isinstance(other, Version):
             raise ValueError(f"{other} must be an instance of Version")
         other_version: Version = cast(Version, other)
-        my_data = (self.release, self.preview, self.post, self.dev, self.local)
+        my_data = (
+            self.epoch,
+            self.release,
+            self.preview,
+            self.post,
+            self.dev,
+            self.local,
+        )
         other_data = (
+            other_version.epoch,
             other_version.release,
             other_version.preview,
             other_version.post,
@@ -142,6 +155,9 @@ class Version:
             other_version.local,
         )
         return my_data < other_data
+
+    def __str__(self) -> str:
+        return Pep440VersionFormatter().format(self)
 
     @staticmethod
     def default() -> "Version":
