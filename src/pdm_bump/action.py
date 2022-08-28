@@ -84,7 +84,9 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
                 ],
                 self.current_version.preview,
             )
-            pre = (pre[0], pre[1] + 1)
+            number = pre[1] + 1 if letter == pre[0] else 1
+
+            pre = (letter, number)
 
         return Version(
             self.current_version.epoch,
@@ -108,7 +110,10 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     def _get_next_release(self) -> Tuple[NonNegativeInteger, ...]:
         micro = self.current_version.micro
-        if self.__increment_micro:
+        if (
+            self.__increment_micro
+            and not self.current_version.preview is not None
+        ):
             micro = micro + 1
 
         ret: List[NonNegativeInteger] = []
@@ -300,7 +305,9 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         if self.__reset_version or self.remove_non_final_parts:
             constructional_args = dataclass_to_dict(Version.default())
             if not self.__reset_version:
-                constructional_args["release_tuple"] = self.current_version.release
+                constructional_args[
+                    "release_tuple"
+                ] = self.current_version.release
 
         constructional_args["epoch"] = self.current_version.epoch + 1
 
