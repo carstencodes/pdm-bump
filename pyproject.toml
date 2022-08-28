@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.4.11"
+version = "0.4.12"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -35,6 +35,7 @@ test = [
     "tox>=3.25.1",
     "tox-pdm>=0.6.0",
     "pytest-cov>=3.0.0",
+    "pytest-subtests>=0.8.0",
 ]
 checkstlye = [
     "flake8>=3.9.2",
