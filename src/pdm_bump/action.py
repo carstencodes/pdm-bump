@@ -112,7 +112,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         micro = self.current_version.micro
         if (
             self.__increment_micro
-            and not self.current_version.preview is not None
+            and self.current_version.preview is None
         ):
             micro = micro + 1
 
