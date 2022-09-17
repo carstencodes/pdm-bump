@@ -8,7 +8,6 @@ authors = [
 ]
 dependencies = [
     "pdm>=2.00",
-    "pep440-version-utils~=0.3",
     "annotated-types>=0.2.0",
     "typing-extensions>=4; python_version<='3.9'",
 ]
@@ -51,6 +50,7 @@ formatting = [
 ]
 release = [
     "gitlint>=0.17.0",
+    "pip-audit>=2.4.4",
 ]
 
 [tool.pdm.scripts]
