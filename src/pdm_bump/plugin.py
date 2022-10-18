@@ -9,6 +9,7 @@
 #
 from argparse import ArgumentParser, Namespace
 from logging import DEBUG, INFO
+from pathlib import Path
 from traceback import format_exc as get_traceback
 from typing import Final, Optional, Protocol, cast, final
 
@@ -23,11 +24,18 @@ from .action import (
     create_actions,
 )
 from .config import Config, ConfigHolder
+from .dynamic import (
+    find_dynamic_config,
+    get_dynamic_version,
+    replace_dynamic_version,
+)
 from .logging import TRACE, logger, traced_function
 from .version import Pep440VersionFormatter, Version
 
 
 class _ProjectLike(ConfigHolder, Protocol):
+    root: Path
+
     @property
     def pyproject_file(self) -> str:
         # Method empty: Only a protocol stub
@@ -106,6 +114,14 @@ class BumpCommand(BaseCommand):
             Optional[str], config.get_pyproject_value("project", "version")
         )
 
+        dynamic_version_config = None
+        if version_value is None and "version" in config.get_pyproject_value(
+            "project", "dynamic"
+        ):
+            dynamic_version_config = find_dynamic_config(project.root, config)
+            if dynamic_version_config:
+                version_value = get_dynamic_version(dynamic_version_config)
+
         if version_value is None:
             logger.error("Cannot find version in %s", project.pyproject_file)
             return
@@ -132,11 +148,14 @@ class BumpCommand(BaseCommand):
 
         next_version: str = self._version_to_string(result)
 
-        config.set_pyproject_value(next_version, "project", "version")
-        if not options.dry_run:
-            project.write_pyproject(True)
-        else:
+        if options.dry_run:
             logger.info("Would write new version %s", next_version)
+            return
+        if dynamic_version_config:
+            replace_dynamic_version(dynamic_version_config, next_version)
+        else:
+            config.set_pyproject_value(next_version, "project", "version")
+            project.write_pyproject(True)
 
     @traced_function
     def _get_action(
