@@ -119,8 +119,17 @@ class BumpCommand(BaseCommand):
             "project", "dynamic"
         ):
             dynamic_version_config = find_dynamic_config(project.root, config)
-            if dynamic_version_config:
-                version_value = get_dynamic_version(dynamic_version_config)
+            if not dynamic_version_config:
+                logger.error(f"Unable to locate compatible dynamic version "
+                             f"config in {project.pyproject_file} Only "
+                             f"pdm-pep517 `file` types are supported.")
+                return
+
+            version_value = get_dynamic_version(dynamic_version_config)
+            if version_value is None:
+                logger.error(f"Cannot find dynamic version in "
+                             f"{dynamic_version_config.file}")
+                return
 
         if version_value is None:
             logger.error("Cannot find version in %s", project.pyproject_file)
