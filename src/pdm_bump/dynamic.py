@@ -1,6 +1,16 @@
+#
+# Copyright (c) 2021-2022 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
+import re
 from dataclasses import dataclass
 from pathlib import Path
-import re
+from typing import Union
 
 from .config import Config
 
@@ -17,7 +27,7 @@ class DynamicVersionConfig:
 
 def find_dynamic_config(
     root_path: Path, project_config: Config
-) -> DynamicVersionConfig | None:
+) -> Union[DynamicVersionConfig, None]:
     if (
         project_config.get_pyproject_value("build-system", "build-backend")
         == "pdm.pep517.api"
@@ -33,15 +43,18 @@ def find_dynamic_config(
             file=root_path / file_path,
             regex=DEFAULT_REGEX,
         )
+    return None
 
 
-def get_dynamic_version(config: DynamicVersionConfig) -> str | None:
+def get_dynamic_version(config: DynamicVersionConfig) -> Union[str, None]:
     with config.file.open("r") as fp:
         match = config.regex.search(fp.read())
     return match and match.group("version")
 
 
-def replace_dynamic_version(config: DynamicVersionConfig, new_version: str):
+def replace_dynamic_version(
+    config: DynamicVersionConfig, new_version: str
+) -> None:
     with config.file.open("r") as fp:
         version_file = fp.read()
         match = config.regex.search(version_file)
