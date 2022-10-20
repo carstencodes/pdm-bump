@@ -58,9 +58,11 @@ def replace_dynamic_version(
     with config.file.open("r") as fp:
         version_file = fp.read()
         match = config.regex.search(version_file)
-        old_version_line = match.group(0)
-        old_version = match.group("version")
-        new_version_line = old_version_line.replace(old_version, new_version)
-        new_version_file = config.regex.sub(new_version_line, version_file)
+        version_start, version_end = match.span("version")
+        new_version_file = (
+            version_file[:version_start]
+            + new_version
+            + version_file[version_end:]
+        )
     with config.file.open("w") as fp:
         fp.write(new_version_file)
