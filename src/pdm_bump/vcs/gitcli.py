@@ -7,9 +7,11 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+from pathlib import Path
 from subprocess import CalledProcessError
-from typing import List
+from typing import List, Optional, Tuple
 
+from ..version import Version
 from .core import VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
 from .mixins import CliRunnerMixin
@@ -47,7 +49,8 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             return len(dirty_files) == 0
         except CalledProcessError as cpe:
             raise VcsProviderError(
-                f"Failed to check if {self.current_path} is a clean git repository."
+                f"Failed to check if {self.current_path} is a clean "
+                f"git repository."
             ) from cpe
 
     def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
@@ -62,14 +65,15 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
             _ = self.run(
                 self.__GIT_EXECUTABLE_NAME,
-                ("commit", "-m", message),
+                ("commit", "-m", f'"{message}"'),
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
         except CalledProcessError as cpe:
             f_args = ",".join([str(f) for f in files])
             raise VcsProviderError(
-                f"Failed to check in items in {self.current_path} using {f_args}."
+                f"Failed to check in items in {self.current_path} "
+                f"using {f_args}."
             ) from cpe
 
     def create_tag_from_string(self, version_formatted: str) -> None:
@@ -82,7 +86,64 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
         except CalledProcessError as cpe:
             raise VcsProviderError(
-                f"Failed to create tag f{version_formatted} in {self.current_path}."
+                f"Failed to create tag f{version_formatted} "
+                f"in {self.current_path}."
+            ) from cpe
+
+    def get_most_recent_tag(self) -> Optional[Version]:
+        try:
+            _, output, _ = self.run(
+                self.__GIT_EXECUTABLE_NAME,
+                ("describe", "--tags"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+        except CalledProcessError as cpe:
+            raise VcsProviderError(
+                "Failed to receive most recent tag"
+            ) from cpe
+
+        if output.strip() == "":
+            return None
+
+        return Version.from_string(output)
+
+    def get_number_of_changes_since_last_release(self) -> int:
+        try:
+            _, output, _ = self.run(
+                self.__GIT_EXECUTABLE_NAME,
+                ("describe", "--tags"),
+                raise_on_exit=False,
+                cwd=self.current_path,
+            )
+            if output.strip() == "":
+                raise VcsProviderError("Failed to fetch most recent tag")
+            _, output, _ = self.run(
+                self.__GIT_EXECUTABLE_NAME,
+                ("rev-list", f"{output}..HEAD", "--count"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+
+            return int(output)
+        except CalledProcessError as cpe:
+            raise VcsProviderError(
+                "Failed to receive number of commits" " since last tag."
+            ) from cpe
+
+    def get_changes_not_checked_in(self) -> int:
+        try:
+            _, output, _ = self.run(
+                self.__GIT_EXECUTABLE_NAME,
+                ("status", "--porcelain"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+            lines = output.split("\n")
+            return len(lines)
+        except CalledProcessError as cpe:
+            raise VcsProviderError(
+                "Failed to receive number of changes" "that are not committed"
             ) from cpe
 
 

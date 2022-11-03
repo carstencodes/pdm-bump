@@ -7,12 +7,13 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import (
     AnyStr,
     Callable,
     Dict,
+    Final,
     Iterator,
     NamedTuple,
     Optional,
@@ -57,7 +58,8 @@ class VcsProvider(ABC):
     def current_path(self) -> Path:
         return self.__path
 
-    @abstractproperty
+    @abstractmethod
+    @property
     def is_clean(self) -> bool:
         raise NotImplementedError()
 
@@ -65,12 +67,28 @@ class VcsProvider(ABC):
     def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
         raise NotImplementedError()
 
-    def create_tag_from_version(self, version: Version) -> None:
+    def create_tag_from_version(
+        self, version: Version, prepend_letter_v: bool = True
+    ) -> None:
         version_formatted: str = Pep440VersionFormatter().format(version)
+        if prepend_letter_v:
+            version_formatted = "v" + version_formatted
         self.create_tag_from_string(version_formatted)
 
     @abstractmethod
     def create_tag_from_string(self, version_formatted: str) -> None:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_most_recent_tag(self) -> Optional[Version]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_number_of_changes_since_last_release(self) -> int:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_changes_not_checked_in(self) -> int:
         raise NotImplementedError()
 
 
@@ -79,7 +97,8 @@ class VcsProviderFactory(ABC):
     def _create_provider(self, path: Path) -> VcsProvider:
         raise NotImplementedError()
 
-    @abstractproperty
+    @abstractmethod
+    @property
     def vcs_fs_root(self) -> Iterator[VcsFileSystemIdentifier]:
         raise NotImplementedError()
 
@@ -111,7 +130,7 @@ class VcsProviderFactory(ABC):
         dir_path: Path = path / directory_name
         return self._is_valid_fs_root_dir(dir_path)
 
-    def _file_exists(path: Path, file_name: str) -> bool:
+    def _file_exists(self, path: Path, file_name: str) -> bool:
         file_path: Path = path / file_name
         return self._is_valid_fs_root_file(file_path)
 
@@ -124,7 +143,7 @@ class VcsProviderFactory(ABC):
             )
             is_valid_root_by_dir: bool = (
                 fs_root.dir_name is None
-                or self._dir_exists(path, fs_root.dir_name)
+                or self._directory_exists(path, fs_root.dir_name)
             )
             is_repository_root = is_repository_root or (
                 is_valid_root_by_dir and is_valid_root_by_file
@@ -155,20 +174,21 @@ class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
         def decorator(clazz: Type):
             if not issubclass(clazz, VcsProviderFactory):
                 raise ValueError(
-                    f"{clazz.__name__} is not an sub-type of {VcsProviderFactory.__name__}"
+                    f"{clazz.__name__} is not an sub-type of "
+                    f"{VcsProviderFactory.__name__}"
                 )
 
             self[name] = clazz.__init__
 
         return decorator
 
-    def __missing__(self, key: str) -> Callable[..., VcsProviderFactory()]:
+    def __missing__(self, key: str) -> Callable[..., VcsProviderFactory]:
         return None
 
 
-vcs_providers = VcsProviderRegistry()
+vcs_providers: Final[VcsProviderRegistry] = VcsProviderRegistry()
 
-vcs_provider = vcs_providers.register
+vcs_provider: Final[Callable[[str], Callable]] = vcs_providers.register
 
 
 class DefaultVcsProvider(VcsProvider):
@@ -187,6 +207,18 @@ class DefaultVcsProvider(VcsProvider):
     def create_tag_from_string(self, version_formatted: str) -> None:
         # Must not be provided
         pass
+
+    def get_most_recent_tag(self) -> Optional[Version]:
+        # Cannot be provided
+        return None
+
+    def get_number_of_changes_since_last_release(self) -> int:
+        # Cannot be provided
+        return 0
+
+    def get_changes_not_checked_in(self) -> int:
+        # Cannot be provided
+        return 0
 
 
 class VcsProviderError(Exception):
