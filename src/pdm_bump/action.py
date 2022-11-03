@@ -110,10 +110,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     def _get_next_release(self) -> Tuple[NonNegativeInteger, ...]:
         micro = self.current_version.micro
-        if (
-            self.__increment_micro
-            and self.current_version.preview is None
-        ):
+        if self.__increment_micro and self.current_version.preview is None:
             micro = micro + 1
 
         ret: List[NonNegativeInteger] = []
