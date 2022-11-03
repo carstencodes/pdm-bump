@@ -24,11 +24,8 @@ from .action import (
     create_actions,
 )
 from .config import Config, ConfigHolder
-from .dynamic import (
-    find_dynamic_config,
-    get_dynamic_version,
-    replace_dynamic_version,
-)
+from .dynamic import DynamicVersionSource
+from .source import StaticPep621VersionSource
 from .logging import TRACE, logger, traced_function
 from .version import Pep440VersionFormatter, Version
 
@@ -44,6 +41,22 @@ class _ProjectLike(ConfigHolder, Protocol):
     def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
         pass
+
+class _VersionSource(Protocol):
+    @property
+    def is_enabled(self) -> bool:
+        raise NotImplementedError()
+
+    def __get_current_version(self) -> Version:
+        raise NotImplementedError()
+
+    def __set_current_version(self, v: Version) -> None:
+        raise NotImplementedError()
+
+    current_version = property(__get_current_version, __set_current_version)
+
+    def save_value(self) -> None:
+        raise NotImplementedError()
 
 
 @final
@@ -110,32 +123,20 @@ class BumpCommand(BaseCommand):
         config: Config = Config(project)
         self._setup_logger(options.trace, options.debug)
 
-        version_value: Optional[str] = cast(
-            Optional[str], config.get_pyproject_value("project", "version")
-        )
+        static_backend: _VersionSource = StaticPep621VersionSource(project, config)
+        dynamic_backend: _VersionSource = DynamicVersionSource(project.root, config)
 
-        dynamic_version_config = None
-        if version_value is None and "version" in config.get_pyproject_value(
-            "project", "dynamic"
-        ):
-            dynamic_version_config = find_dynamic_config(project.root, config)
-            if not dynamic_version_config:
-                logger.error(f"Unable to locate compatible dynamic version "
-                             f"config in {project.pyproject_file} Only "
-                             f"pdm-pep517 `file` types are supported.")
-                return
+        selected_backend: Optional[_VersionSource] = None
+        for backend in (static_backend, dynamic_backend):
+            if backend.is_enabled:
+                selected_backend = backend
+                break
 
-            version_value = get_dynamic_version(dynamic_version_config)
-            if version_value is None:
-                logger.error(f"Cannot find dynamic version in "
-                             f"{dynamic_version_config.file}")
-                return
-
-        if version_value is None:
+        if selected_backend is None:
             logger.error("Cannot find version in %s", project.pyproject_file)
             return
 
-        version: Version = Version.from_string(version_value)
+        version: Version = selected_backend.current_version
 
         actions: ActionCollection = self._get_actions(
             options.micro, options.reset, options.remove
@@ -155,16 +156,16 @@ class BumpCommand(BaseCommand):
             logger.debug("Exception occurred: %s", get_traceback())
             raise SystemExit(1) from exc
 
-        next_version: str = self._version_to_string(result)
+        backend.current_version = result
 
-        if options.dry_run:
-            logger.info("Would write new version %s", next_version)
-            return
-        if dynamic_version_config:
-            replace_dynamic_version(dynamic_version_config, next_version)
+        current_version: str = Pep440VersionFormatter().format(version)
+        next_version: str = Pep440VersionFormatter().format(result)
+        if not options.dry_run:
+
+            logger.info("Updating version: %s -> %s", current_version, next_version)
+            backend.save_value()
         else:
-            config.set_pyproject_value(next_version, "project", "version")
-            project.write_pyproject(True)
+            logger.info("Would write new version %s", next_version)
 
     @traced_function
     def _get_action(

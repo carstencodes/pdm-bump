@@ -15,8 +15,9 @@ jobs:
         python-version:
           - "3.9"
           - "3.10"
+          - "3.11"
         pdm-version:
-          - 2.1.2
+          - 2.2.1
     steps:
       - name: Setup python
         uses: actions/setup-python@v2
@@ -44,8 +45,9 @@ jobs:
         python-version:
           - "3.9"
           - "3.10"
+          - "3.11"
         pdm-version:
-          - 2.1.2
+          - 2.2.1
     steps:
       - name: Setup python
         uses: actions/setup-python@v2
