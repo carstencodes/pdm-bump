@@ -123,7 +123,7 @@ class BumpCommand(BaseCommand):
         config: Config = Config(project)
         self._setup_logger(options.trace, options.debug)
 
-        static_backend: _VersionSource = StaticPep621VersionSource(config)
+        static_backend: _VersionSource = StaticPep621VersionSource(project, config)
         dynamic_backend: _VersionSource = DynamicVersionSource(project.root, config)
 
         selected_backend: Optional[_VersionSource] = None
@@ -158,10 +158,13 @@ class BumpCommand(BaseCommand):
 
         backend.current_version = result
 
+        current_version: str = Pep440VersionFormatter().format(version)
+        next_version: str = Pep440VersionFormatter().format(result)
         if not options.dry_run:
+
+            logger.info("Updating version: %s -> %s", current_version, next_version)
             backend.save_value()
         else:
-            next_version: str = Pep440VersionFormatter().format(result)
             logger.info("Would write new version %s", next_version)
 
     @traced_function

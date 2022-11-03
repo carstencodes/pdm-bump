@@ -8,13 +8,21 @@
 # Refer to LICENSE for more information
 #
 
-from typing import cast
+from typing import Protocol, cast
 
 from .config import Config
 from .version import Version, Pep440VersionFormatter
 
+
+class _ProjectWriter(Protocol):
+    def write_pyproject(self, show_message: bool) -> None:
+        # Method empty: Only a protocol stub
+        pass
+
+
 class StaticPep621VersionSource:
-    def __init__(self, config: Config) -> None:
+    def __init__(self, project: _ProjectWriter, config: Config) -> None:
+        self.__project = project
         self.__config = config
 
     @property
@@ -33,5 +41,5 @@ class StaticPep621VersionSource:
     current_version = property(__get_current_version, __set_current_version)
 
     def save_value(self) -> None:
-        self.__config.write_pyproject(True)
+        self.__project.write_pyproject(True)
 
