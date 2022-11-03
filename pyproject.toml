@@ -12,7 +12,10 @@ dependencies = [
     "typing-extensions>=4; python_version<='3.9'",
 ]
 requires-python = ">=3.9"
-license = {file = "LICENSE"}
+license = "MIT"
+
+[project."license-files"]
+paths = [ "LICENSE" ]
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
@@ -76,14 +79,14 @@ junit_suite_name = "pdm-bump"
 pythonpath = [ "src" ]
 minversion = "7.0.0"
 addopts = [
-    "--cache-clear", 
+    "--cache-clear",
     "--junit-xml",
-    "pytest.result.xml", 
-    "--cov=src", 
+    "pytest.result.xml",
+    "--cov=src",
     "--cov-branch",
-    "--cov-report", 
-    "xml:pytest.coverage.xml", 
-    "--cov-report", 
+    "--cov-report",
+    "xml:pytest.coverage.xml",
+    "--cov-report",
     "term",
 ]
 filterwarnings = [
@@ -102,9 +105,9 @@ skipsdist = true
 
 
 [testenv]
-setenv = 
+setenv =
     PDM_IGNORE_SAVED_PYTHON="1"
-allowlist_externals = 
+allowlist_externals =
     mv
     mkdir
     pytest
@@ -112,14 +115,14 @@ allowlist_externals =
     python
 deps = pdm
 recreate = true
-passenv = 
+passenv =
     PYTHONPATH
 commands =
     pdm install --dev
     pytest
-commands_pre = 
+commands_pre =
     mkdir -p {toxinidir}/results/{envname}
-commands_post = 
+commands_post =
     mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/
 """
 
