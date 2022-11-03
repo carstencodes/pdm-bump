@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2022 Carsten Igel, Chase Sterling.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -10,9 +10,10 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import Optional, cast
 
 from .config import Config
+from .version import Version, Pep440VersionFormatter
 
 DEFAULT_REGEX = re.compile(
     r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$", re.M
@@ -24,10 +25,55 @@ class DynamicVersionConfig:
     file: Path
     regex: re.Pattern
 
+class DynamicVersionSource:
+    def __init__(self, project_root: str, config: Config) -> None:
+        self.__project_root = project_root
+        self.__config = config
+        self.__current_version: Optional[Version] = None
 
-def find_dynamic_config(
+    @property
+    def is_enabled(self) -> bool:
+        dynamic_items: Optional[list[str]] = cast(list[str], config.get_pyproject_value(
+            "project", "dynamic"
+        ))
+        return dynamic_items is not None and "version" in dynamic_items
+
+    def __get_current_version(self) -> Version:
+        if self.__current_version is not None:
+            return case(Version, self.__current_version)
+
+        dynamic: DynamicVersionConfig = self.__get_dynamic_version()
+        version: Optional[str] = __get_dynamic_version(dynamic)
+        if version is not None:
+            self.__current_version = Version.from_string(version)
+            return self.__current_version
+        raise ValueError(f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}")
+
+    def __set_current_version(self, v: Version) -> None:
+        self.__current_version = v
+
+    current_version = property(__get_current_version, __set_current_version)
+
+    def save_value(self) -> None:
+        if self.__current_version is None:
+            raise ValueError("No current value set")
+        version: Version = cast(Version, self.__current_version)
+        v: str = Pep440VersionFormatter().format(version)
+        config: DynamicVersionConfig = self.__get_dynamic_version()
+        __replace_dynamic_version(config, v)
+
+    def __get_dynamic_version(self) -> DynamicVersionConfig:
+        dynamic_version: Optional[DynamicVersionConfig] = __find_dynamic_config(self.__project_root, self.__config)
+        if dynamic_version is not None:
+            dynamic: DynamicVersionConfig = cast(DynamicVersionConfig, dynamic_version)
+            return dynamic
+        raise ValueError(f"Failed to extract dynamic version from {self.__project_root}. Only "
+                             f"pdm-pep517 `file` types are supported.")
+
+
+def __find_dynamic_config(
     root_path: Path, project_config: Config
-) -> Union[DynamicVersionConfig, None]:
+) -> Optional[DynamicVersionConfig]:
     if (
         project_config.get_pyproject_value("build-system", "build-backend")
         == "pdm.pep517.api"
@@ -46,13 +92,13 @@ def find_dynamic_config(
     return None
 
 
-def get_dynamic_version(config: DynamicVersionConfig) -> Union[str, None]:
+def __get_dynamic_version(config: DynamicVersionConfig) -> Optional[str]:
     with config.file.open("r") as fp:
         match = config.regex.search(fp.read())
     return match and match.group("version")
 
 
-def replace_dynamic_version(
+def __replace_dynamic_version(
     config: DynamicVersionConfig, new_version: str
 ) -> None:
     with config.file.open("r") as fp:
