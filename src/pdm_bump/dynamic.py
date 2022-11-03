@@ -35,13 +35,13 @@ class DynamicVersionSource:
     @property
     def is_enabled(self) -> bool:
         dynamic_items: Optional[list[str]] = cast(
-            list[str], config.get_pyproject_value("project", "dynamic")
+            list[str], self.__config.get_pyproject_value("project", "dynamic")
         )
         return dynamic_items is not None and "version" in dynamic_items
 
     def __get_current_version(self) -> Version:
         if self.__current_version is not None:
-            return case(Version, self.__current_version)
+            return cast(Version, self.__current_version)
 
         dynamic: DynamicVersionConfig = self.__get_dynamic_version()
         version: Optional[str] = __get_dynamic_version(dynamic)
