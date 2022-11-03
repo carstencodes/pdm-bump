@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Optional, cast
 
 from .config import Config
-from .version import Version, Pep440VersionFormatter
+from .version import Pep440VersionFormatter, Version
 
 DEFAULT_REGEX = re.compile(
     r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$", re.M
@@ -25,6 +25,7 @@ class DynamicVersionConfig:
     file: Path
     regex: re.Pattern
 
+
 class DynamicVersionSource:
     def __init__(self, project_root: str, config: Config) -> None:
         self.__project_root = project_root
@@ -33,21 +34,23 @@ class DynamicVersionSource:
 
     @property
     def is_enabled(self) -> bool:
-        dynamic_items: Optional[list[str]] = cast(list[str], config.get_pyproject_value(
-            "project", "dynamic"
-        ))
+        dynamic_items: Optional[list[str]] = cast(
+            list[str], self.__config.get_pyproject_value("project", "dynamic")
+        )
         return dynamic_items is not None and "version" in dynamic_items
 
     def __get_current_version(self) -> Version:
         if self.__current_version is not None:
-            return case(Version, self.__current_version)
+            return cast(Version, self.__current_version)
 
         dynamic: DynamicVersionConfig = self.__get_dynamic_version()
         version: Optional[str] = __get_dynamic_version(dynamic)
         if version is not None:
             self.__current_version = Version.from_string(version)
             return self.__current_version
-        raise ValueError(f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}")
+        raise ValueError(
+            f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}"
+        )
 
     def __set_current_version(self, v: Version) -> None:
         self.__current_version = v
@@ -63,12 +66,18 @@ class DynamicVersionSource:
         __replace_dynamic_version(config, v)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
-        dynamic_version: Optional[DynamicVersionConfig] = __find_dynamic_config(self.__project_root, self.__config)
+        dynamic_version: Optional[
+            DynamicVersionConfig
+        ] = __find_dynamic_config(self.__project_root, self.__config)
         if dynamic_version is not None:
-            dynamic: DynamicVersionConfig = cast(DynamicVersionConfig, dynamic_version)
+            dynamic: DynamicVersionConfig = cast(
+                DynamicVersionConfig, dynamic_version
+            )
             return dynamic
-        raise ValueError(f"Failed to extract dynamic version from {self.__project_root}. Only "
-                             f"pdm-pep517 `file` types are supported.")
+        raise ValueError(
+            f"Failed to extract dynamic version from {self.__project_root}. Only "
+            f"pdm-pep517 `file` types are supported."
+        )
 
 
 def __find_dynamic_config(

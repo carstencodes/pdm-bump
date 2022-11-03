@@ -11,7 +11,7 @@
 from typing import Protocol, cast
 
 from .config import Config
-from .version import Version, Pep440VersionFormatter
+from .version import Pep440VersionFormatter, Version
 
 
 class _ProjectWriter(Protocol):
@@ -27,10 +27,14 @@ class StaticPep621VersionSource:
 
     @property
     def is_enabled(self) -> bool:
-        return self.__config.get_pyproject_value("project", "version") is not None
+        return (
+            self.__config.get_pyproject_value("project", "version") is not None
+        )
 
     def __get_current_version(self) -> Version:
-        v: str = cast(str, self.__config.get_pyproject_value("project", "version"))
+        v: str = cast(
+            str, self.__config.get_pyproject_value("project", "version")
+        )
         return Version.from_string(v)
 
     def __set_current_version(self, v: Version) -> None:
@@ -42,4 +46,3 @@ class StaticPep621VersionSource:
 
     def save_value(self) -> None:
         self.__project.write_pyproject(True)
-

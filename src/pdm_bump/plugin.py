@@ -25,8 +25,8 @@ from .action import (
 )
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
-from .source import StaticPep621VersionSource
 from .logging import TRACE, logger, traced_function
+from .source import StaticPep621VersionSource
 from .version import Pep440VersionFormatter, Version
 
 
@@ -41,6 +41,7 @@ class _ProjectLike(ConfigHolder, Protocol):
     def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
         pass
+
 
 class _VersionSource(Protocol):
     @property
@@ -123,8 +124,12 @@ class BumpCommand(BaseCommand):
         config: Config = Config(project)
         self._setup_logger(options.trace, options.debug)
 
-        static_backend: _VersionSource = StaticPep621VersionSource(project, config)
-        dynamic_backend: _VersionSource = DynamicVersionSource(project.root, config)
+        static_backend: _VersionSource = StaticPep621VersionSource(
+            project, config
+        )
+        dynamic_backend: _VersionSource = DynamicVersionSource(
+            project.root, config
+        )
 
         selected_backend: Optional[_VersionSource] = None
         for backend in (static_backend, dynamic_backend):
@@ -162,7 +167,9 @@ class BumpCommand(BaseCommand):
         next_version: str = Pep440VersionFormatter().format(result)
         if not options.dry_run:
 
-            logger.info("Updating version: %s -> %s", current_version, next_version)
+            logger.info(
+                "Updating version: %s -> %s", current_version, next_version
+            )
             backend.save_value()
         else:
             logger.info("Would write new version %s", next_version)
