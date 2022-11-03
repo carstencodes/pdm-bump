@@ -235,6 +235,15 @@ requires_python = ">=3.5"
 summary = "Internationalized Domain Names in Applications (IDNA)"
 
 [[package]]
+name = "importlib-metadata"
+version = "5.0.0"
+requires_python = ">=3.7"
+summary = "Read metadata from Python packages"
+dependencies = [
+    "zipp>=0.5",
+]
+
+[[package]]
 name = "iniconfig"
 version = "1.1.1"
 summary = "iniconfig: brain-dead simple config-ini parsing"
@@ -321,7 +330,7 @@ summary = "Utility library for gitignore style pattern matching of file paths."
 
 [[package]]
 name = "pdm"
-version = "2.1.5"
+version = "2.2.1"
 requires_python = ">=3.7"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -329,6 +338,7 @@ dependencies = [
     "cachecontrol[filecache]>=0.12.11",
     "certifi>=2022.6.15",
     "findpython>=0.2.0",
+    "importlib-metadata>=3.6; python_version < \"3.10\"",
     "installer<0.6,>=0.5.1",
     "packaging>=20.9",
     "pdm-pep517<2.0.0,>=1.0.0",
@@ -376,7 +386,7 @@ dependencies = [
 
 [[package]]
 name = "pip-audit"
-version = "2.4.4"
+version = "2.4.5"
 requires_python = ">=3.7"
 summary = "A tool for scanning Python environments for known vulnerabilities"
 dependencies = [
@@ -486,8 +496,8 @@ dependencies = [
 
 [[package]]
 name = "pytest-subtests"
-version = "0.8.0"
-requires_python = ">=3.6"
+version = "0.9.0"
+requires_python = ">=3.7"
 summary = "unittest subTest() support and subtests fixture"
 dependencies = [
     "pytest>=7.0",
@@ -665,6 +675,12 @@ version = "1.14.1"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 summary = "Module for decorators, wrappers and monkey patching."
 
+[[package]]
+name = "zipp"
+version = "3.10.0"
+requires_python = ">=3.7"
+summary = "Backport of pathlib-compatible object wrapper for zip files"
+
 [metadata]
 lock_version = "4.0"
 content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6bae21905"
@@ -836,6 +852,10 @@ content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6b
     {url = "https://files.pythonhosted.org/packages/04/a2/d918dcd22354d8958fe113e1a3630137e0fc8b44859ade3063982eacd2a4/idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {url = "https://files.pythonhosted.org/packages/62/08/e3fc7c8161090f742f504f40b1bccbfc544d4a4e09eb774bf40aafce5436/idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
+"importlib-metadata 5.0.0" = [
+    {url = "https://files.pythonhosted.org/packages/7e/ec/97f2ce958b62961fddd7258e0ceede844953606ad09b672fa03b86c453d3/importlib_metadata-5.0.0.tar.gz", hash = "sha256:da31db32b304314d044d3c12c79bd59e307889b287ad12ff387b3500835fc2ab"},
+    {url = "https://files.pythonhosted.org/packages/b5/64/ef29a63cf08f047bb7fb22ab0f1f774b87eed0bb46d067a5a524798a4af8/importlib_metadata-5.0.0-py3-none-any.whl", hash = "sha256:ddb0e35065e8938f867ed4928d0ae5bf2a53b7773871bfe6bcc7e4fcdc7dea43"},
+]
 "iniconfig 1.1.1" = [
     {url = "https://files.pythonhosted.org/packages/23/a2/97899f6bd0e873fed3a7e67ae8d3a08b21799430fb4da15cfedf10d6e2c2/iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
     {url = "https://files.pythonhosted.org/packages/9b/dd/b3c12c6d707058fa947864b67f0c4e0c39ef8610988d7baea9578f3c48f3/iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
@@ -995,9 +1015,9 @@ content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6b
     {url = "https://files.pythonhosted.org/packages/42/ba/a9d64c7bcbc7e3e8e5f93a52721b377e994c22d16196e2b0f1236774353a/pathspec-0.9.0-py2.py3-none-any.whl", hash = "sha256:7d15c4ddb0b5c802d161efc417ec1a2558ea2653c2e8ad9c19098201dc1c993a"},
     {url = "https://files.pythonhosted.org/packages/f6/33/436c5cb94e9f8902e59d1d544eb298b83c84b9ec37b5b769c5a0ad6edb19/pathspec-0.9.0.tar.gz", hash = "sha256:e564499435a2673d586f6b2130bb5b95f04a3ba06f81b8f895b651a3c76aabb1"},
 ]
-"pdm 2.1.5" = [
-    {url = "https://files.pythonhosted.org/packages/3a/5f/0f2f6bfb65b65f62fa0ccf0888d23da6791689e94e90b183155f75a1ccda/pdm-2.1.5-py3-none-any.whl", hash = "sha256:9ccf5703bf7a6512f25d3460760f7c5a66a418a652be64cba44cc1f29e5cb5b1"},
-    {url = "https://files.pythonhosted.org/packages/69/c2/b2a6562c6abe254355d2f2056a11aa7fb4b960856d65155eca95c7b4aed0/pdm-2.1.5.tar.gz", hash = "sha256:5bee41d497cec93a49693fa57b5cf1c833701804eb12bc4d347c3ec7955d7ce7"},
+"pdm 2.2.1" = [
+    {url = "https://files.pythonhosted.org/packages/39/8f/9cb6a0bdf1b805b421a61d1f397fd050f672b5eafcf150266302979e8f7d/pdm-2.2.1-py3-none-any.whl", hash = "sha256:63aaa4a3a979872007737e9a8db8a7cda062547916a195e41b0d579ae69fd5d7"},
+    {url = "https://files.pythonhosted.org/packages/87/4a/53ba82dc2b55b08251b0323eb18a4c80d7f359910c5ed3d7c76804f7aae5/pdm-2.2.1.tar.gz", hash = "sha256:a861d47d57bc6ef9e99edb09abd620955a37b2835019b6a8918beea3b089a3b7"},
 ]
 "pdm-pep517 1.0.4" = [
     {url = "https://files.pythonhosted.org/packages/32/56/1d4b069d8c406ba85ef2992a56f6780de6f8e76fef98af7d291138c4221e/pdm_pep517-1.0.4-py3-none-any.whl", hash = "sha256:8fd42caeaa2031a41d86bce6519ad96edaf1dfc99cf0c2b6d310d1ae2089bb39"},
@@ -1015,9 +1035,9 @@ content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6b
     {url = "https://files.pythonhosted.org/packages/05/c8/d319552f0ef7af0cb57c80be8c8181184ab66a205d18b4574214b0940ba1/pip_api-0.0.30-py3-none-any.whl", hash = "sha256:2a0314bd31522eb9ffe8a99668b0d07fee34ebc537931e7b6483001dbedcbdc9"},
     {url = "https://files.pythonhosted.org/packages/69/a2/90dd01b87277ae65a6fb725dae86a039aeb34e24f576600abd0434aa95c4/pip-api-0.0.30.tar.gz", hash = "sha256:a05df2c7aa9b7157374bcf4273544201a0c7bae60a9c65bcf84f3959ef3896f3"},
 ]
-"pip-audit 2.4.4" = [
-    {url = "https://files.pythonhosted.org/packages/be/0f/388850eb18f72a0180b941b2619b5fc0124e512fe543137b7ffc2d27f929/pip_audit-2.4.4.tar.gz", hash = "sha256:a6205bb586f5964325b1af888914bf547d91f588a5f5b2c4d73f04a39fcc276f"},
-    {url = "https://files.pythonhosted.org/packages/e3/fc/0b8e26c2838583072d710879dddea2151704c3a303f223003da73544c6a7/pip_audit-2.4.4-py3-none-any.whl", hash = "sha256:cc7be2253f80dba44e8ae0002c26bf920114436b0097bfd483581c8b607caae2"},
+"pip-audit 2.4.5" = [
+    {url = "https://files.pythonhosted.org/packages/26/5a/680c0b6c9a203715cf754a2a7d0a158da4ad15162e185bf80d2e50c6fd1c/pip_audit-2.4.5.tar.gz", hash = "sha256:6c7fd7c300559c99963f0b4be4543c55175e1550534228b8d27bce7dcd06ab34"},
+    {url = "https://files.pythonhosted.org/packages/89/d7/f5a81d49af7a7e0a7dd65a0f372ce4ce6b2e6d7da8f5cb5116b62ec64139/pip_audit-2.4.5-py3-none-any.whl", hash = "sha256:be866655a365714c98782e00e64b092383ffb9171680aaaa0fb50ba75d775022"},
 ]
 "pip-requirements-parser 31.2.0" = [
     {url = "https://files.pythonhosted.org/packages/67/2e/94750665759e54b39c9c49eff98d9db1385896c7331b2e44e7c69eec3630/pip_requirements_parser-31.2.0-py3-none-any.whl", hash = "sha256:22fa213a987913385b2484d5698ecfa1d9cf4154978cdf929085548af55355b0"},
@@ -1063,9 +1083,9 @@ content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6b
     {url = "https://files.pythonhosted.org/packages/ea/70/da97fd5f6270c7d2ce07559a19e5bf36a76f0af21500256f005a69d9beba/pytest-cov-4.0.0.tar.gz", hash = "sha256:996b79efde6433cdbd0088872dbc5fb3ed7fe1578b68cdbba634f14bb8dd0470"},
     {url = "https://files.pythonhosted.org/packages/fe/1f/9ec0ddd33bd2b37d6ec50bb39155bca4fe7085fa78b3b434c05459a860e3/pytest_cov-4.0.0-py3-none-any.whl", hash = "sha256:2feb1b751d66a8bd934e5edfa2e961d11309dc37b73b0eabe73b5945fee20f6b"},
 ]
-"pytest-subtests 0.8.0" = [
-    {url = "https://files.pythonhosted.org/packages/2f/7a/1af817d053ad4989a8b56528a4eed9cfa64e865624d0408d729d980ab658/pytest-subtests-0.8.0.tar.gz", hash = "sha256:46eb376022e926950816ccc23502de3277adcc1396652ddb3328ce0289052c4d"},
-    {url = "https://files.pythonhosted.org/packages/a9/b2/664a241cfe5cc00661a6fcd1f1d65b19cd326f352ba89d012f6aaa64f66c/pytest_subtests-0.8.0-py3-none-any.whl", hash = "sha256:4e28ca52cf7a46645c1ded7933745b69334cdc97a412ed4431f7be7cef9a0994"},
+"pytest-subtests 0.9.0" = [
+    {url = "https://files.pythonhosted.org/packages/34/23/2daf23a479976a725359ddf4791b948730749edb752e2c797f27eb14824b/pytest_subtests-0.9.0-py3-none-any.whl", hash = "sha256:f5f616b92c13405909d210569d6d3914db6fe156333ff5426534f97d5b447861"},
+    {url = "https://files.pythonhosted.org/packages/bd/e8/c722a2cca34404643d3baf50f1eab6f697c05271b5e0f733e3815dcaacfa/pytest-subtests-0.9.0.tar.gz", hash = "sha256:c0317cd5f6a5eb3e957e89dbe4fc3322a9afddba2db8414355ed2a2cb91a844e"},
 ]
 "python-dateutil 2.8.2" = [
     {url = "https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
@@ -1292,4 +1312,8 @@ content_hash = "sha256:a2402a71b2013516a0675071b6a8c799b7872a2e4939c0a9f60c6ab6b
     {url = "https://files.pythonhosted.org/packages/f8/c4/3f8130d646bfc89382966adfb3d6428f26d0f752543a7e2fd92c1e493be6/wrapt-1.14.1-cp37-cp37m-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d77c85fedff92cf788face9bfa3ebaa364448ebb1d765302e9af11bf449ca36d"},
     {url = "https://files.pythonhosted.org/packages/f9/3c/110e52b9da396a4ef3a0521552a1af9c7875a762361f48678c1ac272fd7e/wrapt-1.14.1-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:34aa51c45f28ba7f12accd624225e2b1e5a3a45206aa191f6f9aac931d9d56fe"},
     {url = "https://files.pythonhosted.org/packages/fd/70/8a133c88a394394dd57159083b86a564247399440b63f2da0ad727593570/wrapt-1.14.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:257fd78c513e0fb5cdbe058c27a0624c9884e735bbd131935fd49e9fe719d310"},
+]
+"zipp 3.10.0" = [
+    {url = "https://files.pythonhosted.org/packages/40/8a/d63273ed0fa4a3d06f77e7b043f6577d8894e95515b0c187c52e2c0efabb/zipp-3.10.0-py3-none-any.whl", hash = "sha256:4fcb6f278987a6605757302a6e40e896257570d11c51628968ccb2a47e80c6c1"},
+    {url = "https://files.pythonhosted.org/packages/8d/d7/1bd1e0a5bc95a27a6f5c4ee8066ddfc5b69a9ec8d39ab11a41a804ec8f0d/zipp-3.10.0.tar.gz", hash = "sha256:7a7262fd930bd3e36c50b9a64897aec3fafff3dfdeec9623ae22b40e93f99bb8"},
 ]
