@@ -55,8 +55,8 @@ class _VersionSource(Protocol):
         raise NotImplementedError()
 
     current_version: property = property(
-        __get_current_version,
-        __set_current_version)
+        __get_current_version, __set_current_version
+    )
 
     def save_value(self) -> None:
         raise NotImplementedError()

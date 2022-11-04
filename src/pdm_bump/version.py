@@ -11,7 +11,17 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from functools import total_ordering
-from typing import Annotated, Any, Final, List, Literal, Optional, Tuple, cast, final
+from typing import (
+    Annotated,
+    Any,
+    Final,
+    List,
+    Literal,
+    Optional,
+    Tuple,
+    cast,
+    final,
+)
 
 from annotated_types import Ge
 from packaging.version import InvalidVersion
@@ -101,9 +111,7 @@ class Version:
     @property
     def is_alpha(self) -> bool:
         alpha_part: Final[Tuple[str, ...]] = ("a", "alpha")
-        return self.preview is not None and self.__compare_preview(
-            alpha_part
-        )
+        return self.preview is not None and self.__compare_preview(alpha_part)
 
     @property
     def is_beta(self) -> bool:

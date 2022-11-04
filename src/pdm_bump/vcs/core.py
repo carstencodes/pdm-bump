@@ -182,8 +182,9 @@ class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
 
         return decorator
 
-    def __missing__(self, key: str) -> Optional[
-            Callable[..., VcsProviderFactory]]:
+    def __missing__(
+        self, key: str
+    ) -> Optional[Callable[..., VcsProviderFactory]]:
         return None
 
 

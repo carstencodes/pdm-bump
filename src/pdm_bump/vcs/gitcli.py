@@ -24,10 +24,12 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     @cached_property
     def git_executable_path(self) -> Path:
         git_executable_path: Optional[Path] = self._which(
-            self.__GIT_EXECUTABLE_NAME)
+            self.__GIT_EXECUTABLE_NAME
+        )
         if git_executable_path is None:
             raise FileNotFoundError(
-                f"No executable '{self.__GIT_EXECUTABLE_NAME}' found in PATH")
+                f"No executable '{self.__GIT_EXECUTABLE_NAME}' found in PATH"
+            )
         return cast(Path, git_executable_path)
 
     @property

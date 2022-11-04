@@ -49,7 +49,8 @@ class DynamicVersionSource:
             self.__current_version = Version.from_string(version)
             return self.__current_version
         raise ValueError(
-            f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}"
+            f"Failed to find version in {dynamic.file}. "
+            f"Make sure it matches {dynamic.regex}"
         )
 
     def __set_current_version(self, version: Version) -> None:
@@ -75,8 +76,8 @@ class DynamicVersionSource:
             )
             return dynamic
         raise ValueError(
-            f"Failed to extract dynamic version from {self.__project_root}. Only "
-            f"pdm-pep517 `file` types are supported."
+            f"Failed to extract dynamic version from {self.__project_root}."
+            f" Only pdm-pep517 `file` types are supported."
         )
 
 

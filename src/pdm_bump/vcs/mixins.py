@@ -18,11 +18,9 @@ from typing import Optional, Tuple, cast
 
 class CliRunnerMixin:
     def _which(
-        self,
-        exec_name: str,
-        extension: Optional[str] = None
+        self, exec_name: str, extension: Optional[str] = None
     ) -> Optional[Path]:
-        search_path = environ['PATH']
+        search_path = environ["PATH"]
         if search_path is None or len(search_path) == 0:
             return None
 
