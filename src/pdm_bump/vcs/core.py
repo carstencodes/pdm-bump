@@ -32,7 +32,7 @@ class _PathLikeConverter(ABC):
     @staticmethod
     def _pathlike_to_path(path: _Pathlike) -> Path:
         if isinstance(path, Path):
-            return cast(Path, Path)
+            return cast(Path, path)
         if isinstance(path, str):
             return Path(path)
         if isinstance(path, bytes):
