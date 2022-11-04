@@ -29,7 +29,12 @@ from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
 from .logging import TRACE, logger, traced_function
 from .source import StaticPep621VersionSource
-from .vcs import DefaultVcsProvider
+from .vcs import (
+    DefaultVcsProvider,
+    VcsProvider,
+    VcsProviderRegistry,
+    vcs_providers,
+)
 from .version import Pep440VersionFormatter, Version
 
 
@@ -157,6 +162,26 @@ class BumpCommand(BaseCommand):
         self._save_new_version(backend, version, next_version)
 
     @traced_function
+    def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
+        config: Config = Config(project)
+        value = config.get_config_or_pyproject_value("vcs", "provider")
+
+        registry: VcsProviderRegistry = vcs_providers
+
+        if value is not None:
+            provider_name: str = str(value)
+            factory_method = registry[provider_name]
+            if factory_method is not None:
+                factory = factory_method()
+                return factory.force_create_provider(project.root)
+        else:
+            provider = registry.find_repository_root(project.root)
+            if provider is not None:
+                return provider
+
+        return DefaultVcsProvider(project.root)
+
+    @traced_function
     def _get_next_version(
         self, version: Version, project: _ProjectLike, options: Namespace
     ) -> Version:
@@ -164,7 +189,8 @@ class BumpCommand(BaseCommand):
             options.micro, options.reset, options.remove
         )
 
-        apply_vcs_based_actions(actions, DefaultVcsProvider(project.root))
+        vcs_provider: VcsProvider = self._get_vcs_provider(project)
+        apply_vcs_based_actions(actions, vcs_provider)
 
         modifier: VersionModifier = self._get_action(
             actions, version, options.what, options.pre

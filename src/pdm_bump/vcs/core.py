@@ -28,9 +28,9 @@ from ..version import Pep440VersionFormatter, Version
 _Pathlike = Union[Path, AnyStr]
 
 
-class _PathLikeConverter:
+class _PathLikeConverter(ABC):
     @staticmethod
-    def __pathlike_to_path(path: _Pathlike) -> Path:
+    def _pathlike_to_path(path: _Pathlike) -> Path:
         if isinstance(path, Path):
             return cast(Path, Path)
         if isinstance(path, str):
@@ -48,9 +48,9 @@ class VcsFileSystemIdentifier(NamedTuple):
     dir_name: Optional[str]
 
 
-class VcsProvider(ABC, _PathLikeConverter):
+class VcsProvider(_PathLikeConverter, ABC):
     def __init__(self, path: _Pathlike) -> None:
-        self.__path = _PathLikeConverter.__pathlike_to_path(path)
+        self.__path = _PathLikeConverter._pathlike_to_path(path)
 
     @property
     def is_available(self) -> bool:
@@ -94,7 +94,10 @@ class VcsProvider(ABC, _PathLikeConverter):
         raise NotImplementedError()
 
 
-class VcsProviderFactory(ABC, _PathLikeConverter):
+class VcsProviderFactory(_PathLikeConverter, ABC):
+    def force_create_provider(self, path: Path) -> VcsProvider:
+        return self._create_provider(path)
+
     @abstractmethod
     def _create_provider(self, path: Path) -> VcsProvider:
         raise NotImplementedError()
@@ -105,7 +108,7 @@ class VcsProviderFactory(ABC, _PathLikeConverter):
         raise NotImplementedError()
 
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
-        real_path: Path = _PathLikeConverter.__pathlike_to_path(path)
+        real_path: Path = _PathLikeConverter._pathlike_to_path(path)
         return self.find_repository_root_from_path(real_path)
 
     def find_repository_root_from_path(
@@ -158,7 +161,7 @@ class VcsProviderRegistry(
     Dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter
 ):
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
-        real_path: Path = _PathLikeConverter.__pathlike_to_path(path)
+        real_path: Path = _PathLikeConverter._pathlike_to_path(path)
         return self.find_repository_root_by_path(real_path)
 
     def find_repository_root_by_path(
