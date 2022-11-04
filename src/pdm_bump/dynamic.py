@@ -10,7 +10,7 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, cast
+from typing import AnyStr, Optional, cast
 
 from .config import Config
 from .version import Pep440VersionFormatter, Version
@@ -27,7 +27,7 @@ class DynamicVersionConfig:
 
 
 class DynamicVersionSource:
-    def __init__(self, project_root: str, config: Config) -> None:
+    def __init__(self, project_root: Path, config: Config) -> None:
         self.__project_root = project_root
         self.__config = config
         self.__current_version: Optional[Version] = None
@@ -104,7 +104,9 @@ def __find_dynamic_config(
 def __get_dynamic_version(config: DynamicVersionConfig) -> Optional[str]:
     with config.file.open("r") as fp:
         match = config.regex.search(fp.read())
-    return match and match.group("version")
+    if match is not None:
+        return match.group("version")
+    return None
 
 
 def __replace_dynamic_version(
@@ -113,6 +115,9 @@ def __replace_dynamic_version(
     with config.file.open("r") as fp:
         version_file = fp.read()
         match = config.regex.search(version_file)
+        if match is None:
+            raise ValueError("Failed to fetch version")
+        match = cast(re.Match[str], match)
         version_start, version_end = match.span("version")
         new_version_file = (
             version_file[:version_start]

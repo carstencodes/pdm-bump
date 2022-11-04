@@ -7,9 +7,10 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+from functools import cached_property
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, cast
 
 from ..version import Version
 from .core import VcsProvider, VcsProviderError, vcs_provider
@@ -20,10 +21,19 @@ from .mixins import CliRunnerMixin
 class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     __GIT_EXECUTABLE_NAME = "git"
 
+    @cached_property
+    def git_executable_path(self) -> Path:
+        git_executable_path: Optional[Path] = self._which(
+            self.__GIT_EXECUTABLE_NAME)
+        if git_executable_path is None:
+            raise FileNotFoundError(
+                f"No executable '{self.__GIT_EXECUTABLE_NAME}' found in PATH")
+        return cast(Path, git_executable_path)
+
     @property
     def is_available(self) -> bool:
         exit_code, _out, _err = self.run(
-            self.__GIT_EXECUTABLE_NAME,
+            self.git_executable_path,
             ("rev-parse", "--root-dir"),
             raise_on_exit=False,
             cwd=self.current_path,
@@ -34,7 +44,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     def is_clean(self) -> bool:
         try:
             _ex, out, _err = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("status", "--porcelain"),
                 cwd=self.current_path,
                 raise_on_exit=True,
@@ -43,7 +53,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             dirty_files = [
                 ln
                 for ln in out.splitlines()
-                if not ln.strip().startswith(b"??")
+                if not ln.strip().startswith("??")
             ]
 
             return len(dirty_files) == 0
@@ -58,13 +68,13 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             args: List[str] = ["add", "--update"]
             args.extend(str(f) for f in files)
             _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 tuple(args),
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
             _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("commit", "-m", f'"{message}"'),
                 raise_on_exit=True,
                 cwd=self.current_path,
@@ -79,7 +89,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     def create_tag_from_string(self, version_formatted: str) -> None:
         try:
             _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("tag", f"v{version_formatted}"),
                 raise_on_exit=True,
                 cwd=self.current_path,
@@ -93,7 +103,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     def get_most_recent_tag(self) -> Optional[Version]:
         try:
             _, output, _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("describe", "--tags"),
                 raise_on_exit=True,
                 cwd=self.current_path,
@@ -111,7 +121,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     def get_number_of_changes_since_last_release(self) -> int:
         try:
             _, output, _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("describe", "--tags"),
                 raise_on_exit=False,
                 cwd=self.current_path,
@@ -119,7 +129,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             if output.strip() == "":
                 raise VcsProviderError("Failed to fetch most recent tag")
             _, output, _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("rev-list", f"{output}..HEAD", "--count"),
                 raise_on_exit=True,
                 cwd=self.current_path,
@@ -128,13 +138,13 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             return int(output)
         except CalledProcessError as cpe:
             raise VcsProviderError(
-                "Failed to receive number of commits" " since last tag."
+                "Failed to receive number of commits since last tag."
             ) from cpe
 
     def get_changes_not_checked_in(self) -> int:
         try:
             _, output, _ = self.run(
-                self.__GIT_EXECUTABLE_NAME,
+                self.git_executable_path,
                 ("status", "--porcelain"),
                 raise_on_exit=True,
                 cwd=self.current_path,
@@ -143,7 +153,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             return len(lines)
         except CalledProcessError as cpe:
             raise VcsProviderError(
-                "Failed to receive number of changes" "that are not committed"
+                "Failed to receive number of changes that are not committed"
             ) from cpe
 
 

@@ -51,10 +51,12 @@ class _VersionSource(Protocol):
     def __get_current_version(self) -> Version:
         raise NotImplementedError()
 
-    def __set_current_version(self, v: Version) -> None:
+    def __set_current_version(self, version: Version) -> None:
         raise NotImplementedError()
 
-    current_version = property(__get_current_version, __set_current_version)
+    current_version: property = property(
+        __get_current_version,
+        __set_current_version)
 
     def save_value(self) -> None:
         raise NotImplementedError()
@@ -63,9 +65,7 @@ class _VersionSource(Protocol):
 @final
 class BumpCommand(BaseCommand):
     name: Final[str] = "bump"
-    description: Final[
-        str
-    ] = "Bumps the version to a next version according to PEP440."
+    description: str = "Bumps the version to a next version following PEP440."
 
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:

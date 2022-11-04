@@ -34,7 +34,7 @@ def __pathlike_to_path(path: _Pathlike) -> Path:
     if isinstance(path, str):
         return Path(path)
     if isinstance(path, bytes):
-        return cast(bytes, path).decode("utf-8")
+        return Path(cast(bytes, path).decode("utf-8"))
 
     raise ValueError(
         f"'{path}' must be a valid path, string or bytes instance"
@@ -171,18 +171,19 @@ class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
         return None
 
     def register(self, name: str) -> Callable:
-        def decorator(clazz: Type):
+        def decorator(clazz: Type[VcsProvider]):
             if not issubclass(clazz, VcsProviderFactory):
                 raise ValueError(
                     f"{clazz.__name__} is not an sub-type of "
                     f"{VcsProviderFactory.__name__}"
                 )
 
-            self[name] = clazz.__init__
+            self[name] = clazz
 
         return decorator
 
-    def __missing__(self, key: str) -> Callable[..., VcsProviderFactory]:
+    def __missing__(self, key: str) -> Optional[
+            Callable[..., VcsProviderFactory]]:
         return None
 
 
