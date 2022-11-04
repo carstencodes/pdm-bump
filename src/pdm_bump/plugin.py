@@ -190,7 +190,7 @@ class BumpCommand(BaseCommand):
         )
 
         vcs_provider: VcsProvider = self._get_vcs_provider(project)
-        apply_vcs_based_actions(actions, vcs_provider)
+        apply_vcs_based_actions(actions, vcs_provider, options.dry_run)
 
         modifier: VersionModifier = self._get_action(
             actions, version, options.what, options.pre

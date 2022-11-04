@@ -11,8 +11,9 @@
 from typing import Final, FrozenSet
 
 from .action import ActionCollection, VersionModifier
+from .logging import logger
 from .vcs import VcsProvider
-from .version import Version
+from .version import Pep440VersionFormatter, Version
 
 
 class _VcsSupportedVersionModifier(VersionModifier):
@@ -34,8 +35,18 @@ class _VcsSupportedVersionModifier(VersionModifier):
 
 
 class CreateTagFromVersion(_VcsSupportedVersionModifier):
+    def __init__(self, version, vcs_provider, dry_run: bool) -> None:
+        super().__init__(version, vcs_provider)
+        self.__dry_run = dry_run
+
     def _run_action(self) -> None:
-        self._vcs_provider.create_tag_from_version(self.current_version)
+        if not self.__dry_run:
+            self._vcs_provider.create_tag_from_version(self.current_version)
+        else:
+            logger.info(
+                "Would create tag v%s",
+                Pep440VersionFormatter().format(self.current_version),
+            )
 
 
 COMMAND_NAME_CREATE_TAG: Final[str] = "tag"
@@ -48,8 +59,8 @@ COMMAND_NAMES: Final[FrozenSet[str]] = frozenset(
 
 
 def apply_vcs_based_actions(
-    actions: ActionCollection, vcs_provider: VcsProvider
+    actions: ActionCollection, vcs_provider: VcsProvider, dry_run: bool
 ) -> None:
     actions[COMMAND_NAME_CREATE_TAG] = lambda v: CreateTagFromVersion(
-        v, vcs_provider
+        v, vcs_provider, dry_run
     )

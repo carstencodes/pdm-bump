@@ -15,23 +15,35 @@ from subprocess import run as run_process
 from sys import platform
 from typing import Optional, Tuple, cast
 
+from ..logging import logger
+
 
 class CliRunnerMixin:
     def _which(
         self, exec_name: str, extension: Optional[str] = None
     ) -> Optional[Path]:
         search_path = environ["PATH"]
+        logger.debug(
+            "Searching for executable '%s' using search path '%s'",
+            exec_name,
+            search_path,
+        )
         if search_path is None or len(search_path) == 0:
             return None
 
         extension = ".exe" if extension is None and platform == "win32" else ""
-        executable_full_name = exec_name + exec_name
+        executable_full_name = exec_name + extension
         paths = search_path.split(pathsep)
         for path in [Path(p) for p in paths]:
+            logger.debug(
+                "Searching for '%s' in '%s'", executable_full_name, path
+            )
             file_path = path / executable_full_name
             if file_path.is_file():
+                logger.debug("Found %s", file_path)
                 return file_path
 
+        logger.debug("Could not find %s", executable_full_name)
         return None
 
     def run(
