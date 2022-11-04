@@ -15,18 +15,26 @@ from typing import Final, Optional, Protocol, cast, final
 
 from pdm.cli.commands.base import BaseCommand
 
+from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
-    COMMAND_NAMES,
     PRERELEASE_OPTIONS,
     ActionCollection,
     VersionModifier,
     VersionModifierFactory,
     create_actions,
 )
+from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
+from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
 from .logging import TRACE, logger, traced_function
 from .source import StaticPep621VersionSource
+from .vcs import (
+    DefaultVcsProvider,
+    VcsProvider,
+    VcsProviderRegistry,
+    vcs_providers,
+)
 from .version import Pep440VersionFormatter, Version
 
 
@@ -51,10 +59,12 @@ class _VersionSource(Protocol):
     def __get_current_version(self) -> Version:
         raise NotImplementedError()
 
-    def __set_current_version(self, v: Version) -> None:
+    def __set_current_version(self, version: Version) -> None:
         raise NotImplementedError()
 
-    current_version = property(__get_current_version, __set_current_version)
+    current_version: property = property(
+        __get_current_version, __set_current_version
+    )
 
     def save_value(self) -> None:
         raise NotImplementedError()
@@ -63,16 +73,14 @@ class _VersionSource(Protocol):
 @final
 class BumpCommand(BaseCommand):
     name: Final[str] = "bump"
-    description: Final[
-        str
-    ] = "Bumps the version to a next version according to PEP440."
+    description: str = "Bumps the version to a next version following PEP440."
 
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
         parser.add_argument(
             "what",
             action="store",
-            choices=list(COMMAND_NAMES),
+            choices=list(MODIFIER_ACTIONS) + list(VCS_BASED_ACTIONS),
             default=None,
             help="The part of the version to bump according to PEP 440: "
             + "major.minor.micro.",
@@ -124,6 +132,83 @@ class BumpCommand(BaseCommand):
         config: Config = Config(project)
         self._setup_logger(options.trace, options.debug)
 
+        selected_backend: Optional[_VersionSource] = self._select_backend(
+            project, config
+        )
+
+        if selected_backend is None:
+            logger.error("Cannot find version in %s", project.pyproject_file)
+            return
+
+        backend: _VersionSource = cast(_VersionSource, selected_backend)
+
+        version: Version = backend.current_version
+
+        next_version: Version = self._get_next_version(
+            version, project, options
+        )
+
+        if next_version == version:
+            logger.info(
+                "Version did not change after application. "
+                "No need to persist new version."
+            )
+            return
+
+        if options.dry_run:
+            logger.info("Would write new version %s", next_version)
+            return
+
+        self._save_new_version(backend, version, next_version)
+
+    @traced_function
+    def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
+        config: Config = Config(project)
+        value = config.get_config_or_pyproject_value("vcs", "provider")
+
+        registry: VcsProviderRegistry = vcs_providers
+
+        if value is not None:
+            provider_name: str = str(value)
+            factory_method = registry[provider_name]
+            if factory_method is not None:
+                factory = factory_method()
+                return factory.force_create_provider(project.root)
+        else:
+            provider = registry.find_repository_root(project.root)
+            if provider is not None:
+                return provider
+
+        return DefaultVcsProvider(project.root)
+
+    @traced_function
+    def _get_next_version(
+        self, version: Version, project: _ProjectLike, options: Namespace
+    ) -> Version:
+        actions: ActionCollection = self._get_actions(
+            options.micro, options.reset, options.remove
+        )
+
+        vcs_provider: VcsProvider = self._get_vcs_provider(project)
+        apply_vcs_based_actions(actions, vcs_provider)
+
+        modifier: VersionModifier = self._get_action(
+            actions, version, options.what, options.pre
+        )
+
+        try:
+            return modifier.create_new_version()
+        except ValueError as exc:
+            logger.exception(
+                "Failed to update version to next version", exc_info=False
+            )
+            logger.debug("Exception occurred: %s", get_traceback())
+            raise SystemExit(1) from exc
+
+    @traced_function
+    def _select_backend(
+        self, project: _ProjectLike, config: Config
+    ) -> Optional[_VersionSource]:
         static_backend: _VersionSource = StaticPep621VersionSource(
             project, config
         )
@@ -137,42 +222,21 @@ class BumpCommand(BaseCommand):
                 selected_backend = backend
                 break
 
-        if selected_backend is None:
-            logger.error("Cannot find version in %s", project.pyproject_file)
-            return
+        return selected_backend
 
-        version: Version = selected_backend.current_version
+    @traced_function
+    def _save_new_version(
+        self, backend: _VersionSource, current: Version, next_version: Version
+    ) -> None:
+        backend.current_version = next_version
 
-        actions: ActionCollection = self._get_actions(
-            options.micro, options.reset, options.remove
+        current_version: str = Pep440VersionFormatter().format(current)
+        next_version_value: str = Pep440VersionFormatter().format(next_version)
+
+        logger.info(
+            "Updating version: %s -> %s", current_version, next_version_value
         )
-
-        modifier: VersionModifier = self._get_action(
-            actions, version, options.what, options.pre
-        )
-
-        result: Version
-        try:
-            result = modifier.create_new_version()
-        except ValueError as exc:
-            logger.exception(
-                "Failed to update version to next version", exc_info=False
-            )
-            logger.debug("Exception occurred: %s", get_traceback())
-            raise SystemExit(1) from exc
-
-        backend.current_version = result
-
-        current_version: str = Pep440VersionFormatter().format(version)
-        next_version: str = Pep440VersionFormatter().format(result)
-        if not options.dry_run:
-
-            logger.info(
-                "Updating version: %s -> %s", current_version, next_version
-            )
-            backend.save_value()
-        else:
-            logger.info("Would write new version %s", next_version)
+        backend.save_value()
 
     @traced_function
     def _get_action(

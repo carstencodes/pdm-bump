@@ -11,14 +11,19 @@ from .core import (
     DefaultVcsProvider,
     VcsProvider,
     VcsProviderFactory,
+    VcsProviderRegistry,
     vcs_provider,
     vcs_providers,
 )
+
+# Justification: Add items to registry
+from .gitcli import *  # noqa: disable=F401,F403
 
 __all__ = (
     "vcs_provider",
     "vcs_providers",
     "VcsProvider",
     "VcsProviderFactory",
+    "VcsProviderRegistry",
     "DefaultVcsProvider",
 )

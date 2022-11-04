@@ -7,13 +7,33 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+
+from os import environ, pathsep
 from pathlib import Path
 from subprocess import CompletedProcess
 from subprocess import run as run_process
+from sys import platform
 from typing import Optional, Tuple, cast
 
 
 class CliRunnerMixin:
+    def _which(
+        self, exec_name: str, extension: Optional[str] = None
+    ) -> Optional[Path]:
+        search_path = environ["PATH"]
+        if search_path is None or len(search_path) == 0:
+            return None
+
+        extension = ".exe" if extension is None and platform == "win32" else ""
+        executable_full_name = exec_name + exec_name
+        paths = search_path.split(pathsep)
+        for path in [Path(p) for p in paths]:
+            file_path = path / executable_full_name
+            if file_path.is_file():
+                return file_path
+
+        return None
+
     def run(
         self,
         /,

@@ -27,7 +27,7 @@ class DynamicVersionConfig:
 
 
 class DynamicVersionSource:
-    def __init__(self, project_root: str, config: Config) -> None:
+    def __init__(self, project_root: Path, config: Config) -> None:
         self.__project_root = project_root
         self.__config = config
         self.__current_version: Optional[Version] = None
@@ -49,11 +49,12 @@ class DynamicVersionSource:
             self.__current_version = Version.from_string(version)
             return self.__current_version
         raise ValueError(
-            f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}"
+            f"Failed to find version in {dynamic.file}. "
+            f"Make sure it matches {dynamic.regex}"
         )
 
-    def __set_current_version(self, v: Version) -> None:
-        self.__current_version = v
+    def __set_current_version(self, version: Version) -> None:
+        self.__current_version = version
 
     current_version = property(__get_current_version, __set_current_version)
 
@@ -61,9 +62,9 @@ class DynamicVersionSource:
         if self.__current_version is None:
             raise ValueError("No current value set")
         version: Version = cast(Version, self.__current_version)
-        v: str = Pep440VersionFormatter().format(version)
+        ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
-        __replace_dynamic_version(config, v)
+        __replace_dynamic_version(config, ver)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
         dynamic_version: Optional[
@@ -75,8 +76,8 @@ class DynamicVersionSource:
             )
             return dynamic
         raise ValueError(
-            f"Failed to extract dynamic version from {self.__project_root}. Only "
-            f"pdm-pep517 `file` types are supported."
+            f"Failed to extract dynamic version from {self.__project_root}."
+            f" Only pdm-pep517 `file` types are supported."
         )
 
 
@@ -102,22 +103,27 @@ def __find_dynamic_config(
 
 
 def __get_dynamic_version(config: DynamicVersionConfig) -> Optional[str]:
-    with config.file.open("r") as fp:
-        match = config.regex.search(fp.read())
-    return match and match.group("version")
+    with config.file.open("r") as file_ptr:
+        match = config.regex.search(file_ptr.read())
+    if match is not None:
+        return match.group("version")
+    return None
 
 
 def __replace_dynamic_version(
     config: DynamicVersionConfig, new_version: str
 ) -> None:
-    with config.file.open("r") as fp:
-        version_file = fp.read()
+    with config.file.open("r") as file_ptr:
+        version_file = file_ptr.read()
         match = config.regex.search(version_file)
+        if match is None:
+            raise ValueError("Failed to fetch version")
+        match = cast(re.Match[str], match)
         version_start, version_end = match.span("version")
         new_version_file = (
             version_file[:version_start]
             + new_version
             + version_file[version_end:]
         )
-    with config.file.open("w") as fp:
-        fp.write(new_version_file)
+    with config.file.open("w") as file_ptr:
+        file_ptr.write(new_version_file)
