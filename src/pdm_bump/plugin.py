@@ -11,7 +11,7 @@ from argparse import ArgumentParser, Namespace
 from logging import DEBUG, INFO
 from pathlib import Path
 from traceback import format_exc as get_traceback
-from typing import Final, Optional, Protocol, cast, final
+from typing import Final, Optional, Protocol, final
 
 from pdm.cli.commands.base import BaseCommand
 

@@ -14,7 +14,8 @@ from .config import Config
 from .version import Pep440VersionFormatter, Version
 
 
-class _ProjectWriter(Protocol):
+# Justification: Minimal protocol
+class _ProjectWriter(Protocol):  # pylint: disable=R0903
     def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
         pass
@@ -32,14 +33,14 @@ class StaticPep621VersionSource:
         )
 
     def __get_current_version(self) -> Version:
-        v: str = cast(
+        version: str = cast(
             str, self.__config.get_pyproject_value("project", "version")
         )
-        return Version.from_string(v)
+        return Version.from_string(version)
 
-    def __set_current_version(self, v: Version) -> None:
+    def __set_current_version(self, ver: Version) -> None:
         formatter: Pep440VersionFormatter = Pep440VersionFormatter()
-        version: str = formatter.format(v)
+        version: str = formatter.format(ver)
         self.__config.set_pyproject_value(version, "project", "version")
 
     current_version = property(__get_current_version, __set_current_version)

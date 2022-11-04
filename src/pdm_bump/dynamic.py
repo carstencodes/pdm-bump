@@ -10,7 +10,7 @@
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import AnyStr, Optional, cast
+from typing import Optional, cast
 
 from .config import Config
 from .version import Pep440VersionFormatter, Version
@@ -52,8 +52,8 @@ class DynamicVersionSource:
             f"Failed to find version in {dynamic.file}. Make sure it matches {dynamic.regex}"
         )
 
-    def __set_current_version(self, v: Version) -> None:
-        self.__current_version = v
+    def __set_current_version(self, version: Version) -> None:
+        self.__current_version = version
 
     current_version = property(__get_current_version, __set_current_version)
 
@@ -61,9 +61,9 @@ class DynamicVersionSource:
         if self.__current_version is None:
             raise ValueError("No current value set")
         version: Version = cast(Version, self.__current_version)
-        v: str = Pep440VersionFormatter().format(version)
+        ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
-        __replace_dynamic_version(config, v)
+        __replace_dynamic_version(config, ver)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
         dynamic_version: Optional[
@@ -102,8 +102,8 @@ def __find_dynamic_config(
 
 
 def __get_dynamic_version(config: DynamicVersionConfig) -> Optional[str]:
-    with config.file.open("r") as fp:
-        match = config.regex.search(fp.read())
+    with config.file.open("r") as file_ptr:
+        match = config.regex.search(file_ptr.read())
     if match is not None:
         return match.group("version")
     return None
@@ -112,8 +112,8 @@ def __get_dynamic_version(config: DynamicVersionConfig) -> Optional[str]:
 def __replace_dynamic_version(
     config: DynamicVersionConfig, new_version: str
 ) -> None:
-    with config.file.open("r") as fp:
-        version_file = fp.read()
+    with config.file.open("r") as file_ptr:
+        version_file = file_ptr.read()
         match = config.regex.search(version_file)
         if match is None:
             raise ValueError("Failed to fetch version")
@@ -124,5 +124,5 @@ def __replace_dynamic_version(
             + new_version
             + version_file[version_end:]
         )
-    with config.file.open("w") as fp:
-        fp.write(new_version_file)
+    with config.file.open("w") as file_ptr:
+        file_ptr.write(new_version_file)

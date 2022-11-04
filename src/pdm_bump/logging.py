@@ -138,8 +138,8 @@ def _get_std_logger() -> TracingLogger:
 
     return _logger
 
-
-logger: Final[TracingLogger] = (
+# Justification: Intended to use as a regular variable
+logger: Final[TracingLogger] = (  # pylint: disable=C0103
     _get_std_logger() if not HAS_RICH else _get_rich_logger()
 )
 
