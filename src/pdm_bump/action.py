@@ -24,7 +24,7 @@ from typing import (
     final,
 )
 
-from .logging import logger, traced_function
+from .logging import traced_function
 from .version import NonNegativeInteger, Pep440VersionFormatter, Version
 
 if sys.version_info >= (3, 10, 0):

@@ -9,7 +9,7 @@
 #
 from typing import Any, Optional, Protocol, cast
 
-from .logging import logger, traced_function
+from .logging import traced_function
 
 
 class ConfigHolder(Protocol):

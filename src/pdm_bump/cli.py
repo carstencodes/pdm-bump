@@ -11,7 +11,6 @@ from typing import Optional, Protocol, Type
 
 from pdm.project.config import ConfigItem as _ConfigItem
 
-from .logging import logger as _logger
 from .plugin import BumpCommand as _Command
 
 

@@ -11,6 +11,7 @@ from .core import (
     DefaultVcsProvider,
     VcsProvider,
     VcsProviderFactory,
+    VcsProviderRegistry,
     vcs_provider,
     vcs_providers,
 )
@@ -20,5 +21,6 @@ __all__ = (
     "vcs_providers",
     "VcsProvider",
     "VcsProviderFactory",
+    "VcsProviderRegistry",
     "DefaultVcsProvider",
 )

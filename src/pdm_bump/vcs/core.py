@@ -28,17 +28,19 @@ from ..version import Pep440VersionFormatter, Version
 _Pathlike = Union[Path, AnyStr]
 
 
-def __pathlike_to_path(path: _Pathlike) -> Path:
-    if isinstance(path, Path):
-        return cast(Path, Path)
-    if isinstance(path, str):
-        return Path(path)
-    if isinstance(path, bytes):
-        return Path(cast(bytes, path).decode("utf-8"))
+class _PathLikeConverter:
+    @staticmethod
+    def __pathlike_to_path(path: _Pathlike) -> Path:
+        if isinstance(path, Path):
+            return cast(Path, Path)
+        if isinstance(path, str):
+            return Path(path)
+        if isinstance(path, bytes):
+            return Path(cast(bytes, path).decode("utf-8"))
 
-    raise ValueError(
-        f"'{path}' must be a valid path, string or bytes instance"
-    )
+        raise ValueError(
+            f"'{path}' must be a valid path, string or bytes instance"
+        )
 
 
 class VcsFileSystemIdentifier(NamedTuple):
@@ -46,9 +48,9 @@ class VcsFileSystemIdentifier(NamedTuple):
     dir_name: Optional[str]
 
 
-class VcsProvider(ABC):
+class VcsProvider(ABC, _PathLikeConverter):
     def __init__(self, path: _Pathlike) -> None:
-        self.__path = __pathlike_to_path(path)
+        self.__path = _PathLikeConverter.__pathlike_to_path(path)
 
     @property
     def is_available(self) -> bool:
@@ -58,8 +60,8 @@ class VcsProvider(ABC):
     def current_path(self) -> Path:
         return self.__path
 
-    @abstractmethod
     @property
+    @abstractmethod
     def is_clean(self) -> bool:
         raise NotImplementedError()
 
@@ -92,18 +94,18 @@ class VcsProvider(ABC):
         raise NotImplementedError()
 
 
-class VcsProviderFactory(ABC):
+class VcsProviderFactory(ABC, _PathLikeConverter):
     @abstractmethod
     def _create_provider(self, path: Path) -> VcsProvider:
         raise NotImplementedError()
 
-    @abstractmethod
     @property
+    @abstractmethod
     def vcs_fs_root(self) -> Iterator[VcsFileSystemIdentifier]:
         raise NotImplementedError()
 
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
-        real_path: Path = __pathlike_to_path(path)
+        real_path: Path = _PathLikeConverter.__pathlike_to_path(path)
         return self.find_repository_root_from_path(real_path)
 
     def find_repository_root_from_path(
@@ -152,9 +154,10 @@ class VcsProviderFactory(ABC):
         return is_repository_root
 
 
-class VcsProviderRegistry(Dict[str, Callable[..., VcsProviderFactory]]):
+class VcsProviderRegistry(
+        Dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter):
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
-        real_path: Path = __pathlike_to_path(path)
+        real_path: Path = _PathLikeConverter.__pathlike_to_path(path)
         return self.find_repository_root_by_path(real_path)
 
     def find_repository_root_by_path(
