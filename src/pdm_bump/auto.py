@@ -48,8 +48,8 @@ COMMAND_NAMES: Final[FrozenSet[str]] = frozenset(
 
 
 def apply_vcs_based_actions(
-    actions: ActionCollection,
-    vcs_provider: VcsProvider
+    actions: ActionCollection, vcs_provider: VcsProvider
 ) -> None:
     actions[COMMAND_NAME_CREATE_TAG] = lambda v: CreateTagFromVersion(
-        v, vcs_provider)
+        v, vcs_provider
+    )

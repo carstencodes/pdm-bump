@@ -15,18 +15,16 @@ from typing import Final, Optional, Protocol, cast, final
 
 from pdm.cli.commands.base import BaseCommand
 
+from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
-    COMMAND_NAMES as MODIFIER_ACTIONS,
     PRERELEASE_OPTIONS,
     ActionCollection,
     VersionModifier,
     VersionModifierFactory,
     create_actions,
 )
-from .auto import (
-    COMMAND_NAMES as VCS_BASED_ACTIONS,
-    apply_vcs_based_actions,
-)
+from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
+from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
 from .logging import TRACE, logger, traced_function
@@ -130,7 +128,8 @@ class BumpCommand(BaseCommand):
         self._setup_logger(options.trace, options.debug)
 
         selected_backend: Optional[_VersionSource] = self._select_backend(
-            project, config)
+            project, config
+        )
 
         if selected_backend is None:
             logger.error("Cannot find version in %s", project.pyproject_file)
@@ -141,11 +140,14 @@ class BumpCommand(BaseCommand):
         version: Version = backend.current_version
 
         next_version: Version = self._get_next_version(
-            version, project, options)
+            version, project, options
+        )
 
         if next_version == version:
-            logger.info("Version did not change after application. "
-                        "No need to persist new version.")
+            logger.info(
+                "Version did not change after application. "
+                "No need to persist new version."
+            )
             return
 
         if options.dry_run:
@@ -155,10 +157,9 @@ class BumpCommand(BaseCommand):
         self._save_new_version(backend, version, next_version)
 
     @traced_function
-    def _get_next_version(self,
-                          version: Version,
-                          project: _ProjectLike,
-                          options: Namespace) -> Version:
+    def _get_next_version(
+        self, version: Version, project: _ProjectLike, options: Namespace
+    ) -> Version:
         actions: ActionCollection = self._get_actions(
             options.micro, options.reset, options.remove
         )
@@ -180,9 +181,7 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _select_backend(
-        self,
-        project: _ProjectLike,
-        config: Config
+        self, project: _ProjectLike, config: Config
     ) -> Optional[_VersionSource]:
         static_backend: _VersionSource = StaticPep621VersionSource(
             project, config
@@ -201,10 +200,7 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _save_new_version(
-        self,
-        backend: _VersionSource,
-        current: Version,
-        next_version: Version
+        self, backend: _VersionSource, current: Version, next_version: Version
     ) -> None:
         backend.current_version = next_version
 

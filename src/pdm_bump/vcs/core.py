@@ -155,7 +155,8 @@ class VcsProviderFactory(ABC, _PathLikeConverter):
 
 
 class VcsProviderRegistry(
-        Dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter):
+    Dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter
+):
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
         real_path: Path = _PathLikeConverter.__pathlike_to_path(path)
         return self.find_repository_root_by_path(real_path)
