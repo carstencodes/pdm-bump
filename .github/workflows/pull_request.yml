@@ -93,6 +93,8 @@ jobs:
           enable-pep582: true
       - name: Checkout sources
         uses: actions/checkout@v2
+      - name: Install flake518
+        run: pip install --user flake518
       - name: Install production dependencies
         run: pdm install --prod
       - name: Run linters
