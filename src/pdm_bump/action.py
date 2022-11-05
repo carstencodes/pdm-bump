@@ -54,7 +54,7 @@ class VersionModifier(ABC):
 
     def _report_new_version(self, next_version: Version) -> None:
         logger.info(
-            "Incrementing version from %s to %s",
+            "Performing increment of version: %s -> %s",
             _formatter.format(self.current_version),
             _formatter.format(next_version),
         )

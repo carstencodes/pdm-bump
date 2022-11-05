@@ -173,7 +173,7 @@ class BumpCommand(BaseCommand):
             logger.info("Would write new version %s", next_version)
             return
 
-        self._save_new_version(backend, version, next_version)
+        self._save_new_version(backend, next_version)
 
     @traced_function
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
@@ -242,16 +242,10 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _save_new_version(
-        self, backend: _VersionSource, current: Version, next_version: Version
+        self, backend: _VersionSource, next_version: Version
     ) -> None:
         backend.current_version = next_version
 
-        current_version: str = Pep440VersionFormatter().format(current)
-        next_version_value: str = Pep440VersionFormatter().format(next_version)
-
-        logger.info(
-            "Updating version: %s -> %s", current_version, next_version_value
-        )
         backend.save_value()
 
     @traced_function
