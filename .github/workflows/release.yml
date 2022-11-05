@@ -66,11 +66,12 @@ jobs:
           path: CHANGELOG.md
       - name: Create Release
         id: create_release
-        uses: ncipollo/release-action@v1
+        uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.tag_name.outputs.version }}
+          tag_name: ${{ steps.tag_name.outputs.version }}
           name: Release ${{ steps.tag_name.outputs.version }}
-          bodyFile: CHANGELOG.md
+          body_path: CHANGELOG.md
+          append_body: false
           draft: false
           prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}

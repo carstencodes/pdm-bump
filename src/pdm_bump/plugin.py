@@ -122,10 +122,10 @@ class BumpCommand(BaseCommand):
             help="When setting epoch, reset version to 1.0.0",
         )
         parser.add_argument(
-            "--remove",
-            action="store_true",
+            "--no-remove",
+            action="store_false",
             help="When incrementing major, minor, micro or epoch, "
-            + "remove all pre-release parts",
+            + "do not remove all pre-release parts",
         )
 
     @traced_function
@@ -189,7 +189,7 @@ class BumpCommand(BaseCommand):
         self, version: Version, project: _ProjectLike, options: Namespace
     ) -> Version:
         actions: ActionCollection = self._get_actions(
-            options.micro, options.reset, options.remove
+            options.micro, options.reset, options.no_remove
         )
 
         vcs_provider: VcsProvider = self._get_vcs_provider(project)
