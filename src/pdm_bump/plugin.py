@@ -8,13 +8,13 @@
 # Refer to LICENSE for more information
 #
 from argparse import ArgumentParser, Namespace
-from logging import DEBUG, INFO
 from pathlib import Path
 from traceback import format_exc as get_traceback
 from typing import Final, Optional, Protocol, cast, final
 
 # MyPy does not recognize this during pull requests
 from pdm.cli.commands.base import BaseCommand  # type: ignore
+from pdm.termui import UI  # type: ignore
 
 from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
@@ -28,7 +28,7 @@ from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
-from .logging import TRACE, logger, traced_function
+from .logging import logger, traced_function, update_logger_from_project_ui
 from .source import StaticPep621VersionSource
 from .vcs import (
     DefaultVcsProvider,
@@ -39,8 +39,14 @@ from .vcs import (
 from .version import Pep440VersionFormatter, Version
 
 
+# Justification: Protocol for interoperability
+class _CoreLike(Protocol):  # pylint: disable=R0903
+    ui: UI
+
+
 class _ProjectLike(ConfigHolder, Protocol):
     root: Path
+    core: _CoreLike
 
     @property
     def pyproject_file(self) -> str:
@@ -121,17 +127,11 @@ class BumpCommand(BaseCommand):
             help="When incrementing major, minor, micro or epoch, "
             + "remove all pre-release parts",
         )
-        parser.add_argument(
-            "--trace", action="store_true", help="Enable trace output"
-        )
-        parser.add_argument(
-            "--debug", action="store_true", help="Enable debug output"
-        )
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
         config: Config = Config(project)
-        self._setup_logger(options.trace, options.debug)
+        update_logger_from_project_ui(project.core.ui)
 
         selected_backend: Optional[_VersionSource] = self._select_backend(
             project, config
@@ -160,7 +160,7 @@ class BumpCommand(BaseCommand):
             logger.info("Would write new version %s", next_version)
             return
 
-        self._save_new_version(backend, version, next_version)
+        self._save_new_version(backend, next_version)
 
     @traced_function
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
@@ -229,16 +229,10 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _save_new_version(
-        self, backend: _VersionSource, current: Version, next_version: Version
+        self, backend: _VersionSource, next_version: Version
     ) -> None:
         backend.current_version = next_version
 
-        current_version: str = Pep440VersionFormatter().format(current)
-        next_version_value: str = Pep440VersionFormatter().format(next_version)
-
-        logger.info(
-            "Updating version: %s -> %s", current_version, next_version_value
-        )
         backend.save_value()
 
     @traced_function
@@ -269,15 +263,6 @@ class BumpCommand(BaseCommand):
         )
 
         return actions
-
-    @traced_function
-    def _setup_logger(self, trace: bool, debug: bool) -> None:
-        level: int = INFO
-        if debug:
-            level = DEBUG
-        if trace:
-            level = TRACE
-        logger.setLevel(level)
 
     @traced_function
     def _version_to_string(self, version: Version) -> str:

@@ -9,7 +9,9 @@
 #
 from logging import (
     CRITICAL,
+    DEBUG,
     ERROR,
+    NOTSET,
     WARN,
     WARNING,
     Filter,
@@ -21,6 +23,9 @@ from logging import (
 )
 from sys import stderr, stdout
 from typing import Any, Dict, Final, Mapping, Optional, Tuple, cast
+
+# MyPy does not recognize this during pull requests
+from pdm.termui import UI, Verbosity  # type: ignore
 
 
 def _get_has_rich():
@@ -43,6 +48,29 @@ if HAS_RICH:
 
 
 TRACE: Final[int] = 5
+
+
+class TermUIHandler(Handler):
+    def __init__(self, ui: UI, level: int = NOTSET) -> None:
+        super().__init__(level)
+        self.__ui = ui
+
+    def emit(self, record: LogRecord) -> None:
+        msg_format = "{text}"
+        if record.levelno in (WARN, WARNING):
+            msg_format = "[warning]{text}[/warning]"
+        verbosity: Verbosity = Verbosity.NORMAL
+        if record.levelno == DEBUG:
+            verbosity = Verbosity.DETAIL
+        if record.levelno == TRACE:
+            verbosity = Verbosity.DEBUG
+
+        text = msg_format.format(text=self.format(record))
+        self.__ui.echo(
+            text,
+            record.levelno in (ERROR, CRITICAL),
+            verbosity,
+        )
 
 
 # Justification: Only one method to override
@@ -143,6 +171,14 @@ def _get_std_logger() -> TracingLogger:
 logger: Final[TracingLogger] = (  # pylint: disable=C0103
     _get_std_logger() if not HAS_RICH else _get_rich_logger()
 )
+
+
+def update_logger_from_project_ui(ui_instance: UI) -> None:
+    for handler in list(logger.handlers):
+        logger.removeHandler(handler)
+
+    new_handler: Handler = TermUIHandler(ui_instance)
+    logger.addHandler(new_handler)
 
 
 def traced_function(fun):
