@@ -12,6 +12,10 @@ jobs:
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history
       - name: Set up git-cliff
         uses: kenji-miyake/setup-git-cliff@v1
       - name: Generate changelog

@@ -151,7 +151,9 @@ jobs:
           - "3.11"
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -171,9 +173,7 @@ jobs:
         run: pdm install --dev
       - name: Run and check for issues
         run: |
-          git fetch origin ${{ github.base_ref }}:target
-          git fetch origin ${{ github.head_ref }}:source
-          issues=$(pdm run gitlint --commits "target..source" lint)
+          issues=$(pdm run gitlint --commits "${{ github.base_ref }}..${{ github.head_ref }}" lint)
           issue_count=$(echo -n "$issues" | wc -l)
           if [ $issue_count -gt 0 ];
           then
