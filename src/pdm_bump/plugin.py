@@ -8,7 +8,6 @@
 # Refer to LICENSE for more information
 #
 from argparse import ArgumentParser, Namespace
-from logging import DEBUG, INFO
 from pathlib import Path
 from traceback import format_exc as get_traceback
 from typing import Final, Optional, Protocol, cast, final
@@ -30,7 +29,6 @@ from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
 from .logging import (
-    TRACE,
     logger,
     traced_function,
     update_logger_from_project_ui,
@@ -133,17 +131,10 @@ class BumpCommand(BaseCommand):
             help="When incrementing major, minor, micro or epoch, "
             + "remove all pre-release parts",
         )
-        parser.add_argument(
-            "--trace", action="store_true", help="Enable trace output"
-        )
-        parser.add_argument(
-            "--debug", action="store_true", help="Enable debug output"
-        )
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
         config: Config = Config(project)
-        self._setup_logger(options.trace, options.debug)
         update_logger_from_project_ui(project.core.ui)
 
         selected_backend: Optional[_VersionSource] = self._select_backend(
@@ -276,15 +267,6 @@ class BumpCommand(BaseCommand):
         )
 
         return actions
-
-    @traced_function
-    def _setup_logger(self, trace: bool, debug: bool) -> None:
-        level: int = INFO
-        if debug:
-            level = DEBUG
-        if trace:
-            level = TRACE
-        logger.setLevel(level)
 
     @traced_function
     def _version_to_string(self, version: Version) -> str:
