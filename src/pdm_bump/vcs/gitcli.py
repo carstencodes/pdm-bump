@@ -12,6 +12,7 @@ from pathlib import Path
 from subprocess import CalledProcessError
 from typing import List, Optional, Tuple, cast
 
+from ..logging import logger
 from ..version import Version
 from .core import VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
@@ -23,6 +24,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     @cached_property
     def git_executable_path(self) -> Path:
+        logger.debug("Searching for %s executable", self.__GIT_EXECUTABLE_NAME)
         git_executable_path: Optional[Path] = self._which(
             self.__GIT_EXECUTABLE_NAME
         )
@@ -34,6 +36,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     @property
     def is_available(self) -> bool:
+        logger.debug("Checking, if we're working on a git repository")
         exit_code, _out, _err = self.run(
             self.git_executable_path,
             ("rev-parse", "--root-dir"),
@@ -45,6 +48,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     @property
     def is_clean(self) -> bool:
         try:
+            logger.debug("Checking, if there are any changes")
             _ex, out, _err = self.run(
                 self.git_executable_path,
                 ("status", "--porcelain"),
@@ -58,6 +62,11 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
                 if not ln.strip().startswith("??")
             ]
 
+            logger.debug(
+                "The following files have been reported as modified: \n %s",
+                "\n".join(dirty_files),
+            )
+
             return len(dirty_files) == 0
         except CalledProcessError as cpe:
             raise VcsProviderError(
@@ -69,12 +78,17 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
         try:
             args: List[str] = ["add", "--update"]
             args.extend(str(f) for f in files)
+            logger.debug(
+                "Checking in the following files: \n%s",
+                ", ".join([str(f) for f in files]),
+            )
             _ = self.run(
                 self.git_executable_path,
                 tuple(args),
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
+            logger.debug("Creating new commit with message '%s'", message)
             _ = self.run(
                 self.git_executable_path,
                 ("commit", "-m", f'"{message}"'),
@@ -90,6 +104,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     def create_tag_from_string(self, version_formatted: str) -> None:
         try:
+            logger.info(
+                "Creating tag '%s' on current commit.", version_formatted
+            )
             _ = self.run(
                 self.git_executable_path,
                 ("tag", version_formatted),
@@ -104,6 +121,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     def get_most_recent_tag(self) -> Optional[Version]:
         try:
+            logger.debug("Checking for most recent tag.")
             _, output, _ = self.run(
                 self.git_executable_path,
                 ("describe", "--tags"),
@@ -116,12 +134,15 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             ) from cpe
 
         if output.strip() == "":
+            logger.debug("Could not find a tagged version.")
             return None
 
+        logger.debug("Found version '%s'", output)
         return Version.from_string(output)
 
     def get_number_of_changes_since_last_release(self) -> int:
         try:
+            logger.debug("Searching last tag ...")
             _, output, _ = self.run(
                 self.git_executable_path,
                 ("describe", "--tags"),
@@ -130,12 +151,14 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
             if output.strip() == "":
                 raise VcsProviderError("Failed to fetch most recent tag")
+            logger.debug("Found tag '%s'", output)
             _, output, _ = self.run(
                 self.git_executable_path,
                 ("rev-list", f"{output}..HEAD", "--count"),
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
+            logger.debug("Git return %s changes", output)
 
             return int(output)
         except CalledProcessError as cpe:
@@ -146,11 +169,15 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     def get_changes_not_checked_in(self) -> int:
         try:
+            logger.debug("Searching for changes")
             _, output, _ = self.run(
                 self.git_executable_path,
                 ("status", "--porcelain"),
                 raise_on_exit=True,
                 cwd=self.current_path,
+            )
+            logger.debug(
+                "The following have been modified or added:\n%s", output
             )
             lines = output.split("\n")
             return len(lines)
