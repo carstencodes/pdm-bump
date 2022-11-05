@@ -57,7 +57,7 @@ release = [
 ]
 
 [tool.pdm.scripts]
-flake = "flake518 --exit-zero src/"
+flake = "flake518 src/"
 mypy = "mypy src/"
 pylint = "pylint src/"
 check-style = { composite = ["flake", "pylint", "mypy"] }
