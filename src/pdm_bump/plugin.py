@@ -15,6 +15,7 @@ from typing import Final, Optional, Protocol, cast, final
 
 # MyPy does not recognize this during pull requests
 from pdm.cli.commands.base import BaseCommand  # type: ignore
+from pdm.termui import UI
 
 from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
@@ -28,7 +29,12 @@ from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
-from .logging import TRACE, logger, traced_function
+from .logging import (
+    TRACE,
+    logger,
+    traced_function,
+    update_logger_from_project_ui,
+)
 from .source import StaticPep621VersionSource
 from .vcs import (
     DefaultVcsProvider,
@@ -39,8 +45,14 @@ from .vcs import (
 from .version import Pep440VersionFormatter, Version
 
 
+# Justification: Protocol for interoperability
+class _CoreLike(Protocol):  # pylint: disable=R0903
+    ui: UI
+
+
 class _ProjectLike(ConfigHolder, Protocol):
     root: Path
+    core: _CoreLike
 
     @property
     def pyproject_file(self) -> str:
@@ -132,6 +144,7 @@ class BumpCommand(BaseCommand):
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
         config: Config = Config(project)
         self._setup_logger(options.trace, options.debug)
+        update_logger_from_project_ui(project.core.ui)
 
         selected_backend: Optional[_VersionSource] = self._select_backend(
             project, config
