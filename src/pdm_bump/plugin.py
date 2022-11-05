@@ -28,11 +28,7 @@ from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
 from .config import Config, ConfigHolder
 from .dynamic import DynamicVersionSource
-from .logging import (
-    logger,
-    traced_function,
-    update_logger_from_project_ui,
-)
+from .logging import logger, traced_function, update_logger_from_project_ui
 from .source import StaticPep621VersionSource
 from .vcs import (
     DefaultVcsProvider,
