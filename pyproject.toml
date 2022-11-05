@@ -65,6 +65,7 @@ isort = "isort src/"
 black = "black src/"
 copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
 format = { composite = [ "copyright-headers", "isort", "black" ] }
+check-commits = {shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"}
 
 [tool.pylint.MAIN]
 fail-under = 9
