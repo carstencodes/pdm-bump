@@ -63,7 +63,7 @@ jobs:
           enable-pep582: true
       - name: Checkout sources
         uses: actions/checkout@v2
-      - name: Install production dependencies
+      - name: Install development dependencies
         run: pdm install --dev
       - name: Run unit tests
         run: pdm run pytest
@@ -93,9 +93,7 @@ jobs:
           enable-pep582: true
       - name: Checkout sources
         uses: actions/checkout@v2
-      - name: Install flake518
-        run: pip install --user flake518
-      - name: Install production dependencies
-        run: pdm install --prod
+      - name: Install development dependencies
+        run: pdm install --dev
       - name: Run linters
         run: pdm check-style
