@@ -15,7 +15,7 @@ from typing import Final, Optional, Protocol, cast, final
 
 # MyPy does not recognize this during pull requests
 from pdm.cli.commands.base import BaseCommand  # type: ignore
-from pdm.termui import UI
+from pdm.termui import UI  # type: ignore
 
 from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
