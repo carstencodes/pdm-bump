@@ -11,7 +11,8 @@ from typing import Optional, Protocol, Type
 
 from pdm.project.config import ConfigItem as _ConfigItem
 
-from .plugin import BumpCommand as _Command
+# MyPy cannot resolve this during pull request
+from .plugin import BumpCommand as _Command  # type: ignore
 
 
 class _CoreLike(Protocol):

@@ -13,7 +13,8 @@ from pathlib import Path
 from traceback import format_exc as get_traceback
 from typing import Final, Optional, Protocol, cast, final
 
-from pdm.cli.commands.base import BaseCommand
+# MyPy does not recognize this during pull requests
+from pdm.cli.commands.base import BaseCommand  # type: ignore
 
 from .action import COMMAND_NAMES as MODIFIER_ACTIONS
 from .action import (
