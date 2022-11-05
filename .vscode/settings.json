@@ -6,5 +6,8 @@
     "python.testing.pytestEnabled": true,
     "coverage-gutters.coverageFileNames": [
         "pytest.coverage.xml"
-    ]
+    ],
+    "files.associations": {
+        ".gitlint": "ini"
+    }
 }
