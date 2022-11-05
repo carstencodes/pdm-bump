@@ -134,7 +134,7 @@ jobs:
       - name: Check for changed files
         run: |
           no_changed_files=$(git status --porcelain | wc -l)
-          if [ $no_changed_files -lt 0 ];
+          if [ $no_changed_files -gt 0 ];
           then
             echo "There are changed files:" >&2
             git status --porcelain >&2
