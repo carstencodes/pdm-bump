@@ -16,9 +16,11 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-        pdm-version:
-          - 2.2.1
     steps:
+      - name: Set PDM version
+        uses: deep-mm/set-variables@v1.0
+        with:
+          variableFileName: 'pdm'
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -28,7 +30,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-          version: ${{ matrix.pdm-version }}
+          version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
       - name: Checkout sources
@@ -46,9 +48,11 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-        pdm-version:
-          - 2.2.1
     steps:
+      - name: Set PDM version
+        uses: deep-mm/set-variables@v1.0
+        with:
+          variableFileName: 'pdm'
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -58,7 +62,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-          version: ${{ matrix.pdm-version }}
+          version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
       - name: Checkout sources
@@ -76,9 +80,11 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-        pdm-version:
-          - 2.2.1
     steps:
+      - name: Set PDM version
+        uses: deep-mm/set-variables@v1.0
+        with:
+          variableFileName: 'pdm'
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -88,7 +94,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-          version: ${{ matrix.pdm-version }}
+          version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
       - name: Checkout sources
@@ -106,9 +112,11 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
-        pdm-version:
-          - 2.2.1
     steps:
+      - name: Set PDM version
+        uses: deep-mm/set-variables@v1.0
+        with:
+          variableFileName: 'pdm'
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -118,7 +126,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-          version: ${{ matrix.pdm-version }}
+          version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
       - name: Checkout sources
