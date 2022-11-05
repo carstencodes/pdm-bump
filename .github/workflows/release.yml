@@ -63,7 +63,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: changelog
-          path: CHANGELOG.md
+          path: ${{ github.workspace }}/CHANGELOG.md
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v1
@@ -71,7 +71,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.tag_name.outputs.version }}
           name: Release ${{ steps.tag_name.outputs.version }}
-          body_path: CHANGELOG.md
-          append_body: false
+          body_path: ${{ github.workspace }}/CHANGELOG.md
           draft: false
           prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
