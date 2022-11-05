@@ -12,7 +12,7 @@ from os import environ, pathsep
 from pathlib import Path
 from subprocess import run as stdlib_run_process
 from sys import platform
-from typing import AnyStr, Optional, Protocol, Tuple, Union, cast
+from typing import Optional, Protocol, Tuple, Union, cast
 
 from ..logging import logger
 
@@ -23,11 +23,11 @@ class _CompletedProcessLike(Protocol):
         raise NotImplementedError()
 
     @property
-    def stdout(self) -> AnyStr:
+    def stdout(self) -> str:
         raise NotImplementedError()
 
     @property
-    def stderr(self) -> AnyStr:
+    def stderr(self) -> str:
         raise NotImplementedError()
 
 
@@ -45,9 +45,36 @@ class _ProcessRunningCallable(Protocol):
 
 
 class ProcessRunner:
-    run_process: _ProcessRunningCallable = cast(
-        _ProcessRunningCallable, stdlib_run_process
-    )
+    run_process: Optional[_ProcessRunningCallable] = None
+
+    def _run_process(
+        self,
+        cmd: list[str],
+        *,
+        check: bool,
+        capture_output: bool,
+        cwd: Optional[Union[str, Path]],
+        encoding: str = "utf-8",
+    ) -> _CompletedProcessLike:
+        if self.run_process is not None:
+            run_proc: _ProcessRunningCallable = cast(
+                _ProcessRunningCallable, self.run_process
+            )
+            return run_proc(
+                cmd,
+                check=check,
+                capture_output=capture_output,
+                cwd=cwd,
+                encoding=encoding,
+            )
+
+        return stdlib_run_process(
+            cmd,
+            check=check,
+            capture_output=capture_output,
+            cwd=cwd,
+            encoding=encoding,
+        )
 
 
 class CliRunnerMixin(ProcessRunner):
@@ -98,7 +125,7 @@ class CliRunnerMixin(ProcessRunner):
             ",".join(args),
         )
 
-        completed: _CompletedProcessLike = super().run_process(
+        completed: _CompletedProcessLike = self._run_process(
             cmd,
             check=raise_on_exit,
             capture_output=True,
@@ -116,6 +143,6 @@ class CliRunnerMixin(ProcessRunner):
 
         return (
             completed.returncode,
-            cast(str, completed.stdout),
-            cast(str, completed.stderr),
+            completed.stdout,
+            completed.stderr,
         )
