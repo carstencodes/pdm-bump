@@ -31,9 +31,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: '3.9'
     - name: Install dependencies
@@ -64,12 +64,14 @@ jobs:
       - name: Create Release
         id: create_release
         run: |
-          pre=
+          export pre=
           case ${{ github.ref_name }} in
-            v0*)
-            *-dev*)
-            *-pre*)
-              pre=--prerelease;;
+            v0* | *-dev* | *-pre*)
+              export pre=--prerelease
+              ;;
+            *)
+              export pre=
+              ;;
           esac
 
           gh release create ${{ github.ref_name }} -F "${{ github.workspace }}/CHANGELOG.md" $pre --title "Release ${{ github.ref_name }}" --repo ${{ github.repository }}
