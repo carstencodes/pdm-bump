@@ -12,11 +12,21 @@ jobs:
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
-      - name: Generate changelog
-        id: changelog
-        uses: heinrichreimer/github-changelog-generator-action@v2.1.1
+      - name: Generate a changelog
+        id: git-cliff
+        uses: orhun/git-cliff-action@v1
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --verbose --latest --strip all
+        env:
+          OUTPUT: CHANGELOG.md
+      - name: Export changelog
+        id: changelog
+        run: |
+          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
+          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
+          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
+          echo "::set-output name=changelog::$r"
   deploy:
     name: Deploy wheel to pypi
     runs-on: ubuntu-latest
