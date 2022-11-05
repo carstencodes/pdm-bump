@@ -124,7 +124,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             logger.debug("Checking for most recent tag.")
             _, output, _ = self.run(
                 self.git_executable_path,
-                ("describe", "--tags"),
+                ("describe", "--tags", "--abbrev=0"),
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
