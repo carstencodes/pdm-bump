@@ -12,17 +12,15 @@ jobs:
     outputs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
-      - name: Generate a changelog
-        id: git-cliff
-        uses: orhun/git-cliff-action@v1
-        with:
-          args: --verbose --latest --strip all
-        env:
-          OUTPUT: CHANGELOG.md
+      - name: Set up git-cliff
+        uses: kenji-miyake/setup-git-cliff@v1
+      - name: Generate changelog
+        run: |
+          git cliff --verbose --latest --strip all --output CHANGELOG.md
       - name: Export changelog
         id: changelog
         run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r=$(cat CHANGELOG.md)
           r="${r//'%'/'%25'}"     # Multiline escape sequences for %
           r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
           r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
