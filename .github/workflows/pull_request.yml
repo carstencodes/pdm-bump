@@ -17,6 +17,8 @@ jobs:
           - "3.10"
           - "3.11"
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -32,8 +34,6 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Checkout sources
-        uses: actions/checkout@v2
       - name: Install production dependencies
         run: pdm install --prod
       - name: Build wheel
@@ -48,6 +48,8 @@ jobs:
           - "3.10"
           - "3.11"
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -63,8 +65,6 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Checkout sources
-        uses: actions/checkout@v2
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run unit tests
@@ -79,6 +79,8 @@ jobs:
           - "3.10"
           - "3.11"
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -94,8 +96,6 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Checkout sources
-        uses: actions/checkout@v2
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -110,6 +110,8 @@ jobs:
           - "3.10"
           - "3.11"
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -125,8 +127,6 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Checkout sources
-        uses: actions/checkout@v2
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -150,6 +150,8 @@ jobs:
           - "3.10"
           - "3.11"
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
       - name: Set PDM version
         run: |
           echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
@@ -165,8 +167,6 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Checkout sources
-        uses: actions/checkout@v2
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run and check for issues
