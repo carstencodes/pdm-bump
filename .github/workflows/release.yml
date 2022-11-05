@@ -20,12 +20,12 @@ jobs:
         uses: kenji-miyake/setup-git-cliff@v1
       - name: Generate changelog
         run: |
-          git cliff --verbose --latest --strip all --output CHANGELOG.md
+          git cliff --verbose --current --strip all --output ${{ github.workspace }}/CHANGELOG.md
       - name: Export changelog
         uses: actions/upload-artifact@v3
         with:
           name: changelog
-          path: CHANGELOG.md
+          path: ${{ github.workspace }}/CHANGELOG.md
   deploy:
     name: Deploy wheel to pypi
     runs-on: ubuntu-latest
@@ -60,20 +60,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: changelog
-          path: ${{ github.workspace }}/CHANGELOG.md
+          path: ${{ github.workspace }}
       - name: Create Release
         id: create_release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          export pre=
-          case ${{ github.ref_name }} in
-            v0* | *-dev* | *-pre*)
-              export pre=--prerelease
-              ;;
-            *)
-              export pre=
-              ;;
-          esac
-
-          gh release create ${{ github.ref_name }} -F "${{ github.workspace }}/CHANGELOG.md" $pre --title "Release ${{ github.ref_name }}" --repo ${{ github.repository }}
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ${{ github.workspace }}/CHANGELOG.md
+          prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
+          draft: false
+          name: Release ${{ github.ref_name }}
+          tag: ${{ github.ref_name }}
+          token: ${{ secrets.GITHUB_TOKEN }}
