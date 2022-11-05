@@ -56,9 +56,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Get tag name
-        uses: battila7/get-version-action@v2
-        id: tag_name
       - name: Get changelog
         uses: actions/download-artifact@v3
         with:
@@ -66,11 +63,13 @@ jobs:
           path: ${{ github.workspace }}/CHANGELOG.md
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ steps.tag_name.outputs.version }}
-          name: Release ${{ steps.tag_name.outputs.version }}
-          body_path: ${{ github.workspace }}/CHANGELOG.md
-          draft: false
-          prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
+        run: |
+          pre=
+          case ${{ github.ref_name }} in
+            v0*)
+            *-dev*)
+            *-pre*)
+              pre=--prerelease;;
+          esac
+
+          gh release create ${{ github.ref_name }} -F "${{ github.workspace }}/CHANGELOG.md" $pre --title "Release ${{ github.ref_name }}" --repo ${{ github.repository }}
