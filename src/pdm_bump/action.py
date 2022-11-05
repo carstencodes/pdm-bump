@@ -24,7 +24,7 @@ from typing import (
     final,
 )
 
-from .logging import traced_function
+from .logging import logger, traced_function
 from .version import NonNegativeInteger, Pep440VersionFormatter, Version
 
 if sys.version_info >= (3, 10, 0):
@@ -52,6 +52,13 @@ class VersionModifier(ABC):
     def create_new_version(self) -> Version:
         raise NotImplementedError()
 
+    def _report_new_version(self, next_version: Version) -> None:
+        logger.info(
+            "Incrementing version from %s to %s",
+            _formatter.format(self.current_version),
+            _formatter.format(next_version),
+        )
+
 
 class _PreReleaseIncrementingVersionModified(VersionModifier):
     def __init__(self, version: Version, increment_micro: bool = True) -> None:
@@ -66,6 +73,13 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         pre: Tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
         ] = (letter, 1)
+
+        logger.debug(
+            "Incrementing %s part of current version %s",
+            name,
+            _formatter.format(self.current_version),
+        )
+
         if self.current_version.preview is not None:
             if not self._is_valid_preview_version():
                 raise PreviewMismatchError(
@@ -88,7 +102,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
             pre = (letter, number)
 
-        return Version(
+        result: Version = Version(
             self.current_version.epoch,
             self._get_next_release(),
             pre,
@@ -96,6 +110,10 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
             None,
             None,
         )
+
+        self._report_new_version(result)
+
+        return result
 
     @property
     @abstractmethod
@@ -214,6 +232,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         ] = self._update_release_version_part(self.release_part)
 
         if self.remove_non_final_parts:
+            logger.debug("Removing non-final parts of version")
             # Using type alias due to line length enforced by black
             construction_args = _NFPR._create_new_constructional_args(  # noqa: E501 pylint: disable=W0212
                 next_release, self.current_version.epoch
@@ -221,7 +240,10 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         else:
             construction_args["release_tuple"] = next_release
 
-        return Version(**construction_args)
+        next_version: Version = Version(**construction_args)
+        self._report_new_version(next_version)
+
+        return next_version
 
     def _update_release_version_part(
         self, part_id: NonNegativeInteger
@@ -229,10 +251,14 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         release_part: List[NonNegativeInteger] = list(
             self.current_version.release
         )
+
         for i in range(len(release_part)):  # pylint: disable=C0200
+            logger.debug("Checking if version part at %d must be modified", i)
             if i == part_id:
+                logger.debug("Incrementing version part at position %d.", i)
                 release_part[i] = release_part[i] + 1
             elif i > part_id:
+                logger.debug("Resetting version part at position %d", i)
                 release_part[i] = 0
 
         return tuple(release_part)
@@ -252,7 +278,11 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         ] = _NFPR._create_new_constructional_args(  # noqa: E501 pylint: disable=W0212
             self.current_version.release, self.current_version.epoch
         )
-        return Version(**constructional_args)
+
+        next_version: Version = Version(**constructional_args)
+        self._report_new_version(next_version)
+
+        return next_version
 
 
 @final
@@ -302,13 +332,17 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         if self.__reset_version or self.remove_non_final_parts:
             constructional_args = dataclass_to_dict(Version.default())
             if not self.__reset_version:
+                logger.debug("Current version tuple shall not be reset")
                 constructional_args[
                     "release_tuple"
                 ] = self.current_version.release
 
+        logger.debug("Incrementing Epoch of version")
         constructional_args["epoch"] = self.current_version.epoch + 1
 
-        return Version(**constructional_args)
+        next_version: Version = Version(**constructional_args)
+        self._report_new_version(next_version)
+        return next_version
 
 
 @final
@@ -318,6 +352,7 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
         dev_version: NonNegativeInteger = 1
         if self.current_version.dev is not None:
             _, dev_version = self.current_version.dev
+            logger.debug("Incrementing development version part by one")
             dev_version = dev_version + 1
 
         constructional_args: Dict[str, Any] = dataclass_to_dict(
@@ -325,7 +360,10 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
         )
         constructional_args["dev"] = ("dev", dev_version)
 
-        return Version(**constructional_args)
+        next_version: Version = Version(**constructional_args)
+        self._report_new_version(next_version)
+
+        return next_version
 
 
 @final
@@ -335,6 +373,7 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
         post_version: NonNegativeInteger = 1
         if self.current_version.post is not None:
             _, post_version = self.current_version.post
+            logger.debug("Incrementing post version part by one")
             post_version = post_version + 1
 
         constructional_args: Dict[str, Any] = dataclass_to_dict(
@@ -342,7 +381,10 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
         )
         constructional_args["post"] = ("post", post_version)
 
-        return Version(**constructional_args)
+        next_version: Version = Version(**constructional_args)
+        self._report_new_version(next_version)
+
+        return next_version
 
 
 VersionModifierFactory: TypeAlias = Callable[[Version], VersionModifier]
