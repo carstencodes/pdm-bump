@@ -63,6 +63,8 @@ jobs:
           path: ${{ github.workspace }}/CHANGELOG.md
       - name: Create Release
         id: create_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export pre=
           case ${{ github.ref_name }} in
