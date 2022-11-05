@@ -22,14 +22,10 @@ jobs:
         run: |
           git cliff --verbose --latest --strip all --output CHANGELOG.md
       - name: Export changelog
-        id: changelog
-        run: |
-          r=$(cat CHANGELOG.md)
-          echo "changelog=$r" >> $GITHUB_OUTPUT
-          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
-          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
-          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
-          echo "changelog_escaped=$r" >> $GITHUB_OUTPUT
+        uses: actions/upload-artifact@v3
+        with:
+          name: changelog
+          path: CHANGELOG.md
   deploy:
     name: Deploy wheel to pypi
     runs-on: ubuntu-latest
@@ -63,16 +59,18 @@ jobs:
       - name: Get tag name
         uses: battila7/get-version-action@v2
         id: tag_name
+      - name: Get changelog
+        uses: actions/download-artifact@v3
+        with:
+          name: changelog
+          path: CHANGELOG.md
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-          changelog: ${{ needs.changelog.outputs.changelog }}
-          branch: ${{ steps.tag_name.outputs.version }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.tag_name.outputs.version }}
-          release_name: Release ${{ steps.tag_name.outputs.version }}
-          body: ${{ needs.changelog.outputs.changelog }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.tag_name.outputs.version }}
+          name: Release ${{ steps.tag_name.outputs.version }}
+          bodyFile: CHANGELOG.md
           draft: false
           prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
