@@ -92,6 +92,12 @@ class CliRunnerMixin(ProcessRunner):
         for arg in args:
             cmd.append(arg)
 
+        logger.debug(
+            "Running command '%s' with args [%s]",
+            str(executable),
+            ",".join(args),
+        )
+
         completed: _CompletedProcessLike = super().run_process(
             cmd,
             check=raise_on_exit,
@@ -99,6 +105,15 @@ class CliRunnerMixin(ProcessRunner):
             cwd=cwd,
             encoding="utf-8",
         )
+
+        logger.debug("Process exited with code %d", completed.returncode)
+        logger.debug(
+            "Process wrote the following to stdout: \n%s", completed.stdout
+        )
+        logger.debug(
+            "Process wrote the following to stderr: \n%s", completed.stderr
+        )
+
         return (
             completed.returncode,
             cast(str, completed.stdout),
