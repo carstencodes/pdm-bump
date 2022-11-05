@@ -85,7 +85,7 @@ class Version:
     @property
     def release(
         self,
-    ) -> Tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger, ]:
+    ) -> Tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]:
         return (
             self.major,
             self.minor,
