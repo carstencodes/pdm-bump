@@ -20,7 +20,7 @@ jobs:
         uses: kenji-miyake/setup-git-cliff@v1
       - name: Generate changelog
         run: |
-          git cliff --verbose --current --strip all --output ${{ github.workspace }}/CHANGELOG.md
+          git cliff --verbose --config ${{ github.workspace }}/.gitcliff.toml --current --strip all --output ${{ github.workspace }}/CHANGELOG.md
       - name: Export changelog
         uses: actions/upload-artifact@v3
         with:
