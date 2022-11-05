@@ -1,8 +1,0 @@
-{
-    "variables": [
-        {
-            "name": "pdm_version",
-            "value": "2.2.1"
-        }
-    ]
-}

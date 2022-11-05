@@ -18,9 +18,8 @@ jobs:
           - "3.11"
     steps:
       - name: Set PDM version
-        uses: deep-mm/set-variables@v1.0
-        with:
-          variableFileName: 'pdm'
+        run: |
+          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -50,9 +49,8 @@ jobs:
           - "3.11"
     steps:
       - name: Set PDM version
-        uses: deep-mm/set-variables@v1.0
-        with:
-          variableFileName: 'pdm'
+        run: |
+          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -82,9 +80,8 @@ jobs:
           - "3.11"
     steps:
       - name: Set PDM version
-        uses: deep-mm/set-variables@v1.0
-        with:
-          variableFileName: 'pdm'
+        run: |
+          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -114,9 +111,8 @@ jobs:
           - "3.11"
     steps:
       - name: Set PDM version
-        uses: deep-mm/set-variables@v1.0
-        with:
-          variableFileName: 'pdm'
+        run: |
+          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
       - name: Setup python
         uses: actions/setup-python@v2
         with:
