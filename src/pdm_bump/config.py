@@ -9,7 +9,7 @@
 #
 from typing import Any, Optional, Protocol, cast
 
-from .logging import traced_function
+from .logging import logger, traced_function
 
 
 class ConfigHolder(Protocol):
@@ -27,24 +27,41 @@ class ConfigHolder(Protocol):
 @traced_function
 def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:
     front: str
+
+    key: str = ".".join(keys)
+    logger.debug("Searching for '%s' in configuration", key)
+    logger.debug("Configuration is set to: \n%s", config)
+
     while len(keys) > 1:
         front = keys[0]
         if front in config.keys():
+            logger.debug("Found configuration section %s", front)
             config = cast(dict[str, Any], config[front])
             keys = tuple(keys[1:])
         else:
+            logger.debug("Could not find configuration section %s.", front)
             return None
 
     front = keys[0]
-    return None if front not in config.keys() else config[front]
+
+    result = None if front not in config.keys() else config[front]
+    logger.debug("Found value at '%s' is: %s", key, result)
+    return result
 
 
 @traced_function
 def _set_config_value(config: dict[str, Any], value: Any, *keys: str) -> None:
     front: str
+
+    key: str = ".".join(keys)
+    logger.debug("Setting '%s' to '%s'", key, value)
+
     while len(keys) > 1:
         front = keys[0]
         if front not in config.keys():
+            logger.debug(
+                "Key '%s' was not found. Adding empty configuration", front
+            )
             config[front] = {}
         config = config[front]
         keys = tuple(keys[1:])

@@ -10,15 +10,47 @@
 
 from os import environ, pathsep
 from pathlib import Path
-from subprocess import CompletedProcess
-from subprocess import run as run_process
+from subprocess import run as stdlib_run_process
 from sys import platform
-from typing import Optional, Tuple, cast
+from typing import AnyStr, Optional, Protocol, Tuple, Union, cast
 
 from ..logging import logger
 
 
-class CliRunnerMixin:
+class _CompletedProcessLike(Protocol):
+    @property
+    def returncode(self) -> int:
+        raise NotImplementedError()
+
+    @property
+    def stdout(self) -> AnyStr:
+        raise NotImplementedError()
+
+    @property
+    def stderr(self) -> AnyStr:
+        raise NotImplementedError()
+
+
+class _ProcessRunningCallable(Protocol):
+    def __call__(
+        self,
+        cmd: list[str],
+        *,
+        check: bool,
+        capture_output: bool,
+        cwd: Optional[Union[str, Path]],
+        encoding: str = "utf-8",
+    ) -> _CompletedProcessLike:
+        raise NotImplementedError()
+
+
+class ProcessRunner:
+    run_process: _ProcessRunningCallable = cast(
+        _ProcessRunningCallable, stdlib_run_process
+    )
+
+
+class CliRunnerMixin(ProcessRunner):
     def _which(
         self, exec_name: str, extension: Optional[str] = None
     ) -> Optional[Path]:
@@ -60,13 +92,28 @@ class CliRunnerMixin:
         for arg in args:
             cmd.append(arg)
 
-        completed: CompletedProcess = run_process(
+        logger.debug(
+            "Running command '%s' with args [%s]",
+            str(executable),
+            ",".join(args),
+        )
+
+        completed: _CompletedProcessLike = super().run_process(
             cmd,
             check=raise_on_exit,
             capture_output=True,
             cwd=cwd,
             encoding="utf-8",
         )
+
+        logger.debug("Process exited with code %d", completed.returncode)
+        logger.debug(
+            "Process wrote the following to stdout: \n%s", completed.stdout
+        )
+        logger.debug(
+            "Process wrote the following to stderr: \n%s", completed.stderr
+        )
+
         return (
             completed.returncode,
             cast(str, completed.stdout),

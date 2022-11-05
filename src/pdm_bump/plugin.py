@@ -165,7 +165,9 @@ class BumpCommand(BaseCommand):
     @traced_function
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
         config: Config = Config(project)
-        value = config.get_config_or_pyproject_value("vcs", "provider")
+        value = config.get_config_or_pyproject_value(
+            "pdm_bump", "vcs", "provider"
+        )
 
         registry: VcsProviderRegistry = vcs_providers
 
