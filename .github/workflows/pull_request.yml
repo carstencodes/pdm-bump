@@ -171,7 +171,7 @@ jobs:
         run: pdm install --dev
       - name: Run and check for issues
         run: |
-          issues=$(pdm run gitlint --commits ${{ github.base_ref }}..${{ github.head_ref }} lint)
+          issues=$(pdm run gitlint --commits $(git rev-parse ${{ github.base_ref }})..$(git rev-parse ${{ github.head_ref }}) lint)
           issue_count=$(echo "$issues" | wc -l)
           if [ $issue_count -gt 0 ];
           then
