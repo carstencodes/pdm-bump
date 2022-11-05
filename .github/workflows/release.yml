@@ -28,7 +28,7 @@ jobs:
           r="${r//'%'/'%25'}"     # Multiline escape sequences for %
           r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
           r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
-          echo "::set-output name=changelog::$r"
+          echo "changelog=$r" >> $GITHUB_OUTPUT
   deploy:
     name: Deploy wheel to pypi
     runs-on: ubuntu-latest
