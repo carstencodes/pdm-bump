@@ -11,6 +11,7 @@ from logging import (
     CRITICAL,
     DEBUG,
     ERROR,
+    INFO,
     NOTSET,
     WARN,
     WARNING,
@@ -148,6 +149,8 @@ def _get_rich_logger() -> TracingLogger:
     _logger.addHandler(std_out_handler)
     _logger.addHandler(std_err_handler)
 
+    _logger.level = INFO
+
     return _logger
 
 
@@ -163,6 +166,8 @@ def _get_std_logger() -> TracingLogger:
 
     _logger.addHandler(std_out)
     _logger.addHandler(std_err)
+
+    _logger.level = INFO
 
     return _logger
 
