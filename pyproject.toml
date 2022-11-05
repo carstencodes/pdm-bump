@@ -57,13 +57,13 @@ release = [
 ]
 
 [tool.pdm.scripts]
-flake = "flake518 --exit-zero src/"
+flake = "flake518 src/"
 mypy = "mypy src/"
 pylint = "pylint src/"
 check-style = { composite = ["flake", "pylint", "mypy"] }
 isort = "isort src/"
 black = "black src/"
-copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -t ./.licenseheader.j2 -E .py"
+copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
 format = { composite = [ "copyright-headers", "isort", "black" ] }
 
 [tool.pylint.MAIN]

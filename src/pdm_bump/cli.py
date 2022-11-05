@@ -9,7 +9,8 @@
 #
 from typing import Optional, Protocol, Type
 
-from pdm.project.config import ConfigItem as _ConfigItem
+# MyPy cannot resolve this during pull request
+from pdm.project.config import ConfigItem as _ConfigItem  # type: ignore
 
 from .plugin import BumpCommand as _Command
 
