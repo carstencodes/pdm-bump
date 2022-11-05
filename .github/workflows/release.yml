@@ -69,5 +69,5 @@ jobs:
           prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
           draft: false
           name: Release ${{ github.ref_name }}
-          tag: ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
           token: ${{ secrets.GITHUB_TOKEN }}
