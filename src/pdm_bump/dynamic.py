@@ -26,10 +26,14 @@ DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
 class DynamicVersionConfig:
     __file: Path
     __pattern: Pattern[str]
+    __file_encoding: str
 
-    def __init__(self, file_path: Path, pattern: Pattern[str]) -> None:
+    def __init__(
+        self, file_path: Path, pattern: Pattern[str], encoding: str = "utf-8"
+    ) -> None:
         self.__file = file_path
         self.__pattern = pattern
+        self.__file_encoding = encoding
 
     @property
     def file(self) -> Path:
@@ -41,14 +45,14 @@ class DynamicVersionConfig:
 
     @cached_property
     def dynamic_version(self) -> Optional[str]:
-        with self.__file.open("r") as file_ptr:
+        with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             match = self.__pattern.search(file_ptr.read())
         if match is not None:
             return match.group("version")
         return None
 
     def replace_dynamic_version(self, new_version: str) -> None:
-        with self.__file.open("r") as file_ptr:
+        with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             version_file = file_ptr.read()
             match = self.__pattern.search(version_file)
             if match is None:
@@ -60,7 +64,7 @@ class DynamicVersionConfig:
                 + new_version
                 + version_file[version_end:]
             )
-        with self.__file.open("w") as file_ptr:
+        with self.__file.open("w", encoding=self.__file_encoding) as file_ptr:
             file_ptr.write(new_version_file)
 
     @staticmethod
