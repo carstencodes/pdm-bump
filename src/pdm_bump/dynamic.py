@@ -39,6 +39,7 @@ class DynamicVersionConfig:
     def pattern(self) -> Pattern[str]:
         return self.__pattern
 
+    @cached_property
     def dynamic_version(self) -> Optional[str]:
         with self.__file.open("r") as file_ptr:
             match = self.__pattern.search(file_ptr.read())
