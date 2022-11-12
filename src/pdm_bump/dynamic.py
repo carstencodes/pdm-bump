@@ -39,6 +39,50 @@ class DynamicVersionConfig:
     def pattern(self) -> Pattern[str]:
         return self.__pattern
 
+    def dynamic_version(self) -> Optional[str]:
+        with self.__file.open("r") as file_ptr:
+            match = self.__pattern.search(file_ptr.read())
+        if match is not None:
+            return match.group("version")
+        return None
+
+    def replace_dynamic_version(self, new_version: str) -> None:
+        with self.__file.open("r") as file_ptr:
+            version_file = file_ptr.read()
+            match = self.__pattern.search(version_file)
+            if match is None:
+                raise ValueError("Failed to fetch version")
+            match = cast(Match[str], match)
+            version_start, version_end = match.span("version")
+            new_version_file = (
+                version_file[:version_start]
+                + new_version
+                + version_file[version_end:]
+            )
+        with self.__file.open("w") as file_ptr:
+            file_ptr.write(new_version_file)
+
+    @staticmethod
+    def find_dynamic_config(
+        root_path: Path, project_config: Config
+    ) -> Optional["DynamicVersionConfig"]:
+        if (
+            project_config.get_pyproject_value("build-system", "build-backend")
+            == "pdm.pep517.api"
+            and project_config.get_pyproject_value(
+                "tool", "pdm", "version", "source"
+            )
+            == "file"
+        ):
+            file_path = project_config.get_pyproject_value(
+                "tool", "pdm", "version", "path"
+            )
+            return DynamicVersionConfig(
+                file_path=root_path / file_path,
+                pattern=DEFAULT_REGEX,
+            )
+        return None
+
 
 class DynamicVersionSource:
     def __init__(self, project_root: Path, config: Config) -> None:
