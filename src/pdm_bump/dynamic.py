@@ -103,13 +103,13 @@ class DynamicVersionSource:
             return cast(Version, self.__current_version)
 
         dynamic: DynamicVersionConfig = self.__get_dynamic_version()
-        version: Optional[str] = __get_dynamic_version(dynamic)
+        version: Optional[str] = dynamic.dynamic_version
         if version is not None:
             self.__current_version = Version.from_string(version)
             return self.__current_version
         raise ValueError(
             f"Failed to find version in {dynamic.file}. "
-            f"Make sure it matches {dynamic.regex}"
+            f"Make sure it matches {dynamic.pattern}"
         )
 
     def __set_current_version(self, version: Version) -> None:
@@ -123,12 +123,14 @@ class DynamicVersionSource:
         version: Version = cast(Version, self.__current_version)
         ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
-        __replace_dynamic_version(config, ver)
+        config.replace_dynamic_version(ver)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
         dynamic_version: Optional[
             DynamicVersionConfig
-        ] = __find_dynamic_config(self.__project_root, self.__config)
+        ] = DynamicVersionConfig.find_dynamic_config(
+            self.__project_root, self.__config
+        )
         if dynamic_version is not None:
             dynamic: DynamicVersionConfig = cast(
                 DynamicVersionConfig, dynamic_version
