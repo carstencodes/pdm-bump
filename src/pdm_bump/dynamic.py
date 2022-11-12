@@ -7,16 +7,19 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
-import re
-from dataclasses import dataclass
+from functools import cached_property
 from pathlib import Path
-from typing import Optional, cast
+from re import M as MultilinePattern
+from re import Match, Pattern
+from re import compile as compile_re
+from typing import Final, Optional, cast
 
 from .config import Config
 from .version import Pep440VersionFormatter, Version
 
-DEFAULT_REGEX = re.compile(
-    r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$", re.M
+DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
+    r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$",
+    MultilinePattern,
 )
 
 
