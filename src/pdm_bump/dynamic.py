@@ -23,10 +23,21 @@ DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
 )
 
 
-@dataclass
 class DynamicVersionConfig:
-    file: Path
-    regex: re.Pattern
+    __file: Path
+    __pattern: Pattern[str]
+
+    def __init__(self, file_path: Path, pattern: Pattern[str]) -> None:
+        self.__file = file_path
+        self.__pattern = pattern
+
+    @property
+    def file(self) -> Path:
+        return self.__file
+
+    @property
+    def pattern(self) -> Pattern[str]:
+        return self.__pattern
 
 
 class DynamicVersionSource:
