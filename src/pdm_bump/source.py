@@ -24,7 +24,7 @@ class _ProjectWriter(Protocol):  # pylint: disable=R0903
 
 @runtime_checkable
 class _ProjectWriterClassic(Protocol):  # pylint: disable=R0903
-    def write(self, show_message: bool) -> None:
+    def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
         pass
 

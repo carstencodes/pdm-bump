@@ -47,7 +47,7 @@ class _CoreLike(Protocol):  # pylint: disable=R0903
 class _ProjectLike(ConfigHolder, Protocol):
     root: Path
     core: _CoreLike
-    PYPROJECT_FILENAME: Final[str]
+    PYPROJECT_FILENAME: str
 
     def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
