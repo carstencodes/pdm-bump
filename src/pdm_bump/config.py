@@ -7,25 +7,39 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
-from typing import Any, Optional, Protocol, cast
+import sys
+from typing import Any, Optional, Protocol, Union, cast
+
+from pdm.project.project_file import PyProject
+from tomlkit.items import Table
 
 from .logging import logger, traced_function
+
+if sys.version_info >= (3, 10, 0):
+    # suspicious mypy behavior
+    from typing import TypeAlias  # type: ignore
+else:
+    from typing_extensions import TypeAlias
+
+
+_ConfigMapping: TypeAlias = dict[str, Any]
+_ModernPyProject: TypeAlias = Union[_ConfigMapping, PyProject]
 
 
 class ConfigHolder(Protocol):
     @property
-    def pyproject(self) -> dict[str, Any]:
+    def pyproject(self) -> _ModernPyProject:
         # Method empty: Only a protocol stub
         pass
 
     @property
-    def config(self) -> dict[str, Any]:
+    def config(self) -> _ConfigMapping:
         # Method empty: Only a protocol stub
         pass
 
 
 @traced_function
-def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:
+def _get_config_value(config: _ConfigMapping, *keys: str) -> Optional[Any]:
     front: str
 
     key: str = ".".join(keys)
@@ -50,7 +64,7 @@ def _get_config_value(config: dict[str, Any], *keys: str) -> Optional[Any]:
 
 
 @traced_function
-def _set_config_value(config: dict[str, Any], value: Any, *keys: str) -> None:
+def _set_config_value(config: _ConfigMapping, value: Any, *keys: str) -> None:
     front: str
 
     key: str = ".".join(keys)
@@ -76,7 +90,7 @@ class Config:
 
     @traced_function
     def get_pyproject_value(self, *keys: str) -> Optional[Any]:
-        config: dict[str, Any] = self.__project.pyproject
+        config: _ConfigMapping = self._get_pyproject_config(False)
         return _get_config_value(config, *keys)
 
     @traced_function
@@ -86,15 +100,32 @@ class Config:
 
     @traced_function
     def get_config_or_pyproject_value(self, *keys: str) -> Optional[Any]:
-        config1: dict[str, Any] = self.__project.config
-        config2: dict[str, Any] = self.__project.pyproject
-        py_project_keys: list[str] = ["tool", "pdm", "plugins"] + list(keys)
+        config1: _ConfigMapping = self.__project.config
+        config2: _ConfigMapping = self._get_pyproject_config()
 
         return _get_config_value(config1, *keys) or _get_config_value(
-            config2, *tuple(py_project_keys)
+            config2, *keys
         )
 
     @traced_function
     def set_pyproject_value(self, value: Any, *keys: str) -> None:
-        config: dict[str, Any] = self.__project.pyproject
+        config: _ConfigMapping = self._get_pyproject_config(False)
         _set_config_value(config, value, *keys)
+
+    @traced_function
+    def _get_pyproject_config(self,
+                              load_settings: bool = True) -> _ConfigMapping:
+        project: _ModernPyProject = self.__project.pyproject
+        if isinstance(project, PyProject):
+            pyproject: PyProject = cast(PyProject, project)
+            if (load_settings):
+                settings: Table = pyproject.settings
+                return cast(_ConfigMapping, settings.setdefault("plugins", {}))
+
+            return cast(_ConfigMapping, project.read().value)
+
+        if isinstance(project, dict):
+            return cast(_ConfigMapping, project)
+
+        logger.error("Failed to load project configuration.")
+        return {}
