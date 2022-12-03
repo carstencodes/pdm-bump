@@ -47,11 +47,7 @@ class _CoreLike(Protocol):  # pylint: disable=R0903
 class _ProjectLike(ConfigHolder, Protocol):
     root: Path
     core: _CoreLike
-
-    @property
-    def pyproject_file(self) -> str:
-        # Method empty: Only a protocol stub
-        pass
+    PYPROJECT_FILENAME: Final[str]
 
     def write_pyproject(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
@@ -138,7 +134,8 @@ class BumpCommand(BaseCommand):
         )
 
         if selected_backend is None:
-            logger.error("Cannot find version in %s", project.pyproject_file)
+            pyproject_file = project.root / project.PYPROJECT_FILENAME
+            logger.error("Cannot find version in %s", pyproject_file)
             return
 
         backend: _VersionSource = cast(_VersionSource, selected_backend)
