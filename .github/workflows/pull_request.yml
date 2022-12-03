@@ -133,7 +133,7 @@ jobs:
         run: pdm format
       - name: Check for changed files
         run: |
-          no_changed_files=$(git status --porcelain | wc -l)
+          no_changed_files=$(git status --porcelain | grep '.py' | wc -l)
           if [ $no_changed_files -gt 0 ];
           then
             echo "There are changed files:" >&2

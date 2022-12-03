@@ -72,15 +72,13 @@ class DynamicVersionConfig:
         root_path: Path, project_config: Config
     ) -> Optional["DynamicVersionConfig"]:
         if (
-            project_config.get_pyproject_value("build-system", "build-backend")
+            project_config.get_pyproject_build_system("build-backend")
             == "pdm.pep517.api"
-            and project_config.get_pyproject_value(
-                "tool", "pdm", "version", "source"
-            )
+            and project_config.get_pyproject_tool_config("version", "source")
             == "file"
         ):
-            file_path = project_config.get_pyproject_value(
-                "tool", "pdm", "version", "path"
+            file_path = project_config.get_pyproject_tool_config(
+                "version", "path"
             )
             return DynamicVersionConfig(
                 file_path=root_path / file_path,
@@ -98,7 +96,7 @@ class DynamicVersionSource:
     @property
     def is_enabled(self) -> bool:
         dynamic_items: Optional[list[str]] = cast(
-            list[str], self.__config.get_pyproject_value("project", "dynamic")
+            list[str], self.__config.get_pyproject_metadata("dynamic")
         )
         return dynamic_items is not None and "version" in dynamic_items
 

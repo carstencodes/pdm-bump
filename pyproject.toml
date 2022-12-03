@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.6.9"
+version = "0.6.10"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -10,6 +10,7 @@ dependencies = [
     "pdm>=2.00",
     "annotated-types>=0.2.0",
     "typing-extensions>=4; python_version<='3.9'",
+    "tomlkit>=0.11.6",
 ]
 requires-python = ">=3.9"
 license = "MIT"
@@ -67,6 +68,7 @@ copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -
 format = { composite = [ "copyright-headers", "isort", "black" ] }
 check-commits = {shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"}
 
+[tool.pdm.plugins]
 [tool.pylint.MAIN]
 fail-under = 9
 ignore = "vcs"
