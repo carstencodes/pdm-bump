@@ -46,20 +46,18 @@ class StaticPep621VersionSource:
 
     @property
     def is_enabled(self) -> bool:
-        return (
-            self.__config.get_pyproject_value("project", "version") is not None
-        )
+        return self.__config.get_pyproject_metadata("version") is not None
 
     def __get_current_version(self) -> Version:
         version: str = cast(
-            str, self.__config.get_pyproject_value("project", "version")
+            str, self.__config.get_pyproject_metadata("version")
         )
         return Version.from_string(version)
 
     def __set_current_version(self, ver: Version) -> None:
         formatter: Pep440VersionFormatter = Pep440VersionFormatter()
         version: str = formatter.format(ver)
-        self.__config.set_pyproject_value(version, "project", "version")
+        self.__config.set_pyproject_metadata(version, "version")
 
     current_version = property(__get_current_version, __set_current_version)
 
