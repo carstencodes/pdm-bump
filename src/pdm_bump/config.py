@@ -113,12 +113,13 @@ class Config:
         _set_config_value(config, value, *keys)
 
     @traced_function
-    def _get_pyproject_config(self,
-                              load_settings: bool = True) -> _ConfigMapping:
+    def _get_pyproject_config(
+        self, load_settings: bool = True
+    ) -> _ConfigMapping:
         project: _ModernPyProject = self.__project.pyproject
         if isinstance(project, PyProject):
             pyproject: PyProject = cast(PyProject, project)
-            if (load_settings):
+            if load_settings:
                 settings: Table = pyproject.settings
                 return cast(_ConfigMapping, settings.setdefault("plugins", {}))
 

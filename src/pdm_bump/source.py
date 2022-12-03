@@ -21,11 +21,13 @@ class _ProjectWriter(Protocol):  # pylint: disable=R0903
         # Method empty: Only a protocol stub
         pass
 
+
 @runtime_checkable
 class _ProjectWriterClassic(Protocol):  # pylint: disable=R0903
     def write(self, show_message: bool) -> None:
         # Method empty: Only a protocol stub
         pass
+
 
 # Justification: Minimal protocol
 @runtime_checkable
@@ -34,10 +36,11 @@ class _ProjectWriterHolder(Protocol):  # pylint: disable=R0903
 
 
 class StaticPep621VersionSource:
-    def __init__(self, project: Union[
-                    _ProjectWriterHolder,
-                    _ProjectWriterClassic],
-                 config: Config) -> None:
+    def __init__(
+        self,
+        project: Union[_ProjectWriterHolder, _ProjectWriterClassic],
+        config: Config,
+    ) -> None:
         self.__project = project
         self.__config = config
 
