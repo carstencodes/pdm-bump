@@ -1,4 +1,6 @@
 #
+# SPDX-License-Identifier: MIT
+#
 # Copyright (c) 2021-2022 Carsten Igel, Chase Sterling.
 #
 # This file is part of pdm-bump
