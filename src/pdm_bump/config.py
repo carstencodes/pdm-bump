@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any, Final, Iterable, Optional, Protocol, cast
 
 from pyproject_metadata import StandardMetadata
-from tomli_w import dump
+from tomli_w import dump as dump_toml
 
 from .logging import logger, traced_function
 
@@ -29,9 +29,10 @@ else:
 
 if sys.version_info >= (3, 11, 0):
     # suspicious mypy behavior
-    from tomllib import load  # type: ignore
+    from tomllib import load as load_toml  # type: ignore
 else:
-    from tomli import load
+    # Python 3.11 -> mypy will not recognize this
+    from tomli import load as load_toml  # type: ignore
 
 
 _ConfigMapping: TypeAlias = dict[str, Any]
@@ -203,7 +204,7 @@ class Config:
 
     def _write_config(self, config: _ConfigMapping) -> None:
         with BytesIO() as buffer:
-            dump(config, buffer)
+            dump_toml(config, buffer)
 
             with open(self.pyproject_file, "wb+") as file_ptr:
                 file_ptr.write(buffer.getvalue())
@@ -239,4 +240,4 @@ class Config:
     def _read_config(self) -> dict[str, Any]:
         project_file = self.pyproject_file
         with open(project_file, "rb") as file_pointer:
-            return load(file_pointer)
+            return load_toml(file_pointer)
