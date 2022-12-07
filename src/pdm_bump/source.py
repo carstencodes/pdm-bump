@@ -12,7 +12,7 @@
 
 from typing import Protocol, Union, cast, runtime_checkable
 
-from .config import Config
+from .config import Config, ConfigKeys
 from .logging import logger
 from .version import Pep440VersionFormatter, Version
 
@@ -48,11 +48,14 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
 
     @property
     def is_enabled(self) -> bool:
-        return self.__config.get_pyproject_metadata("version") is not None
+        return (
+            self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
+            is not None
+        )
 
     def __get_current_version(self) -> Version:
         version: str = cast(
-            str, self.__config.get_pyproject_metadata("version")
+            str, self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
         )
         return Version.from_string(version)
 
@@ -60,6 +63,6 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
         formatter: Pep440VersionFormatter = Pep440VersionFormatter()
         version: str = formatter.format(ver)
         logger.debug("Setting new version %s", version)
-        self.__config.set_pyproject_metadata(version, "version")
+        self.__config.set_pyproject_metadata(version, ConfigKeys.VERSION)
 
     current_version = property(__get_current_version, __set_current_version)

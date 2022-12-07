@@ -28,7 +28,7 @@ from .action import (
 )
 from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
-from .config import Config, ConfigHolder
+from .config import Config, ConfigHolder, ConfigKeys, ConfigSections
 from .dynamic import DynamicVersionSource
 from .logging import logger, traced_function, update_logger_from_project_ui
 from .source import StaticPep621VersionSource
@@ -164,7 +164,9 @@ class BumpCommand(BaseCommand):
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
         config: Config = Config(project)
         value = config.get_config_or_pyproject_value(
-            "pdm_bump", "vcs", "provider"
+            ConfigSections.PDM_BUMP,
+            ConfigSections.PDM_BUMP_VCS,
+            ConfigKeys.VCS_PROVIDER,
         )
 
         registry: VcsProviderRegistry = vcs_providers

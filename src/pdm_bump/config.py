@@ -10,11 +10,11 @@
 # Refer to LICENSE for more information
 #
 import sys
-from enum import IntEnum, auto
+from enum import Enum, IntEnum, auto
 from functools import cached_property
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Iterable, Optional, Protocol, cast
+from typing import Any, Final, Iterable, Optional, Protocol, cast
 
 from pyproject_metadata import StandardMetadata
 from tomli_w import dump
@@ -35,6 +35,10 @@ else:
 
 
 _ConfigMapping: TypeAlias = dict[str, Any]
+
+
+class _StringEnum(str, Enum):
+    pass
 
 
 # Justification: Minimal protocol
@@ -96,16 +100,32 @@ def _set_config_value(config: _ConfigMapping, value: Any, *keys: str) -> None:
     config[front] = value
 
 
+class ConfigSections(_StringEnum):
+    PDM_BUMP: Final[str] = "pdm_bump"
+    PDM_BUMP_VCS: Final[str] = "vcs"
+
+
+class ConfigKeys(_StringEnum):
+    VERSION: Final[str] = "version"
+    VERSION_SOURCE: Final[str] = "source"
+    VERSION_SOURCE_FILE_PATH: Final[str] = "path"
+    BUILD_BACKEND: Final[str] = "build-backend"
+    VCS_PROVIDER: Final[str] = "provider"
+
+
+class ConfigValues(_StringEnum):
+    VERSION_SOURCE_FILE: Final[str] = "file"
+    BUILD_BACKEND_PDM_PEP517_API: Final[str] = "pdm.pep517.api"
+
+
 # Justification: Currently no more meta data to check
 class ProjectMetaData:  # pylint: disable=R0903
-    __VERSION_IDENTIFIER = "version"
-
     def __init__(self, meta_data: StandardMetadata) -> None:
         self.__meta_data = meta_data
 
     @property
     def is_dynamic_version(self) -> bool:
-        return ProjectMetaData.__VERSION_IDENTIFIER in self.__meta_data.dynamic
+        return ConfigKeys().VERSION in self.__meta_data.dynamic
 
 
 class _ConfigSection(IntEnum):

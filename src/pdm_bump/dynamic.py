@@ -16,7 +16,7 @@ from re import Match, Pattern
 from re import compile as compile_re
 from typing import Final, Optional, cast
 
-from .config import Config
+from .config import Config, ConfigKeys, ConfigValues
 from .version import Pep440VersionFormatter, Version
 
 DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
@@ -50,7 +50,7 @@ class DynamicVersionConfig:
         with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             match = self.__pattern.search(file_ptr.read())
         if match is not None:
-            return match.group("version")
+            return match.group(ConfigKeys.VERSION)
         return None
 
     def replace_dynamic_version(self, new_version: str) -> None:
@@ -60,7 +60,7 @@ class DynamicVersionConfig:
             if match is None:
                 raise ValueError("Failed to fetch version")
             match = cast(Match[str], match)
-            version_start, version_end = match.span("version")
+            version_start, version_end = match.span(ConfigKeys.VERSION)
             new_version_file = (
                 version_file[:version_start]
                 + new_version
@@ -74,13 +74,15 @@ class DynamicVersionConfig:
         root_path: Path, project_config: Config
     ) -> Optional["DynamicVersionConfig"]:
         if (
-            project_config.get_pyproject_build_system("build-backend")
-            == "pdm.pep517.api"
-            and project_config.get_pyproject_tool_config("version", "source")
-            == "file"
+            project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
+            == ConfigValues.BUILD_BACKEND_PDM_PEP517_API
+            and project_config.get_pyproject_tool_config(
+                ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
+            )
+            == ConfigValues.VERSION_SOURCE_FILE
         ):
             file_path = project_config.get_pyproject_tool_config(
-                "version", "path"
+                ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE_FILE_PATH
             )
             return DynamicVersionConfig(
                 file_path=root_path / file_path,
