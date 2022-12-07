@@ -1,4 +1,6 @@
 #
+# SPDX-License-Identifier: MIT
+#
 # Copyright (c) 2021-2022 Carsten Igel.
 #
 # This file is part of pdm-bump
@@ -26,7 +28,7 @@ from .action import (
 )
 from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
-from .config import Config, ConfigHolder
+from .config import Config, ConfigHolder, ConfigKeys, ConfigSections
 from .dynamic import DynamicVersionSource
 from .logging import logger, traced_function, update_logger_from_project_ui
 from .source import StaticPep621VersionSource
@@ -54,7 +56,9 @@ class _ProjectLike(ConfigHolder, Protocol):
         pass
 
 
-class _VersionSource(Protocol):
+# Justification: Minimal protocol. Maybe false positive,
+# since 2 public methods available
+class _VersionSource(Protocol):  # pylint: disable=R0903
     @property
     def is_enabled(self) -> bool:
         raise NotImplementedError()
@@ -68,9 +72,6 @@ class _VersionSource(Protocol):
     current_version: property = property(
         __get_current_version, __set_current_version
     )
-
-    def save_value(self) -> None:
-        raise NotImplementedError()
 
 
 @final
@@ -163,7 +164,9 @@ class BumpCommand(BaseCommand):
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
         config: Config = Config(project)
         value = config.get_config_or_pyproject_value(
-            "pdm_bump", "vcs", "provider"
+            ConfigSections.PDM_BUMP,
+            ConfigSections.PDM_BUMP_VCS,
+            ConfigKeys.VCS_PROVIDER,
         )
 
         registry: VcsProviderRegistry = vcs_providers
@@ -229,8 +232,6 @@ class BumpCommand(BaseCommand):
         self, backend: _VersionSource, next_version: Version
     ) -> None:
         backend.current_version = next_version
-
-        backend.save_value()
 
     @traced_function
     def _get_action(
