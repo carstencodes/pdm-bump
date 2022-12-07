@@ -111,6 +111,7 @@ class ConfigKeys(_StringEnum):
     VERSION_SOURCE_FILE_PATH: Final[str] = "path"
     BUILD_BACKEND: Final[str] = "build-backend"
     VCS_PROVIDER: Final[str] = "provider"
+    PROJECT_METADATA: Final[str] = "project"
 
 
 class ConfigValues(_StringEnum):
@@ -194,7 +195,9 @@ class Config:
         config: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.ROOT
         )
-        new_config: _ConfigMapping = _get_config_value(config, "metadata")
+        new_config: _ConfigMapping = _get_config_value(
+            config, ConfigKeys.PROJECT_METADATA, default_value={}
+        )
         _set_config_value(new_config, value, *keys)
         self._write_config(config)
 
