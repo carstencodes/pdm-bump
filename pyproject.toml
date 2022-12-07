@@ -1,10 +1,10 @@
 [project]
 name = "pdm-bump"
-version = "0.6.10"
+version = "0.6.11"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
-    {name = "Carsten Igel", email = "cig@bite-that-bit.de"},
+    { name = "Carsten Igel", email = "cig@bite-that-bit.de" },
 ]
 dependencies = [
     "pdm>=2.00",
@@ -18,23 +18,31 @@ dependencies = [
 requires-python = ">=3.9"
 license = "MIT"
 
-[project."license-files"]
-paths = [ "LICENSE" ]
+[project.license-files]
+paths = [
+    "LICENSE",
+]
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
 
 [project.optional-dependencies]
+
+[project.entry-points.pdm]
+pdm-bump = "pdm_bump:main"
+
 [build-system]
-requires = ["pdm-pep517"]
+requires = [
+    "pdm-pep517",
+]
 build-backend = "pdm.pep517.api"
 
-[tool]
 [tool.black]
 line-length = 79
-target-version = [ "py39" ]
+target-version = [
+    "py39",
+]
 
-[tool.pdm]
 [tool.pdm.dev-dependencies]
 test = [
     "pytest>=7.1.2",
@@ -64,25 +72,48 @@ release = [
 flake = "flake518 src/"
 mypy = "mypy src/"
 pylint = "pylint src/"
-check-style = { composite = ["flake", "pylint", "mypy"] }
 isort = "isort src/"
 black = "black src/"
 copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
-format = { composite = [ "copyright-headers", "isort", "black" ] }
-check-commits = {shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"}
+
+[tool.pdm.scripts.check-style]
+composite = [
+    "flake",
+    "pylint",
+    "mypy",
+]
+
+[tool.pdm.scripts.format]
+composite = [
+    "copyright-headers",
+    "isort",
+    "black",
+]
+
+[tool.pdm.scripts.check-commits]
+shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"
 
 [tool.pdm.plugins]
+
 [tool.pylint.MAIN]
 fail-under = 9
 ignore = "vcs"
 
 [tool.pylint."MESSAGES CONTROL"]
-disable = [ "C0114", "C0115", "C0116" ]
+disable = [
+    "C0114",
+    "C0115",
+    "C0116",
+]
 
 [tool.pytest.ini_options]
-testpaths = [ "tests" ]
+testpaths = [
+    "tests",
+]
 junit_suite_name = "pdm-bump"
-pythonpath = [ "src" ]
+pythonpath = [
+    "src",
+]
 minversion = "7.0.0"
 addopts = [
     "--cache-clear",
@@ -96,41 +127,8 @@ addopts = [
     "term",
 ]
 filterwarnings = [
-    "ignore::DeprecationWarning "
+    "ignore::DeprecationWarning ",
 ]
 
 [tool.tox]
-legacy_tox_ini = """
-[tox]
-minversion = 3.25.0
-requires = tox-pdm
-skip_missing_interpreters = false
-envlist = py{39, 310, 311}
-isolated_build = true
-skipsdist = true
-
-
-[testenv]
-setenv =
-    PDM_IGNORE_SAVED_PYTHON="1"
-allowlist_externals =
-    mv
-    mkdir
-    pytest
-    pdm
-    python
-deps = pdm
-recreate = true
-passenv =
-    PYTHONPATH
-commands =
-    pdm install --dev
-    pytest
-commands_pre =
-    mkdir -p {toxinidir}/results/{envname}
-commands_post =
-    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/
-"""
-
-[project.entry-points.pdm]
-pdm-bump = "pdm_bump:main"
+legacy_tox_ini = "[tox]\nminversion = 3.25.0\nrequires = tox-pdm\nskip_missing_interpreters = false\nenvlist = py{39, 310, 311}\nisolated_build = true\nskipsdist = true\n\n\n[testenv]\nsetenv =\n    PDM_IGNORE_SAVED_PYTHON=\"1\"\nallowlist_externals =\n    mv\n    mkdir\n    pytest\n    pdm\n    python\ndeps = pdm\nrecreate = true\npassenv =\n    PYTHONPATH\ncommands =\n    pdm install --dev\n    pytest\ncommands_pre =\n    mkdir -p {toxinidir}/results/{envname}\ncommands_post =\n    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/\n"
