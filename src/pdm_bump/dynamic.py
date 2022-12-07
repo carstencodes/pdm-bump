@@ -89,7 +89,8 @@ class DynamicVersionConfig:
         return None
 
 
-class DynamicVersionSource:
+# Justification: Implementation of minimal protocol
+class DynamicVersionSource:  # pylint: disable=R0903
     def __init__(self, project_root: Path, config: Config) -> None:
         self.__project_root = project_root
         self.__config = config
@@ -97,10 +98,7 @@ class DynamicVersionSource:
 
     @property
     def is_enabled(self) -> bool:
-        dynamic_items: Optional[list[str]] = cast(
-            list[str], self.__config.get_pyproject_metadata("dynamic")
-        )
-        return dynamic_items is not None and "version" in dynamic_items
+        return self.__config.meta_data.is_dynamic_version
 
     def __get_current_version(self) -> Version:
         if self.__current_version is not None:
@@ -118,16 +116,11 @@ class DynamicVersionSource:
 
     def __set_current_version(self, version: Version) -> None:
         self.__current_version = version
-
-    current_version = property(__get_current_version, __set_current_version)
-
-    def save_value(self) -> None:
-        if self.__current_version is None:
-            raise ValueError("No current value set")
-        version: Version = cast(Version, self.__current_version)
         ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
         config.replace_dynamic_version(ver)
+
+    current_version = property(__get_current_version, __set_current_version)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
         dynamic_version: Optional[

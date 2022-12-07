@@ -56,7 +56,9 @@ class _ProjectLike(ConfigHolder, Protocol):
         pass
 
 
-class _VersionSource(Protocol):
+# Justification: Minimal protocol. Maybe false positive,
+# since 2 public methods available
+class _VersionSource(Protocol):  # pylint: disable=R0903
     @property
     def is_enabled(self) -> bool:
         raise NotImplementedError()
@@ -70,9 +72,6 @@ class _VersionSource(Protocol):
     current_version: property = property(
         __get_current_version, __set_current_version
     )
-
-    def save_value(self) -> None:
-        raise NotImplementedError()
 
 
 @final
@@ -231,8 +230,6 @@ class BumpCommand(BaseCommand):
         self, backend: _VersionSource, next_version: Version
     ) -> None:
         backend.current_version = next_version
-
-        backend.save_value()
 
     @traced_function
     def _get_action(
