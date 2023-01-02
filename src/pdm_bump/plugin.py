@@ -86,8 +86,9 @@ class BumpCommand(BaseCommand):
             action="store",
             choices=list(MODIFIER_ACTIONS) + list(VCS_BASED_ACTIONS),
             default=None,
-            help="The part of the version to bump according to PEP 440: "
-            + "major.minor.micro.",
+            help="Either the part of the version to bump according to PEP 440: "
+            + "major.minor.micro, "
+            + "or VCS based actions to take.",
         )
         parser.add_argument(
             "--pre",
@@ -96,15 +97,15 @@ class BumpCommand(BaseCommand):
             default=None,
             help="Sets a pre-release on the current version."
             + " If a pre-release is set, it can be removed "
-            + "using the final option. A new pre-release "
-            + "must greater then the current version."
+            + "using the 'final' option. A new pre-release "
+            + "must be greater than the current version."
             + " See PEP440 for details.",
         )
         parser.add_argument(
             "--dry-run",
             "-n",
             action="store_true",
-            help="Do not store incremented version",
+            help="Do not store the incremented version.",
         )
         parser.add_argument(
             "--micro",
@@ -122,7 +123,7 @@ class BumpCommand(BaseCommand):
             "--no-remove",
             action="store_false",
             help="When incrementing major, minor, micro or epoch, "
-            + "do not remove all pre-release parts",
+            + "do not remove all pre-release parts.",
         )
 
     @traced_function
