@@ -127,7 +127,7 @@ class ProjectMetaData:  # pylint: disable=R0903
 
     @property
     def is_dynamic_version(self) -> bool:
-        return ConfigKeys().VERSION in self.__meta_data.dynamic
+        return ConfigKeys.VERSION in self.__meta_data.dynamic
 
 
 class _ConfigSection(IntEnum):
