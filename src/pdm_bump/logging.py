@@ -96,7 +96,7 @@ class TracingLogger(Logger):
         self.log(TRACE, msg, *args, **kwargs)
 
     # Justification: Overriding inherited method
-    def makeRecord(  # pylint: disable=R0913
+    def makeRecord(  # noqa: N802 pylint: disable=R0913
         self,
         name: str,
         level: int,
