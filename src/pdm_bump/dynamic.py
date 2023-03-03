@@ -11,7 +11,7 @@
 #
 from functools import cached_property
 from pathlib import Path
-from re import M as MultilinePattern
+from re import M as MultilinePattern  # noqa: N811
 from re import Match, Pattern
 from re import compile as compile_re
 from typing import Final, Optional, cast

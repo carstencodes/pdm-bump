@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.6.12.post1"
+version = "0.6.13.dev1"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -67,6 +67,12 @@ release = [
     "gitlint>=0.17.0",
     "pip-audit>=2.4.4",
 ]
+static-code-analysis = [
+    "radon>=5.1.0",
+    "vulture>=2.7",
+    "bandit>=1.7.4",
+    "prospector>=0.12.2",
+]
 
 [tool.pdm.scripts]
 flake = "flake518 src/"
@@ -74,6 +80,12 @@ mypy = "mypy src/"
 pylint = "pylint src/"
 isort = "isort src/"
 black = "black src/"
+radon_cc = "radon cc --total-average --show-complexity --json --output-file radon.cc.json src/"
+radon_mi = "radon mi --show --json --output-file radon.mi.json src/"
+radon_hal = "radon hal --functions --json --output-file radon.hal.json src/"
+vulture = "vulture src/"
+bandit = "bandit src/"
+prospector = "prospector src/"
 copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
 
 [tool.pdm.scripts.check-style]
@@ -88,6 +100,21 @@ composite = [
     "copyright-headers",
     "isort",
     "black",
+]
+
+[tool.pdm.scripts.radon]
+composite = [
+    "radon_cc",
+    "radon_mi",
+    "radon_hal",
+]
+
+[tool.pdm.scripts.static-analysis]
+composite = [
+    "radon",
+    "vulture",
+    "bandit",
+    "prospector",
 ]
 
 [tool.pdm.scripts.check-commits]

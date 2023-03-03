@@ -86,8 +86,8 @@ class BumpCommand(BaseCommand):
             action="store",
             choices=list(MODIFIER_ACTIONS) + list(VCS_BASED_ACTIONS),
             default=None,
-            help="Either the part of the version to bump according to PEP 440: "
-            + "major.minor.micro, "
+            help="Either the part of the version to bump according to PEP 440:"
+            + " major.minor.micro, "
             + "or VCS based actions to take.",
         )
         parser.add_argument(
