@@ -224,7 +224,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         raise NotImplementedError()
 
     @traced_function
-    def create_new_version(self):
+    def create_new_version(self) -> Version:
         construction_args: Dict[str, Any] = dataclass_to_dict(
             self.current_version
         )
