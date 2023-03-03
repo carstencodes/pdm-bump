@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.6.12.post1"
+version = "0.6.13.dev1"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -106,7 +106,7 @@ composite = [
 composite = [
     "radon_cc",
     "radon_mi",
-    "radon_hal"
+    "radon_hal",
 ]
 
 [tool.pdm.scripts.static-analysis]
@@ -114,7 +114,7 @@ composite = [
     "radon",
     "vulture",
     "bandit",
-    "prospector"
+    "prospector",
 ]
 
 [tool.pdm.scripts.check-commits]
