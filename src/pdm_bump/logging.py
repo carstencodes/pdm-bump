@@ -37,8 +37,8 @@ def _get_has_rich():
         import rich  # noqa: F401 pylint: disable=C0415,W0611
     except ImportError:
         return False
-    else:
-        return True
+
+    return True
 
 
 HAS_RICH: Final[bool] = _get_has_rich()
