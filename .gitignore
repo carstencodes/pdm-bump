@@ -10,3 +10,4 @@ pytest.*.xml
 .coverage
 results/
 install-output.json
+radon.*.json
