@@ -1,13 +1,21 @@
 {
-    "python.testing.pytestArgs": [
-        "tests"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
-    "coverage-gutters.coverageFileNames": [
-        "pytest.coverage.xml"
-    ],
-    "files.associations": {
-        ".gitlint": "ini"
-    }
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "coverage-gutters.coverageFileNames": [
+    "pytest.coverage.xml"
+  ],
+  "files.associations": {
+    ".gitlint": "ini"
+  },
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/.venv/3.10/lib",
+    "${workspaceFolder}/__pypackages__/3.10/lib"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/.venv/3.10/lib",
+    "${workspaceFolder}/__pypackages__/3.10/lib"
+  ]
 }
