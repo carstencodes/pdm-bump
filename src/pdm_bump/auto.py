@@ -10,7 +10,7 @@
 # Refer to LICENSE for more information
 #
 
-from typing import Final, FrozenSet
+from typing import Final
 
 from .action import ActionCollection, VersionModifier
 from .logging import logger

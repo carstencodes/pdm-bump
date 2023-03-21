@@ -12,7 +12,7 @@
 from functools import cached_property
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import List, Optional, Tuple, cast
+from typing import Optional, cast
 
 from ..logging import logger
 from ..version import Version

@@ -26,7 +26,7 @@ from logging import (
     getLogger,
 )
 from sys import stderr, stdout
-from typing import Any, Dict, Final, Optional, Tuple, cast
+from typing import Any, Final, Optional, cast
 
 # MyPy does not recognize this during pull requests
 from pdm.termui import UI, Verbosity  # type: ignore

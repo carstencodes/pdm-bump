@@ -9,7 +9,7 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
-from typing import Optional, Protocol, Type
+from typing import Optional, Protocol
 
 # MyPy cannot resolve this during pull request
 from pdm.project.config import ConfigItem as _ConfigItem  # type: ignore

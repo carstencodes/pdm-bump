@@ -17,10 +17,8 @@ from typing import (
     Annotated,
     Any,
     Final,
-    List,
     Literal,
     Optional,
-    Tuple,
     cast,
     final,
 )
