@@ -9,6 +9,7 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+from collections.abc import Mapping
 from logging import (
     CRITICAL,
     DEBUG,
@@ -26,7 +27,6 @@ from logging import (
 )
 from sys import stderr, stdout
 from typing import Any, Dict, Final, Optional, Tuple, cast
-from collections.abc import Mapping
 
 # MyPy does not recognize this during pull requests
 from pdm.termui import UI, Verbosity  # type: ignore

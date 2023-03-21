@@ -10,6 +10,7 @@
 # Refer to LICENSE for more information
 #
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from pathlib import Path
 from typing import (
     AnyStr,
@@ -23,7 +24,6 @@ from typing import (
     Union,
     cast,
 )
-from collections.abc import Iterator
 
 from ..version import Pep440VersionFormatter, Version
 
