@@ -35,6 +35,16 @@ requires_python = ">=3.6"
 summary = "Classes Without Boilerplate"
 
 [[package]]
+name = "autoflake"
+version = "2.0.2"
+requires_python = ">=3.7"
+summary = "Removes unused imports and unused variables"
+dependencies = [
+    "pyflakes>=3.0.0",
+    "tomli>=2.0.1; python_version < \"3.11\"",
+]
+
+[[package]]
 name = "bandit"
 version = "1.7.5"
 requires_python = ">=3.7"
@@ -939,7 +949,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
 lock_version = "4.1"
-content_hash = "sha256:aa3499a351a151f49641586915fd295142a4e78c27fc9fa80124d96c01ab009e"
+content_hash = "sha256:ace5f578ee0ed63b6d4f84d085fbee004c3211b94bdecf1b23bd26fb47b1a8b2"
 
 [metadata.files]
 "annotated-types 0.4.0" = [
@@ -957,6 +967,10 @@ content_hash = "sha256:aa3499a351a151f49641586915fd295142a4e78c27fc9fa80124d96c0
 "attrs 22.2.0" = [
     {url = "https://files.pythonhosted.org/packages/21/31/3f468da74c7de4fcf9b25591e682856389b3400b4b62f201e65f15ea3e07/attrs-22.2.0.tar.gz", hash = "sha256:c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99"},
     {url = "https://files.pythonhosted.org/packages/fb/6e/6f83bf616d2becdf333a1640f1d463fef3150e2e926b7010cb0f81c95e88/attrs-22.2.0-py3-none-any.whl", hash = "sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"},
+]
+"autoflake 2.0.2" = [
+    {url = "https://files.pythonhosted.org/packages/34/47/702047c981cb6376d08bdedfd99341ab418697a0145366b02007292680d8/autoflake-2.0.2-py3-none-any.whl", hash = "sha256:a82d8efdcbbb7129a8a23238c529fb9d9919c562e26bb7963ea6890fbfff7d02"},
+    {url = "https://files.pythonhosted.org/packages/86/da/db0b6087baec5a92df5162188e302cac4a2f9b2739cb9f757e14b2f8cf92/autoflake-2.0.2.tar.gz", hash = "sha256:e0164421ff13f805f08a023e249d84200bd00463d213b490906bfefa67e83830"},
 ]
 "bandit 1.7.5" = [
     {url = "https://files.pythonhosted.org/packages/02/37/e06b8f1e2d45a2fe43ec80c4591d963b7bc1f351e6e1b8c094350d03b973/bandit-1.7.5-py3-none-any.whl", hash = "sha256:75665181dc1e0096369112541a056c59d1c5f66f9bb74a8d686c3c362b83f549"},

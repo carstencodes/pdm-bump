@@ -62,6 +62,7 @@ formatting = [
     "black>=22.6.0",
     "isort>=5.10.1",
     "licenseheaders>=0.8.8",
+    "autoflake>=2.0.2",
 ]
 release = [
     "gitlint>=0.17.0",
@@ -80,6 +81,7 @@ mypy = "mypy src/"
 pylint = "pylint src/"
 isort = "isort src/"
 black = "black src/"
+autoflake = "autoflake --ignore-pass-statements --remove-all-unused-imports --in-place --recursive src"
 radon_cc = "radon cc --total-average --show-complexity --json --output-file radon.cc.json src/"
 radon_mi = "radon mi --show --json --output-file radon.mi.json src/"
 radon_hal = "radon hal --functions --json --output-file radon.hal.json src/"
@@ -100,6 +102,7 @@ composite = [
     "copyright-headers",
     "isort",
     "black",
+    "autoflake",
 ]
 
 [tool.pdm.scripts.radon]
