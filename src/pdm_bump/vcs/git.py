@@ -11,7 +11,7 @@
 #
 from abc import abstractmethod
 from pathlib import Path
-from typing import Iterator
+from collections.abc import Iterator
 
 from .core import VcsFileSystemIdentifier, VcsProvider, VcsProviderFactory
 

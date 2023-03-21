@@ -19,7 +19,7 @@ from .plugin import BumpCommand as _Command
 
 class _CoreLike(Protocol):
     def register_command(
-        self, command: Type[_Command], name: Optional[str] = None
+        self, command: type[_Command], name: Optional[str] = None
     ) -> None:
         # Method empty: Only a protocol stub
         pass

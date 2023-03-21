@@ -111,11 +111,11 @@ class CliRunnerMixin(ProcessRunner):
         self,
         /,
         executable: Path,
-        args: Tuple[str, ...],
+        args: tuple[str, ...],
         *,
         raise_on_exit: bool = False,
         cwd: Optional[Path] = None,
-    ) -> Tuple[int, str, str]:
+    ) -> tuple[int, str, str]:
         cmd = []
         cmd.append(str(executable))
         for arg in args:

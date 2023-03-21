@@ -25,7 +25,8 @@ from logging import (
     getLogger,
 )
 from sys import stderr, stdout
-from typing import Any, Dict, Final, Mapping, Optional, Tuple, cast
+from typing import Any, Dict, Final, Optional, Tuple, cast
+from collections.abc import Mapping
 
 # MyPy does not recognize this during pull requests
 from pdm.termui import UI, Verbosity  # type: ignore
@@ -83,7 +84,7 @@ class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
         super().__init__()
 
     def filter(self, record: LogRecord) -> bool:
-        warning_and_above: Tuple[int, ...] = (WARN, WARNING, ERROR, CRITICAL)
+        warning_and_above: tuple[int, ...] = (WARN, WARNING, ERROR, CRITICAL)
         return (
             record.levelno in warning_and_above
             if not self.__invert
@@ -124,7 +125,7 @@ Logger.manager.setLoggerClass(TracingLogger)
 def _get_rich_logger() -> TracingLogger:
     _logger: TracingLogger = cast(TracingLogger, getLogger("pdm-bump"))
 
-    styles: Dict[str, StyleType] = {}
+    styles: dict[str, StyleType] = {}
     styles.update(DEFAULT_STYLES)
     styles.update(
         {

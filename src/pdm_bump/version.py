@@ -49,16 +49,16 @@ class Version:
     epoch: NonNegativeInteger = field(
         default=0, repr=True, hash=True, compare=True
     )
-    release_tuple: Tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
+    release_tuple: tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
     preview: Optional[
-        Tuple[
+        tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
         ]
     ] = field(default=None, repr=True, hash=True, compare=True)
-    post: Optional[Tuple[Literal["post"], NonNegativeInteger]] = field(
+    post: Optional[tuple[Literal["post"], NonNegativeInteger]] = field(
         default=None, repr=True, hash=True, compare=True
     )
-    dev: Optional[Tuple[Literal["dev"], NonNegativeInteger]] = field(
+    dev: Optional[tuple[Literal["dev"], NonNegativeInteger]] = field(
         default=None, repr=True, hash=True, compare=True
     )
     local: Optional[str] = field(
@@ -87,7 +87,7 @@ class Version:
     @property
     def release(
         self,
-    ) -> Tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]:
+    ) -> tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]:
         return (
             self.major,
             self.minor,
@@ -112,22 +112,22 @@ class Version:
 
     @property
     def is_alpha(self) -> bool:
-        alpha_part: Final[Tuple[str, ...]] = ("a", "alpha")
+        alpha_part: Final[tuple[str, ...]] = ("a", "alpha")
         return self.preview is not None and self.__compare_preview(alpha_part)
 
     @property
     def is_beta(self) -> bool:
-        beta_part: Final[Tuple[str, ...]] = ("b", "beta")
+        beta_part: Final[tuple[str, ...]] = ("b", "beta")
         return self.preview is not None and self.__compare_preview(beta_part)
 
     @property
     def is_release_candidate(self) -> bool:
-        rc_part: Final[Tuple[str, ...]] = ("c", "rc")
+        rc_part: Final[tuple[str, ...]] = ("c", "rc")
         return self.preview is not None and self.__compare_preview(rc_part)
 
-    def __compare_preview(self, valid_parts: Tuple[str, ...]) -> bool:
+    def __compare_preview(self, valid_parts: tuple[str, ...]) -> bool:
         if self.preview is not None:
-            pre: Tuple[str, int] = cast(Tuple[str, int], self.preview)
+            pre: tuple[str, int] = cast(tuple[str, int], self.preview)
             return pre[0] in valid_parts
         return False
 
@@ -183,7 +183,7 @@ class Version:
                 _version.release,
                 cast(
                     Optional[
-                        Tuple[
+                        tuple[
                             Literal["a", "b", "c", "alpha", "beta", "rc"], int
                         ]
                     ],
@@ -212,7 +212,7 @@ class Version:
 class Pep440VersionFormatter:  # pylint: disable=R0903
     @traced_function
     def format(self, version: Version) -> str:
-        parts: List[str] = []
+        parts: list[str] = []
 
         if version.epoch > 0:
             parts.append(f"{version.epoch}!")

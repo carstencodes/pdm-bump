@@ -14,7 +14,8 @@ from enum import Enum, IntEnum, auto
 from functools import cached_property
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Final, Iterable, Optional, Protocol, cast
+from typing import Any, Final, Optional, Protocol, cast
+from collections.abc import Iterable
 
 from pyproject_metadata import StandardMetadata
 from tomli_w import dump as dump_toml

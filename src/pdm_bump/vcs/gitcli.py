@@ -76,9 +76,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
                 f"git repository. Reason: {cpe.stderr}"
             ) from cpe
 
-    def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+    def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         try:
-            args: List[str] = ["add", "--update"]
+            args: list[str] = ["add", "--update"]
             args.extend(str(f) for f in files)
             logger.debug(
                 "Checking in the following files: \n%s",
