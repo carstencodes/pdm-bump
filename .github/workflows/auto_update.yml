@@ -40,12 +40,20 @@ jobs:
         run: |
           pdm update --dry-run --update-all 2>/dev/null 1>output.txt
           _pdm_output=$(cat output.txt)
+          echo ${_pdm_output}
+          _next_output=$(echo ${_pdm_output})
+          _next_output="${_next_output//'%'/'%25'}"
+          _next_output="${_next_output//$'\n'/'%0A'}"
+          _next_output="${_next_output//$'\r'/'%0D'}"
+          echo "pdm_output=${_next_output}" >> $GITHUB_OUTPUT
+          echo $_next_output
+          echo ---
           echo ${_pdm_output} | tail -n+2
           _next_output=$(echo ${_pdm_output} | tail -n+2)
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
           _next_output="${_next_output//$'\r'/'%0D'}"
-          echo "pdm_output=${_next_output}" >> $GITHUB_OUTPUT
+          echo "packages_to_update=${_next_output}" >> $GITHUB_OUTPUT
           echo $_next_output
           echo ---
           echo ${_pdm_output} | tail -n+3
