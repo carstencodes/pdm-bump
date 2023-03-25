@@ -43,6 +43,16 @@ jobs:
           echo "updated_packages=${_updates}" >> $GITHUB_OUTPUT
           _updates=$(echo ${_updates} | wc -l)
           echo "number_of_new_packages=${_updates}" >> $GITHUB_OUTPUT
+      - name: DEBUG
+        shell: bash
+        run: |
+          echo ${{ steps.detect-changes.outputs.number_of_new_packages }}
+          echo ----
+          echo ${{ steps.detect-changes.outputs.updated_packages }}
+          echo ----
+          echo ${{ steps.detect-changes.outputs.packages_to_update }}
+          echo ----
+          echo ${{ steps.detect-changes.outputs.pdm_output }}
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
