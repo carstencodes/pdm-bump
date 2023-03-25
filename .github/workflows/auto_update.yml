@@ -40,36 +40,24 @@ jobs:
         run: |
           pdm update --dry-run --update-all 2>/dev/null 1>output.txt
           _pdm_output=$(cat output.txt)
-          echo ${_pdm_output}
           _next_output=$(echo ${_pdm_output})
-          _next_output="${_next_output//'%'/'%25'}"
-          _next_output="${_next_output//$'\n'/'%0A'}"
-          _next_output="${_next_output//$'\r'/'%0D'}"
-          echo "pdm_output=${_next_output}" >> $GITHUB_OUTPUT
+          echo "PDM_UPDATE_OUTPUT<<EOF" >> $GITHUB_ENV
+          echo "${_next_output}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           echo $_next_output
-          echo ---
-          tail -n+2 output.txt
           _next_output=$(tail -n+2 output.txt)
-          _next_output="${_next_output//'%'/'%25'}"
-          _next_output="${_next_output//$'\n'/'%0A'}"
-          _next_output="${_next_output//$'\r'/'%0D'}"
-          echo "packages_to_update=${_next_output}" >> $GITHUB_OUTPUT
+          echo "PDM_PACKAGES_TO_UPDATE<<EOF" >> $GITHUB_ENV
+          echo "${_next_output}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           echo $_next_output
-          echo ---
-          tail -n+3 output.txt
           _next_output=$(tail -n+3 output.txt)
-          _next_output="${_next_output//'%'/'%25'}"
-          _next_output="${_next_output//$'\n'/'%0A'}"
-          _next_output="${_next_output//$'\r'/'%0D'}"
-          echo "updated_packages=${_next_output}" >> $GITHUB_OUTPUT
+          echo "PDM_UPDATED_PACKAGES_NAMES<<EOF" >> $GITHUB_ENV
+          echo "${_next_output}" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           echo $_next_output
-          echo ---
-          tail -n+3 output.txt | wc -l
           _next_output=$(tail -n+3 output.txt | wc -l)
-          echo "number_of_new_packages=${_next_output}" >> $GITHUB_OUTPUT
-          echo ---
+          echo "PDM_NUMBER_OF_NEW_PACKAGES=${_next_output}" >> $GITHUB_ENV
           rm output.txt
-          cat < $GITHUB_OUTPUT
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
@@ -94,7 +82,7 @@ jobs:
         id: text_formatting
         shell: bash
         run: |
-          echo "title=chore: Updated ${{ steps.package_update.output.number_of_new_packages }} in pdm.lock" >> $GITHUB_OUTPUT
+          echo "GIT_PDM_TITLE=chore: Updated ${{ env.PDM_NUMBER_OF_NEW_PACKAGES }} in pdm.lock" >> $GITHUB_ENV
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: Commit and create Pull request
         id: create-pr
@@ -106,18 +94,17 @@ jobs:
             pyproject.toml
             pdm.lock
           commit-message: >
-            ${{ steps.text_formatting.output.title }}
+            ${{ env.GIT_PDM_TITLE }}
 
-            ${{ steps.package_update.output.packages_to_update }}
+            ${{ env.PDM_UPDATED_PACKAGES_NAMES }}
           committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
           branch: auto-update/dependencies
           branch-suffix: timestamp
           delete-branch: true
-          title: |
-            ${{ steps.text_formatting.output.title }}
-          body: ${{ steps.package_update.outputs.packages_to_update }}
+          title: ${{ env.GIT_PDM_TITLE }}
+          body: ${{ env.PDM_PACKAGES_TO_UPDATE }}
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
         uses: peter-evans/enable-pull-request-automerge@v3
