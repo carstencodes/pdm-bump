@@ -101,7 +101,7 @@ jobs:
             pyproject.toml
             pdm.lock
           commit-message: |
-            ${{ format('chore: Update {0} dependencies in pdm.lock\n\n{1}', steps.package_update.output.number_of_new_packages, steps.package_update.output.updated_packages) }}
+            ${{ format('chore: Update {0} dependencies in pdm.lock%0A%0A{1}', steps.package_update.output.number_of_new_packages, steps.package_update.output.updated_packages) }}
           committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
