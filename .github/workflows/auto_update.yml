@@ -83,7 +83,7 @@ jobs:
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
         uses: peter-evans/enable-pull-request-automerge@v3
-        if: ${{ steps.changed_files.outputs.any_modified == 'true' }}
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
           token: ${{ github.token }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
