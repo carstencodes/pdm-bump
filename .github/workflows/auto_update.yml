@@ -28,6 +28,9 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+      - name: Disable update check
+        shell: bash
+        run: pdm config check_update false
       - name: Install all dependencies from lock file
         shell: bash
         run: pdm install -G:all
