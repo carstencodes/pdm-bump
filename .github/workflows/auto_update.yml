@@ -69,6 +69,7 @@ jobs:
           echo "number_of_new_packages=${_next_output}" >> $GITHUB_OUTPUT
           echo ---
           rm output.txt
+          cat < $GITHUB_OUTPUT
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
