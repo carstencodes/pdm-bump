@@ -32,7 +32,10 @@ jobs:
         shell: bash
         id: package_update
         run: |
-          _updates=$(pdm update --dry-run --update-all 2>/dev/null)
+          pdm update --dry-run --update-all 2>/dev/null 1>output.txt
+          _updates=$(cat output.txt)
+          cat output.txt
+          rm output.txt
           _updates="${_updates//'%'/'%25'}"
           _updates="${_updates//$'\n'/'%0A'}"
           _updates="${_updates//$'\r'/'%0D'}"
