@@ -33,6 +33,9 @@ jobs:
         id: package_update
         run: |
           _updates=$(pdm update --dry-run --update-all 2>/dev/null)
+          _updates="${_updates//'%'/'%25'}"
+          _updates="${_updates//$'\n'/'%0A'}"
+          _updates="${_updates//$'\r'/'%0D'}"
           echo "pdm_output=${_updates}" >> $GITHUB_OUTPUT
           _updates=$(echo ${_updates} | tail -n +2)
           echo "packages_to_update=${_updates}" >> $GITHUB_OUTPUT
