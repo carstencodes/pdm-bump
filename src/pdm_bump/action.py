@@ -12,15 +12,7 @@
 import sys
 from abc import ABC, abstractmethod
 from dataclasses import asdict as dataclass_to_dict
-from typing import (
-    Any,
-    Callable,
-    Final,
-    Literal,
-    Union,
-    cast,
-    final,
-)
+from typing import Any, Callable, Final, Literal, Union, cast, final
 
 from .logging import logger, traced_function
 from .version import NonNegativeInteger, Pep440VersionFormatter, Version

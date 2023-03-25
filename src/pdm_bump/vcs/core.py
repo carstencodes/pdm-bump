@@ -12,15 +12,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from pathlib import Path
-from typing import (
-    AnyStr,
-    Callable,
-    Final,
-    NamedTuple,
-    Optional,
-    Union,
-    cast,
-)
+from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
 
 from ..version import Pep440VersionFormatter, Version
 

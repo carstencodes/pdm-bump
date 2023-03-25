@@ -13,15 +13,7 @@
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from functools import total_ordering
-from typing import (
-    Annotated,
-    Any,
-    Final,
-    Literal,
-    Optional,
-    cast,
-    final,
-)
+from typing import Annotated, Any, Final, Literal, Optional, cast, final
 
 from annotated_types import Ge
 from packaging.version import InvalidVersion
