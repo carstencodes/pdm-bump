@@ -11,6 +11,8 @@ jobs:
   auto_update:
     name: Perform automatic update
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -85,7 +87,7 @@ jobs:
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
         uses: peter-evans/enable-pull-request-automerge@v3
-        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+        if: false # ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
           token: ${{ github.token }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
