@@ -90,17 +90,23 @@ jobs:
         shell: bash
         run: pdm run pdm bump dev
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+      - name: Setup Commit message and PR Title
+        id: text_formatting
+        shell: bash
+        run: |
+          echo "title=chore: Updated ${{ steps.package_update.output.number_of_new_packages }} in pdm.lock" >> $GITHUB_OUTPUT
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: Commit and create Pull request
         id: create-pr
         uses: peter-evans/create-pull-request@v4
-        if: false # ${{ steps.detect-changes.outputs.changed == 'true' }}
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
           token: ${{ github.token }}
           add-paths: |
             pyproject.toml
             pdm.lock
           commit-message: >
-            chore: Update ${{ steps.package_update.output.number_of_new_packages }} dependencies in pdm.lock
+            ${{ steps.text_formatting.output.title }}
 
             ${{ steps.package_update.output.packages_to_update }}
           committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
@@ -110,7 +116,7 @@ jobs:
           branch-suffix: timestamp
           delete-branch: true
           title: |
-            ${{ format('chore: Update {0} dependencies', steps.package_update.output.number_of_new_packages) }}
+            ${{ steps.text_formatting.output.title }}
           body: ${{ steps.package_update.outputs.packages_to_update }}
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
