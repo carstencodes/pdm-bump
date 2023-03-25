@@ -89,7 +89,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.AUTOUPDATE_TOKEN }}
           add-paths: |
             pyproject.toml
             pdm.lock
@@ -97,8 +97,8 @@ jobs:
             ${{ env.GIT_PDM_TITLE }}
 
             ${{ env.PDM_UPDATED_PACKAGES_NAMES }}
-          committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
-          author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
+          committer: ${{ github.repository_owner }} (Github Workflow - Auto update) <${{ github.repository_owner }}@users.noreply.github.com>
+          author: ${{ github.repository_owner }} (Github Workflow - Auto update) <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
           branch: auto-update/dependencies
           branch-suffix: timestamp
@@ -110,7 +110,7 @@ jobs:
         uses: peter-evans/enable-pull-request-automerge@v3
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.AUTOUPDATE_TOKEN }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
           merge-method: rebase
           delete-branch: true
