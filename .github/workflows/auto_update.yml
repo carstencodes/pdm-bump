@@ -1,0 +1,84 @@
+
+on:
+  schedule:
+    - cron: 0 18 * * MON
+    - cron: 0 18 * * WED
+    - cron: 0 18 * * FRI
+  workflow_dispatch:
+
+jobs:
+  auto_update:
+    name: Perform automatic update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - name: Set PDM version
+        run: |
+          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
+      - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Setup PDM
+        uses: pdm-project/setup-pdm@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+          version: ${{ env.pdm_version }}
+          prerelease: true
+          enable-pep582: true
+      - name: Run dry-run update
+        shell: bash
+        id: package_update
+        run: |
+          _updates=$(pdm update --dry-run --update-all 2>/dev/null)
+          echo "pdm_output=${_updates}" >> $GITHUB_OUTPUT
+          _updates=$(echo ${_updates} | tail -n +2)
+          echo "packages_to_update=${_updates}" >> $GITHUB_OUTPUT
+          _updates=$(echo ${_updates} | tail -n +2)
+          echo "updated_packages=${_updates}" >> $GITHUB_OUTPUT
+          _updates=$(echo ${_updates} | wc -l)
+          echo "number_of_new_packages=${_updates}" >> $GITHUB_OUTPUT
+      - name: "Update dependencies"
+        run: pdm update --no-sync --update-all
+        shell: bash
+      - name: Detect changes
+        id: detect-changes
+        shell: bash
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+      - name: "Increase dev version"
+        shell: bash
+        run: pdm run pdm bump dev
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+      - name: Commit and create Pull request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v4
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+        with:
+          token: ${{ github.token }}
+          add-paths: |
+            pyproject.toml
+            pdm.lock
+          commit-message: "${{ format('chore: Update {0} dependencies in pdm.lock\n\n{1}', steps.package_update.output.number_of_new_packages, steps.package_update.output.updated_packages) }}"
+          committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
+          author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
+          signoff: false
+          branch: auto-update/dependencies
+          branch-suffix: timestamp
+          delete-branch: true
+          title: "${{ format('chore: Update {0} dependencies', steps.package_update.output.number_of_new_packages) }}"
+          body: ${{ steps.package_update.outputs.packages_to_update }}
+          assignees: ${{ github.repository_owner }}
+      - name: Close Pull request automatically, if it succeeds
+        uses: peter-evans/enable-pull-request-automerge@v3
+        if: ${{ steps.changed_files.outputs.any_modified == 'true' }}
+        with:
+          token: ${{ github.token }}
+          pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
+          merge-method: rebase
