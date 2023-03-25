@@ -10,20 +10,9 @@
 # Refer to LICENSE for more information
 #
 from abc import ABC, abstractmethod
+from collections.abc import Iterator
 from pathlib import Path
-from typing import (
-    AnyStr,
-    Callable,
-    Dict,
-    Final,
-    Iterator,
-    NamedTuple,
-    Optional,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
 
 from ..version import Pep440VersionFormatter, Version
 
@@ -68,7 +57,7 @@ class VcsProvider(_PathLikeConverter, ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+    def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         raise NotImplementedError()
 
     def create_tag_from_version(
@@ -160,7 +149,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
 
 
 class VcsProviderRegistry(
-    Dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter
+    dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter
 ):
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
         real_path: Path = _PathLikeConverter._pathlike_to_path(path)
@@ -180,7 +169,7 @@ class VcsProviderRegistry(
         return None
 
     def register(self, name: str) -> Callable:
-        def decorator(clazz: Type[VcsProvider]):
+        def decorator(clazz: type[VcsProvider]):
             if not issubclass(clazz, VcsProviderFactory):
                 raise ValueError(
                     f"{clazz.__name__} is not an sub-type of "
@@ -211,7 +200,7 @@ class DefaultVcsProvider(VcsProvider):
     def is_clean(self) -> bool:
         return True
 
-    def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+    def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         # Must not be provided
         pass
 

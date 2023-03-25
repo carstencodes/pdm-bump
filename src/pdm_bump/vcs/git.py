@@ -10,8 +10,8 @@
 # Refer to LICENSE for more information
 #
 from abc import abstractmethod
+from collections.abc import Iterator
 from pathlib import Path
-from typing import Iterator
 
 from .core import VcsFileSystemIdentifier, VcsProvider, VcsProviderFactory
 

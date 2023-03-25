@@ -11,10 +11,10 @@
 #
 
 from unittest import TestCase
-from typing import Type, Optional, Dict, List, Tuple, Iterable
+from typing import Optional
+from collections.abc import Iterable
 from argparse import ArgumentParser, Namespace, ArgumentError
 
-from pdm.core import Core
 from pdm.project.config import ConfigItem
 from pdm.cli.commands.base import BaseCommand
 
@@ -22,14 +22,16 @@ from pdm_bump.cli import main
 from pdm_bump.plugin import BumpCommand
 
 
-_registered_configurations: Dict[str, ConfigItem] = {}
+_registered_configurations: dict[str, ConfigItem] = {}
 
 
-class _CoreStub(object):
-    registered_command: Optional[Type[BaseCommand]] = None
+class _CoreStub:
+    registered_command: Optional[type[BaseCommand]] = None
     registered_name: Optional[str] = None
 
-    def register_command(self, command: Type[BaseCommand], name: Optional[str] = None) -> None:
+    def register_command(
+        self, command: type[BaseCommand], name: Optional[str] = None
+    ) -> None:
         self.registered_command = command
         self.registered_name = name
 
@@ -45,7 +47,11 @@ class CliRegistrationTest(TestCase):
     def test_registration_command_type(self) -> None:
         core: _CoreStub = _CoreStub()
         main(core)
-        self.assertEqual(core.registered_command, BumpCommand, "The command is registered correctly")
+        self.assertEqual(
+            core.registered_command,
+            BumpCommand,
+            "The command is registered correctly",
+        )
 
     def test_registration_command_name(self) -> None:
         core: _CoreStub = _CoreStub()
@@ -55,12 +61,14 @@ class CliRegistrationTest(TestCase):
     def test_registered_config_items(self) -> None:
         core: _CoreStub = _CoreStub()
         main(core)
-        self.assert_(len(_registered_configurations) == 0, "No config item has been registered")
+        self.assertTrue(
+            len(_registered_configurations) == 0,
+            "No config item has been registered",
+        )
 
 
 class BumpVersionCommandParserTests(TestCase):
-    SUB_TEST_PARAMS_WHAT_SUCCESS: Iterable[Tuple[str, str]] = [
-
+    SUB_TEST_PARAMS_WHAT_SUCCESS: Iterable[tuple[str, str]] = [
         ("major", "major"),
         ("minor", "minor"),
         ("micro", "micro"),
@@ -70,13 +78,13 @@ class BumpVersionCommandParserTests(TestCase):
         ("post", "post"),
         ("dev", "dev"),
     ]
-    SUB_TEST_PARAMS_PRE_SUCCESS: Iterable[Tuple[str, str]] = [
+    SUB_TEST_PARAMS_PRE_SUCCESS: Iterable[tuple[str, str]] = [
         ("alpha", "alpha"),
         ("beta", "beta"),
         ("c", "c"),
         ("rc", "rc"),
     ]
-    SUB_TEST_PARAMS_FAIL: Iterable[Tuple[str, List[str]]] = [
+    SUB_TEST_PARAMS_FAIL: Iterable[tuple[str, list[str]]] = [
         ("major", ["maj"]),
         ("minor", ["min"]),
         ("micro", ["mic"]),
@@ -95,8 +103,12 @@ class BumpVersionCommandParserTests(TestCase):
 
         for msg, what_success in self.SUB_TEST_PARAMS_WHAT_SUCCESS:
             with self.subTest(msg, what=what_success):
-                options: Namespace = parser.parse_args([ what_success ])
-                self.assertEqual(options.what, what_success, "The first item is only matched")
+                options: Namespace = parser.parse_args([what_success])
+                self.assertEqual(
+                    options.what,
+                    what_success,
+                    "The first item is only matched",
+                )
 
     def test_parser_setup_pre_success(self) -> None:
         parser: ArgumentParser = ArgumentParser()
@@ -104,8 +116,12 @@ class BumpVersionCommandParserTests(TestCase):
 
         for msg, pre_success in self.SUB_TEST_PARAMS_PRE_SUCCESS:
             with self.subTest(msg, pre=pre_success):
-                options: Namespace = parser.parse_args([ "pre-release", "--pre", pre_success ])
-                self.assertEqual(options.pre, pre_success, "The second item is only matched")
+                options: Namespace = parser.parse_args(
+                    ["pre-release", "--pre", pre_success]
+                )
+                self.assertEqual(
+                    options.pre, pre_success, "The second item is only matched"
+                )
 
     def test_parser_setup_fail(self) -> None:
         parser: ArgumentParser = ArgumentParser(exit_on_error=False)

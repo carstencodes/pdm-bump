@@ -14,7 +14,7 @@ from os import environ, pathsep
 from pathlib import Path
 from subprocess import run as stdlib_run_process
 from sys import platform
-from typing import Optional, Protocol, Tuple, Union, cast
+from typing import Optional, Protocol, Union, cast
 
 from ..logging import logger
 
@@ -111,11 +111,11 @@ class CliRunnerMixin(ProcessRunner):
         self,
         /,
         executable: Path,
-        args: Tuple[str, ...],
+        args: tuple[str, ...],
         *,
         raise_on_exit: bool = False,
         cwd: Optional[Path] = None,
-    ) -> Tuple[int, str, str]:
+    ) -> tuple[int, str, str]:
         cmd = []
         cmd.append(str(executable))
         for arg in args:

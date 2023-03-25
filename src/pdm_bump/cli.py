@@ -9,7 +9,7 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
-from typing import Optional, Protocol, Type
+from typing import Optional, Protocol
 
 # MyPy cannot resolve this during pull request
 from pdm.project.config import ConfigItem as _ConfigItem  # type: ignore
@@ -19,7 +19,7 @@ from .plugin import BumpCommand as _Command
 
 class _CoreLike(Protocol):
     def register_command(
-        self, command: Type[_Command], name: Optional[str] = None
+        self, command: type[_Command], name: Optional[str] = None
     ) -> None:
         # Method empty: Only a protocol stub
         pass

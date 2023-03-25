@@ -12,7 +12,7 @@
 from functools import cached_property
 from pathlib import Path
 from subprocess import CalledProcessError
-from typing import List, Optional, Tuple, cast
+from typing import Optional, cast
 
 from ..logging import logger
 from ..version import Version
@@ -76,9 +76,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
                 f"git repository. Reason: {cpe.stderr}"
             ) from cpe
 
-    def check_in_items(self, message: str, *files: Tuple[Path, ...]) -> None:
+    def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         try:
-            args: List[str] = ["add", "--update"]
+            args: list[str] = ["add", "--update"]
             args.extend(str(f) for f in files)
             logger.debug(
                 "Checking in the following files: \n%s",
