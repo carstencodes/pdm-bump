@@ -41,13 +41,8 @@ jobs:
           pdm update --dry-run --update-all 2>/dev/null 1>output.txt
           _pdm_output=$(cat output.txt)
           rm output.txt
-          _next_output=${_pdm_output}
-          _next_output="${_next_output//'%'/'%25'}"
-          _next_output="${_next_output//$'\n'/'%0A'}"
-          _next_output="${_next_output//$'\r'/'%0D'}"
-          echo ---
-          echo $_next_output
           echo "pdm_output=${_next_output}" >> $GITHUB_OUTPUT
+          echo ${_pdm_output} | tail -n+2
           _next_output=$(echo ${_pdm_output} | tail -n+2)
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
@@ -57,6 +52,7 @@ jobs:
           echo "packages_to_update=${_next_output}" >> $GITHUB_OUTPUT
           echo ---
           echo $_next_output
+          echo ${_pdm_output} | tail -n+3
           _next_output=$(echo ${_pdm_output} | tail -n+3)
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
@@ -64,6 +60,7 @@ jobs:
           echo "updated_packages=${_next_output}" >> $GITHUB_OUTPUT
           echo ---
           echo $_next_output
+          echo ${_pdm_output} | tail -n+3 | wc -l
           _next_output=$(echo ${_pdm_output} | tail -n+3)
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
