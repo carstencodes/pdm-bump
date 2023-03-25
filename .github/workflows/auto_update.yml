@@ -71,14 +71,16 @@ jobs:
           add-paths: |
             pyproject.toml
             pdm.lock
-          commit-message: "${{ format('chore: Update {0} dependencies in pdm.lock\n\n{1}', steps.package_update.output.number_of_new_packages, steps.package_update.output.updated_packages) }}"
+          commit-message: |
+            ${{ format('chore: Update {0} dependencies in pdm.lock\n\n{1}', steps.package_update.output.number_of_new_packages, steps.package_update.output.updated_packages) }}
           committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
           branch: auto-update/dependencies
           branch-suffix: timestamp
           delete-branch: true
-          title: "${{ format('chore: Update {0} dependencies', steps.package_update.output.number_of_new_packages) }}"
+          title: |
+            ${{ format('chore: Update {0} dependencies', steps.package_update.output.number_of_new_packages) }}
           body: ${{ steps.package_update.outputs.packages_to_update }}
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
