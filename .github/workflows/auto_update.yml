@@ -93,7 +93,7 @@ jobs:
           add-paths: |
             pyproject.toml
             pdm.lock
-          commit-message: >
+          commit-message: |
             ${{ env.GIT_PDM_TITLE }}
 
             ${{ env.PDM_UPDATED_PACKAGES_NAMES }}
