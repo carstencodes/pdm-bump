@@ -11,8 +11,6 @@ jobs:
   auto_update:
     name: Perform automatic update
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_STEP_DEBUG: true
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -45,9 +43,6 @@ jobs:
           echo "updated_packages=${_updates}" >> $GITHUB_OUTPUT
           _updates=$(echo ${_updates} | wc -l)
           echo "number_of_new_packages=${_updates}" >> $GITHUB_OUTPUT
-      - name: Install plugin itself
-        shell: bash
-        run: pdm install --no-lock --prod
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
@@ -60,6 +55,10 @@ jobs:
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
+      - name: Install plugin itself
+        shell: bash
+        run: pdm install --no-lock --prod
+        if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: "Increase dev version"
         shell: bash
         run: pdm run pdm bump dev
