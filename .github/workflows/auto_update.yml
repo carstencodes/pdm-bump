@@ -92,3 +92,4 @@ jobs:
           token: ${{ github.token }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
           merge-method: rebase
+          delete-branch: true
