@@ -28,7 +28,10 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-      - name: Run dry-run update
+      - name: Install all dependencies from lock file
+        shell: bash
+        run: pdm install -G:all
+      - name: Perform dry-run update
         shell: bash
         id: package_update
         run: |
