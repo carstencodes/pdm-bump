@@ -50,7 +50,6 @@ jobs:
           echo ---
           tail -n+2 output.txt
           _next_output=$(tail -n+2 output.txt)
-          echo "packages_to_update_raw=${_next_output}" >> $GITHUB_OUTPUT
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
           _next_output="${_next_output//$'\r'/'%0D'}"
@@ -59,7 +58,6 @@ jobs:
           echo ---
           tail -n+3 output.txt
           _next_output=$(tail -n+3 output.txt)
-          echo "updated_packages_raw=${_next_output}" >> $GITHUB_OUTPUT
           _next_output="${_next_output//'%'/'%25'}"
           _next_output="${_next_output//$'\n'/'%0A'}"
           _next_output="${_next_output//$'\r'/'%0D'}"
@@ -103,7 +101,7 @@ jobs:
           commit-message: >
             ${{ format('chore: Update {0} dependencies in pdm.lock', steps.package_update.output.number_of_new_packages) }}
 
-            ${{ steps.package_update.output.updated_packages_raw }}
+            ${{ steps.package_update.output.updated_packages }}
           committer: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           author: ${{ github.repository_owner }} <${{ github.repository_owner }}@users.noreply.github.com>
           signoff: false
@@ -112,7 +110,7 @@ jobs:
           delete-branch: true
           title: |
             ${{ format('chore: Update {0} dependencies', steps.package_update.output.number_of_new_packages) }}
-          body: ${{ steps.package_update.outputs.packages_to_update_raw }}
+          body: ${{ steps.package_update.outputs.packages_to_update }}
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
         uses: peter-evans/enable-pull-request-automerge@v3
