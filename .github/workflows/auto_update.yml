@@ -64,13 +64,13 @@ jobs:
       - name: DEBUG
         shell: bash
         run: |
-          echo ${{ steps.detect-changes.outputs.number_of_new_packages }}
+          echo ${{ steps.package_update.outputs.number_of_new_packages }}
           echo ----
-          echo ${{ steps.detect-changes.outputs.updated_packages }}
+          echo ${{ steps.package_update.outputs.updated_packages }}
           echo ----
-          echo ${{ steps.detect-changes.outputs.packages_to_update }}
+          echo ${{ steps.package_update.outputs.packages_to_update }}
           echo ----
-          echo ${{ steps.detect-changes.outputs.pdm_output }}
+          echo ${{ steps.package_update.outputs.pdm_output }}
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
