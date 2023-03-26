@@ -88,7 +88,7 @@ radon_hal = "radon hal --functions --json --output-file radon.hal.json src/"
 vulture = "vulture src/"
 bandit = "bandit src/"
 prospector = "prospector src/"
-copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
+copyright-headers = "licenseheaders -y 2021-2023 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
 
 [tool.pdm.scripts.check-style]
 composite = [
