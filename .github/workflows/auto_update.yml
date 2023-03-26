@@ -9,7 +9,7 @@ on:
 
 jobs:
   auto_update:
-    name: Perform automatic update
+    name: Run PDM Update
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources

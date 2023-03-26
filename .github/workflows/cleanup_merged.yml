@@ -1,0 +1,27 @@
+name: Clean-up stale merged branches
+
+on:
+  schedule:
+    - cron: 0 18 * * SUN
+  workflow_dispatch:
+
+jobs:
+  clean-up-branches:
+    name: Remove branches already merge
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history
+      - name: Find and remove branches already merged
+        shell: bash
+        run: |
+          MAIN_BRANCH=main
+          if [ `git branch --merged ${MAIN_BRANCH} | wc -l` == 1 ];
+          then
+            echo No merged branches found.
+          else
+            git branch --merged ${MAIN_BRANCH} | egrep -v "(^\*|${MAIN_BRANCH})" | xargs git push origin -d
+            echo Removed all branches already merged.
+          fi
