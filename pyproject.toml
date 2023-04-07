@@ -74,6 +74,9 @@ static-code-analysis = [
     "bandit>=1.7.4",
     "prospector>=0.12.2",
 ]
+checkstyle = [
+    "pep8-naming>=0.13.3",
+]
 
 [tool.pdm.scripts]
 flake = "flake518 src/"
