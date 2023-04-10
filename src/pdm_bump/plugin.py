@@ -85,9 +85,13 @@ class BumpCommand(BaseCommand):
     @traced_function
     def save_version(self, version: Version) -> None:
         if self.__backend is None:
-            logger.error(
-                "No source for a version could be determined. Saving version failed."
+            msg = ". ".join(
+                (
+                    "No source for a version could be determined.",
+                    "Saving version failed."
+                )
             )
+            logger.error(msg)
             return
 
         self.__backend.current_version = version

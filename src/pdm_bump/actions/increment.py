@@ -133,7 +133,9 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     name: str = "no-pre-release"
     description: str = "Remove all pre-release parts from the version"
 
-    def __init__(self, version: Version, persister: VersionPersister, **kwargs) -> None:
+    def __init__(
+        self, version: Version, persister: VersionPersister, **kwargs
+    ) -> None:
         super().__init__(version, persister, True, **kwargs)
 
     @traced_function
@@ -182,7 +184,7 @@ class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
 @action
 class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
     name: str = "micro"
-    description: str = "Increment the micro part (also known as the patch part) of the version"
+    description: str = "Increment the micro (or patch) part of the version"
     aliases: tuple[str] = ("patch",)
 
     __MICRO_PART: Final[NonNegativeInteger] = 2
@@ -201,10 +203,11 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(
         self,
         version: Version,
+        persister: VersionPersister,
         remove_parts: bool = True,
         reset_version: bool = True,
     ):
-        super().__init__(version, remove_parts)
+        super().__init__(version, persister, remove_parts)
         self.__reset_version = reset_version
 
     @traced_function
@@ -237,7 +240,8 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
             help="Reset version to 1.0.0 on epoch increment",
         )
 
-        _NFPR._update_command(sub_parser)
+        # Justification: Call protected method of parent class
+        _NFPR._update_command(sub_parser)  # pylint: disable=W0212
 
 
 @final

@@ -20,12 +20,14 @@ from ..core.version import Pep440VersionFormatter, Version
 _formatter = Pep440VersionFormatter()
 
 
-class _HasAddSubParser(Protocol):
+# Justification: Just a protocol
+class _HasAddSubParser(Protocol):  # pylint: disable=R0903
     def add_parser(self, name, **kwargs) -> ArgumentParser:
         raise NotImplementedError()
 
 
-class VersionPersister(Protocol):
+# Justification: Just a protocol
+class VersionPersister(Protocol):  # pylint: disable=R0903
     def save_version(self, version: Version) -> None:
         raise NotImplementedError()
 
@@ -60,14 +62,17 @@ class ActionBase(ABC):
         aliases: list[str] = []
 
         if "aliases" in vars(cls):
-            aliases = list(cls.aliases)
+            aliases = list(getattr(cls, "aliases"))
 
         exit_on_error = True
         if "exit_on_error" in kwargs:
             exit_on_error = bool(kwargs.pop("exit_on_error"))
 
         parser = sub_parser_collection.add_parser(
-            cls.name, description=cls.description, aliases=aliases, exit_on_error=exit_on_error
+            cls.name,
+            description=cls.description,
+            aliases=aliases,
+            exit_on_error=exit_on_error,
         )
 
         parser.add_argument(
@@ -84,7 +89,9 @@ class ActionBase(ABC):
 
 
 class VersionModifier(ActionBase):
-    def __init__(self, version: Version, persister: VersionPersister, **kwargs) -> None:
+    def __init__(
+        self, version: Version, persister: VersionPersister, **kwargs
+    ) -> None:
         super().__init__(**kwargs)
         self.__version = version
         self.__persister = persister
@@ -114,7 +121,7 @@ class VersionModifier(ActionBase):
 
 class ActionRegistry:
     def __init__(self) -> None:
-        self.__items: dict[str, type[ActionBase]] = dict()
+        self.__items: dict[str, type[ActionBase]] = {}
 
     def register(self) -> Callable:
         def decorator(clazz: type[ActionBase]):
@@ -128,9 +135,10 @@ class ActionRegistry:
         return decorator
 
     def update_parser(self, parser: ArgumentParser) -> None:
-        parsers: _HasAddSubParser = parser.add_subparsers(
+        parsers: _HasAddSubParser = parser.add_subparsers(  # type: ignore
             dest="selected_command",
-            description="Either the part of the version to bump according to PEP 440:"
+            description="Either the part of the version to bump "
+            + "according to PEP 440:"
             + " major.minor.micro, "
             + "or VCS based actions to take.",
             required=True,
@@ -138,9 +146,13 @@ class ActionRegistry:
         parser.add_help = True
         keys = list(self.__items.keys())
         keys.sort()
+        exit_on_error = False
+        if "exit_on_error" in vars(parser):
+            exit_on_error = getattr(parser, "exit_on_error")
+
         for key in keys:
             clazz = self.__items[key]
-            clazz.create_command(parsers, exit_on_error = parser.exit_on_error)
+            clazz.create_command(parsers, exit_on_error=exit_on_error)
 
     def execute(
         self, args: Namespace, version: Version, persister: VersionPersister
@@ -165,7 +177,8 @@ class ActionRegistry:
 
         if selected_command not in self.__items:
             raise ValueError(
-                f"Failed to get command {selected_command}. Valid values are {', '.join(self.__items.keys())}."
+                f"´Failed to get command {selected_command}. "
+                + "Valid values are {', '.join(self.__items.keys())}."
             )
 
         clazz: type[ActionBase] = self.__items[selected_command]

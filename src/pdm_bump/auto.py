@@ -12,15 +12,20 @@
 
 from typing import Final
 
-from .action import ActionCollection, VersionModifier
+from .actions import VersionModifier
 from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 from .vcs import VcsProvider
 
 
+class _Pacifier:
+    def save_version(self, version: Version) -> None:
+        return
+
+
 class _VcsSupportedVersionModifier(VersionModifier):
     def __init__(self, version: Version, vcs_provider: VcsProvider) -> None:
-        super().__init__(version)
+        super().__init__(version, _Pacifier())
         self._vcs_provider = vcs_provider
 
     def create_new_version(self) -> Version:
@@ -58,11 +63,3 @@ COMMAND_NAMES: Final[frozenset[str]] = frozenset(
         COMMAND_NAME_CREATE_TAG,
     ]
 )
-
-
-def apply_vcs_based_actions(
-    actions: ActionCollection, vcs_provider: VcsProvider, dry_run: bool
-) -> None:
-    actions[COMMAND_NAME_CREATE_TAG] = lambda v: CreateTagFromVersion(
-        v, vcs_provider, dry_run
-    )

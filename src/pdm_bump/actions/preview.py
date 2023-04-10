@@ -25,7 +25,8 @@ class PreviewMismatchError(Exception):
     pass
 
 
-class _DummyPersister:
+# Justification fulfills a protocol
+class _DummyPersister:  # pylint: disable=R0903
     def save_version(self, version: Version) -> None:
         # This must not be implemented as it is only a dummy.
         pass
@@ -150,14 +151,15 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         **kwargs,
     ) -> None:
         super().__init__(version, persister, **kwargs)
+        self.__sub_modifier: VersionModifier
         if pre_release_part in (AlphaIncrementingVersionModifier.name,):
-            self.__sub_modifier: VersionModifier = (
+            self.__sub_modifier = (
                 AlphaIncrementingVersionModifier(
                     version, _DummyPersister(), increment_micro
                 )
             )
         elif pre_release_part in (BetaIncrementingVersionModifier.name,):
-            self.__sub_modifier: VersionModifier = (
+            self.__sub_modifier = (
                 BetaIncrementingVersionModifier(
                     version, _DummyPersister(), increment_micro
                 )
@@ -168,7 +170,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             or pre_release_part
             in ReleaseCandidateIncrementingVersionModifier.aliases
         ):
-            self.__sub_modifier: VersionModifier = (
+            self.__sub_modifier = (
                 ReleaseCandidateIncrementingVersionModifier(
                     version, _DummyPersister(), increment_micro
                 )
@@ -207,6 +209,8 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         )
 
         VersionModifier._update_command(sub_parser)
+        # Justification: Class is a mixin
+        # pylint: disable=W0212
         _PreReleaseIncrementingVersionModified._update_command(sub_parser)
 
 
