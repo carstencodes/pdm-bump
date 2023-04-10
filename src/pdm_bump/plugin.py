@@ -18,16 +18,7 @@ from typing import Final, Optional, Protocol, cast, final
 from pdm.cli.commands.base import BaseCommand  # type: ignore
 from pdm.termui import UI  # type: ignore
 
-from .action import COMMAND_NAMES as MODIFIER_ACTIONS
-from .action import (
-    PRERELEASE_OPTIONS,
-    ActionCollection,
-    VersionModifier,
-    VersionModifierFactory,
-    create_actions,
-)
-from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
-from .auto import apply_vcs_based_actions
+from .actions import actions
 from .core.config import Config, ConfigHolder, ConfigKeys, ConfigSections
 from .core.logging import (
     logger,
@@ -83,52 +74,23 @@ class BumpCommand(BaseCommand):
     name: Final[str] = "bump"
     description: str = "Bumps the version to a next version following PEP440."
 
+    def __init__(self, parser) -> None:
+        super().__init__(parser)
+        self.__backend: Optional[_VersionSource] = None
+
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
-        parser.add_argument(
-            "what",
-            action="store",
-            choices=list(MODIFIER_ACTIONS) + list(VCS_BASED_ACTIONS),
-            default=None,
-            help="Either the part of the version to bump according to PEP 440:"
-            + " major.minor.micro, "
-            + "or VCS based actions to take.",
-        )
-        parser.add_argument(
-            "--pre",
-            action="store",
-            choices=list(PRERELEASE_OPTIONS),
-            default=None,
-            help="Sets a pre-release on the current version."
-            + " If a pre-release is set, it can be removed "
-            + "using the 'final' option. A new pre-release "
-            + "must be greater than the current version."
-            + " See PEP440 for details.",
-        )
-        parser.add_argument(
-            "--dry-run",
-            "-n",
-            action="store_true",
-            help="Do not store the incremented version.",
-        )
-        parser.add_argument(
-            "--micro",
-            action="store_true",
-            help="When setting pre-release, specifies "
-            + "whether micro version shall "
-            + "be incremented as well",
-        )
-        parser.add_argument(
-            "--reset",
-            action="store_true",
-            help="When setting epoch, reset version to 1.0.0",
-        )
-        parser.add_argument(
-            "--no-remove",
-            action="store_false",
-            help="When incrementing major, minor, micro or epoch, "
-            + "do not remove all pre-release parts.",
-        )
+        actions.update_parser(parser)
+
+    @traced_function
+    def save_version(self, version: Version) -> None:
+        if self.__backend is None:
+            logger.error(
+                "No source for a version could be determined. Saving version failed."
+            )
+            return
+
+        self.__backend.current_version = version
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
@@ -139,6 +101,8 @@ class BumpCommand(BaseCommand):
             project, config
         )
 
+        self.__backend = selected_backend
+
         if selected_backend is None:
             pyproject_file = project.root / project.PYPROJECT_FILENAME
             logger.error("Cannot find version in %s", pyproject_file)
@@ -146,24 +110,12 @@ class BumpCommand(BaseCommand):
 
         backend: _VersionSource = cast(_VersionSource, selected_backend)
 
-        version: Version = backend.current_version
-
-        next_version: Version = self._get_next_version(
-            version, project, options
-        )
-
-        if next_version == version:
-            logger.info(
-                "Version did not change after application. "
-                "No need to persist new version."
-            )
-            return
-
-        if options.dry_run:
-            logger.info("Would write new version %s", next_version)
-            return
-
-        self._save_new_version(backend, next_version)
+        try:
+            actions.execute(options, backend.current_version, self)
+        except ValueError as exc:
+            logger.exception("Failed to execute action", exc_info=True)
+            logger.debug("Exception occurred: %s", get_traceback())
+            raise SystemExit(1) from exc
 
     @traced_function
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
@@ -190,30 +142,6 @@ class BumpCommand(BaseCommand):
         return DefaultVcsProvider(project.root)
 
     @traced_function
-    def _get_next_version(
-        self, version: Version, project: _ProjectLike, options: Namespace
-    ) -> Version:
-        actions: ActionCollection = self._get_actions(
-            options.micro, options.reset, options.no_remove
-        )
-
-        vcs_provider: VcsProvider = self._get_vcs_provider(project)
-        apply_vcs_based_actions(actions, vcs_provider, options.dry_run)
-
-        modifier: VersionModifier = self._get_action(
-            actions, version, options.what, options.pre
-        )
-
-        try:
-            return modifier.create_new_version()
-        except ValueError as exc:
-            logger.exception(
-                "Failed to update version to next version", exc_info=False
-            )
-            logger.debug("Exception occurred: %s", get_traceback())
-            raise SystemExit(1) from exc
-
-    @traced_function
     def _select_backend(
         self, project: _ProjectLike, config: Config
     ) -> Optional[_VersionSource]:
@@ -231,41 +159,6 @@ class BumpCommand(BaseCommand):
                 break
 
         return selected_backend
-
-    @traced_function
-    def _save_new_version(
-        self, backend: _VersionSource, next_version: Version
-    ) -> None:
-        backend.current_version = next_version
-
-    @traced_function
-    def _get_action(
-        self,
-        actions: ActionCollection,
-        version: Version,
-        what: str,
-        pre: Optional[str],
-    ) -> VersionModifier:
-        modifier_factory: VersionModifierFactory
-        if pre is not None:
-            modifier_factory = actions.get_action_with_option(what, pre)
-        else:
-            modifier_factory = actions.get_action(what)
-
-        modifier: VersionModifier = modifier_factory(version)
-        return modifier
-
-    @traced_function
-    def _get_actions(
-        self, increment_micro: bool, reset_version: bool, remove_parts: bool
-    ) -> ActionCollection:
-        actions: ActionCollection = create_actions(
-            increment_micro=increment_micro,
-            reset_version=reset_version,
-            remove_parts=remove_parts,
-        )
-
-        return actions
 
     @traced_function
     def _version_to_string(self, version: Version) -> str:

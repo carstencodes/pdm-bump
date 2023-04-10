@@ -13,7 +13,7 @@
 import unittest
 from typing import Callable
 
-from pdm_bump.action import (
+from pdm_bump.actions import (
     PreviewMismatchError,
     VersionModifier,
     MajorIncrementingVersionModifier,
