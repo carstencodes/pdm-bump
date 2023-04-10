@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2023 Carsten Igel.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -14,8 +14,8 @@ from pathlib import Path
 from subprocess import CalledProcessError
 from typing import Optional, cast
 
-from ..logging import logger
-from ..version import Version
+from ..core.logging import logger
+from ..core.version import Version
 from .core import VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
 from .mixins import CliRunnerMixin

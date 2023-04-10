@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel, Chase Sterling.
+# Copyright (c) 2021-2023 Carsten Igel, Chase Sterling.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -16,8 +16,8 @@ from re import Match, Pattern
 from re import compile as compile_re
 from typing import Final, Optional, cast
 
-from .config import Config, ConfigKeys, ConfigValues
-from .version import Pep440VersionFormatter, Version
+from .core.config import Config, ConfigKeys, ConfigValues
+from .core.version import Pep440VersionFormatter, Version
 
 DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
     r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$",

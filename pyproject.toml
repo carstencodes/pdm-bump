@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.6.13.dev10"
+version = "0.7.0a1"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -74,6 +74,9 @@ static-code-analysis = [
     "bandit>=1.7.4",
     "prospector>=0.12.2",
 ]
+checkstyle = [
+    "pep8-naming>=0.13.3",
+]
 
 [tool.pdm.scripts]
 flake = "flake518 src/"
@@ -88,7 +91,7 @@ radon_hal = "radon hal --functions --json --output-file radon.hal.json src/"
 vulture = "vulture src/"
 bandit = "bandit src/"
 prospector = "prospector src/"
-copyright-headers = "licenseheaders -y 2021-2022 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
+copyright-headers = "licenseheaders -y 2021-2023 -o 'Carsten Igel' -n pdm-bump -d . -u https://github.com/carstencodes/pdm-bump -x src/pdm_bump/dynamic.py -t ./.licenseheader.j2 -E .py"
 
 [tool.pdm.scripts.check-style]
 composite = [

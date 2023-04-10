@@ -11,3 +11,4 @@ pytest.*.xml
 results/
 install-output.json
 radon.*.json
+.venv

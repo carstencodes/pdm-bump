@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2023 Carsten Igel.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -16,7 +16,7 @@ from subprocess import run as stdlib_run_process
 from sys import platform
 from typing import Optional, Protocol, Union, cast
 
-from ..logging import logger
+from ..core.logging import logger
 
 
 class _CompletedProcessLike(Protocol):

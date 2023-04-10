@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2023 Carsten Igel.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -105,7 +105,7 @@ class BumpVersionCommandParserTests(TestCase):
             with self.subTest(msg, what=what_success):
                 options: Namespace = parser.parse_args([what_success])
                 self.assertEqual(
-                    options.what,
+                    options.selected_command,
                     what_success,
                     "The first item is only matched",
                 )
@@ -120,7 +120,7 @@ class BumpVersionCommandParserTests(TestCase):
                     ["pre-release", "--pre", pre_success]
                 )
                 self.assertEqual(
-                    options.pre, pre_success, "The second item is only matched"
+                    options.pre_release_part, pre_success, "The second item is only matched"
                 )
 
     def test_parser_setup_fail(self) -> None:

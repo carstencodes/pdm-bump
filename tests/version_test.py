@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2023 Carsten Igel.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -14,7 +14,7 @@ import unittest
 
 from typing import Final, final
 
-from pdm_bump.version import (
+from pdm_bump.core.version import (
     Version,
     VersionParserError,
     Pep440VersionFormatter,

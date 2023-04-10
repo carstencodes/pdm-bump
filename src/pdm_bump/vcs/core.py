@@ -1,7 +1,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-# Copyright (c) 2021-2022 Carsten Igel.
+# Copyright (c) 2021-2023 Carsten Igel.
 #
 # This file is part of pdm-bump
 # (see https://github.com/carstencodes/pdm-bump).
@@ -14,7 +14,7 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
 
-from ..version import Pep440VersionFormatter, Version
+from ..core.version import Pep440VersionFormatter, Version
 
 _Pathlike = Union[Path, AnyStr]
 
@@ -83,6 +83,15 @@ class VcsProvider(_PathLikeConverter, ABC):
     @abstractmethod
     def get_changes_not_checked_in(self) -> int:
         raise NotImplementedError()
+
+
+class VcsProviderAggregator:
+    def __init__(self, vcs_provider: VcsProvider, **kwargs) -> None:
+        self.__vcs_provider: VcsProvider = vcs_provider
+
+    @property
+    def vcs_provider(self) -> VcsProvider:
+        return self.__vcs_provider
 
 
 class VcsProviderFactory(_PathLikeConverter, ABC):
