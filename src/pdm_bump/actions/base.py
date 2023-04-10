@@ -60,8 +60,12 @@ class ActionBase(ABC):
         if "aliases" in vars(cls):
             aliases = list(cls.aliases)
 
+        exit_on_error = True
+        if "exit_on_error" in kwargs:
+            exit_on_error = bool(kwargs.pop("exit_on_error"))
+
         parser = sub_parser_collection.add_parser(
-            cls.name, description=cls.description, aliases=aliases
+            cls.name, description=cls.description, aliases=aliases, exit_on_error=exit_on_error
         )
 
         parser.add_argument(
@@ -133,7 +137,7 @@ class ActionRegistry:
         keys.sort()
         for key in keys:
             clazz = self.__items[key]
-            clazz.create_command(parsers)
+            clazz.create_command(parsers, exit_on_error = parser.exit_on_error)
 
     def execute(
         self, args: Namespace, version: Version, persister: VersionPersister
