@@ -27,7 +27,7 @@ from pdm_bump.action import (
     DevelopmentVersionIncrementingVersionModifier,
     PostVersionIncrementingVersionModifier,
 )
-from pdm_bump.version import Version
+from pdm_bump.core.version import Version
 
 
 class ActionTest(unittest.TestCase):

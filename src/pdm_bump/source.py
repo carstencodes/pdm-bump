@@ -12,9 +12,9 @@
 
 from typing import Protocol, Union, cast, runtime_checkable
 
-from .config import Config, ConfigKeys
-from .logging import logger
-from .version import Pep440VersionFormatter, Version
+from .core.config import Config, ConfigKeys
+from .core.logging import logger
+from .core.version import Pep440VersionFormatter, Version
 
 
 # Justification: Minimal protocol

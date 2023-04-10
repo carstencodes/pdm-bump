@@ -16,7 +16,7 @@ from subprocess import run as stdlib_run_process
 from sys import platform
 from typing import Optional, Protocol, Union, cast
 
-from ..logging import logger
+from ..core.logging import logger
 
 
 class _CompletedProcessLike(Protocol):

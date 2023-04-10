@@ -14,8 +14,8 @@ from abc import ABC, abstractmethod
 from dataclasses import asdict as dataclass_to_dict
 from typing import Any, Callable, Final, Literal, Union, cast, final
 
-from .logging import logger, traced_function
-from .version import NonNegativeInteger, Pep440VersionFormatter, Version
+from .core.logging import logger, traced_function
+from .core.version import NonNegativeInteger, Pep440VersionFormatter, Version
 
 if sys.version_info >= (3, 10, 0):
     # suspicious mypy behavior

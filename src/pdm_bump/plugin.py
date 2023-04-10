@@ -28,9 +28,14 @@ from .action import (
 )
 from .auto import COMMAND_NAMES as VCS_BASED_ACTIONS
 from .auto import apply_vcs_based_actions
-from .config import Config, ConfigHolder, ConfigKeys, ConfigSections
+from .core.config import Config, ConfigHolder, ConfigKeys, ConfigSections
+from .core.logging import (
+    logger,
+    traced_function,
+    update_logger_from_project_ui,
+)
+from .core.version import Pep440VersionFormatter, Version
 from .dynamic import DynamicVersionSource
-from .logging import logger, traced_function, update_logger_from_project_ui
 from .source import StaticPep621VersionSource
 from .vcs import (
     DefaultVcsProvider,
@@ -38,7 +43,6 @@ from .vcs import (
     VcsProviderRegistry,
     vcs_providers,
 )
-from .version import Pep440VersionFormatter, Version
 
 
 # Justification: Protocol for interoperability

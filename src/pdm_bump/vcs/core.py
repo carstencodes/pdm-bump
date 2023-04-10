@@ -14,7 +14,7 @@ from collections.abc import Iterator
 from pathlib import Path
 from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
 
-from ..version import Pep440VersionFormatter, Version
+from ..core.version import Pep440VersionFormatter, Version
 
 _Pathlike = Union[Path, AnyStr]
 

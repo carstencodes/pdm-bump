@@ -14,7 +14,7 @@ import unittest
 
 from typing import Final, final
 
-from pdm_bump.version import (
+from pdm_bump.core.version import (
     Version,
     VersionParserError,
     Pep440VersionFormatter,

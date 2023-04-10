@@ -13,9 +13,9 @@
 from typing import Final
 
 from .action import ActionCollection, VersionModifier
-from .logging import logger
+from .core.logging import logger
+from .core.version import Pep440VersionFormatter, Version
 from .vcs import VcsProvider
-from .version import Pep440VersionFormatter, Version
 
 
 class _VcsSupportedVersionModifier(VersionModifier):
