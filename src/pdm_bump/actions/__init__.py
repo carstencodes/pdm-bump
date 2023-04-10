@@ -11,6 +11,7 @@
 #
 
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
+from .explicit import *  # noqa
 from .increment import *  # noqa
 from .preview import *  # noqa
 from .vcs import *  # noqa
