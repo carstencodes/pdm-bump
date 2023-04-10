@@ -88,7 +88,7 @@ class BumpCommand(BaseCommand):
             msg = ". ".join(
                 (
                     "No source for a version could be determined.",
-                    "Saving version failed."
+                    "Saving version failed.",
                 )
             )
             logger.error(msg)

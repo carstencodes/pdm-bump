@@ -10,7 +10,7 @@
 # Refer to LICENSE for more information
 #
 
-from .base import actions, ActionBase, VersionConsumer, VersionModifier
+from .base import ActionBase, VersionConsumer, VersionModifier, actions
 from .increment import *  # noqa
 from .preview import *  # noqa
 

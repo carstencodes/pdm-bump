@@ -153,16 +153,12 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         super().__init__(version, persister, **kwargs)
         self.__sub_modifier: VersionModifier
         if pre_release_part in (AlphaIncrementingVersionModifier.name,):
-            self.__sub_modifier = (
-                AlphaIncrementingVersionModifier(
-                    version, _DummyPersister(), increment_micro
-                )
+            self.__sub_modifier = AlphaIncrementingVersionModifier(
+                version, _DummyPersister(), increment_micro
             )
         elif pre_release_part in (BetaIncrementingVersionModifier.name,):
-            self.__sub_modifier = (
-                BetaIncrementingVersionModifier(
-                    version, _DummyPersister(), increment_micro
-                )
+            self.__sub_modifier = BetaIncrementingVersionModifier(
+                version, _DummyPersister(), increment_micro
             )
         elif (
             pre_release_part
@@ -170,10 +166,8 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             or pre_release_part
             in ReleaseCandidateIncrementingVersionModifier.aliases
         ):
-            self.__sub_modifier = (
-                ReleaseCandidateIncrementingVersionModifier(
-                    version, _DummyPersister(), increment_micro
-                )
+            self.__sub_modifier = ReleaseCandidateIncrementingVersionModifier(
+                version, _DummyPersister(), increment_micro
             )
         else:
             raise ValueError(
