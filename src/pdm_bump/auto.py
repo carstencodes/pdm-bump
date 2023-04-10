@@ -12,20 +12,15 @@
 
 from typing import Final
 
-from .actions import VersionModifier
+from .actions import VersionConsumer
 from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 from .vcs import VcsProvider
 
 
-class _Pacifier:
-    def save_version(self, version: Version) -> None:
-        return
-
-
-class _VcsSupportedVersionModifier(VersionModifier):
+class _VcsSupportedVersionModifier(VersionConsumer):
     def __init__(self, version: Version, vcs_provider: VcsProvider) -> None:
-        super().__init__(version, _Pacifier())
+        super().__init__(version)
         self._vcs_provider = vcs_provider
 
     def create_new_version(self) -> Version:

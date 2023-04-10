@@ -10,10 +10,13 @@
 # Refer to LICENSE for more information
 #
 
-from .base import actions
+from .base import actions, ActionBase, VersionConsumer, VersionModifier
 from .increment import *  # noqa
 from .preview import *  # noqa
 
 __all__ = [
     "actions",
+    "ActionBase",
+    "VersionConsumer",
+    "VersionModifier",
 ]

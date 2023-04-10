@@ -88,17 +88,21 @@ class ActionBase(ABC):
         return parser
 
 
-class VersionModifier(ActionBase):
-    def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
-    ) -> None:
-        super().__init__(**kwargs)
+class VersionConsumer(ActionBase):
+    def __init__(self, version: Version, **kwargs) -> None:
         self.__version = version
-        self.__persister = persister
 
     @property
     def current_version(self) -> Version:
         return self.__version
+
+
+class VersionModifier(VersionConsumer):
+    def __init__(
+        self, version: Version, persister: VersionPersister, **kwargs
+    ) -> None:
+        super().__init__(version, **kwargs)
+        self.__persister = persister
 
     @abstractmethod
     def create_new_version(self) -> Version:
@@ -161,8 +165,6 @@ class ActionRegistry:
     ) -> None:
         kwargs: dict = {}
 
-        kwargs["version"] = version
-
         kwargs.update(vars(args))
 
         kwargs = {
@@ -184,6 +186,9 @@ class ActionRegistry:
             )
 
         clazz: type[ActionBase] = self.__items[selected_command]
+
+        if issubclass(clazz, VersionConsumer):
+            kwargs["version"] = version
 
         if issubclass(clazz, VersionModifier):
             kwargs["persister"] = persister
