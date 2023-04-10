@@ -37,8 +37,9 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         version: Version,
         persister: VersionPersister,
         increment_micro: bool = True,
+        **kwargs,
     ) -> None:
-        super().__init__(version, persister)
+        super().__init__(version, persister, **kwargs)
         self.__increment_micro = increment_micro
 
     @classmethod
@@ -146,8 +147,9 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         persister: VersionPersister,
         pre_release_part: str,
         increment_micro: bool = True,
+        **kwargs,
     ) -> None:
-        super().__init__(version, persister)
+        super().__init__(version, persister, **kwargs)
         if pre_release_part in (AlphaIncrementingVersionModifier.name,):
             self.__sub_modifier: VersionModifier = (
                 AlphaIncrementingVersionModifier(

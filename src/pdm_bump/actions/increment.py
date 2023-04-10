@@ -36,8 +36,9 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
         version: Version,
         persister: VersionPersister,
         remove_parts: bool = True,
+        **kwargs,
     ) -> None:
-        super().__init__(version, persister)
+        super().__init__(version, persister, **kwargs)
         self.__remove_parts = remove_parts
 
     @property
@@ -132,8 +133,8 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     name: str = "no-pre-release"
     description: str = "Remove all pre-release parts from the version"
 
-    def __init__(self, version: Version, persister: VersionPersister) -> None:
-        super().__init__(version, persister, True)
+    def __init__(self, version: Version, persister: VersionPersister, **kwargs) -> None:
+        super().__init__(version, persister, True, **kwargs)
 
     @traced_function
     def create_new_version(self) -> Version:

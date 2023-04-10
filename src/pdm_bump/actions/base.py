@@ -34,14 +34,16 @@ class ActionBase(ABC):
     name: str
     description: str
 
+    def __init__(self, **kwargs) -> None:
+        # Just to ignore key word arguments
+        pass
+
     @abstractmethod
     def run(self, dry_run: bool = False) -> None:
         raise NotImplementedError()
 
     @classmethod
-    def create_from_command(cls, args: Namespace, **kwargs) -> "ActionBase":
-        command_line: dict = vars(args)
-        kwargs.update(command_line)
+    def create_from_command(cls, **kwargs) -> "ActionBase":
         instance: "ActionBase" = cls(**kwargs)
 
         return instance
@@ -82,7 +84,8 @@ class ActionBase(ABC):
 
 
 class VersionModifier(ActionBase):
-    def __init__(self, version: Version, persister: VersionPersister) -> None:
+    def __init__(self, version: Version, persister: VersionPersister, **kwargs) -> None:
+        super().__init__(**kwargs)
         self.__version = version
         self.__persister = persister
 
@@ -170,7 +173,7 @@ class ActionRegistry:
         if issubclass(clazz, VersionModifier):
             kwargs["persister"] = persister
 
-        command: "ActionBase" = clazz.create_from_command(args, **kwargs)
+        command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)
 
 
