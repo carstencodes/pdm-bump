@@ -85,6 +85,15 @@ class VcsProvider(_PathLikeConverter, ABC):
         raise NotImplementedError()
 
 
+class VcsProviderAggregator:
+    def __init__(self, vcs_provider: VcsProvider) -> None:
+        self.__vcs_provider: VcsProvider = vcs_provider
+
+    @property
+    def vcs_provider(self) -> VcsProvider:
+        return self.__vcs_provider
+
+
 class VcsProviderFactory(_PathLikeConverter, ABC):
     def force_create_provider(self, path: Path) -> VcsProvider:
         return self._create_provider(path)
