@@ -132,6 +132,8 @@ class ActionRegistry:
                 )
             self.__items[clazz.name] = clazz
 
+            return clazz
+
         return decorator
 
     def update_parser(self, parser: ArgumentParser) -> None:
