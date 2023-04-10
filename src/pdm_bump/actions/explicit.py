@@ -16,7 +16,6 @@ from typing import final
 
 from ..core.logging import logger
 from ..core.version import Version
-
 from .base import VersionModifier, VersionPersister, action
 
 
@@ -26,7 +25,13 @@ class SetExplicitVersionModifier(VersionModifier):
     name: str = "to"
     description: str = "Sets a new version explicitly from CLI"
 
-    def __init__(self, version: Version, persister: VersionPersister, new_version: list[str], **kwargs) -> None:
+    def __init__(
+        self,
+        version: Version,
+        persister: VersionPersister,
+        new_version: list[str],
+        **kwargs,
+    ) -> None:
         super().__init__(version, persister, **kwargs)
         if len(new_version) != 1:
             raise ValueError("Only one value is supported")
