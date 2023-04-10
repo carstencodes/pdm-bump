@@ -16,6 +16,7 @@ from typing import Callable, Protocol
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
+from ..vcs.core import VcsProvider, VcsProviderAggregator
 
 _formatter = Pep440VersionFormatter()
 
@@ -161,7 +162,11 @@ class ActionRegistry:
             clazz.create_command(parsers, exit_on_error=exit_on_error)
 
     def execute(
-        self, args: Namespace, version: Version, persister: VersionPersister
+        self,
+        args: Namespace,
+        version: Version,
+        persister: VersionPersister,
+        vcs_provider: VcsProvider,
     ) -> None:
         kwargs: dict = {}
 
@@ -192,6 +197,9 @@ class ActionRegistry:
 
         if issubclass(clazz, VersionModifier):
             kwargs["persister"] = persister
+
+        if issubclass(clazz, VcsProviderAggregator):
+            kwargs["vcs_provider"] = vcs_provider
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)

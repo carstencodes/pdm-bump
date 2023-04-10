@@ -13,6 +13,7 @@
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
 from .increment import *  # noqa
 from .preview import *  # noqa
+from .vcs import *  # noqa
 
 __all__ = [
     "actions",

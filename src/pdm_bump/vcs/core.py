@@ -86,7 +86,7 @@ class VcsProvider(_PathLikeConverter, ABC):
 
 
 class VcsProviderAggregator:
-    def __init__(self, vcs_provider: VcsProvider) -> None:
+    def __init__(self, vcs_provider: VcsProvider, **kwargs) -> None:
         self.__vcs_provider: VcsProvider = vcs_provider
 
     @property

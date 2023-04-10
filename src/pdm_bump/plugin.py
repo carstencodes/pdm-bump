@@ -113,9 +113,12 @@ class BumpCommand(BaseCommand):
             return
 
         backend: _VersionSource = cast(_VersionSource, selected_backend)
+        vcs_provider: VcsProvider = self._get_vcs_provider(project)
 
         try:
-            actions.execute(options, backend.current_version, self)
+            actions.execute(
+                options, backend.current_version, self, vcs_provider
+            )
         except ValueError as exc:
             logger.exception("Failed to execute action", exc_info=True)
             logger.debug("Exception occurred: %s", get_traceback())
