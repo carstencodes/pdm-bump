@@ -401,7 +401,7 @@ summary = "A purl aka. Package URL parser and builder"
 
 [[package]]
 name = "packaging"
-version = "23.0"
+version = "23.1"
 requires_python = ">=3.7"
 summary = "Core utilities for Python packages"
 
@@ -769,7 +769,7 @@ summary = "Resolve abstract dependencies into concrete ones"
 
 [[package]]
 name = "rich"
-version = "13.3.3"
+version = "13.3.4"
 requires_python = ">=3.7.0"
 summary = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 dependencies = [
@@ -1395,9 +1395,9 @@ content_hash = "sha256:0f24930d6a653f6ec532897f3347dd6e32a90eed35443faaa7f89c563
     {url = "https://files.pythonhosted.org/packages/3a/f1/b6b20be5fe9776b4fb4308da966e2df6d0bca72cdcd929830bdbb7d59e9f/packageurl_python-0.11.1-py3-none-any.whl", hash = "sha256:4bad1d3ea4feb5e7a1db5ca8fb690ac9c82ab18e08d500755947b853df68817d"},
     {url = "https://files.pythonhosted.org/packages/91/c7/47a411700a121acc05fe78642b019afe320592078e58c182537c7c65006f/packageurl-python-0.11.1.tar.gz", hash = "sha256:bbcc53d2cb5920c815c1626c75992f319bfc450b73893fa7bd8aac5869aa49fe"},
 ]
-"packaging 23.0" = [
-    {url = "https://files.pythonhosted.org/packages/47/d5/aca8ff6f49aa5565df1c826e7bf5e85a6df852ee063600c1efa5b932968c/packaging-23.0.tar.gz", hash = "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"},
-    {url = "https://files.pythonhosted.org/packages/ed/35/a31aed2993e398f6b09a790a181a7927eb14610ee8bbf02dc14d31677f1c/packaging-23.0-py3-none-any.whl", hash = "sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2"},
+"packaging 23.1" = [
+    {url = "https://files.pythonhosted.org/packages/ab/c3/57f0601a2d4fe15de7a553c00adbc901425661bf048f2a22dfc500caf121/packaging-23.1-py3-none-any.whl", hash = "sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61"},
+    {url = "https://files.pythonhosted.org/packages/b9/6c/7c6658d258d7971c5eb0d9b69fa9265879ec9a9158031206d47800ae2213/packaging-23.1.tar.gz", hash = "sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f"},
 ]
 "pathspec 0.11.1" = [
     {url = "https://files.pythonhosted.org/packages/95/60/d93628975242cc515ab2b8f5b2fc831d8be2eff32f5a1be4776d49305d13/pathspec-0.11.1.tar.gz", hash = "sha256:2798de800fa92780e33acca925945e9a19a133b715067cf165b8866c15a31687"},
@@ -1643,9 +1643,9 @@ content_hash = "sha256:0f24930d6a653f6ec532897f3347dd6e32a90eed35443faaa7f89c563
     {url = "https://files.pythonhosted.org/packages/ce/10/f699366ce577423cbc3df3280063099054c23df70856465080798c6ebad6/resolvelib-1.0.1.tar.gz", hash = "sha256:04ce76cbd63fded2078ce224785da6ecd42b9564b1390793f64ddecbe997b309"},
     {url = "https://files.pythonhosted.org/packages/d2/fc/e9ccf0521607bcd244aa0b3fbd574f71b65e9ce6a112c83af988bbbe2e23/resolvelib-1.0.1-py2.py3-none-any.whl", hash = "sha256:d2da45d1a8dfee81bdd591647783e340ef3bcb104b54c383f70d422ef5cc7dbf"},
 ]
-"rich 13.3.3" = [
-    {url = "https://files.pythonhosted.org/packages/42/5c/f44fc88bad850c4a20711a3349ec0e8bc50fece8d8b32c962d2aab70ea2b/rich-13.3.3-py3-none-any.whl", hash = "sha256:540c7d6d26a1178e8e8b37e9ba44573a3cd1464ff6348b99ee7061b95d1c6333"},
-    {url = "https://files.pythonhosted.org/packages/9a/50/672a8d347f92bc752b04c338bbf932fbd0104fbc416c82cc91aa5f7b4b0b/rich-13.3.3.tar.gz", hash = "sha256:dc84400a9d842b3a9c5ff74addd8eb798d155f36c1c91303888e0a66850d2a15"},
+"rich 13.3.4" = [
+    {url = "https://files.pythonhosted.org/packages/31/3b/2360352760b436f822258396e66ffb6d42585518a9cde2f93f142e64c5eb/rich-13.3.4.tar.gz", hash = "sha256:b5d573e13605423ec80bdd0cd5f8541f7844a0e71a13f74cf454ccb2f490708b"},
+    {url = "https://files.pythonhosted.org/packages/9d/1a/28117ae737aec7c004ed5067034a8949adab43730420b50312821f466c3f/rich-13.3.4-py3-none-any.whl", hash = "sha256:22b74cae0278fd5086ff44144d3813be1cedc9115bdfabbfefd86400cb88b20a"},
 ]
 "setoptconf 0.3.0" = [
     {url = "https://files.pythonhosted.org/packages/3c/98/92a42f481277db22f527fe4eda593b546eddb76484fdd9c4da9682a88bbd/setoptconf-0.3.0-py3-none-any.whl", hash = "sha256:1fa613dc4a6fbfbaab9a52319d1e369d030e8ed80455b151574ccf3390ec86c6"},
