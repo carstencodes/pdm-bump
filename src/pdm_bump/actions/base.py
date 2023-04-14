@@ -211,15 +211,19 @@ class ActionRegistry:
         clazz: type[ActionBase] = self.__items[selected_command]
 
         allowed_args: set[str] = clazz.get_allowed_arguments()
-        kwargs: dict[str, Any] = {
+        allowed_kwargs: dict[str, Any] = {
             "version": version,
             "persister": persister,
             "vcs_provider": vcs_provider,
         }
 
-        kwargs = {
-            key: value for key, value in kwargs.items() if key in allowed_args
+        allowed_kwargs = {
+            key: value
+            for key, value in allowed_kwargs.items()
+            if key in allowed_args
         }
+
+        kwargs.update(allowed_kwargs)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)
