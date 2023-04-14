@@ -14,11 +14,13 @@ from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
 from traceback import format_exc as get_traceback
+from typing import Final
 
 from .logging import logger, traced_function
 
 
-class _Loader:
+# Justification: loader should be single instance only.
+class _Loader:  # pylint: disable=R0903
     def __init__(self) -> None:
         self.__loaded: set[str] = set()
 
@@ -58,4 +60,5 @@ class _Loader:
                     logger.debug("Error loading module: %s", get_traceback())
 
 
-loader = _Loader()
+# Justification: Intended to use as a regular variable
+loader: Final[_Loader] = _Loader()  # pylint: disable=C0103
