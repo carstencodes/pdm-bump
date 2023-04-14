@@ -33,7 +33,7 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
         raise NotImplementedError()
 
 
-class _ArgumentParserFactory:
+class _ArgumentParserFactoryMixin:
     name: str
     description: str
 
@@ -79,7 +79,7 @@ class _ArgumentParserFactory:
         return parser
 
 
-class ActionBase(ABC, _ArgumentParserFactory):
+class ActionBase(ABC, _ArgumentParserFactoryMixin):
     def __init__(self, **kwargs) -> None:
         # Just to ignore key word arguments
         pass
