@@ -41,5 +41,6 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
-        return set(["vcs_provider"]).union(VersionConsumer.get_allowed_arguments())
-
+        return set(["vcs_provider"]).union(
+            VersionConsumer.get_allowed_arguments()
+        )

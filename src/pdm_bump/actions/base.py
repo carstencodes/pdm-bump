@@ -12,11 +12,11 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from typing import Callable, Protocol, Any
+from typing import Any, Callable, Protocol
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
-from ..vcs.core import VcsProvider, VcsProviderAggregator
+from ..vcs.core import VcsProvider
 
 _formatter = Pep440VersionFormatter()
 
@@ -135,7 +135,9 @@ class VersionModifier(VersionConsumer):
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
-        return set(["persister"]).union(VersionConsumer.get_allowed_arguments())
+        return set(["persister"]).union(
+            VersionConsumer.get_allowed_arguments()
+        )
 
 
 class ActionRegistry:
@@ -215,7 +217,9 @@ class ActionRegistry:
             "vcs_provider": vcs_provider,
         }
 
-        kwargs = { key: value for key, value in kwargs.items() if key in allowed_args }
+        kwargs = {
+            key: value for key, value in kwargs.items() if key in allowed_args
+        }
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)
