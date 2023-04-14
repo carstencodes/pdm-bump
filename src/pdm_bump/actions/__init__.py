@@ -10,11 +10,10 @@
 # Refer to LICENSE for more information
 #
 
+from ..core.loader import loader as _loader
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
-from .explicit import *  # noqa
-from .increment import *  # noqa
-from .preview import *  # noqa
-from .vcs import *  # noqa
+
+_loader.load_modules_of_package(__file__, __name__, "__init__", "base")
 
 __all__ = [
     "actions",

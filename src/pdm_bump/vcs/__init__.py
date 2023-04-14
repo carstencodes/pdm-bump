@@ -9,6 +9,8 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+
+from ..core.loader import loader as _loader
 from .core import (
     DefaultVcsProvider,
     VcsProvider,
@@ -20,7 +22,9 @@ from .core import (
 )
 
 # Justification: Add items to registry
-from .gitcli import *  # noqa: disable=F401,F403
+_loader.load_modules_of_package(
+    __file__, __name__, "__init__", "core", "mixins"
+)
 
 __all__ = (
     "vcs_provider",
