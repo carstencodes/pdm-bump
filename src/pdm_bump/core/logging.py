@@ -189,6 +189,18 @@ def update_logger_from_project_ui(ui_instance: UI) -> None:
     logger.addHandler(new_handler)
 
 
+def setup_logger(level: int) -> None:
+    if 0 > level:
+        return
+
+    if level == 0:
+        logger.setLevel(INFO)
+    elif level == 1:
+        logger.setLevel(DEBUG)
+    elif level == 2:
+        logger.setLevel(TRACE)
+
+
 def traced_function(fun):
     def tracing_function(*args, **kwargs):
         try:
