@@ -200,7 +200,7 @@ class ActionRegistry:
 
         if selected_command not in self.__items:
             raise ValueError(
-                f"´Failed to get command {selected_command}. "
+                f"Failed to get command {selected_command}. "
                 + "Valid values are {', '.join(self.__items.keys())}."
             )
 
