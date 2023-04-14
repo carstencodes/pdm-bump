@@ -34,6 +34,9 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
 
 
 class _ArgumentParserFactory:
+    name: str
+    description: str
+
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
         # Must be implemented if necessary
@@ -77,9 +80,6 @@ class _ArgumentParserFactory:
 
 
 class ActionBase(ABC, _ArgumentParserFactory):
-    name: str
-    description: str
-
     def __init__(self, **kwargs) -> None:
         # Just to ignore key word arguments
         pass
