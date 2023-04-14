@@ -33,24 +33,7 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
         raise NotImplementedError()
 
 
-class ActionBase(ABC):
-    name: str
-    description: str
-
-    def __init__(self, **kwargs) -> None:
-        # Just to ignore key word arguments
-        pass
-
-    @abstractmethod
-    def run(self, dry_run: bool = False) -> None:
-        raise NotImplementedError()
-
-    @classmethod
-    def create_from_command(cls, **kwargs) -> "ActionBase":
-        instance: "ActionBase" = cls(**kwargs)
-
-        return instance
-
+class _ArgumentParserFactory:
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
         # Must be implemented if necessary
@@ -91,6 +74,25 @@ class ActionBase(ABC):
         cls._update_command(parser)
 
         return parser
+
+
+class ActionBase(ABC, _ArgumentParserFactory):
+    name: str
+    description: str
+
+    def __init__(self, **kwargs) -> None:
+        # Just to ignore key word arguments
+        pass
+
+    @abstractmethod
+    def run(self, dry_run: bool = False) -> None:
+        raise NotImplementedError()
+
+    @classmethod
+    def create_from_command(cls, **kwargs) -> "ActionBase":
+        instance: "ActionBase" = cls(**kwargs)
+
+        return instance
 
 
 class VersionConsumer(ActionBase):
