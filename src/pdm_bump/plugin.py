@@ -22,6 +22,7 @@ from .actions import actions
 from .core.config import Config, ConfigHolder, ConfigKeys, ConfigSections
 from .core.logging import (
     logger,
+    setup_logger,
     traced_function,
     update_logger_from_project_ui,
 )
@@ -98,6 +99,11 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
+        # This will not handling tracing or related parts
+        # Should be evaluated at start-up time
+        if hasattr(options, "verbose"):
+            setup_logger(options.verbose)
+
         config: Config = Config(project)
         update_logger_from_project_ui(project.core.ui)
 
@@ -117,7 +123,10 @@ class BumpCommand(BaseCommand):
 
         try:
             actions.execute(
-                options, backend.current_version, self, vcs_provider
+                options,
+                version=backend.current_version,
+                persister=self,
+                vcs_provider=vcs_provider,
             )
         except ValueError as exc:
             logger.exception("Failed to execute action", exc_info=True)

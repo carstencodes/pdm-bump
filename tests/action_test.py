@@ -14,19 +14,25 @@ import unittest
 from typing import Callable
 
 from pdm_bump.actions import (
-    PreviewMismatchError,
     VersionModifier,
+)
+from pdm_bump.actions.increment import (
     MajorIncrementingVersionModifier,
     MinorIncrementingVersionModifier,
     MicroIncrementingVersionModifier,
-    AlphaIncrementingVersionModifier,
-    BetaIncrementingVersionModifier,
-    ReleaseCandidateIncrementingVersionModifier,
     FinalizingVersionModifier,
     EpochIncrementingVersionModifier,
     DevelopmentVersionIncrementingVersionModifier,
     PostVersionIncrementingVersionModifier,
 )
+from pdm_bump.actions.preview import (
+    PreviewMismatchError,
+    AlphaIncrementingVersionModifier,
+    BetaIncrementingVersionModifier,
+    ReleaseCandidateIncrementingVersionModifier,
+)
+
+
 from pdm_bump.core.version import Version
 
 

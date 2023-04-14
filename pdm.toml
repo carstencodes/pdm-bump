@@ -1,0 +1,7 @@
+[python]
+use_venv = true
+
+[venv]
+in_project = true
+backend = "virtualenv"
+with_pip = true

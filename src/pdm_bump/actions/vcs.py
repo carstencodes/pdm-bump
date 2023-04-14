@@ -38,3 +38,9 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
                 "Would create tag v%s",
                 Pep440VersionFormatter().format(self.current_version),
             )
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set(["vcs_provider"]).union(
+            VersionConsumer.get_allowed_arguments()
+        )

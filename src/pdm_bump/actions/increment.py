@@ -136,7 +136,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def __init__(
         self, version: Version, persister: VersionPersister, **kwargs
     ) -> None:
-        super().__init__(version, persister, True, **kwargs)
+        super().__init__(version, persister, **kwargs)
 
     @traced_function
     def create_new_version(self) -> Version:

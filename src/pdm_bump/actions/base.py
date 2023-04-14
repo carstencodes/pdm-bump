@@ -12,11 +12,11 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from typing import Callable, Protocol
+from typing import Any, Callable, Protocol
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
-from ..vcs.core import VcsProvider, VcsProviderAggregator
+from ..vcs.core import VcsProvider
 
 _formatter = Pep440VersionFormatter()
 
@@ -33,28 +33,18 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
         raise NotImplementedError()
 
 
-class ActionBase(ABC):
+class _ArgumentParserFactoryMixin:
     name: str
     description: str
-
-    def __init__(self, **kwargs) -> None:
-        # Just to ignore key word arguments
-        pass
-
-    @abstractmethod
-    def run(self, dry_run: bool = False) -> None:
-        raise NotImplementedError()
-
-    @classmethod
-    def create_from_command(cls, **kwargs) -> "ActionBase":
-        instance: "ActionBase" = cls(**kwargs)
-
-        return instance
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
         # Must be implemented if necessary
         pass
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set()
 
     @classmethod
     def create_command(
@@ -89,6 +79,22 @@ class ActionBase(ABC):
         return parser
 
 
+class ActionBase(ABC, _ArgumentParserFactoryMixin):
+    def __init__(self, **kwargs) -> None:
+        # Just to ignore key word arguments
+        pass
+
+    @abstractmethod
+    def run(self, dry_run: bool = False) -> None:
+        raise NotImplementedError()
+
+    @classmethod
+    def create_from_command(cls, **kwargs) -> "ActionBase":
+        instance: "ActionBase" = cls(**kwargs)
+
+        return instance
+
+
 class VersionConsumer(ActionBase):
     def __init__(self, version: Version, **kwargs) -> None:
         self.__version = version
@@ -96,6 +102,10 @@ class VersionConsumer(ActionBase):
     @property
     def current_version(self) -> Version:
         return self.__version
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set(["version"]).union(ActionBase.get_allowed_arguments())
 
 
 class VersionModifier(VersionConsumer):
@@ -122,6 +132,12 @@ class VersionModifier(VersionConsumer):
             self.__persister.save_version(next_version)
         else:
             logger.info("Would write new version %s", next_version)
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set(["persister"]).union(
+            VersionConsumer.get_allowed_arguments()
+        )
 
 
 class ActionRegistry:
@@ -163,7 +179,9 @@ class ActionRegistry:
 
     def execute(
         self,
+        /,
         args: Namespace,
+        *,
         version: Version,
         persister: VersionPersister,
         vcs_provider: VcsProvider,
@@ -186,20 +204,26 @@ class ActionRegistry:
 
         if selected_command not in self.__items:
             raise ValueError(
-                f"´Failed to get command {selected_command}. "
+                f"Failed to get command {selected_command}. "
                 + "Valid values are {', '.join(self.__items.keys())}."
             )
 
         clazz: type[ActionBase] = self.__items[selected_command]
 
-        if issubclass(clazz, VersionConsumer):
-            kwargs["version"] = version
+        allowed_args: set[str] = clazz.get_allowed_arguments()
+        allowed_kwargs: dict[str, Any] = {
+            "version": version,
+            "persister": persister,
+            "vcs_provider": vcs_provider,
+        }
 
-        if issubclass(clazz, VersionModifier):
-            kwargs["persister"] = persister
+        allowed_kwargs = {
+            key: value
+            for key, value in allowed_kwargs.items()
+            if key in allowed_args
+        }
 
-        if issubclass(clazz, VcsProviderAggregator):
-            kwargs["vcs_provider"] = vcs_provider
+        kwargs.update(allowed_kwargs)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)
