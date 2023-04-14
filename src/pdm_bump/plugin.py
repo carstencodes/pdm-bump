@@ -123,7 +123,10 @@ class BumpCommand(BaseCommand):
 
         try:
             actions.execute(
-                options, backend.current_version, self, vcs_provider
+                options,
+                version=backend.current_version,
+                persister=self,
+                vcs_provider=vcs_provider,
             )
         except ValueError as exc:
             logger.exception("Failed to execute action", exc_info=True)

@@ -12,7 +12,7 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from typing import Callable, Protocol
+from typing import Callable, Protocol, Any
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
@@ -57,6 +57,10 @@ class ActionBase(ABC):
         pass
 
     @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set()
+
+    @classmethod
     def create_command(
         cls, sub_parser_collection: _HasAddSubParser, **kwargs
     ) -> ArgumentParser:
@@ -97,6 +101,10 @@ class VersionConsumer(ActionBase):
     def current_version(self) -> Version:
         return self.__version
 
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set(["version"]).union(ActionBase.get_allowed_arguments())
+
 
 class VersionModifier(VersionConsumer):
     def __init__(
@@ -122,6 +130,10 @@ class VersionModifier(VersionConsumer):
             self.__persister.save_version(next_version)
         else:
             logger.info("Would write new version %s", next_version)
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        return set(["persister"]).union(VersionConsumer.get_allowed_arguments())
 
 
 class ActionRegistry:
@@ -163,7 +175,9 @@ class ActionRegistry:
 
     def execute(
         self,
+        /,
         args: Namespace,
+        *,
         version: Version,
         persister: VersionPersister,
         vcs_provider: VcsProvider,
@@ -192,14 +206,14 @@ class ActionRegistry:
 
         clazz: type[ActionBase] = self.__items[selected_command]
 
-        if issubclass(clazz, VersionConsumer):
-            kwargs["version"] = version
+        allowed_args: set[str] = clazz.get_allowed_arguments()
+        kwargs: dict[str, Any] = {
+            "version": version,
+            "persister": persister,
+            "vcs_provider": vcs_provider,
+        }
 
-        if issubclass(clazz, VersionModifier):
-            kwargs["persister"] = persister
-
-        if issubclass(clazz, VcsProviderAggregator):
-            kwargs["vcs_provider"] = vcs_provider
+        kwargs = { key: value for key, value in kwargs.items() if key in allowed_args }
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
         command.run(dry_run=dry_run)
