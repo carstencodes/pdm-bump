@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.7.0.dev1"
+version = "0.7.0.dev2"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -16,7 +16,9 @@ dependencies = [
     "tomli-w>=1.0.0",
 ]
 requires-python = ">=3.9"
-license = { text = "MIT" }
+
+[project.license]
+text = "MIT"
 
 [project.license-files]
 paths = [
