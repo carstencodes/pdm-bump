@@ -1,4 +1,4 @@
-.pdm.toml
+.pdm-python
 dist/
 __pypackages__/
 pdm_bump.egg-info/

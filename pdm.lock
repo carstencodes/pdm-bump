@@ -29,12 +29,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "attrs"
-version = "23.1.0"
-requires_python = ">=3.7"
-summary = "Classes Without Boilerplate"
-
-[[package]]
 name = "autoflake"
 version = "2.1.1"
 requires_python = ">=3.7"
@@ -675,16 +669,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "pytest-subtests"
-version = "0.10.0"
-requires_python = ">=3.7"
-summary = "unittest subTest() support and subtests fixture"
-dependencies = [
-    "attrs>=19.2.0",
-    "pytest>=7.0",
-]
-
-[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 requires_python = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
@@ -940,8 +924,9 @@ requires_python = ">=3.7"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
-lock_version = "4.1"
-content_hash = "sha256:0f24930d6a653f6ec532897f3347dd6e32a90eed35443faaa7f89c5631a809d0"
+lock_version = "4.2"
+groups = ["default", "checkstlye", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
+content_hash = "sha256:24fa8bc16a27a275a8d5d94edbb1b7cb7a9f90f880ab63f2007632383d486a05"
 
 [metadata.files]
 "annotated-types 0.4.0" = [
@@ -955,10 +940,6 @@ content_hash = "sha256:0f24930d6a653f6ec532897f3347dd6e32a90eed35443faaa7f89c563
 "astroid 2.15.4" = [
     {url = "https://files.pythonhosted.org/packages/36/50/c2bde258f4b8021ee9075932ace925245a1ad9a816a0cab269f04f480c3b/astroid-2.15.4.tar.gz", hash = "sha256:c81e1c7fbac615037744d067a9bb5f9aeb655edf59b63ee8b59585475d6f80d8"},
     {url = "https://files.pythonhosted.org/packages/6d/79/5684480fc8be4b9e3ec55d78376d82e88b6658a2328a7fded88738aa1286/astroid-2.15.4-py3-none-any.whl", hash = "sha256:a1b8543ef9d36ea777194bc9b17f5f8678d2c56ee6a45b2c2f17eec96f242347"},
-]
-"attrs 23.1.0" = [
-    {url = "https://files.pythonhosted.org/packages/97/90/81f95d5f705be17872843536b1868f351805acf6971251ff07c1b8334dbb/attrs-23.1.0.tar.gz", hash = "sha256:6279836d581513a26f1bf235f9acd333bc9115683f14f7e8fae46c98fc50e015"},
-    {url = "https://files.pythonhosted.org/packages/f0/eb/fcb708c7bf5056045e9e98f62b93bd7467eb718b0202e7698eb11d66416c/attrs-23.1.0-py3-none-any.whl", hash = "sha256:1f28b4522cdc2fb4256ac1a020c78acf9cba2c6b461ccd2c126f3aa8e8335d04"},
 ]
 "autoflake 2.1.1" = [
     {url = "https://files.pythonhosted.org/packages/50/4c/24cf18273b0a76cd31255b76f76999dbbeba119c3dd370a6ed84b0f1e85f/autoflake-2.1.1-py3-none-any.whl", hash = "sha256:94e330a2bcf5ac01384fb2bf98bea60c6383eaa59ea62be486e376622deba985"},
@@ -1499,10 +1480,6 @@ content_hash = "sha256:0f24930d6a653f6ec532897f3347dd6e32a90eed35443faaa7f89c563
 "pytest-cov 4.0.0" = [
     {url = "https://files.pythonhosted.org/packages/ea/70/da97fd5f6270c7d2ce07559a19e5bf36a76f0af21500256f005a69d9beba/pytest-cov-4.0.0.tar.gz", hash = "sha256:996b79efde6433cdbd0088872dbc5fb3ed7fe1578b68cdbba634f14bb8dd0470"},
     {url = "https://files.pythonhosted.org/packages/fe/1f/9ec0ddd33bd2b37d6ec50bb39155bca4fe7085fa78b3b434c05459a860e3/pytest_cov-4.0.0-py3-none-any.whl", hash = "sha256:2feb1b751d66a8bd934e5edfa2e961d11309dc37b73b0eabe73b5945fee20f6b"},
-]
-"pytest-subtests 0.10.0" = [
-    {url = "https://files.pythonhosted.org/packages/10/ba/51115d999d70e1644adb38d5f7d2ab910fbc1b601b264a42ab3df9879116/pytest-subtests-0.10.0.tar.gz", hash = "sha256:d9961a67c1791e8c1e32dce7a70ed1e54f3b1e641087f2094f2d37087ab7fb17"},
-    {url = "https://files.pythonhosted.org/packages/9b/b4/ada3443f09e150668dbb68e794229b6f743c4ed4d34fca2ddb0c746d53ea/pytest_subtests-0.10.0-py3-none-any.whl", hash = "sha256:03a50a14f7981cd03090e8ca94205d783e290266d828728210c3d79f4d00c46f"},
 ]
 "python-dateutil 2.8.2" = [
     {url = "https://files.pythonhosted.org/packages/36/7a/87837f39d0296e723bb9b62bbb257d0355c7f6128853c78955f57342a56d/python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
