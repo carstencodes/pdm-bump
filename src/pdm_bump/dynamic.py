@@ -26,6 +26,7 @@ DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
 
 
 class DynamicVersionConfig:
+    """"""
     __file: Path
     __pattern: Pattern[str]
     __file_encoding: str
@@ -39,14 +40,17 @@ class DynamicVersionConfig:
 
     @property
     def file(self) -> Path:
+        """"""
         return self.__file
 
     @property
     def pattern(self) -> Pattern[str]:
+        """"""
         return self.__pattern
 
     @cached_property
     def dynamic_version(self) -> Optional[str]:
+        """"""
         with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             match = self.__pattern.search(file_ptr.read())
         if match is not None:
@@ -54,6 +58,17 @@ class DynamicVersionConfig:
         return None
 
     def replace_dynamic_version(self, new_version: str) -> None:
+        """
+
+        Parameters
+        ----------
+        new_version: str :
+            
+
+        Returns
+        -------
+
+        """
         with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             version_file = file_ptr.read()
             match = self.__pattern.search(version_file)
@@ -73,6 +88,19 @@ class DynamicVersionConfig:
     def find_dynamic_config(
         root_path: Path, project_config: Config
     ) -> Optional["DynamicVersionConfig"]:
+        """
+
+        Parameters
+        ----------
+        root_path: Path :
+            
+        project_config: Config :
+            
+
+        Returns
+        -------
+
+        """
         if (
             project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
             == ConfigValues.BUILD_BACKEND_PDM_PEP517_API
@@ -93,6 +121,7 @@ class DynamicVersionConfig:
 
 # Justification: Implementation of minimal protocol
 class DynamicVersionSource:  # pylint: disable=R0903
+    """"""
     def __init__(self, project_root: Path, config: Config) -> None:
         self.__project_root = project_root
         self.__config = config
@@ -100,6 +129,7 @@ class DynamicVersionSource:  # pylint: disable=R0903
 
     @property
     def is_enabled(self) -> bool:
+        """"""
         return self.__config.meta_data.is_dynamic_version
 
     def __get_current_version(self) -> Version:

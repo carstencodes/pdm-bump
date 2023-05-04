@@ -22,10 +22,12 @@ from .mixins import CliRunnerMixin
 
 
 class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
+    """"""
     __GIT_EXECUTABLE_NAME = "git"
 
     @cached_property
     def git_executable_path(self) -> Path:
+        """"""
         logger.debug("Searching for %s executable", self.__GIT_EXECUTABLE_NAME)
         git_executable_path: Optional[Path] = self._which(
             self.__GIT_EXECUTABLE_NAME
@@ -38,6 +40,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     @property
     def is_available(self) -> bool:
+        """"""
         logger.debug("Checking, if we're working on a git repository")
         exit_code, _out, _err = self.run(
             self.git_executable_path,
@@ -49,6 +52,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     @property
     def is_clean(self) -> bool:
+        """"""
         try:
             logger.debug("Checking, if there are any changes")
             _ex, out, _err = self.run(
@@ -77,6 +81,19 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             ) from cpe
 
     def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
+        """
+
+        Parameters
+        ----------
+        message: str :
+
+        *files: tuple[Path, ...] :
+
+
+        Returns
+        -------
+
+        """
         try:
             args: list[str] = ["add", "--update"]
             args.extend(str(f) for f in files)
@@ -105,6 +122,17 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             ) from cpe
 
     def create_tag_from_string(self, version_formatted: str) -> None:
+        """
+
+        Parameters
+        ----------
+        version_formatted: str :
+
+
+        Returns
+        -------
+
+        """
         try:
             logger.info(
                 "Creating tag '%s' on current commit.", version_formatted
@@ -122,6 +150,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             ) from cpe
 
     def get_most_recent_tag(self) -> Optional[Version]:
+        """"""
         try:
             logger.debug("Checking for most recent tag.")
             _, output, _ = self.run(
@@ -143,6 +172,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
         return Version.from_string(output)
 
     def get_number_of_changes_since_last_release(self) -> int:
+        """"""
         try:
             logger.debug("Searching last tag ...")
             _, output, _ = self.run(
@@ -170,6 +200,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             ) from cpe
 
     def get_changes_not_checked_in(self) -> int:
+        """"""
         try:
             logger.debug("Searching for changes")
             _, output, _ = self.run(
@@ -192,5 +223,17 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
 @vcs_provider("git-cli")
 class GitCliVcsProviderFactory(GitCommonVcsProviderFactory):
+    """"""
     def _create_provider(self, path: Path) -> VcsProvider:
+        """
+
+        Parameters
+        ----------
+        path: Path :
+
+
+        Returns
+        -------
+
+        """
         return GitCliVcsProvider(path)

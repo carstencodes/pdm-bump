@@ -23,33 +23,85 @@ _formatter = Pep440VersionFormatter()
 
 # Justification: Just a protocol
 class _HasAddSubParser(Protocol):  # pylint: disable=R0903
+    """"""
     def add_parser(self, name, **kwargs) -> ArgumentParser:
+        """
+
+        Parameters
+        ----------
+        name :
+            
+        **kwargs :
+            
+
+        Returns
+        -------
+
+        """
         raise NotImplementedError()
 
 
 # Justification: Just a protocol
 class VersionPersister(Protocol):  # pylint: disable=R0903
+    """"""
     def save_version(self, version: Version) -> None:
+        """
+
+        Parameters
+        ----------
+        version: Version :
+            
+
+        Returns
+        -------
+
+        """
         raise NotImplementedError()
 
 
 class _ArgumentParserFactoryMixin:
+    """"""
     name: str
     description: str
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         # Must be implemented if necessary
         pass
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
+        """"""
         return set()
 
     @classmethod
     def create_command(
         cls, sub_parser_collection: _HasAddSubParser, **kwargs
     ) -> ArgumentParser:
+        """
+
+        Parameters
+        ----------
+        sub_parser_collection: _HasAddSubParser :
+            
+        **kwargs :
+            
+
+        Returns
+        -------
+
+        """
         aliases: list[str] = []
 
         if "aliases" in vars(cls):
@@ -80,35 +132,62 @@ class _ArgumentParserFactoryMixin:
 
 
 class ActionBase(ABC, _ArgumentParserFactoryMixin):
+    """"""
     def __init__(self, **kwargs) -> None:
         # Just to ignore key word arguments
         pass
 
     @abstractmethod
     def run(self, dry_run: bool = False) -> None:
+        """
+
+        Parameters
+        ----------
+        dry_run: bool :
+             (Default value = False)
+
+        Returns
+        -------
+
+        """
         raise NotImplementedError()
 
     @classmethod
     def create_from_command(cls, **kwargs) -> "ActionBase":
+        """
+
+        Parameters
+        ----------
+        **kwargs :
+            
+
+        Returns
+        -------
+
+        """
         instance: "ActionBase" = cls(**kwargs)
 
         return instance
 
 
 class VersionConsumer(ActionBase):
+    """"""
     def __init__(self, version: Version, **kwargs) -> None:
         self.__version = version
 
     @property
     def current_version(self) -> Version:
+        """"""
         return self.__version
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
+        """"""
         return set(["version"]).union(ActionBase.get_allowed_arguments())
 
 
 class VersionModifier(VersionConsumer):
+    """"""
     def __init__(
         self, version: Version, persister: VersionPersister, **kwargs
     ) -> None:
@@ -117,9 +196,21 @@ class VersionModifier(VersionConsumer):
 
     @abstractmethod
     def create_new_version(self) -> Version:
+        """"""
         raise NotImplementedError()
 
     def _report_new_version(self, next_version: Version) -> None:
+        """
+
+        Parameters
+        ----------
+        next_version: Version :
+            
+
+        Returns
+        -------
+
+        """
         logger.info(
             "Performing increment of version: %s -> %s",
             _formatter.format(self.current_version),
@@ -127,6 +218,17 @@ class VersionModifier(VersionConsumer):
         )
 
     def run(self, dry_run: bool = False) -> None:
+        """
+
+        Parameters
+        ----------
+        dry_run: bool :
+             (Default value = False)
+
+        Returns
+        -------
+
+        """
         next_version: Version = self.create_new_version()
         if not dry_run:
             self.__persister.save_version(next_version)
@@ -135,17 +237,31 @@ class VersionModifier(VersionConsumer):
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
+        """"""
         return set(["persister"]).union(
             VersionConsumer.get_allowed_arguments()
         )
 
 
 class ActionRegistry:
+    """"""
     def __init__(self) -> None:
         self.__items: dict[str, type[ActionBase]] = {}
 
     def register(self) -> Callable:
+        """"""
         def decorator(clazz: type[ActionBase]):
+            """
+
+            Parameters
+            ----------
+            clazz: type[ActionBase] :
+                
+
+            Returns
+            -------
+
+            """
             if not issubclass(clazz, ActionBase):
                 raise ValueError(
                     f"{clazz.__name__} is not an sub-type of "
@@ -158,6 +274,17 @@ class ActionRegistry:
         return decorator
 
     def update_parser(self, parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         parsers: _HasAddSubParser = parser.add_subparsers(  # type: ignore
             dest="selected_command",
             description="Either the part of the version to bump "
@@ -186,6 +313,27 @@ class ActionRegistry:
         persister: VersionPersister,
         vcs_provider: VcsProvider,
     ) -> None:
+        """
+
+        Parameters
+        ----------
+        / :
+            
+        args: Namespace :
+            
+        * :
+            
+        version: Version :
+            
+        persister: VersionPersister :
+            
+        vcs_provider: VcsProvider :
+            
+
+        Returns
+        -------
+
+        """
         kwargs: dict = {}
 
         kwargs.update(vars(args))

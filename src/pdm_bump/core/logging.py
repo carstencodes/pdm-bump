@@ -33,6 +33,7 @@ from pdm.termui import UI, Verbosity  # type: ignore
 
 
 def _get_has_rich():
+    """"""
     try:
         # Justification: Required to find module, not more
         import rich  # noqa: F401 pylint: disable=C0415,W0611
@@ -55,11 +56,23 @@ TRACE: Final[int] = 5
 
 
 class TermUIHandler(Handler):
+    """"""
     def __init__(self, ui: UI, level: int = NOTSET) -> None:
         super().__init__(level)
         self.__ui = ui
 
     def emit(self, record: LogRecord) -> None:
+        """
+
+        Parameters
+        ----------
+        record: LogRecord :
+
+
+        Returns
+        -------
+
+        """
         msg_format = "{text}"
         if record.levelno in (WARN, WARNING):
             msg_format = "[warning]{text}[/warning]"
@@ -79,11 +92,23 @@ class TermUIHandler(Handler):
 
 # Justification: Only one method to override
 class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
+    """"""
     def __init__(self, invert: Optional[bool] = False) -> None:
         self.__invert: bool = invert or False
         super().__init__()
 
     def filter(self, record: LogRecord) -> bool:
+        """
+
+        Parameters
+        ----------
+        record: LogRecord :
+
+
+        Returns
+        -------
+
+        """
         warning_and_above: tuple[int, ...] = (WARN, WARNING, ERROR, CRITICAL)
         return (
             record.levelno in warning_and_above
@@ -93,7 +118,23 @@ class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
 
 
 class TracingLogger(Logger):
-    def trace(self, msg: str, *args: Any, **kwargs) -> None:
+    """"""
+    def trace(self, msg: str, *args: tuple[Any, ...], **kwargs) -> None:
+        """
+
+        Parameters
+        ----------
+        msg: str :
+
+        *args: tuple[Any, ...] :
+
+        **kwargs :
+
+
+        Returns
+        -------
+
+        """
         self.log(TRACE, msg, *args, **kwargs)
 
     # Justification: Overriding inherited method
@@ -110,6 +151,37 @@ class TracingLogger(Logger):
         extra: Optional[Mapping[str, Any]] = None,
         sinfo: Optional[str] = None,
     ) -> LogRecord:
+        """
+
+        Parameters
+        ----------
+        name: str :
+
+        level: int :
+
+        fn: str :
+
+        lno: int :
+
+        msg: Any :
+
+        args: Any :
+
+        exc_info: Any :
+
+        func: Optional[str] :
+             (Default value = None)
+        extra: Optional[Mapping[str :
+
+        Any]] :
+             (Default value = None)
+        sinfo: Optional[str] :
+             (Default value = None)
+
+        Returns
+        -------
+
+        """
         record: LogRecord = super().makeRecord(
             name, level, fn, lno, msg, args, exc_info, func, extra, sinfo
         )
@@ -123,6 +195,7 @@ Logger.manager.setLoggerClass(TracingLogger)
 
 
 def _get_rich_logger() -> TracingLogger:
+    """"""
     _logger: TracingLogger = cast(TracingLogger, getLogger("pdm-bump"))
 
     styles: dict[str, StyleType] = {}
@@ -158,6 +231,7 @@ def _get_rich_logger() -> TracingLogger:
 
 
 def _get_std_logger() -> TracingLogger:
+    """"""
     _logger: TracingLogger = cast(TracingLogger, getLogger("pdm-bump"))
     # mypy: No overload variant of "StreamHandler"
     #       matches argument type "Handler"
@@ -182,6 +256,17 @@ logger: Final[TracingLogger] = (  # pylint: disable=C0103
 
 
 def update_logger_from_project_ui(ui_instance: UI) -> None:
+    """
+
+    Parameters
+    ----------
+    ui_instance: UI :
+
+
+    Returns
+    -------
+
+    """
     for handler in list(logger.handlers):
         logger.removeHandler(handler)
 
@@ -190,6 +275,17 @@ def update_logger_from_project_ui(ui_instance: UI) -> None:
 
 
 def setup_logger(level: int) -> None:
+    """
+
+    Parameters
+    ----------
+    level: int :
+
+
+    Returns
+    -------
+
+    """
     if 0 > level:
         return
 
@@ -202,7 +298,31 @@ def setup_logger(level: int) -> None:
 
 
 def traced_function(fun):
-    def tracing_function(*args, **kwargs):
+    """
+
+    Parameters
+    ----------
+    fun :
+
+
+    Returns
+    -------
+
+    """
+    def tracing_function(*args: tuple[Any, ...], **kwargs):
+        """
+
+        Parameters
+        ----------
+        *args: tuple[Any, ...] :
+
+        **kwargs :
+
+
+        Returns
+        -------
+
+        """
         try:
             logger.trace(
                 "%s: Entering function", fun.__qualname__ or fun.__name__

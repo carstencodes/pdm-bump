@@ -21,13 +21,29 @@ from .logging import logger, traced_function
 
 # Justification: loader should be single instance only.
 class _Loader:  # pylint: disable=R0903
+    """"""
     def __init__(self) -> None:
         self.__loaded: set[str] = set()
 
     @traced_function
     def load_modules_of_package(
-        self, file_path: str, pkg_name: str, *skip: str
+        self, file_path: str, pkg_name: str, *skip: tuple[str, ...]
     ) -> None:
+        """
+
+        Parameters
+        ----------
+        file_path: str :
+
+        pkg_name: str :
+
+        *skip: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         file_pth = Path(file_path)
         if not file_pth.exists() or not file_pth.is_file():
             raise FileNotFoundError(file_path)

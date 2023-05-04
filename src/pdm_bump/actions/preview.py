@@ -22,17 +22,31 @@ _formatter = Pep440VersionFormatter()
 
 
 class PreviewMismatchError(Exception):
+    """"""
     pass
 
 
 # Justification fulfills a protocol
 class _DummyPersister:  # pylint: disable=R0903
+    """"""
     def save_version(self, version: Version) -> None:
+        """
+
+        Parameters
+        ----------
+        version: Version :
+            
+
+        Returns
+        -------
+
+        """
         # This must not be implemented as it is only a dummy.
         pass
 
 
 class _PreReleaseIncrementingVersionModified(VersionModifier):
+    """"""
     def __init__(
         self,
         version: Version,
@@ -45,6 +59,17 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         sub_parser.add_argument(
             "--micro",
             action="store_true",
@@ -58,6 +83,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         letter: Literal["a", "b", "c", "alpha", "beta", "rc"]
         name: str
         letter, name = self.pre_release_part
@@ -111,13 +137,16 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
     def pre_release_part(
         self,
     ) -> tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
+        """"""
         raise NotImplementedError()
 
     @abstractmethod
     def _is_valid_preview_version(self) -> bool:
+        """"""
         raise NotImplementedError()
 
     def _get_next_release(self) -> tuple[NonNegativeInteger, ...]:
+        """"""
         micro = self.current_version.micro
         if self.__increment_micro and self.current_version.preview is None:
             micro = micro + 1
@@ -137,6 +166,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 @final
 @action
 class PreReleaseIncrementingVersionModifier(VersionModifier):
+    """"""
     name: str = "pre-release"
     description: str = (
         "Increment a pre-release part (alpha, beta, release-candidate)"
@@ -176,10 +206,22 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         return self.__sub_modifier.create_new_version()
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         valid_values = []
         valid_values.append(AlphaIncrementingVersionModifier.name)
         valid_values.append(BetaIncrementingVersionModifier.name)
@@ -210,6 +252,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
 
 @final
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
+    """"""
     name: str = "alpha"
     description: str = "Increment the alpha pre-release version part"
 
@@ -217,14 +260,17 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     def pre_release_part(
         self,
     ) -> tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
+        """"""
         return ("a", "alpha")
 
     def _is_valid_preview_version(self) -> bool:
+        """"""
         return self.current_version.is_alpha
 
 
 @final
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
+    """"""
     name: str = "beta"
     description: str = "Increment the beta pre-release version part"
 
@@ -232,9 +278,11 @@ class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     def pre_release_part(
         self,
     ) -> tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
+        """"""
         return ("b", "alpha or beta")
 
     def _is_valid_preview_version(self) -> bool:
+        """"""
         return self.current_version.is_alpha or self.current_version.is_beta
 
 
@@ -242,6 +290,7 @@ class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
+    """"""
     name: str = "rc"
     description: str = (
         "Increment the release-candidate pre-release version part"
@@ -252,9 +301,11 @@ class ReleaseCandidateIncrementingVersionModifier(
     def pre_release_part(
         self,
     ) -> tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], str]:
+        """"""
         return ("rc", "pre-release")
 
     def _is_valid_preview_version(self) -> bool:
+        """"""
         return (
             self.current_version.is_alpha
             or self.current_version.is_beta

@@ -39,15 +39,28 @@ from .vcs import (
 
 # Justification: Protocol for interoperability
 class _CoreLike(Protocol):  # pylint: disable=R0903
+    """"""
     ui: UI
 
 
 class _ProjectLike(ConfigHolder, Protocol):
+    """"""
     root: Path
     core: _CoreLike
     PYPROJECT_FILENAME: str
 
     def write_pyproject(self, show_message: bool) -> None:
+        """
+
+        Parameters
+        ----------
+        show_message: bool :
+            
+
+        Returns
+        -------
+
+        """
         # Method empty: Only a protocol stub
         pass
 
@@ -55,8 +68,10 @@ class _ProjectLike(ConfigHolder, Protocol):
 # Justification: Minimal protocol. Maybe false positive,
 # since 2 public methods available
 class _VersionSource(Protocol):  # pylint: disable=R0903
+    """"""
     @property
     def is_enabled(self) -> bool:
+        """"""
         raise NotImplementedError()
 
     def __get_current_version(self) -> Version:
@@ -72,6 +87,7 @@ class _VersionSource(Protocol):  # pylint: disable=R0903
 
 @final
 class BumpCommand(BaseCommand):
+    """"""
     name: Final[str] = "bump"
     description: str = "Bumps the version to a next version following PEP440."
 
@@ -81,10 +97,32 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def add_arguments(self, parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         actions.update_parser(parser)
 
     @traced_function
     def save_version(self, version: Version) -> None:
+        """
+
+        Parameters
+        ----------
+        version: Version :
+            
+
+        Returns
+        -------
+
+        """
         if self.__backend is None:
             msg = ". ".join(
                 (
@@ -99,6 +137,19 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def handle(self, project: _ProjectLike, options: Namespace) -> None:
+        """
+
+        Parameters
+        ----------
+        project: _ProjectLike :
+            
+        options: Namespace :
+            
+
+        Returns
+        -------
+
+        """
         # This will not handling tracing or related parts
         # Should be evaluated at start-up time
         if hasattr(options, "verbose"):
@@ -135,6 +186,17 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
+        """
+
+        Parameters
+        ----------
+        project: _ProjectLike :
+            
+
+        Returns
+        -------
+
+        """
         config: Config = Config(project)
         value = config.get_config_or_pyproject_value(
             ConfigSections.PDM_BUMP,
@@ -161,6 +223,19 @@ class BumpCommand(BaseCommand):
     def _select_backend(
         self, project: _ProjectLike, config: Config
     ) -> Optional[_VersionSource]:
+        """
+
+        Parameters
+        ----------
+        project: _ProjectLike :
+            
+        config: Config :
+            
+
+        Returns
+        -------
+
+        """
         static_backend: _VersionSource = StaticPep621VersionSource(
             project, config
         )
@@ -178,5 +253,16 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _version_to_string(self, version: Version) -> str:
+        """
+
+        Parameters
+        ----------
+        version: Version :
+            
+
+        Returns
+        -------
+
+        """
         result: str = Pep440VersionFormatter().format(version)
         return result

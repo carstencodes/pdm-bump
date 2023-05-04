@@ -24,6 +24,7 @@ from .logging import traced_function
 
 @final
 class VersionParserError(ValueError):
+    """"""
     pass
 
 
@@ -36,6 +37,7 @@ NonNegativeInteger = Annotated[int, NonNegative]
 @dataclass(eq=False, order=False, frozen=True)
 @total_ordering
 class Version:
+    """"""
     epoch: NonNegativeInteger = field(
         default=0, repr=True, hash=True, compare=True
     )
@@ -64,20 +66,24 @@ class Version:
 
     @property
     def major(self) -> NonNegativeInteger:
+        """"""
         return self.release_tuple[0] if len(self.release_tuple) >= 1 else 0
 
     @property
     def minor(self) -> NonNegativeInteger:
+        """"""
         return self.release_tuple[1] if len(self.release_tuple) >= 2 else 0
 
     @property
     def micro(self) -> NonNegativeInteger:
+        """"""
         return self.release_tuple[2] if len(self.release_tuple) >= 3 else 0
 
     @property
     def release(
         self,
     ) -> tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]:
+        """"""
         return (
             self.major,
             self.minor,
@@ -86,32 +92,39 @@ class Version:
 
     @property
     def is_pre_release(self) -> bool:
+        """"""
         return self.preview is not None or self.is_development_version
 
     @property
     def is_development_version(self) -> bool:
+        """"""
         return self.dev is not None
 
     @property
     def is_post_release(self) -> bool:
+        """"""
         return self.post is not None
 
     @property
     def is_local_version(self) -> bool:
+        """"""
         return self.local is not None
 
     @property
     def is_alpha(self) -> bool:
+        """"""
         alpha_part: Final[tuple[str, ...]] = ("a", "alpha")
         return self.preview is not None and self.__compare_preview(alpha_part)
 
     @property
     def is_beta(self) -> bool:
+        """"""
         beta_part: Final[tuple[str, ...]] = ("b", "beta")
         return self.preview is not None and self.__compare_preview(beta_part)
 
     @property
     def is_release_candidate(self) -> bool:
+        """"""
         rc_part: Final[tuple[str, ...]] = ("c", "rc")
         return self.preview is not None and self.__compare_preview(rc_part)
 
@@ -161,10 +174,22 @@ class Version:
 
     @staticmethod
     def default() -> "Version":
+        """"""
         return Version(0, (1,), None, None, None, None)
 
     @staticmethod
     def from_string(version: str) -> "Version":
+        """
+
+        Parameters
+        ----------
+        version: str :
+            
+
+        Returns
+        -------
+
+        """
         try:
             _version: BaseVersion = BaseVersion(version)
 
@@ -190,6 +215,17 @@ class Version:
 
     @staticmethod
     def can_parse_to_version(version: str) -> bool:
+        """
+
+        Parameters
+        ----------
+        version: str :
+            
+
+        Returns
+        -------
+
+        """
         try:
             _ = Version.from_string(version)
             return True
@@ -200,8 +236,20 @@ class Version:
 @final
 # Justification: Only method to provide
 class Pep440VersionFormatter:  # pylint: disable=R0903
+    """"""
     @traced_function
     def format(self, version: Version) -> str:
+        """
+
+        Parameters
+        ----------
+        version: Version :
+            
+
+        Returns
+        -------
+
+        """
         parts: list[str] = []
 
         if version.epoch > 0:

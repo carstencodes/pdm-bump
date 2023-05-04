@@ -22,6 +22,7 @@ from .base import VersionModifier, VersionPersister, action
 @final
 @action
 class SetExplicitVersionModifier(VersionModifier):
+    """"""
     name: str = "to"
     description: str = "Sets a new version explicitly from CLI"
 
@@ -38,6 +39,7 @@ class SetExplicitVersionModifier(VersionModifier):
         self.__new_version: str = new_version[0]
 
     def create_new_version(self) -> Version:
+        """"""
         try:
             new_version: Version = Version.from_string(self.__new_version)
             return new_version
@@ -49,6 +51,17 @@ class SetExplicitVersionModifier(VersionModifier):
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+            
+
+        Returns
+        -------
+
+        """
         sub_parser.add_argument(
             "new_version",
             action="store",

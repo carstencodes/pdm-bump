@@ -31,6 +31,7 @@ _formatter = Pep440VersionFormatter()
 
 
 class _NonFinalPartsRemovingVersionModifier(VersionModifier):
+    """"""
     def __init__(
         self,
         version: Version,
@@ -43,16 +44,31 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
     @property
     def remove_non_final_parts(self) -> bool:
+        """"""
         return self.__remove_parts
 
     @abstractmethod
     def create_new_version(self) -> Version:
+        """"""
         raise NotImplementedError()
 
     @staticmethod
     def _create_new_constructional_args(
         release: tuple[NonNegativeInteger, ...], epoch: NonNegativeInteger = 0
     ) -> dict[str, Any]:
+        """
+
+        Parameters
+        ----------
+        release: tuple[NonNegativeInteger, ...] :
+
+        epoch: NonNegativeInteger :
+             (Default value = 0)
+
+        Returns
+        -------
+
+        """
         return {
             "epoch": epoch,
             "release_tuple": release,
@@ -64,6 +80,17 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+
+
+        Returns
+        -------
+
+        """
         sub_parser.add_argument(
             "--no-remove",
             action="store_false",
@@ -79,13 +106,16 @@ _NFPR: TypeAlias = _NonFinalPartsRemovingVersionModifier
 
 
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
+    """"""
     @property
     @abstractmethod
     def release_part(self) -> NonNegativeInteger:
+        """"""
         raise NotImplementedError()
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         construction_args: dict[str, Any] = dataclass_to_dict(
             self.current_version
         )
@@ -111,6 +141,17 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     def _update_release_version_part(
         self, part_id: NonNegativeInteger
     ) -> tuple[NonNegativeInteger, ...]:
+        """
+
+        Parameters
+        ----------
+        part_id: NonNegativeInteger :
+
+
+        Returns
+        -------
+
+        """
         release_part: list[NonNegativeInteger] = list(
             self.current_version.release
         )
@@ -130,6 +171,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @final
 @action
 class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
+    """"""
     name: str = "no-pre-release"
     description: str = "Remove all pre-release parts from the version"
 
@@ -140,6 +182,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         constructional_args: dict[
             str,
             Any
@@ -157,6 +200,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @final
 @action
 class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
+    """"""
     name: str = "major"
     description: str = "Increment the major part of the version"
 
@@ -164,12 +208,14 @@ class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
 
     @property
     def release_part(self) -> NonNegativeInteger:
+        """"""
         return self.__MAJOR_PART
 
 
 @final
 @action
 class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
+    """"""
     name: str = "minor"
     description: str = "Increment the minor part of the version"
 
@@ -177,12 +223,14 @@ class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
 
     @property
     def release_part(self) -> NonNegativeInteger:
+        """"""
         return self.__MINOR_PART
 
 
 @final
 @action
 class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
+    """"""
     name: str = "micro"
     description: str = "Increment the micro (or patch) part of the version"
     aliases: tuple[str] = ("patch",)
@@ -191,12 +239,14 @@ class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
 
     @property
     def release_part(self) -> int:
+        """"""
         return self.__MICRO_PART
 
 
 @final
 @action
 class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
+    """"""
     name: str = "epoch"
     description: str = "Increment the epoch of the version"
 
@@ -212,6 +262,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         constructional_args: dict[str, Any] = dataclass_to_dict(
             self.current_version
         )
@@ -233,6 +284,17 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        """
+
+        Parameters
+        ----------
+        sub_parser: ArgumentParser :
+
+
+        Returns
+        -------
+
+        """
         sub_parser.add_argument(
             "--reset",
             action="store_true",
@@ -247,11 +309,13 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @final
 @action
 class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
+    """"""
     name: str = "dev"
     description: str = "Increment the local development part"
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         dev_version: NonNegativeInteger = 1
         if self.current_version.dev is not None:
             _, dev_version = self.current_version.dev
@@ -272,11 +336,13 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
 @final
 @action
 class PostVersionIncrementingVersionModifier(VersionModifier):
+    """"""
     name: str = "post"
     description: str = "Increment the post version part"
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         post_version: NonNegativeInteger = 1
         if self.current_version.post is not None:
             _, post_version = self.current_version.post

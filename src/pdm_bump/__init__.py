@@ -19,6 +19,17 @@ main = register_plugin
 
 
 def _get_version(name: str) -> str:
+    """
+
+    Parameters
+    ----------
+    name: str :
+        
+
+    Returns
+    -------
+
+    """
     try:
         return __get_version(name)
     except PackageNotFoundError:

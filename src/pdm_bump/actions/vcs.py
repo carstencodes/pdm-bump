@@ -21,6 +21,7 @@ from .base import VersionConsumer, action
 @final
 @action
 class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
+    """"""
     name: str = "tag"
     description: str = "Create a VCS revision tag from the current version"
 
@@ -31,6 +32,17 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
         VcsProviderAggregator.__init__(self, vcs_provider, **kwargs)
 
     def run(self, dry_run: bool = False) -> None:
+        """
+
+        Parameters
+        ----------
+        dry_run: bool :
+             (Default value = False)
+
+        Returns
+        -------
+
+        """
         if not dry_run:
             self.vcs_provider.create_tag_from_version(self.current_version)
         else:
@@ -41,6 +53,7 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
+        """"""
         return set(["vcs_provider"]).union(
             VersionConsumer.get_allowed_arguments()
         )
