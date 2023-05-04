@@ -57,6 +57,7 @@ formatting = [
     "isort>=5.10.1",
     "licenseheaders>=0.8.8",
     "autoflake>=2.0.2",
+    "pyment>=0.3.3",
 ]
 release = [
     "gitlint>=0.17.0",

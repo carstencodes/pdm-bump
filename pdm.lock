@@ -612,6 +612,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "pyment"
+version = "0.3.3"
+summary = "Generate/convert automatically the docstrings from code signature"
+
+[[package]]
 name = "pyparsing"
 version = "3.0.9"
 requires_python = ">=3.6.8"
@@ -927,7 +932,7 @@ summary = "Backport of pathlib-compatible object wrapper for zip files"
 [metadata]
 lock_version = "4.2"
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
-content_hash = "sha256:a475af16dd34402f60ca0abc93fb682dbb36598bd049fa466c5944f29ac1ae94"
+content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecfb7249eb"
 
 [metadata.files]
 "annotated-types 0.4.0" = [
@@ -1457,6 +1462,10 @@ content_hash = "sha256:a475af16dd34402f60ca0abc93fb682dbb36598bd049fa466c5944f29
 "pylint-plugin-utils 0.7" = [
     {url = "https://files.pythonhosted.org/packages/75/41/599c287d586bb71e9e115994a9bd722e6418906228035ace90e2562be2cb/pylint_plugin_utils-0.7-py3-none-any.whl", hash = "sha256:b3d43e85ab74c4f48bb46ae4ce771e39c3a20f8b3d56982ab17aa73b4f98d535"},
     {url = "https://files.pythonhosted.org/packages/aa/d8/e2b0edf756059da43de080415b0c1b0a98c1ad8faec678ad28ad09a44380/pylint-plugin-utils-0.7.tar.gz", hash = "sha256:ce48bc0516ae9415dd5c752c940dfe601b18fe0f48aa249f2386adfa95a004dd"},
+]
+"pyment 0.3.3" = [
+    {url = "https://files.pythonhosted.org/packages/52/01/810e174c28a7dcf5f91c048faf69c84eafee60c9a844e4ce21671b2e99bb/Pyment-0.3.3-py2.py3-none-any.whl", hash = "sha256:a0c6ec59d06d24aeec3eaecb22115d0dc95d09e14209b2df838381fdf47a78cc"},
+    {url = "https://files.pythonhosted.org/packages/dd/9e/c58a151c7020f6fdd48eea0085a9d1c91a57da19fa4e7bff0daf930c9900/Pyment-0.3.3.tar.gz", hash = "sha256:951a4c52d6791ccec55bc739811169eed69917d3874f5fe722866623a697f39d"},
 ]
 "pyparsing 3.0.9" = [
     {url = "https://files.pythonhosted.org/packages/6c/10/a7d0fa5baea8fe7b50f448ab742f26f52b80bfca85ac2be9d35cdd9a3246/pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
