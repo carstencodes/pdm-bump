@@ -460,7 +460,7 @@ dependencies = [
 
 [[package]]
 name = "pip-audit"
-version = "2.5.4"
+version = "2.5.5"
 requires_python = ">=3.7"
 summary = "A tool for scanning Python environments for known vulnerabilities"
 dependencies = [
@@ -470,6 +470,7 @@ dependencies = [
     "packaging>=23.0.0",
     "pip-api>=0.0.28",
     "pip-requirements-parser>=32.0.0",
+    "requests<2.30",
     "rich>=12.4",
     "toml>=0.10",
 ]
@@ -924,8 +925,9 @@ requires_python = ">=3.7"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
 
 [metadata]
-lock_version = "4.1"
-content_hash = "sha256:24fa8bc16a27a275a8d5d94edbb1b7cb7a9f90f880ab63f2007632383d486a05"
+lock_version = "4.2"
+groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
+content_hash = "sha256:a475af16dd34402f60ca0abc93fb682dbb36598bd049fa466c5944f29ac1ae94"
 
 [metadata.files]
 "annotated-types 0.4.0" = [
@@ -1400,9 +1402,9 @@ content_hash = "sha256:24fa8bc16a27a275a8d5d94edbb1b7cb7a9f90f880ab63f2007632383
     {url = "https://files.pythonhosted.org/packages/05/c8/d319552f0ef7af0cb57c80be8c8181184ab66a205d18b4574214b0940ba1/pip_api-0.0.30-py3-none-any.whl", hash = "sha256:2a0314bd31522eb9ffe8a99668b0d07fee34ebc537931e7b6483001dbedcbdc9"},
     {url = "https://files.pythonhosted.org/packages/69/a2/90dd01b87277ae65a6fb725dae86a039aeb34e24f576600abd0434aa95c4/pip-api-0.0.30.tar.gz", hash = "sha256:a05df2c7aa9b7157374bcf4273544201a0c7bae60a9c65bcf84f3959ef3896f3"},
 ]
-"pip-audit 2.5.4" = [
-    {url = "https://files.pythonhosted.org/packages/0c/93/0d76d6665b3ee2c87f60bdef98a24782d110487788cecd905f8c04cb97a8/pip_audit-2.5.4-py3-none-any.whl", hash = "sha256:bee3748030c895488b4dd8a6196fa44f484da000cfd52d8fc64dfa3a2e121624"},
-    {url = "https://files.pythonhosted.org/packages/7c/75/c977c23e0e1bcb86ff0f4b987b3501dfd5a0b23e3bed7f7e94c446a713e7/pip_audit-2.5.4.tar.gz", hash = "sha256:a4cb03f9e2896d626f5b153973d3ac0d32fdb18594d78d393b153c83bb8089b6"},
+"pip-audit 2.5.5" = [
+    {url = "https://files.pythonhosted.org/packages/5f/a7/4f8ced79165741bd2c616480c8bbf36047f8de9ab4769442cd59fd88504f/pip_audit-2.5.5-py3-none-any.whl", hash = "sha256:ea9b51a63eb2d430a2d68cfab6cdb373b7f3823184e175cef9fa991f8fb412fc"},
+    {url = "https://files.pythonhosted.org/packages/c2/17/6d3dc833570867a1c9ba011e82edc9e5622bff08292fe6ff9e253550943a/pip_audit-2.5.5.tar.gz", hash = "sha256:4796ac09e2c5ab31a215c3180212a5a37fdaea651d7f3301c2912a322f53803e"},
 ]
 "pip-requirements-parser 32.0.1" = [
     {url = "https://files.pythonhosted.org/packages/54/d0/d04f1d1e064ac901439699ee097f58688caadea42498ec9c4b4ad2ef84ab/pip_requirements_parser-32.0.1-py3-none-any.whl", hash = "sha256:4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526"},

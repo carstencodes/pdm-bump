@@ -52,13 +52,6 @@ test = [
     "tox-pdm>=0.6.0",
     "pytest-cov>=3.0.0",
 ]
-checkstlye = [
-    "flake8>=3.9.2",
-    "flake518>=1.2.3",
-    "mypy>=0.971",
-    "pylint>=2.14.5",
-    "pycodestyle>=2.7.0",
-]
 formatting = [
     "black>=22.6.0",
     "isort>=5.10.1",
@@ -76,6 +69,11 @@ static-code-analysis = [
     "prospector>=0.12.2",
 ]
 checkstyle = [
+    "flake8>=3.9.2",
+    "flake518>=1.2.3",
+    "mypy>=0.971",
+    "pylint>=2.14.5",
+    "pycodestyle>=2.7.0",
     "pep8-naming>=0.13.3",
 ]
 
