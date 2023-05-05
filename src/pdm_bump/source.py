@@ -19,14 +19,40 @@ from .core.version import Pep440VersionFormatter, Version
 
 # Justification: Minimal protocol
 class _ProjectWriter(Protocol):  # pylint: disable=R0903
+    """"""
+
     def write(self, show_message: bool) -> None:
+        """
+
+        Parameters
+        ----------
+        show_message: bool :
+
+
+        Returns
+        -------
+
+        """
         # Method empty: Only a protocol stub
         pass
 
 
 @runtime_checkable
 class _ProjectWriterClassic(Protocol):  # pylint: disable=R0903
+    """"""
+
     def write_pyproject(self, show_message: bool) -> None:
+        """
+
+        Parameters
+        ----------
+        show_message: bool :
+
+
+        Returns
+        -------
+
+        """
         # Method empty: Only a protocol stub
         pass
 
@@ -34,11 +60,15 @@ class _ProjectWriterClassic(Protocol):  # pylint: disable=R0903
 # Justification: Minimal protocol
 @runtime_checkable
 class _ProjectWriterHolder(Protocol):  # pylint: disable=R0903
+    """"""
+
     pyproject: _ProjectWriter
 
 
 # Justification: Implementation of minimal protocol
 class StaticPep621VersionSource:  # pylint: disable=R0903
+    """"""
+
     def __init__(
         self,
         _: Union[_ProjectWriterHolder, _ProjectWriterClassic],
@@ -48,6 +78,7 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
 
     @property
     def is_enabled(self) -> bool:
+        """"""
         return (
             self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
             is not None

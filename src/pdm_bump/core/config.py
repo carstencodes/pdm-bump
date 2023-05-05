@@ -40,16 +40,21 @@ _ConfigMapping: TypeAlias = dict[str, Any]
 
 
 class _StringEnum(str, Enum):
+    """"""
+
     pass
 
 
 # Justification: Minimal protocol
 class ConfigHolder(Protocol):  # pylint: disable=R0903
+    """"""
+
     root: Path
     PYPROJECT_FILENAME: str
 
     @property
     def config(self) -> _ConfigMapping:
+        """"""
         # Method empty: Only a protocol stub
         pass
 
@@ -58,6 +63,21 @@ class ConfigHolder(Protocol):  # pylint: disable=R0903
 def _get_config_value(
     config: _ConfigMapping, *keys: str, default_value: Optional[Any] = None
 ) -> Optional[Any]:
+    """
+
+    Parameters
+    ----------
+    config: _ConfigMapping :
+
+    *keys: str :
+
+    default_value: Optional[Any] :
+         (Default value = None)
+
+    Returns
+    -------
+
+    """
     front: str
 
     key: str = ".".join(keys)
@@ -83,6 +103,21 @@ def _get_config_value(
 
 @traced_function
 def _set_config_value(config: _ConfigMapping, value: Any, *keys: str) -> None:
+    """
+
+    Parameters
+    ----------
+    config: _ConfigMapping :
+
+    value: Any :
+
+    *keys: str :
+
+
+    Returns
+    -------
+
+    """
     front: str
 
     key: str = ".".join(keys)
@@ -103,11 +138,15 @@ def _set_config_value(config: _ConfigMapping, value: Any, *keys: str) -> None:
 
 
 class ConfigSections(_StringEnum):
+    """"""
+
     PDM_BUMP: Final[str] = "pdm_bump"
     PDM_BUMP_VCS: Final[str] = "vcs"
 
 
 class ConfigKeys(_StringEnum):
+    """"""
+
     VERSION: Final[str] = "version"
     VERSION_SOURCE: Final[str] = "source"
     VERSION_SOURCE_FILE_PATH: Final[str] = "path"
@@ -117,21 +156,28 @@ class ConfigKeys(_StringEnum):
 
 
 class ConfigValues(_StringEnum):
+    """"""
+
     VERSION_SOURCE_FILE: Final[str] = "file"
     BUILD_BACKEND_PDM_PEP517_API: Final[str] = "pdm.pep517.api"
 
 
 # Justification: Currently no more meta data to check
 class ProjectMetaData:  # pylint: disable=R0903
+    """"""
+
     def __init__(self, meta_data: StandardMetadata) -> None:
         self.__meta_data = meta_data
 
     @property
     def is_dynamic_version(self) -> bool:
+        """"""
         return ConfigKeys.VERSION in self.__meta_data.dynamic
 
 
 class _ConfigSection(IntEnum):
+    """"""
+
     ROOT = auto()
     METADATA = auto()
     PLUGIN_CONFIG = auto()
@@ -140,49 +186,114 @@ class _ConfigSection(IntEnum):
 
 
 class Config:
+    """"""
+
     def __init__(self, project: ConfigHolder) -> None:
         self.__project: ConfigHolder = project
 
     @cached_property
     @traced_function
     def pyproject_file(self) -> Path:
+        """"""
         return self.__project.root / self.__project.PYPROJECT_FILENAME
 
     @property
     @traced_function
     def meta_data(self) -> ProjectMetaData:
+        """"""
         data: _ConfigMapping = self._get_pyproject_config(_ConfigSection.ROOT)
         meta: StandardMetadata = StandardMetadata.from_pyproject(data)
         return ProjectMetaData(meta)
 
     @traced_function
-    def get_pyproject_metadata(self, *keys: str) -> Optional[Any]:
+    def get_pyproject_metadata(self, *keys: tuple[str, ...]) -> Optional[Any]:
+        """
+
+        Parameters
+        ----------
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.METADATA
         )
         return _get_config_value(config, *keys)
 
     @traced_function
-    def get_pyproject_build_system(self, *keys: str) -> Optional[Any]:
+    def get_pyproject_build_system(
+        self, *keys: tuple[str, ...]
+    ) -> Optional[Any]:
+        """
+
+        Parameters
+        ----------
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.BUILD_SYSTEM
         )
         return _get_config_value(config, *keys)
 
     @traced_function
-    def get_pyproject_tool_config(self, *keys: str) -> Optional[Any]:
+    def get_pyproject_tool_config(
+        self, *keys: tuple[str, ...]
+    ) -> Optional[Any]:
+        """
+
+        Parameters
+        ----------
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.TOOL_CONFIG
         )
         return _get_config_value(config, *keys)
 
     @traced_function
-    def get_config_value(self, *keys: str) -> Optional[Any]:
+    def get_config_value(self, *keys: tuple[str, ...]) -> Optional[Any]:
+        """
+
+        Parameters
+        ----------
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config: dict[str, Any] = self.__project.config
         return _get_config_value(config, *keys)
 
     @traced_function
-    def get_config_or_pyproject_value(self, *keys: str) -> Optional[Any]:
+    def get_config_or_pyproject_value(
+        self, *keys: tuple[str, ...]
+    ) -> Optional[Any]:
+        """
+
+        Parameters
+        ----------
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config1: _ConfigMapping = self.__project.config
         config2: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.PLUGIN_CONFIG
@@ -193,7 +304,22 @@ class Config:
         )
 
     @traced_function
-    def set_pyproject_metadata(self, value: Any, *keys: str) -> None:
+    def set_pyproject_metadata(
+        self, value: Any, *keys: tuple[str, ...]
+    ) -> None:
+        """
+
+        Parameters
+        ----------
+        value: Any :
+
+        *keys: tuple[str, ...] :
+
+
+        Returns
+        -------
+
+        """
         config: _ConfigMapping = self._get_pyproject_config(
             _ConfigSection.ROOT
         )
@@ -204,6 +330,17 @@ class Config:
         self._write_config(config)
 
     def _write_config(self, config: _ConfigMapping) -> None:
+        """
+
+        Parameters
+        ----------
+        config: _ConfigMapping :
+
+
+        Returns
+        -------
+
+        """
         with BytesIO() as buffer:
             dump_toml(config, buffer)
 
@@ -216,6 +353,17 @@ class Config:
 
     @traced_function
     def _get_pyproject_config(self, section: _ConfigSection) -> _ConfigMapping:
+        """
+
+        Parameters
+        ----------
+        section: _ConfigSection :
+
+
+        Returns
+        -------
+
+        """
         project_data: _ConfigMapping = self._read_config()
         section_key: Iterable[str] = ()
         if section in (
@@ -239,6 +387,7 @@ class Config:
 
     @traced_function
     def _read_config(self) -> dict[str, Any]:
+        """"""
         project_file = self.pyproject_file
         with open(project_file, "rb") as file_pointer:
             return load_toml(file_pointer)

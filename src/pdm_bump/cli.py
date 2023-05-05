@@ -18,17 +18,56 @@ from .plugin import BumpCommand as _Command
 
 
 class _CoreLike(Protocol):
+    """"""
+
     def register_command(
         self, command: type[_Command], name: Optional[str] = None
     ) -> None:
+        """
+
+        Parameters
+        ----------
+        command: type[_Command] :
+
+        name: Optional[str] :
+             (Default value = None)
+
+        Returns
+        -------
+
+        """
         # Method empty: Only a protocol stub
         pass
 
     @staticmethod
     def add_config(name: str, config_item: _ConfigItem) -> None:
+        """
+
+        Parameters
+        ----------
+        name: str :
+
+        config_item: _ConfigItem :
+
+
+        Returns
+        -------
+
+        """
         # Method empty: Only a protocol stub
         pass
 
 
 def main(core: _CoreLike) -> None:
+    """
+
+    Parameters
+    ----------
+    core: _CoreLike :
+
+
+    Returns
+    -------
+
+    """
     core.register_command(_Command)

@@ -17,5 +17,8 @@
   "python.autoComplete.extraPaths": [
     "${workspaceFolder}/.venv/3.10/lib",
     "${workspaceFolder}/__pypackages__/3.10/lib"
+  ],
+  "git.branchProtection": [
+    "main"
   ]
 }
