@@ -21,6 +21,7 @@ from ..core.logging import logger
 
 class _CompletedProcessLike(Protocol):
     """"""
+
     @property
     def returncode(self) -> int:
         """"""
@@ -39,6 +40,7 @@ class _CompletedProcessLike(Protocol):
 
 class _ProcessRunningCallable(Protocol):
     """"""
+
     def __call__(
         self,
         cmd: list[str],
@@ -53,6 +55,7 @@ class _ProcessRunningCallable(Protocol):
 
 class ProcessRunner:
     """"""
+
     run_process: Optional[_ProcessRunningCallable] = None
 
     def _run_process(
@@ -108,6 +111,7 @@ class ProcessRunner:
 
 class CliRunnerMixin(ProcessRunner):
     """"""
+
     def _which(
         self, exec_name: str, extension: Optional[str] = None
     ) -> Optional[Path]:

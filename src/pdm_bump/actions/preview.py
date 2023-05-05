@@ -23,19 +23,21 @@ _formatter = Pep440VersionFormatter()
 
 class PreviewMismatchError(Exception):
     """"""
+
     pass
 
 
 # Justification fulfills a protocol
 class _DummyPersister:  # pylint: disable=R0903
     """"""
+
     def save_version(self, version: Version) -> None:
         """
 
         Parameters
         ----------
         version: Version :
-            
+
 
         Returns
         -------
@@ -47,6 +49,7 @@ class _DummyPersister:  # pylint: disable=R0903
 
 class _PreReleaseIncrementingVersionModified(VersionModifier):
     """"""
+
     def __init__(
         self,
         version: Version,
@@ -64,7 +67,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
         Parameters
         ----------
         sub_parser: ArgumentParser :
-            
+
 
         Returns
         -------
@@ -167,6 +170,7 @@ class _PreReleaseIncrementingVersionModified(VersionModifier):
 @action
 class PreReleaseIncrementingVersionModifier(VersionModifier):
     """"""
+
     name: str = "pre-release"
     description: str = (
         "Increment a pre-release part (alpha, beta, release-candidate)"
@@ -216,7 +220,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         Parameters
         ----------
         sub_parser: ArgumentParser :
-            
+
 
         Returns
         -------
@@ -253,6 +257,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
 @final
 class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     """"""
+
     name: str = "alpha"
     description: str = "Increment the alpha pre-release version part"
 
@@ -271,6 +276,7 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 @final
 class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     """"""
+
     name: str = "beta"
     description: str = "Increment the beta pre-release version part"
 
@@ -291,6 +297,7 @@ class ReleaseCandidateIncrementingVersionModifier(
     _PreReleaseIncrementingVersionModified
 ):
     """"""
+
     name: str = "rc"
     description: str = (
         "Increment the release-candidate pre-release version part"

@@ -40,11 +40,13 @@ from .vcs import (
 # Justification: Protocol for interoperability
 class _CoreLike(Protocol):  # pylint: disable=R0903
     """"""
+
     ui: UI
 
 
 class _ProjectLike(ConfigHolder, Protocol):
     """"""
+
     root: Path
     core: _CoreLike
     PYPROJECT_FILENAME: str
@@ -55,7 +57,7 @@ class _ProjectLike(ConfigHolder, Protocol):
         Parameters
         ----------
         show_message: bool :
-            
+
 
         Returns
         -------
@@ -69,6 +71,7 @@ class _ProjectLike(ConfigHolder, Protocol):
 # since 2 public methods available
 class _VersionSource(Protocol):  # pylint: disable=R0903
     """"""
+
     @property
     def is_enabled(self) -> bool:
         """"""
@@ -88,6 +91,7 @@ class _VersionSource(Protocol):  # pylint: disable=R0903
 @final
 class BumpCommand(BaseCommand):
     """"""
+
     name: Final[str] = "bump"
     description: str = "Bumps the version to a next version following PEP440."
 
@@ -102,7 +106,7 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         parser: ArgumentParser :
-            
+
 
         Returns
         -------
@@ -117,7 +121,7 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         version: Version :
-            
+
 
         Returns
         -------
@@ -142,9 +146,9 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         project: _ProjectLike :
-            
+
         options: Namespace :
-            
+
 
         Returns
         -------
@@ -191,7 +195,7 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         project: _ProjectLike :
-            
+
 
         Returns
         -------
@@ -228,9 +232,9 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         project: _ProjectLike :
-            
+
         config: Config :
-            
+
 
         Returns
         -------
@@ -258,7 +262,7 @@ class BumpCommand(BaseCommand):
         Parameters
         ----------
         version: Version :
-            
+
 
         Returns
         -------

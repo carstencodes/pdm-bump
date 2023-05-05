@@ -23,6 +23,7 @@ from .mixins import CliRunnerMixin
 
 class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
     """"""
+
     __GIT_EXECUTABLE_NAME = "git"
 
     @cached_property
@@ -224,6 +225,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 @vcs_provider("git-cli")
 class GitCliVcsProviderFactory(GitCommonVcsProviderFactory):
     """"""
+
     def _create_provider(self, path: Path) -> VcsProvider:
         """
 

@@ -22,6 +22,7 @@ from .logging import logger, traced_function
 # Justification: loader should be single instance only.
 class _Loader:  # pylint: disable=R0903
     """"""
+
     def __init__(self) -> None:
         self.__loaded: set[str] = set()
 

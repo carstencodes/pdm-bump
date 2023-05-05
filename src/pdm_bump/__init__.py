@@ -24,7 +24,7 @@ def _get_version(name: str) -> str:
     Parameters
     ----------
     name: str :
-        
+
 
     Returns
     -------

@@ -23,6 +23,7 @@ from .base import VersionModifier, VersionPersister, action
 @action
 class SetExplicitVersionModifier(VersionModifier):
     """"""
+
     name: str = "to"
     description: str = "Sets a new version explicitly from CLI"
 
@@ -56,7 +57,7 @@ class SetExplicitVersionModifier(VersionModifier):
         Parameters
         ----------
         sub_parser: ArgumentParser :
-            
+
 
         Returns
         -------

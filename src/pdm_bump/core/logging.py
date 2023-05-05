@@ -57,6 +57,7 @@ TRACE: Final[int] = 5
 
 class TermUIHandler(Handler):
     """"""
+
     def __init__(self, ui: UI, level: int = NOTSET) -> None:
         super().__init__(level)
         self.__ui = ui
@@ -93,6 +94,7 @@ class TermUIHandler(Handler):
 # Justification: Only one method to override
 class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
     """"""
+
     def __init__(self, invert: Optional[bool] = False) -> None:
         self.__invert: bool = invert or False
         super().__init__()
@@ -119,6 +121,7 @@ class _ErrorWarningsFilter(Filter):  # pylint: disable=R0903
 
 class TracingLogger(Logger):
     """"""
+
     def trace(self, msg: str, *args: tuple[Any, ...], **kwargs) -> None:
         """
 
@@ -309,6 +312,7 @@ def traced_function(fun):
     -------
 
     """
+
     def tracing_function(*args: tuple[Any, ...], **kwargs):
         """
 

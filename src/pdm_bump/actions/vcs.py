@@ -22,6 +22,7 @@ from .base import VersionConsumer, action
 @action
 class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
     """"""
+
     name: str = "tag"
     description: str = "Create a VCS revision tag from the current version"
 

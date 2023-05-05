@@ -32,6 +32,7 @@ _formatter = Pep440VersionFormatter()
 
 class _NonFinalPartsRemovingVersionModifier(VersionModifier):
     """"""
+
     def __init__(
         self,
         version: Version,
@@ -107,6 +108,7 @@ _NFPR: TypeAlias = _NonFinalPartsRemovingVersionModifier
 
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
     """"""
+
     @property
     @abstractmethod
     def release_part(self) -> NonNegativeInteger:
@@ -172,6 +174,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @action
 class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     """"""
+
     name: str = "no-pre-release"
     description: str = "Remove all pre-release parts from the version"
 
@@ -201,6 +204,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @action
 class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
     """"""
+
     name: str = "major"
     description: str = "Increment the major part of the version"
 
@@ -216,6 +220,7 @@ class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
 @action
 class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
     """"""
+
     name: str = "minor"
     description: str = "Increment the minor part of the version"
 
@@ -231,6 +236,7 @@ class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
 @action
 class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
     """"""
+
     name: str = "micro"
     description: str = "Increment the micro (or patch) part of the version"
     aliases: tuple[str] = ("patch",)
@@ -247,6 +253,7 @@ class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
 @action
 class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     """"""
+
     name: str = "epoch"
     description: str = "Increment the epoch of the version"
 
@@ -310,6 +317,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 @action
 class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
     """"""
+
     name: str = "dev"
     description: str = "Increment the local development part"
 
@@ -337,6 +345,7 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
 @action
 class PostVersionIncrementingVersionModifier(VersionModifier):
     """"""
+
     name: str = "post"
     description: str = "Increment the post version part"
 

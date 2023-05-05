@@ -25,6 +25,7 @@ from .logging import traced_function
 @final
 class VersionParserError(ValueError):
     """"""
+
     pass
 
 
@@ -38,6 +39,7 @@ NonNegativeInteger = Annotated[int, NonNegative]
 @total_ordering
 class Version:
     """"""
+
     epoch: NonNegativeInteger = field(
         default=0, repr=True, hash=True, compare=True
     )
@@ -184,7 +186,7 @@ class Version:
         Parameters
         ----------
         version: str :
-            
+
 
         Returns
         -------
@@ -220,7 +222,7 @@ class Version:
         Parameters
         ----------
         version: str :
-            
+
 
         Returns
         -------
@@ -237,6 +239,7 @@ class Version:
 # Justification: Only method to provide
 class Pep440VersionFormatter:  # pylint: disable=R0903
     """"""
+
     @traced_function
     def format(self, version: Version) -> str:
         """
@@ -244,7 +247,7 @@ class Pep440VersionFormatter:  # pylint: disable=R0903
         Parameters
         ----------
         version: Version :
-            
+
 
         Returns
         -------

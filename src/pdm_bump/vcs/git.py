@@ -18,6 +18,7 @@ from .core import VcsFileSystemIdentifier, VcsProvider, VcsProviderFactory
 
 class GitCommonVcsProviderFactory(VcsProviderFactory):
     """"""
+
     __git_dir_provider = VcsFileSystemIdentifier(
         file_name=None, dir_name=".git"
     )
@@ -32,7 +33,7 @@ class GitCommonVcsProviderFactory(VcsProviderFactory):
         Parameters
         ----------
         path: Path :
-            
+
 
         Returns
         -------

@@ -21,6 +21,7 @@ _Pathlike = Union[Path, AnyStr]
 
 class _PathLikeConverter(ABC):
     """"""
+
     @staticmethod
     def _pathlike_to_path(path: _Pathlike) -> Path:
         """
@@ -48,12 +49,14 @@ class _PathLikeConverter(ABC):
 
 class VcsFileSystemIdentifier(NamedTuple):
     """"""
+
     file_name: Optional[str]
     dir_name: Optional[str]
 
 
 class VcsProvider(_PathLikeConverter, ABC):
     """"""
+
     def __init__(self, path: _Pathlike) -> None:
         self.__path = _PathLikeConverter._pathlike_to_path(path)
 
@@ -144,6 +147,7 @@ class VcsProvider(_PathLikeConverter, ABC):
 
 class VcsProviderAggregator:
     """"""
+
     def __init__(self, vcs_provider: VcsProvider, **kwargs) -> None:
         self.__vcs_provider: VcsProvider = vcs_provider
 
@@ -155,6 +159,7 @@ class VcsProviderAggregator:
 
 class VcsProviderFactory(_PathLikeConverter, ABC):
     """"""
+
     def force_create_provider(self, path: Path) -> VcsProvider:
         """
 
@@ -325,6 +330,7 @@ class VcsProviderRegistry(
     dict[str, Callable[..., VcsProviderFactory]], _PathLikeConverter
 ):
     """"""
+
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
         """
 
@@ -376,6 +382,7 @@ class VcsProviderRegistry(
         -------
 
         """
+
         def decorator(clazz: type[VcsProvider]):
             """
 
@@ -411,6 +418,7 @@ vcs_provider: Final[Callable[[str], Callable]] = vcs_providers.register
 
 class DefaultVcsProvider(VcsProvider):
     """"""
+
     @property
     def is_available(self) -> bool:
         """"""
@@ -471,4 +479,5 @@ class DefaultVcsProvider(VcsProvider):
 
 class VcsProviderError(Exception):
     """"""
+
     pass

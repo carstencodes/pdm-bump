@@ -24,15 +24,16 @@ _formatter = Pep440VersionFormatter()
 # Justification: Just a protocol
 class _HasAddSubParser(Protocol):  # pylint: disable=R0903
     """"""
+
     def add_parser(self, name, **kwargs) -> ArgumentParser:
         """
 
         Parameters
         ----------
         name :
-            
+
         **kwargs :
-            
+
 
         Returns
         -------
@@ -44,13 +45,14 @@ class _HasAddSubParser(Protocol):  # pylint: disable=R0903
 # Justification: Just a protocol
 class VersionPersister(Protocol):  # pylint: disable=R0903
     """"""
+
     def save_version(self, version: Version) -> None:
         """
 
         Parameters
         ----------
         version: Version :
-            
+
 
         Returns
         -------
@@ -61,6 +63,7 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
 
 class _ArgumentParserFactoryMixin:
     """"""
+
     name: str
     description: str
 
@@ -71,7 +74,7 @@ class _ArgumentParserFactoryMixin:
         Parameters
         ----------
         sub_parser: ArgumentParser :
-            
+
 
         Returns
         -------
@@ -94,9 +97,9 @@ class _ArgumentParserFactoryMixin:
         Parameters
         ----------
         sub_parser_collection: _HasAddSubParser :
-            
+
         **kwargs :
-            
+
 
         Returns
         -------
@@ -133,6 +136,7 @@ class _ArgumentParserFactoryMixin:
 
 class ActionBase(ABC, _ArgumentParserFactoryMixin):
     """"""
+
     def __init__(self, **kwargs) -> None:
         # Just to ignore key word arguments
         pass
@@ -159,7 +163,7 @@ class ActionBase(ABC, _ArgumentParserFactoryMixin):
         Parameters
         ----------
         **kwargs :
-            
+
 
         Returns
         -------
@@ -172,6 +176,7 @@ class ActionBase(ABC, _ArgumentParserFactoryMixin):
 
 class VersionConsumer(ActionBase):
     """"""
+
     def __init__(self, version: Version, **kwargs) -> None:
         self.__version = version
 
@@ -188,6 +193,7 @@ class VersionConsumer(ActionBase):
 
 class VersionModifier(VersionConsumer):
     """"""
+
     def __init__(
         self, version: Version, persister: VersionPersister, **kwargs
     ) -> None:
@@ -205,7 +211,7 @@ class VersionModifier(VersionConsumer):
         Parameters
         ----------
         next_version: Version :
-            
+
 
         Returns
         -------
@@ -245,18 +251,20 @@ class VersionModifier(VersionConsumer):
 
 class ActionRegistry:
     """"""
+
     def __init__(self) -> None:
         self.__items: dict[str, type[ActionBase]] = {}
 
     def register(self) -> Callable:
         """"""
+
         def decorator(clazz: type[ActionBase]):
             """
 
             Parameters
             ----------
             clazz: type[ActionBase] :
-                
+
 
             Returns
             -------
@@ -279,7 +287,7 @@ class ActionRegistry:
         Parameters
         ----------
         parser: ArgumentParser :
-            
+
 
         Returns
         -------
@@ -318,17 +326,17 @@ class ActionRegistry:
         Parameters
         ----------
         / :
-            
+
         args: Namespace :
-            
+
         * :
-            
+
         version: Version :
-            
+
         persister: VersionPersister :
-            
+
         vcs_provider: VcsProvider :
-            
+
 
         Returns
         -------

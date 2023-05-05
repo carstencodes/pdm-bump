@@ -27,6 +27,7 @@ DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
 
 class DynamicVersionConfig:
     """"""
+
     __file: Path
     __pattern: Pattern[str]
     __file_encoding: str
@@ -63,7 +64,7 @@ class DynamicVersionConfig:
         Parameters
         ----------
         new_version: str :
-            
+
 
         Returns
         -------
@@ -93,9 +94,9 @@ class DynamicVersionConfig:
         Parameters
         ----------
         root_path: Path :
-            
+
         project_config: Config :
-            
+
 
         Returns
         -------
@@ -122,6 +123,7 @@ class DynamicVersionConfig:
 # Justification: Implementation of minimal protocol
 class DynamicVersionSource:  # pylint: disable=R0903
     """"""
+
     def __init__(self, project_root: Path, config: Config) -> None:
         self.__project_root = project_root
         self.__config = config
