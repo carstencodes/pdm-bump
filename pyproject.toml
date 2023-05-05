@@ -137,6 +137,7 @@ disable = [
     "C0114",
     "C0115",
     "C0116",
+    "C0112"
 ]
 
 [tool.pytest.ini_options]
