@@ -42,7 +42,8 @@ _ConfigMapping: TypeAlias = dict[str, Any]
 class _StringEnum(str, Enum):
     """"""
 
-    pass
+    # Justification: Zen of python: Explicit is better than implicit
+    pass  # pylint: disable=W0107
 
 
 # Justification: Minimal protocol

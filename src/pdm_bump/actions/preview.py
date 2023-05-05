@@ -24,7 +24,8 @@ _formatter = Pep440VersionFormatter()
 class PreviewMismatchError(Exception):
     """"""
 
-    pass
+    # Justification: Zen of Python: Explicit is better than implicit
+    pass  # pylint: disable=W0107
 
 
 # Justification fulfills a protocol
@@ -44,7 +45,7 @@ class _DummyPersister:  # pylint: disable=R0903
 
         """
         # This must not be implemented as it is only a dummy.
-        pass
+        raise NotImplementedError()
 
 
 class _PreReleaseIncrementingVersionModified(VersionModifier):
