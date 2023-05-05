@@ -9,6 +9,9 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+""""""
+
+
 import sys
 from collections.abc import Iterable
 from enum import Enum, IntEnum, auto
@@ -42,7 +45,8 @@ _ConfigMapping: TypeAlias = dict[str, Any]
 class _StringEnum(str, Enum):
     """"""
 
-    pass
+    # Justification: Zen of python: Explicit is better than implicit
+    pass  # pylint: disable=W0107
 
 
 # Justification: Minimal protocol
@@ -56,7 +60,7 @@ class ConfigHolder(Protocol):  # pylint: disable=R0903
     def config(self) -> _ConfigMapping:
         """"""
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 @traced_function

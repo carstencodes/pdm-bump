@@ -9,6 +9,8 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+""""""
+
 
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
@@ -26,7 +28,8 @@ from .logging import traced_function
 class VersionParserError(ValueError):
     """"""
 
-    pass
+    # Justification: Zen of python: Explicit is better than implicit
+    pass  # pylint: disable=W0107
 
 
 NonNegative = Ge(0)

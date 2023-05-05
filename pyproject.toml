@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.7.0.dev8"
+version = "0.7.1.dev9"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -134,9 +134,7 @@ ignore = "vcs"
 
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
-    "C0114",
-    "C0115",
-    "C0116",
+    "C0112",
 ]
 
 [tool.pytest.ini_options]

@@ -9,6 +9,7 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+""""""
 
 from typing import Protocol, Union, cast, runtime_checkable
 
@@ -34,7 +35,7 @@ class _ProjectWriter(Protocol):  # pylint: disable=R0903
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 @runtime_checkable
@@ -54,7 +55,7 @@ class _ProjectWriterClassic(Protocol):  # pylint: disable=R0903
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 # Justification: Minimal protocol

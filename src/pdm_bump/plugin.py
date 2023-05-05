@@ -9,6 +9,9 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+""""""
+
+
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 from traceback import format_exc as get_traceback
@@ -64,7 +67,7 @@ class _ProjectLike(ConfigHolder, Protocol):
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 # Justification: Minimal protocol. Maybe false positive,
