@@ -80,8 +80,9 @@ class _ArgumentParserFactoryMixin:
         -------
 
         """
+        # Justification: Zen of Python: Explicit is better than implicit
         # Must be implemented if necessary
-        pass
+        pass  # pylint: disable=W0107
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:

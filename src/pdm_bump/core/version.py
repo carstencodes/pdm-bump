@@ -26,7 +26,8 @@ from .logging import traced_function
 class VersionParserError(ValueError):
     """"""
 
-    pass
+    # Justification: Zen of python: Explicit is better than implicit
+    pass  # pylint: disable=W0107
 
 
 NonNegative = Ge(0)

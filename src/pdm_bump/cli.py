@@ -37,7 +37,7 @@ class _CoreLike(Protocol):
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
     @staticmethod
     def add_config(name: str, config_item: _ConfigItem) -> None:
@@ -55,7 +55,7 @@ class _CoreLike(Protocol):
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 def main(core: _CoreLike) -> None:

@@ -64,7 +64,7 @@ class _ProjectLike(ConfigHolder, Protocol):
 
         """
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 # Justification: Minimal protocol. Maybe false positive,

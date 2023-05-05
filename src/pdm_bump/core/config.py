@@ -56,7 +56,7 @@ class ConfigHolder(Protocol):  # pylint: disable=R0903
     def config(self) -> _ConfigMapping:
         """"""
         # Method empty: Only a protocol stub
-        pass
+        raise NotImplementedError()
 
 
 @traced_function
