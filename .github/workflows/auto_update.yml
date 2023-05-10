@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Set PDM version
         run: |
-          echo "pdm_version=$(cat .pdm.version)" >> $GITHUB_ENV
+          echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_ENV
       - name: Setup python
         uses: actions/setup-python@v4
         with:
