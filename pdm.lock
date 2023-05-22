@@ -604,7 +604,7 @@ dependencies = [
 
 [[package]]
 name = "pylint-plugin-utils"
-version = "0.8.1"
+version = "0.8.2"
 requires_python = ">=3.7,<4.0"
 summary = "Utilities and helpers for writing Pylint plugins"
 dependencies = [
@@ -733,7 +733,7 @@ dependencies = [
 
 [[package]]
 name = "requirements-detector"
-version = "1.2.1"
+version = "1.2.2"
 requires_python = ">=3.7,<4.0"
 summary = "Python tool to find and list requirements of a Python project"
 dependencies = [
@@ -772,7 +772,7 @@ summary = "A module for retrieving program settings from various sources in a co
 
 [[package]]
 name = "setuptools"
-version = "67.7.2"
+version = "67.8.0"
 requires_python = ">=3.7"
 summary = "Easily download, build, install, upgrade, and uninstall Python packages"
 
@@ -1460,9 +1460,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
 "pylint-flask 0.6" = [
     {url = "https://files.pythonhosted.org/packages/0d/ec/e8c5742985bab80b2fcd0ab429cf6804779d8cfd15264fdad933057d1380/pylint-flask-0.6.tar.gz", hash = "sha256:f4d97de2216bf7bfce07c9c08b166e978fe9f2725de2a50a9845a97de7e31517"},
 ]
-"pylint-plugin-utils 0.8.1" = [
-    {url = "https://files.pythonhosted.org/packages/a5/dc/fd630c4374c3f77f9623bb142db7e8160742eaf51e2400f4eac8426cc212/pylint_plugin_utils-0.8.1.tar.gz", hash = "sha256:a595517d238d2ebe586fd867325cc656d4fac8d22b99421ff4cfb51b8c823a93"},
-    {url = "https://files.pythonhosted.org/packages/bd/f6/98df1993ecfe0989619ba0a33bda05bc9962bc3fafe68efeaa60123e381f/pylint_plugin_utils-0.8.1-py3-none-any.whl", hash = "sha256:8d753118eb4189b0f5d07483ab6bbc5770dcd52799ceb6456b0e96309218c80c"},
+"pylint-plugin-utils 0.8.2" = [
+    {url = "https://files.pythonhosted.org/packages/4b/d2/3b9728910bc69232ec38d8fb7053c03c887bfe7e6e170649b683dd351750/pylint_plugin_utils-0.8.2.tar.gz", hash = "sha256:d3cebf68a38ba3fba23a873809155562571386d4c1b03e5b4c4cc26c3eee93e4"},
+    {url = "https://files.pythonhosted.org/packages/af/ee/49d11aee31061bcc1d2726bd8334a2883ddcdbde7d7744ed6b3bd11704ed/pylint_plugin_utils-0.8.2-py3-none-any.whl", hash = "sha256:ae11664737aa2effbf26f973a9e0b6779ab7106ec0adc5fe104b0907ca04e507"},
 ]
 "pyment 0.3.3" = [
     {url = "https://files.pythonhosted.org/packages/52/01/810e174c28a7dcf5f91c048faf69c84eafee60c9a844e4ce21671b2e99bb/Pyment-0.3.3-py2.py3-none-any.whl", hash = "sha256:a0c6ec59d06d24aeec3eaecb22115d0dc95d09e14209b2df838381fdf47a78cc"},
@@ -1644,9 +1644,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/3f/51/d4db610ef29373b879047326cbf6fa98b6c1969d6f6dc423279de2b1be2c/requests_toolbelt-1.0.0-py2.py3-none-any.whl", hash = "sha256:cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06"},
     {url = "https://files.pythonhosted.org/packages/f3/61/d7545dafb7ac2230c70d38d31cbfe4cc64f7144dc41f6e4e4b78ecd9f5bb/requests-toolbelt-1.0.0.tar.gz", hash = "sha256:7681a0a3d047012b5bdc0ee37d7f8f07ebe76ab08caeccfc3921ce23c88d5bc6"},
 ]
-"requirements-detector 1.2.1" = [
-    {url = "https://files.pythonhosted.org/packages/01/c6/9c68cdeca00705674513a11fd4c4b65eef25cefed3817d312e8790d120ff/requirements_detector-1.2.1-py3-none-any.whl", hash = "sha256:ae4aa170106e8940482fd450e0fafbae1e3627b0ea15b852a191c509e6f8c4db"},
-    {url = "https://files.pythonhosted.org/packages/1d/52/b51135f1b3c5eded8b5f7ea486710c893df3af539811493fa426dad637f8/requirements_detector-1.2.1.tar.gz", hash = "sha256:3c3f2eaf40f86337b07826be65ee2a413a6337da2484a887523c816a921f04b6"},
+"requirements-detector 1.2.2" = [
+    {url = "https://files.pythonhosted.org/packages/6d/07/caf219327b6ddf29a71c6b248da1406bf084fe6ff0e2f81033f5cb5ff312/requirements_detector-1.2.2.tar.gz", hash = "sha256:3642cd7a5b261d79536c36bb7ecacf2adabd902d2e0e42bfb2ba82515da10501"},
+    {url = "https://files.pythonhosted.org/packages/b9/22/6a1845fd467cdce47607fe58dd3aefc82212edaa28367bfc306b7c6dcb90/requirements_detector-1.2.2-py3-none-any.whl", hash = "sha256:d7c60493bf166da3dd59de0e6cb25765e0e32a1931aeae92614034e5786d0bd0"},
 ]
 "resolvelib 1.0.1" = [
     {url = "https://files.pythonhosted.org/packages/ce/10/f699366ce577423cbc3df3280063099054c23df70856465080798c6ebad6/resolvelib-1.0.1.tar.gz", hash = "sha256:04ce76cbd63fded2078ce224785da6ecd42b9564b1390793f64ddecbe997b309"},
@@ -1664,9 +1664,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/3c/98/92a42f481277db22f527fe4eda593b546eddb76484fdd9c4da9682a88bbd/setoptconf-0.3.0-py3-none-any.whl", hash = "sha256:1fa613dc4a6fbfbaab9a52319d1e369d030e8ed80455b151574ccf3390ec86c6"},
     {url = "https://files.pythonhosted.org/packages/78/64/9ba5400dd9a605f2af9c1d2351cf6b9e0a0aa7157d020aa3a11ae3c95ea4/setoptconf-0.3.0.tar.gz", hash = "sha256:d2ecbd27c0c7d0d53990e2df98d9aad6490df8b75b71c621d8c441d6e91e3161"},
 ]
-"setuptools 67.7.2" = [
-    {url = "https://files.pythonhosted.org/packages/2f/8c/f336a966d4097c7cef6fc699b2ecb83b5fb63fd698198c1b5c7905a74f0f/setuptools-67.7.2-py3-none-any.whl", hash = "sha256:23aaf86b85ca52ceb801d32703f12d77517b2556af839621c641fca11287952b"},
-    {url = "https://files.pythonhosted.org/packages/fd/53/e5d7ae40d03e4ed20b7cba317cf9c0c97097c8debb39f9d72d182a6578a2/setuptools-67.7.2.tar.gz", hash = "sha256:f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990"},
+"setuptools 67.8.0" = [
+    {url = "https://files.pythonhosted.org/packages/03/20/630783571e76e5fa5f3e9f29398ca3ace377207b8196b54e0ffdf09f12c1/setuptools-67.8.0.tar.gz", hash = "sha256:62642358adc77ffa87233bc4d2354c4b2682d214048f500964dbe760ccedf102"},
+    {url = "https://files.pythonhosted.org/packages/f5/2c/074ab1c5be9c7d523d8d6d69d1f46f450fe7f11713147dc9e779aa4ca4ea/setuptools-67.8.0-py3-none-any.whl", hash = "sha256:5df61bf30bb10c6f756eb19e7c9f3b473051f48db77fddbe06ff2ca307df9a6f"},
 ]
 "sh 1.14.3" = [
     {url = "https://files.pythonhosted.org/packages/b7/09/89c28aaf2a49f226fef8587c90c6386bd2cc03a0295bc4ff7fc6ee43c01d/sh-1.14.3.tar.gz", hash = "sha256:e4045b6c732d9ce75d571c79f5ac2234edd9ae4f5fa9d59b09705082bdca18c7"},
