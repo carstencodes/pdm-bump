@@ -98,8 +98,8 @@ class BumpCommand(BaseCommand):
     name: Final[str] = "bump"
     description: str = "Bumps the version to a next version following PEP440."
 
-    def __init__(self, parser) -> None:
-        super().__init__(parser)
+    def __init__(self) -> None:
+        super().__init__()
         self.__backend: Optional[_VersionSource] = None
 
     @traced_function
