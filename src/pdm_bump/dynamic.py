@@ -20,6 +20,7 @@ from re import compile as compile_re
 from typing import Final, Optional, cast
 
 from .core.config import Config, ConfigKeys, ConfigValues
+from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 
 DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
@@ -107,12 +108,15 @@ class DynamicVersionConfig:
         """
         if (
             project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
-            == ConfigValues.BUILD_BACKEND_PDM_PEP517_API
+            == ConfigValues.DEPREACTED_BUILD_BACKEND_PDM_PEP517_API
             and project_config.get_pyproject_tool_config(
                 ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
             )
             == ConfigValues.VERSION_SOURCE_FILE
         ):
+            logger.warning(
+                "Build backend pdm-pep517 is deprecated. Consider upgrading."
+            )
             file_path = project_config.get_pyproject_tool_config(
                 ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE_FILE_PATH
             )
@@ -120,6 +124,32 @@ class DynamicVersionConfig:
                 file_path=root_path / file_path,
                 pattern=DEFAULT_REGEX,
             )
+        if (
+            project_config.get_pyproject_metadata(ConfigKeys.BUILD_BACKEND)
+            == ConfigValues.BUILD_BACKEND_PDM_BACKEND
+        ):
+            if (
+                project_config.get_pyproject_tool_config(
+                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
+                )
+                == ConfigValues.VERSION_SOURCE_SCM
+            ):
+                logger.error(
+                    "PDM bump cannot be used if version is fetched from scm"
+                )
+            if (
+                project_config.get_pyproject_tool_config(
+                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
+                )
+                == ConfigValues.VERSION_SOURCE_FILE
+            ):
+                file_path = project_config.get_pyproject_tool_config(
+                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE_FILE_PATH
+                )
+                return DynamicVersionConfig(
+                    file_path=root_path / file_path,
+                    pattern=DEFAULT_REGEX,
+                )
         return None
 
 

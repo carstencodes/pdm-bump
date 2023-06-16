@@ -163,7 +163,9 @@ class ConfigValues(_StringEnum):
     """"""
 
     VERSION_SOURCE_FILE: Final[str] = "file"
-    BUILD_BACKEND_PDM_PEP517_API: Final[str] = "pdm.pep517.api"
+    VERSION_SOURCE_SCM: Final[str] = "scm"
+    DEPREACTED_BUILD_BACKEND_PDM_PEP517_API: Final[str] = "pdm.pep517.api"
+    BUILD_BACKEND_PDM_BACKEND: Final[str] = "pdm.backend"
 
 
 # Justification: Currently no more meta data to check
