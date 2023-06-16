@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.7.1.dev24"
+version = "0.7.1"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -35,9 +35,9 @@ pdm-bump = "pdm_bump:main"
 
 [build-system]
 requires = [
-    "pdm-pep517",
+    "pdm-backend",
 ]
-build-backend = "pdm.pep517.api"
+build-backend = "pdm.backend"
 
 [tool.black]
 line-length = 79
