@@ -97,7 +97,7 @@ SUB_TEST_PARAMS_FAIL: Iterable[tuple[str, list[str]]] = [
 @parametrize(",".join(["msg", "what_success"]), SUB_TEST_PARAMS_WHAT_SUCCESS)
 def test_parser_setup_what_success(msg, what_success) -> None:
     parser: ArgumentParser = ArgumentParser()
-    _ = BumpCommand(parser)
+    _ = BumpCommand.init_parser(parser)
 
     options: Namespace = parser.parse_args([what_success])
 
@@ -106,7 +106,7 @@ def test_parser_setup_what_success(msg, what_success) -> None:
 @parametrize(",".join(["msg", "pre_success"]), SUB_TEST_PARAMS_PRE_SUCCESS)
 def test_parser_setup_pre_success(msg, pre_success) -> None:
     parser: ArgumentParser = ArgumentParser()
-    _ = BumpCommand(parser)
+    _ = BumpCommand.init_parser(parser)
 
     options: Namespace = parser.parse_args(
         ["pre-release", "--pre", pre_success]
@@ -117,7 +117,7 @@ def test_parser_setup_pre_success(msg, pre_success) -> None:
 @parametrize(",".join(["msg", "options"]), SUB_TEST_PARAMS_FAIL)
 def test_parser_setup_fail(msg, options) -> None:
     parser: ArgumentParser = ArgumentParser(exit_on_error=False)
-    _ = BumpCommand(parser)
+    _ = BumpCommand.init_parser(parser)
 
     with assert_raises(ArgumentError):
         parser.parse_args(options)
