@@ -1,3 +1,4 @@
+---
 name: Perform automatic updates
 
 on:
@@ -28,6 +29,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Disable update check
         shell: bash
         run: pdm config check_update false

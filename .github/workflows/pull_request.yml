@@ -1,3 +1,4 @@
+---
 name: PullRequest validation
 
 on:
@@ -28,13 +29,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
-        uses: pdm-project/setup-pdm@main
+        uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Install production dependencies
         run: pdm install --prod
       - name: Build wheel
@@ -67,6 +69,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run unit tests
@@ -92,13 +95,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
-        uses: pdm-project/setup-pdm@main
+        uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -124,13 +128,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
-        uses: pdm-project/setup-pdm@main
+        uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -167,13 +172,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
-        uses: pdm-project/setup-pdm@main
+        uses: pdm-project/setup-pdm@v3
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
+          allow-python-prereleases: false 
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run and check for issues
