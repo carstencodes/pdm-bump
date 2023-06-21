@@ -1,3 +1,4 @@
+---
 name: Clean-up stale merged branches
 
 on:
