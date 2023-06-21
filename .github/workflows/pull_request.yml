@@ -28,14 +28,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
-        uses: pdm-project/setup-pdm@v3
+        uses: pdm-project/setup-pdm@main
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
       - name: Install production dependencies
         run: pdm install --prod
       - name: Build wheel
