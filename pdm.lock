@@ -151,15 +151,20 @@ dependencies = [
 
 [[package]]
 name = "cyclonedx-python-lib"
-version = "2.7.1"
-requires_python = ">=3.6,<4.0"
+version = "4.0.1"
+requires_python = ">=3.7,<4.0"
 summary = "A library for producing CycloneDX SBOM (Software Bill of Materials) files."
 dependencies = [
-    "packageurl-python>=0.9",
-    "setuptools>=47.0.0",
+    "packageurl-python>=0.11",
+    "py-serializable<0.12.0,>=0.11.1",
     "sortedcontainers<3.0.0,>=2.4.0",
-    "toml<0.11.0,>=0.10.0",
 ]
+
+[[package]]
+name = "defusedxml"
+version = "0.7.1"
+requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+summary = "XML bomb protection for Python stdlib modules"
 
 [[package]]
 name = "dill"
@@ -179,7 +184,7 @@ summary = "Dodgy: Searches for dodgy looking lines in Python code"
 
 [[package]]
 name = "exceptiongroup"
-version = "1.1.1"
+version = "1.1.2"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
 
@@ -455,12 +460,12 @@ dependencies = [
 
 [[package]]
 name = "pip-audit"
-version = "2.5.6"
+version = "2.6.0"
 requires_python = ">=3.7"
 summary = "A tool for scanning Python environments for known vulnerabilities"
 dependencies = [
-    "CacheControl[filecache]>=0.12.0",
-    "cyclonedx-python-lib!=2.5.0,~=2.0",
+    "CacheControl[filecache]>=0.13.0",
+    "cyclonedx-python-lib~=4.0",
     "html5lib>=1.1",
     "packaging>=23.0.0",
     "pip-api>=0.0.28",
@@ -468,7 +473,6 @@ dependencies = [
     "requests>=2.31.0",
     "rich>=12.4",
     "toml>=0.10",
-    "urllib3~=1.26",
 ]
 
 [[package]]
@@ -513,6 +517,15 @@ dependencies = [
     "pyyaml",
     "requirements-detector>=0.4.1",
     "setoptconf>=0.2.0",
+]
+
+[[package]]
+name = "py-serializable"
+version = "0.11.1"
+requires_python = ">=3.7,<4.0"
+summary = "Library for serializing and deserializing Python Objects to and from JSON and XML."
+dependencies = [
+    "defusedxml<0.8.0,>=0.7.1",
 ]
 
 [[package]]
@@ -767,12 +780,6 @@ requires_python = ">=3.0"
 summary = "A module for retrieving program settings from various sources in a consistant method."
 
 [[package]]
-name = "setuptools"
-version = "68.0.0"
-requires_python = ">=3.7"
-summary = "Easily download, build, install, upgrade, and uninstall Python packages"
-
-[[package]]
 name = "sh"
 version = "1.14.3"
 summary = "Python subprocess replacement"
@@ -868,7 +875,7 @@ dependencies = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.7.0"
+version = "4.7.1"
 requires_python = ">=3.7"
 summary = "Backported and Experimental Type Hints for Python 3.7+"
 
@@ -884,8 +891,8 @@ dependencies = [
 
 [[package]]
 name = "urllib3"
-version = "1.26.16"
-requires_python = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+version = "2.0.3"
+requires_python = ">=3.7"
 summary = "HTTP library with thread-safe connection pooling, file post, and more."
 
 [[package]]
@@ -1146,9 +1153,13 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/fe/57/e4f8ad64d84ca9e759d783a052795f62a9f9111585e46068845b1cb52c2b/coverage-7.2.7-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f48351d66575f535669306aa7d6d6f71bc43372473b54a832222803eb956fd1"},
     {url = "https://files.pythonhosted.org/packages/ff/d5/52fa1891d1802ab2e1b346d37d349cb41cdd4fd03f724ebbf94e80577687/coverage-7.2.7-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:f2f67fe12b22cd130d34d0ef79206061bfb5eda52feb6ce0dba0644e20a03cf4"},
 ]
-"cyclonedx-python-lib 2.7.1" = [
-    {url = "https://files.pythonhosted.org/packages/2b/82/85dbbf993d25567399e771057ff6a9ab6ce28515e48246a04a279f8d6561/cyclonedx_python_lib-2.7.1-py3-none-any.whl", hash = "sha256:fabc4c8baf722faeea01c3bbca83730e3489dfb37d85c6036baa67a9a7519d40"},
-    {url = "https://files.pythonhosted.org/packages/60/1e/55e5a6c23c029d536626dc93be350c483e2a0d15f87b88ca5cec22eb3ea3/cyclonedx-python-lib-2.7.1.tar.gz", hash = "sha256:493bf2f30e26c48f305f745ed8580ce10d05a8d68d62a598fe95f05a0d9007dc"},
+"cyclonedx-python-lib 4.0.1" = [
+    {url = "https://files.pythonhosted.org/packages/79/56/e1fb61304c5ef8f94bb0bea2d33694181c734e4228b70e550333fc62c8e6/cyclonedx_python_lib-4.0.1-py3-none-any.whl", hash = "sha256:907b64f00df85d727a425de86604768b248cf19285993729e04f17bec767f692"},
+    {url = "https://files.pythonhosted.org/packages/92/6f/b5e9ede426a65367bdb1f34f1f19101fa95d69441776a65597ab6cc7d88f/cyclonedx_python_lib-4.0.1.tar.gz", hash = "sha256:878e33b8e0080c786f6cbd4c6f87ad610db65d6a3a686a5698415d9cfcd8925d"},
+]
+"defusedxml 0.7.1" = [
+    {url = "https://files.pythonhosted.org/packages/07/6c/aa3f2f849e01cb6a001cd8554a88d4c77c5c1a31c95bdf1cf9301e6d9ef4/defusedxml-0.7.1-py2.py3-none-any.whl", hash = "sha256:a352e7e428770286cc899e2542b6cdaedb2b4953ff269a210103ec58f6198a61"},
+    {url = "https://files.pythonhosted.org/packages/0f/d5/c66da9b79e5bdb124974bfe172b4daf3c984ebd9c2a06e2b8a4dc7331c72/defusedxml-0.7.1.tar.gz", hash = "sha256:1bb3032db185915b62d7c6209c5a8792be6a32ab2fedacc84e01b52c51aa3e69"},
 ]
 "dill 0.3.6" = [
     {url = "https://files.pythonhosted.org/packages/7c/e7/364a09134e1062d4d5ff69b853a56cf61c223e0afcc6906b6832bcd51ea8/dill-0.3.6.tar.gz", hash = "sha256:e5db55f3687856d8fbdab002ed78544e1c4559a130302693d839dfe8f93f2373"},
@@ -1162,9 +1173,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/22/f4/65b8a29adab331611259b86cf1d87a64f523fed52aba5d4bbdb2be2aed43/dodgy-0.2.1-py3-none-any.whl", hash = "sha256:51f54c0fd886fa3854387f354b19f429d38c04f984f38bc572558b703c0542a6"},
     {url = "https://files.pythonhosted.org/packages/40/10/236a51323133319e108bc52594a66a39ec2f8fa9e4e47543936b5f4582d0/dodgy-0.2.1.tar.gz", hash = "sha256:28323cbfc9352139fdd3d316fa17f325cc0e9ac74438cbba51d70f9b48f86c3a"},
 ]
-"exceptiongroup 1.1.1" = [
-    {url = "https://files.pythonhosted.org/packages/61/97/17ed81b7a8d24d8f69b62c0db37abbd8c0042d4b3fc429c73dab986e7483/exceptiongroup-1.1.1-py3-none-any.whl", hash = "sha256:232c37c63e4f682982c8b6459f33a8981039e5fb8756b2074364e5055c498c9e"},
-    {url = "https://files.pythonhosted.org/packages/cc/38/57f14ddc8e8baeddd8993a36fe57ce7b4ba174c35048b9a6d270bb01e833/exceptiongroup-1.1.1.tar.gz", hash = "sha256:d484c3090ba2889ae2928419117447a14daf3c1231d5e30d0aae34f354f01785"},
+"exceptiongroup 1.1.2" = [
+    {url = "https://files.pythonhosted.org/packages/55/09/5d2079ecab0ca483e527a1707a483562bdc17abf829d3e73f0c1a73b61c7/exceptiongroup-1.1.2.tar.gz", hash = "sha256:12c3e887d6485d16943a309616de20ae5582633e0a2eda17f4e10fd61c1e8af5"},
+    {url = "https://files.pythonhosted.org/packages/fe/17/f43b7c9ccf399d72038042ee72785c305f6c6fdc6231942f8ab99d995742/exceptiongroup-1.1.2-py3-none-any.whl", hash = "sha256:e346e69d186172ca7cf029c8c1d16235aa0e04035e5750b4b95039e65204328f"},
 ]
 "filelock 3.12.2" = [
     {url = "https://files.pythonhosted.org/packages/00/0b/c506e9e44e4c4b6c89fcecda23dc115bf8e7ff7eb127e0cb9c114cbc9a15/filelock-3.12.2.tar.gz", hash = "sha256:002740518d8aa59a26b0c76e10fb8c6e15eae825d34b6fdf670333fd7b938d81"},
@@ -1409,9 +1420,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/05/c8/d319552f0ef7af0cb57c80be8c8181184ab66a205d18b4574214b0940ba1/pip_api-0.0.30-py3-none-any.whl", hash = "sha256:2a0314bd31522eb9ffe8a99668b0d07fee34ebc537931e7b6483001dbedcbdc9"},
     {url = "https://files.pythonhosted.org/packages/69/a2/90dd01b87277ae65a6fb725dae86a039aeb34e24f576600abd0434aa95c4/pip-api-0.0.30.tar.gz", hash = "sha256:a05df2c7aa9b7157374bcf4273544201a0c7bae60a9c65bcf84f3959ef3896f3"},
 ]
-"pip-audit 2.5.6" = [
-    {url = "https://files.pythonhosted.org/packages/f9/b0/4a1062fdfca2335cc5b00eec5a597036f1ff2cd9bdeacbc3e76ac4097a62/pip_audit-2.5.6.tar.gz", hash = "sha256:04fc0ad1727674181bda243a457af5a73038ee691dd9b8afc71f7e9292ce3912"},
-    {url = "https://files.pythonhosted.org/packages/fb/8d/2b90e56ac690f2cc49163373585e1e1d698d62c6bacc51bebd70fa694461/pip_audit-2.5.6-py3-none-any.whl", hash = "sha256:7673bea690470024f1aec9be26055334cb987a530c6a431a31c347f66064e475"},
+"pip-audit 2.6.0" = [
+    {url = "https://files.pythonhosted.org/packages/54/08/c5b8ba48daa8cd154d60351b85f2bf7c92b099c241a483d1a0b092258aff/pip_audit-2.6.0.tar.gz", hash = "sha256:6431c363efa80ef52c2599197c5b8a39ff8708ce316624b97fa35b5cdf493118"},
+    {url = "https://files.pythonhosted.org/packages/e0/20/42c126afc1b03159ebd3d5895ac13ee028761bc63072a28170276f8c2665/pip_audit-2.6.0-py3-none-any.whl", hash = "sha256:49e97e3d6663d2ed0c00b7a7c468afcb816beb3988f32f8496d3fe3927cfd627"},
 ]
 "pip-requirements-parser 32.0.1" = [
     {url = "https://files.pythonhosted.org/packages/54/d0/d04f1d1e064ac901439699ee097f58688caadea42498ec9c4b4ad2ef84ab/pip_requirements_parser-32.0.1-py3-none-any.whl", hash = "sha256:4659bc2a667783e7a15d190f6fccf8b2486685b6dba4c19c3876314769c57526"},
@@ -1427,6 +1438,10 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
 ]
 "prospector 0.12.2" = [
     {url = "https://files.pythonhosted.org/packages/7b/7a/0aeedfdb4c28350569848c80c844de8e0d635887c03cbf3ebf9380bf90b1/prospector-0.12.2.tar.gz", hash = "sha256:eee570da89ac0fec8d746fc72c97e1a8aca9dd82161cac175d78ddd0d5170487"},
+]
+"py-serializable 0.11.1" = [
+    {url = "https://files.pythonhosted.org/packages/04/e0/0d5aac3b8174ba33acaa8b4d311c803aef5045f8b271b837af6416d01bef/py_serializable-0.11.1-py3-none-any.whl", hash = "sha256:79e21f0672822e6200b15f45ce9f636e8126466f62dbd7d488c67313c72b5c3e"},
+    {url = "https://files.pythonhosted.org/packages/aa/2e/70c31636b6eab09f6b1d3372ba350352f7c5c2b93bfd06a1b434f2eede0f/py-serializable-0.11.1.tar.gz", hash = "sha256:ba0e1287b9e4f645a5334f1913abd8e647e7250209f84f55dce3909498a6f586"},
 ]
 "pycodestyle 2.10.0" = [
     {url = "https://files.pythonhosted.org/packages/06/6b/5ca0d12ef7dcf7d20dfa35287d02297f3e0f9e515da5183654c03a9636ce/pycodestyle-2.10.0.tar.gz", hash = "sha256:347187bdb476329d98f695c213d7295a846d1152ff4fe9bacb8a9590b8ee7053"},
@@ -1665,10 +1680,6 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/3c/98/92a42f481277db22f527fe4eda593b546eddb76484fdd9c4da9682a88bbd/setoptconf-0.3.0-py3-none-any.whl", hash = "sha256:1fa613dc4a6fbfbaab9a52319d1e369d030e8ed80455b151574ccf3390ec86c6"},
     {url = "https://files.pythonhosted.org/packages/78/64/9ba5400dd9a605f2af9c1d2351cf6b9e0a0aa7157d020aa3a11ae3c95ea4/setoptconf-0.3.0.tar.gz", hash = "sha256:d2ecbd27c0c7d0d53990e2df98d9aad6490df8b75b71c621d8c441d6e91e3161"},
 ]
-"setuptools 68.0.0" = [
-    {url = "https://files.pythonhosted.org/packages/c7/42/be1c7bbdd83e1bfb160c94b9cafd8e25efc7400346cf7ccdbdb452c467fa/setuptools-68.0.0-py3-none-any.whl", hash = "sha256:11e52c67415a381d10d6b462ced9cfb97066179f0e871399e006c4ab101fc85f"},
-    {url = "https://files.pythonhosted.org/packages/dc/98/5f896af066c128669229ff1aa81553ac14cfb3e5e74b6b44594132b8540e/setuptools-68.0.0.tar.gz", hash = "sha256:baf1fdb41c6da4cd2eae722e135500da913332ab3f2f5c7d33af9b492acb5235"},
-]
 "sh 1.14.3" = [
     {url = "https://files.pythonhosted.org/packages/b7/09/89c28aaf2a49f226fef8587c90c6386bd2cc03a0295bc4ff7fc6ee43c01d/sh-1.14.3.tar.gz", hash = "sha256:e4045b6c732d9ce75d571c79f5ac2234edd9ae4f5fa9d59b09705082bdca18c7"},
 ]
@@ -1720,17 +1731,17 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/57/42/c437d69c3b884c58027999e524c91716ac355048284be771d810d80ceed1/tox-pdm-0.6.1.tar.gz", hash = "sha256:952ea67f2ec891f11eb00749f63fc0f980384435ca782c448d154390f9f42f5e"},
     {url = "https://files.pythonhosted.org/packages/dd/2e/9c694f9775e3bd6e9eadf6c38fdc9f2e55d2ecbc7a4bba30eecf2a4b7f91/tox_pdm-0.6.1-py3-none-any.whl", hash = "sha256:9e3cf83b7b55c3e33aaee0e65cf341739581ff4604a4178f0ef7dbab73a0bb35"},
 ]
-"typing-extensions 4.7.0" = [
-    {url = "https://files.pythonhosted.org/packages/57/e3/b37a6b1ce6c1b2b75d05997ec24f73c794bc05a587e0f30a532d0ab13cb2/typing_extensions-4.7.0.tar.gz", hash = "sha256:935ccf31549830cda708b42289d44b6f74084d616a00be651601a4f968e77c82"},
-    {url = "https://files.pythonhosted.org/packages/7e/4d/b0185d077dc1cd070a56859a0ba3bb6e76618393ec693e59faf1368da8f6/typing_extensions-4.7.0-py3-none-any.whl", hash = "sha256:5d8c9dac95c27d20df12fb1d97b9793ab8b2af8a3a525e68c80e21060c161771"},
+"typing-extensions 4.7.1" = [
+    {url = "https://files.pythonhosted.org/packages/3c/8b/0111dd7d6c1478bf83baa1cab85c686426c7a6274119aceb2bd9d35395ad/typing_extensions-4.7.1.tar.gz", hash = "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"},
+    {url = "https://files.pythonhosted.org/packages/ec/6b/63cc3df74987c36fe26157ee12e09e8f9db4de771e0f3404263117e75b95/typing_extensions-4.7.1-py3-none-any.whl", hash = "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36"},
 ]
 "unearth 0.9.1" = [
     {url = "https://files.pythonhosted.org/packages/72/13/9518d5eaf9640cec2af59705d9c893252d768e098f6b6c017cdee1c1a1d8/unearth-0.9.1-py3-none-any.whl", hash = "sha256:eb963a8c565324f42a72f284e142ba5ceb30db1ba982dd7454bc2d9b9a7eb3c9"},
     {url = "https://files.pythonhosted.org/packages/da/08/5a19c6195599eac32b01280081e6a3beb9bcbe47d4f40ba31471450b0e84/unearth-0.9.1.tar.gz", hash = "sha256:7205832b087005d1b746903a535ca7d0db5381c1f621ddc00290524d56afd217"},
 ]
-"urllib3 1.26.16" = [
-    {url = "https://files.pythonhosted.org/packages/c5/05/c214b32d21c0b465506f95c4f28ccbcba15022e000b043b72b3df7728471/urllib3-1.26.16-py2.py3-none-any.whl", hash = "sha256:8d36afa7616d8ab714608411b4a3b13e58f463aee519024578e062e141dce20f"},
-    {url = "https://files.pythonhosted.org/packages/e2/7d/539e6f0cf9f0b95b71dd701a56dae89f768cd39fd8ce0096af3546aeb5a3/urllib3-1.26.16.tar.gz", hash = "sha256:8f135f6502756bde6b2a9b28989df5fbe87c9970cecaa69041edcce7f0589b14"},
+"urllib3 2.0.3" = [
+    {url = "https://files.pythonhosted.org/packages/8a/03/ad9306a50d05c166e3456fe810f33cee2b8b2a7a6818ec5d4908c4ec6b36/urllib3-2.0.3-py3-none-any.whl", hash = "sha256:48e7fafa40319d358848e1bc6809b208340fafe2096f1725d05d67443d0483d1"},
+    {url = "https://files.pythonhosted.org/packages/d6/af/3b4cfedd46b3addab52e84a71ab26518272c23c77116de3c61ead54af903/urllib3-2.0.3.tar.gz", hash = "sha256:bee28b5e56addb8226c96f7f13ac28cb4c301dd5ea8a6ca179c0b9835e032825"},
 ]
 "virtualenv 20.23.1" = [
     {url = "https://files.pythonhosted.org/packages/21/6b/0910aebe4d5c2a27d5a79ab8fae06d22f7e01dff46baf29ced8d080134c3/virtualenv-20.23.1.tar.gz", hash = "sha256:8ff19a38c1021c742148edc4f81cb43d7f8c6816d2ede2ab72af5b84c749ade1"},
