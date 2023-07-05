@@ -881,7 +881,7 @@ summary = "Backported and Experimental Type Hints for Python 3.7+"
 
 [[package]]
 name = "unearth"
-version = "0.9.1"
+version = "0.9.2"
 requires_python = ">=3.7"
 summary = "A utility to fetch and download python packages"
 dependencies = [
@@ -1735,9 +1735,9 @@ content_hash = "sha256:d850576a18f48eca5bfc313b33da932d4ef2d5b6fc67268a6cdb70ecf
     {url = "https://files.pythonhosted.org/packages/3c/8b/0111dd7d6c1478bf83baa1cab85c686426c7a6274119aceb2bd9d35395ad/typing_extensions-4.7.1.tar.gz", hash = "sha256:b75ddc264f0ba5615db7ba217daeb99701ad295353c45f9e95963337ceeeffb2"},
     {url = "https://files.pythonhosted.org/packages/ec/6b/63cc3df74987c36fe26157ee12e09e8f9db4de771e0f3404263117e75b95/typing_extensions-4.7.1-py3-none-any.whl", hash = "sha256:440d5dd3af93b060174bf433bccd69b0babc3b15b1a8dca43789fd7f61514b36"},
 ]
-"unearth 0.9.1" = [
-    {url = "https://files.pythonhosted.org/packages/72/13/9518d5eaf9640cec2af59705d9c893252d768e098f6b6c017cdee1c1a1d8/unearth-0.9.1-py3-none-any.whl", hash = "sha256:eb963a8c565324f42a72f284e142ba5ceb30db1ba982dd7454bc2d9b9a7eb3c9"},
-    {url = "https://files.pythonhosted.org/packages/da/08/5a19c6195599eac32b01280081e6a3beb9bcbe47d4f40ba31471450b0e84/unearth-0.9.1.tar.gz", hash = "sha256:7205832b087005d1b746903a535ca7d0db5381c1f621ddc00290524d56afd217"},
+"unearth 0.9.2" = [
+    {url = "https://files.pythonhosted.org/packages/2e/14/7a73dc88a96ae767bceb516655363fbcceb899baae848b94ee6f42417344/unearth-0.9.2.tar.gz", hash = "sha256:845f4b5733874ce3b4272126de496eabe00a49ad678fdd04d482d1e77deed425"},
+    {url = "https://files.pythonhosted.org/packages/de/ef/32d0c0a1e66bae2be86f34c78f12e6b6863e0b0f4314f5c8f518c831ba19/unearth-0.9.2-py3-none-any.whl", hash = "sha256:deac1c9fce25b977f27a5ea7a1f24dad7035b996e55f862d7392b6f8d0f43ed0"},
 ]
 "urllib3 2.0.3" = [
     {url = "https://files.pythonhosted.org/packages/8a/03/ad9306a50d05c166e3456fe810f33cee2b8b2a7a6818ec5d4908c4ec6b36/urllib3-2.0.3-py3-none-any.whl", hash = "sha256:48e7fafa40319d358848e1bc6809b208340fafe2096f1725d05d67443d0483d1"},
