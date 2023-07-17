@@ -29,7 +29,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Disable update check
         shell: bash
         run: pdm config check_update false
@@ -67,7 +67,8 @@ jobs:
         id: detect-changes
         shell: bash
         run: |
-          if [[ `git status --porcelain` ]]; then
+          _no_changed_files=$(git status --porcelain | wc -l)
+          if [ $_no_changed_files -ne 0 ]; then
             echo "changed=true" >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
