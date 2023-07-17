@@ -378,7 +378,7 @@ class Config:
         ):
             section_key = ["tool", "pdm"]
             if _ConfigSection.PLUGIN_CONFIG == section:
-                section_key.extend(["plugins", "bump"])
+                section_key.extend(["bump-plugin"])
             section_key = tuple(section_key)
         elif _ConfigSection.BUILD_SYSTEM == section:
             section_key = ("build-system",)
