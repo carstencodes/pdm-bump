@@ -125,7 +125,7 @@ class DynamicVersionConfig:
                 pattern=DEFAULT_REGEX,
             )
         if (
-            project_config.get_pyproject_metadata(ConfigKeys.BUILD_BACKEND)
+            project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
             == ConfigValues.BUILD_BACKEND_PDM_BACKEND
         ):
             if (
