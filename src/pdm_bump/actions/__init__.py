@@ -11,9 +11,9 @@
 #
 """"""
 
+# Justification: load module for decoupling
+from . import explicit, increment, preview, vcs  # noqa: F401
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
-
-from . import explicit as _, increment as _, preview as _, vcs as _
 
 __all__ = [
     "actions",
