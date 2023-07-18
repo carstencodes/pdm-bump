@@ -13,7 +13,8 @@
 """"""
 
 
-from importlib import import_module
+# Justification: load module for decoupling
+from . import gitcli  # noqa: F401
 from .core import (
     DefaultVcsProvider,
     VcsProvider,
@@ -23,8 +24,6 @@ from .core import (
     vcs_provider,
     vcs_providers,
 )
-
-from . import gitcli as _
 
 __all__ = (
     "vcs_provider",
