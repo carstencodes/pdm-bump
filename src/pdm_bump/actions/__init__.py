@@ -11,10 +11,9 @@
 #
 """"""
 
-from ..core.loader import loader as _loader
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
 
-_loader.load_modules_of_package(__file__, __name__, "__init__", "base")
+from . import explicit as _, increment as _, preview as _, vcs as _
 
 __all__ = [
     "actions",

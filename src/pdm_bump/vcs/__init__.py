@@ -13,7 +13,7 @@
 """"""
 
 
-from ..core.loader import loader as _loader
+from importlib import import_module
 from .core import (
     DefaultVcsProvider,
     VcsProvider,
@@ -24,10 +24,7 @@ from .core import (
     vcs_providers,
 )
 
-# Justification: Add items to registry
-_loader.load_modules_of_package(
-    __file__, __name__, "__init__", "core", "mixins"
-)
+from . import gitcli as _
 
 __all__ = (
     "vcs_provider",
