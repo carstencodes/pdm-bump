@@ -12,3 +12,4 @@ results/
 install-output.json
 radon.*.json
 .venv
+build/
