@@ -30,6 +30,12 @@ from pdm_bump.actions.preview import (
     BetaIncrementingVersionModifier,
     ReleaseCandidateIncrementingVersionModifier,
 )
+from pdm_bump.actions.poetry_like import (
+    PoetryLikePreRelease,
+    PoetryLikePreMajorVersionModifier,
+    PoetryLikePreMinorVersionModifier,
+    PoetryLikePrePatchVersionModifier,
+)
 
 from pdm_bump.core.version import Version
 
@@ -735,31 +741,145 @@ _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
         "Increment alpha version if beta is present",
         "1.2.3b1",
         lambda v: AlphaIncrementingVersionModifier(v, _unit_test_persister, False),
+        PreviewMismatchError,
     ),
     (
         "Increment alpha version if beta is present",
         "1.2.3b1",
         lambda v: AlphaIncrementingVersionModifier(v, _unit_test_persister, True),
+        PreviewMismatchError,
     ),
     (
         "Increment alpha version if rc is present",
         "1.2.3rc1",
         lambda v: AlphaIncrementingVersionModifier(v, _unit_test_persister, False),
+        PreviewMismatchError,
     ),
     (
         "Increment alpha version if rc is present",
         "1.2.3rc1",
         lambda v: AlphaIncrementingVersionModifier(v, _unit_test_persister, True),
+        PreviewMismatchError,
     ),
     (
         "Increment beta version if rc is present",
         "1.2.3rc1",
         lambda v: BetaIncrementingVersionModifier(v, _unit_test_persister, False),
+        PreviewMismatchError,
     ),
     (
         "Increment beta version if rc is present",
         "1.2.3rc1",
         lambda v: BetaIncrementingVersionModifier(v, _unit_test_persister, True),
+        PreviewMismatchError,
+    ),
+    (
+        "Pre-Major if version is dev version",
+        "1.2.3-dev1",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Major if version is local version",
+        "1.2.3+local17",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Major if version is post version",
+        "1.2.3-post12",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Major if version is alpha version",
+        "1.2.3a23",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Major if version is beta version",
+        "1.2.3b23",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Major if version is release candidate",
+        "1.2.3rc23",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is dev version",
+        "1.2.3-dev1",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is local version",
+        "1.2.3+local17",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is post version",
+        "1.2.3-post12",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is alpha version",
+        "1.2.3a23",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is beta version",
+        "1.2.3b23",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Minor if version is release candidate",
+        "1.2.3rc23",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is dev version",
+        "1.2.3-dev1",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is local version",
+        "1.2.3+local17",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is post version",
+        "1.2.3-post12",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is alpha version",
+        "1.2.3a23",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is beta version",
+        "1.2.3b23",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
+    ),
+    (
+        "Pre-Patch if version is release candidate",
+        "1.2.3rc23",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        ValueError,
     ),
 ]
 
@@ -773,11 +893,11 @@ def test_create_next_version_success(message, current_version_str, expected_vers
     modified: Version = command.create_new_version()
     assert modified == expected
 
-@parametrize(",".join(["message", "current_version_str", "factory"]), _CREATE_NEXT_VERSION_ERROR_PARAMS)
-def test_create_next_version_fail(message, current_version_str, factory) -> None:
+@parametrize(",".join(["message", "current_version_str", "factory", "exception_type"]), _CREATE_NEXT_VERSION_ERROR_PARAMS)
+def test_create_next_version_fail(message, current_version_str, factory, exception_type) -> None:
     current: Version = Version.from_string(current_version_str)
 
     command: VersionModifier = factory(current)
 
-    with assert_raises(PreviewMismatchError):
+    with assert_raises(exception_type):
         _ = command.create_new_version()
