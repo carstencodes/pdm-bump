@@ -733,7 +733,7 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         "1.2.3-post1+local1",
         lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
     ),
-] # TODO Test Post Incrementing modifier
+]
 _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
     tuple[str, str, Callable[[Version], VersionModifier]]
 ] = [
