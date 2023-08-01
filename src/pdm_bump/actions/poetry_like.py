@@ -10,9 +10,6 @@
 # Refer to LICENSE for more information
 #
 
-pass
-pass
-pass
 from typing import final
 
 from ..core.logging import logger, traced_function
@@ -43,7 +40,7 @@ class PoetryLikePreMajorVersionModifier(VersionModifier):
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a pre-release from non-final version %s",
+                "Cannot create a new major pre-release from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
@@ -83,7 +80,7 @@ class PoetryLikePreMinorVersionModifier(VersionModifier):
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a pre-release from non-final version %s",
+                "Cannot create a new minor pre-release from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
@@ -123,7 +120,7 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a pre-release from non-final version %s",
+                "Cannot create a new patch pre-release from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
