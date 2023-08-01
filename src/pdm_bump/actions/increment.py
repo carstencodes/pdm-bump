@@ -373,6 +373,8 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
             self.current_version
         )
         constructional_args["post"] = ("post", post_version)
+        if self.current_version.is_development_version:
+            constructional_args["dev"] = None
 
         next_version: Version = Version(**constructional_args)
         self._report_new_version(next_version)
