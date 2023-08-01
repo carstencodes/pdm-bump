@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
 
 from ..core.version import Pep440VersionFormatter, Version
+from .history import History
 
 _Pathlike = Union[Path, AnyStr]
 
@@ -144,6 +145,11 @@ class VcsProvider(_PathLikeConverter, ABC):
 
     @abstractmethod
     def get_changes_not_checked_in(self) -> int:
+        """"""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_history(self, since_last_tag: bool = True) -> History:
         """"""
         raise NotImplementedError()
 
@@ -478,6 +484,9 @@ class DefaultVcsProvider(VcsProvider):
         """"""
         # Cannot be provided
         return 0
+
+    def get_history(self, since_last_tag: bool = True) -> History:
+        return History([])
 
 
 class VcsProviderError(Exception):

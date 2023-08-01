@@ -13,6 +13,7 @@
 
 
 from collections.abc import Mapping
+from contextlib import contextmanager
 from logging import (
     CRITICAL,
     DEBUG,
@@ -341,3 +342,15 @@ def traced_function(fun):
             )
 
     return tracing_function
+
+
+@contextmanager
+def silenced(log: Logger):
+    """"""
+    log_level: int = log.level
+    try:
+        if log_level > DEBUG:
+            log.setLevel(CRITICAL + 20)
+        yield
+    finally:
+        log.setLevel(log_level)

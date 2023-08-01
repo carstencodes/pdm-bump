@@ -24,6 +24,13 @@ from .core import (
     vcs_provider,
     vcs_providers,
 )
+from .history import (
+    Commit,
+    CommitStatistics,
+    CommitType,
+    ConventionalCommitParser,
+    History,
+)
 
 __all__ = (
     "vcs_provider",
@@ -33,4 +40,9 @@ __all__ = (
     "VcsProviderFactory",
     "VcsProviderRegistry",
     "DefaultVcsProvider",
+    "Commit",
+    "CommitType",
+    "CommitStatistics",
+    "History",
+    "ConventionalCommitParser",
 )
