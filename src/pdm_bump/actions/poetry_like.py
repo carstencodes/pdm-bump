@@ -147,7 +147,7 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
 
 @final
 @action
-class PoetryLikePreRelease(VersionModifier):
+class PoetryLikePreReleaseVersionModifier(VersionModifier):
     """"""
     name: str = "prerelease"
     description: str = (
