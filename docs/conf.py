@@ -1,3 +1,15 @@
+#
+# SPDX-License-Identifier: MIT
+#
+# Copyright (c) 2021-2023 Carsten Igel.
+#
+# This file is part of pdm-bump
+# (see https://github.com/carstencodes/pdm-bump).
+#
+# This file is published using the MIT license.
+# Refer to LICENSE for more information
+#
+
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
