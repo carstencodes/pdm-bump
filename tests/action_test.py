@@ -691,6 +691,42 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         "1.2.4-dev1+local9",
         lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
     ),
+    (
+        "Increment post part of a non-existing post part",
+        "1.2.3",
+        "1.2.3-post1",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment post part of an existing post part",
+        "1.2.3-post1",
+        "1.2.3-post2",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment post part of a non-existing post part, but dev exists",
+        "1.2.3-dev3",
+        "1.2.3-post1",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment post part of an existing post part, but dev exists",
+        "1.2.3-post1-dev3",
+        "1.2.3-post2",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment post part of a non-existing post part, but local exists",
+        "1.2.3+local1",
+        "1.2.3-post1+local1",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment post part of a non-existing post part, but dev and local exist",
+        "1.2.3-dev1+local1",
+        "1.2.3-post1+local1",
+        lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
 ] # TODO Test Post Incrementing modifier
 _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
     tuple[str, str, Callable[[Version], VersionModifier]]
