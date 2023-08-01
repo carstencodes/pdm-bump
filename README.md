@@ -39,6 +39,25 @@ $ pdm bump minor # creates 0.2.0 from 0.1.2
 $ pdm bump major # creates 1.0.0 from 1.0.0
 ```
 
+### Migrating from `poetry`
+
+If you used to work with `poetry`, the `pdm` `bump` plugin will actually include all the commands
+that you are used to work with in the `poetry` `version` [command](https://python-poetry.org/docs/cli/#version).
+
+So you can actually use the following commands in the same way:
+
+| `poetry version` | `pdm bump`       | Remarks                                        |
+| ---------------- | ---------------- | ---------------------------------------------- |
+| `major`          | `major`          | No 1:1 implementation, but compatible behavior |
+| `minor`          | `minor`          | No 1:1 implementation, but compatible behavior |
+| `patch`          | `patch`, `micro` | No 1:1 implementation, but compatible behavior |
+| `premajor`       | `premajor`       | Implemented according to poetry documentation  |
+| `preminor`       | `preminor`       | Implemented according to poetry documentation  |
+| `prepatch`       | `prepatch`       | Implemented according to poetry documentation  |
+| `prerelease`     | `prerelease`     | Implemented according to poetry documentation  |
+
+Hence, replacing `poetry version` with `pdm bump` should be sufficient with pdm-bump v0.8.0 onwards.
+
 ## VCS based actions
 
 **NOTE**: Currently, only `git` is supported as VCS provider.
