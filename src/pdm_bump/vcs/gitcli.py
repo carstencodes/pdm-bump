@@ -18,9 +18,10 @@ from subprocess import CalledProcessError
 from typing import Optional, cast
 
 from ..core.logging import logger
-from ..core.version import Version
+from ..core.version import Pep440VersionFormatter, Version
 from .core import VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
+from .history import Commit, History
 from .mixins import CliRunnerMixin
 
 
@@ -222,6 +223,40 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             raise VcsProviderError(
                 f"Failed to receive number of changes that are not committed."
                 f" Reason: {cpe.stderr}"
+            ) from cpe
+
+    def get_history(self, since_last_tag: bool = True) -> History:
+        """"""
+        commit_history: str = ""
+        if since_last_tag:
+            last_tag: Optional[Version] = self.get_most_recent_tag()
+            if last_tag is not None:
+                last_tag_name: str = (
+                    f"v{Pep440VersionFormatter().format(last_tag)}"
+                )
+                commit_history = f"{last_tag_name}..HEAD"
+
+        try:
+            _, output, _ = self.run(
+                self.git_executable_path,
+                ("log", commit_history, "--format=%s"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+            logger.debug(
+                "The following commits have been received for %s:\n%s",
+                commit_history,
+                output,
+            )
+            commit_texts: list[str] = output.split("\n")
+
+            commits: list[Commit] = [Commit(t) for t in commit_texts]
+
+            return History(commits)
+
+        except CalledProcessError as cpe:
+            raise VcsProviderError(
+                f"Failed to receive commit history." f" Reason: {cpe.stderr}"
             ) from cpe
 
 
