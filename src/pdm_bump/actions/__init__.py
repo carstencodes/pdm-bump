@@ -12,7 +12,7 @@
 """"""
 
 # Justification: load module for decoupling
-from . import explicit, increment, preview, vcs, poetry_like  # noqa: F401
+from . import explicit, increment, poetry_like, preview, vcs  # noqa: F401
 from .base import ActionBase, VersionConsumer, VersionModifier, actions
 
 __all__ = [

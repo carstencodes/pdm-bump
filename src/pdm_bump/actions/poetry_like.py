@@ -16,7 +16,6 @@ from ..core.logging import logger, traced_function
 from ..core.version import Version
 from .base import VersionModifier, VersionPersister, action
 
-
 # Comparable functions at poetry. Cf.
 # https://python-poetry.org/docs/cli/#version
 
@@ -25,6 +24,7 @@ from .base import VersionModifier, VersionPersister, action
 @action
 class PoetryLikePreMajorVersionModifier(VersionModifier):
     """"""
+
     name: str = "premajor"
     description: str = (
         "Prepares a new major version - like `poetry version premajor`"
@@ -65,6 +65,7 @@ class PoetryLikePreMajorVersionModifier(VersionModifier):
 @action
 class PoetryLikePreMinorVersionModifier(VersionModifier):
     """"""
+
     name: str = "preminor"
     description: str = (
         "Prepares a new minor version - like `poetry version preminor`"
@@ -105,6 +106,7 @@ class PoetryLikePreMinorVersionModifier(VersionModifier):
 @action
 class PoetryLikePrePatchVersionModifier(VersionModifier):
     """"""
+
     name: str = "prepatch"
     description: str = (
         "Prepares a new patch (micro) version - like `poetry version prepatch`"
@@ -149,6 +151,7 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
 @action
 class PoetryLikePreReleaseVersionModifier(VersionModifier):
     """"""
+
     name: str = "prerelease"
     description: str = (
         "Prepares a new release version - like `poetry version prerelease`"
@@ -162,7 +165,11 @@ class PoetryLikePreReleaseVersionModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         """"""
-        release_part = (self.current_version.major, self.current_version.minor, self.current_version.micro)
+        release_part = (
+            self.current_version.major,
+            self.current_version.minor,
+            self.current_version.micro,
+        )
         preview_part = None
 
         if self.current_version.is_pre_release:
@@ -174,7 +181,11 @@ class PoetryLikePreReleaseVersionModifier(VersionModifier):
                 preview_part = ("rc", self.current_version.preview[1] + 1)
         else:
             preview_part = ("a", 0)
-            release_part = (self.current_version.major, self.current_version.minor, self.current_version.micro + 1)
+            release_part = (
+                self.current_version.major,
+                self.current_version.minor,
+                self.current_version.micro + 1,
+            )
 
         next_version: Version = Version(
             epoch=self.current_version.epoch,
@@ -182,7 +193,7 @@ class PoetryLikePreReleaseVersionModifier(VersionModifier):
             preview=preview_part,
             post=None,
             dev=None,
-            local=None
+            local=None,
         )
 
         return next_version
