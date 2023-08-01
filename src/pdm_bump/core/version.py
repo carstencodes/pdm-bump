@@ -133,6 +133,15 @@ class Version:
         rc_part: Final[tuple[str, ...]] = ("c", "rc")
         return self.preview is not None and self.__compare_preview(rc_part)
 
+    @property
+    def is_final(self) -> bool:
+        return (
+            not self.preview
+            and not self.is_local_version
+            and not self.is_post_release
+            and not self.is_development_version
+        )
+
     def __compare_preview(self, valid_parts: tuple[str, ...]) -> bool:
         if self.preview is not None:
             pre: tuple[str, int] = cast(tuple[str, int], self.preview)
