@@ -135,6 +135,7 @@ class Version:
 
     @property
     def is_final(self) -> bool:
+        """"""
         return (
             not self.preview
             and not self.is_local_version
