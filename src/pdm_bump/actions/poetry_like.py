@@ -9,12 +9,13 @@
 # This file is published using the MIT license.
 # Refer to LICENSE for more information
 #
+""""""
 
-from typing import final
+from typing import Literal, Optional, final
 
 from ..core.logging import logger, traced_function
 from ..core.version import Version
-from .base import VersionModifier, VersionPersister, action
+from .base import VersionModifier, action
 
 # Comparable functions at poetry. Cf.
 # https://python-poetry.org/docs/cli/#version
@@ -30,17 +31,13 @@ class PoetryLikePreMajorVersionModifier(VersionModifier):
         "Prepares a new major version - like `poetry version premajor`"
     )
 
-    def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
-    ) -> None:
-        super().__init__(version, persister, **kwargs)
-
     @traced_function
     def create_new_version(self) -> Version:
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a new major pre-release from non-final version %s",
+                "Cannot create a new major pre-release "
+                + "from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
@@ -71,17 +68,13 @@ class PoetryLikePreMinorVersionModifier(VersionModifier):
         "Prepares a new minor version - like `poetry version preminor`"
     )
 
-    def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
-    ) -> None:
-        super().__init__(version, persister, **kwargs)
-
     @traced_function
     def create_new_version(self) -> Version:
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a new minor pre-release from non-final version %s",
+                "Cannot create a new minor pre-release "
+                + "from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
@@ -112,17 +105,13 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
         "Prepares a new patch (micro) version - like `poetry version prepatch`"
     )
 
-    def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
-    ) -> None:
-        super().__init__(version, persister, **kwargs)
-
     @traced_function
     def create_new_version(self) -> Version:
         """"""
         if not self.current_version.is_final:
             logger.error(
-                "Cannot create a new patch pre-release from non-final version %s",
+                "Cannot create a new patch pre-release "
+                + "from non-final version %s",
                 self.current_version,
             )
             raise ValueError(self.current_version)
@@ -157,11 +146,6 @@ class PoetryLikePreReleaseVersionModifier(VersionModifier):
         "Prepares a new release version - like `poetry version prerelease`"
     )
 
-    def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
-    ) -> None:
-        super().__init__(version, persister, **kwargs)
-
     @traced_function
     def create_new_version(self) -> Version:
         """"""
@@ -170,9 +154,11 @@ class PoetryLikePreReleaseVersionModifier(VersionModifier):
             self.current_version.minor,
             self.current_version.micro,
         )
-        preview_part = None
+        preview_part: Optional[
+            tuple[Literal["a", "b", "c", "alpha", "beta", "rc"], int]
+        ] = None
 
-        if self.current_version.is_pre_release:
+        if self.current_version.preview is not None:
             if self.current_version.is_alpha:
                 preview_part = ("a", self.current_version.preview[1] + 1)
             elif self.current_version.is_beta:
