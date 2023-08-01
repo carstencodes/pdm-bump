@@ -327,15 +327,24 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
     def create_new_version(self) -> Version:
         """"""
         dev_version: NonNegativeInteger = 1
+        micro_version = self.current_version.micro
         if self.current_version.dev is not None:
             _, dev_version = self.current_version.dev
             logger.debug("Incrementing development version part by one")
             dev_version = dev_version + 1
+        else:
+            logger.debug("Incrementing micro version as it is no dev version yet")
+            micro_version = micro_version + 1
 
         constructional_args: dict[str, Any] = dataclass_to_dict(
             self.current_version
         )
         constructional_args["dev"] = ("dev", dev_version)
+        constructional_args["release_tuple"] = (self.current_version.major, self.current_version.minor, micro_version)
+
+        if self.current_version.is_post_release and not self.current_version.is_development_version:
+            logger.debug("Resetting post version to zero")
+            constructional_args["post"] = None
 
         next_version: Version = Version(**constructional_args)
         self._report_new_version(next_version)
