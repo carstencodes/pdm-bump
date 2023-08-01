@@ -649,7 +649,49 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         "1.2.3",
         lambda v: FinalizingVersionModifier(v, _unit_test_persister),
     ),
-]  # TODO Test Dev and Post Incrementing modifier
+    (
+        "Increment development part of existing development version",
+        "1.2.3-dev1",
+        "1.2.3-dev2",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of non-existing development version",
+        "1.2.3",
+        "1.2.4-dev1",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing post and non-existing development version",
+        "1.2.3-post6",
+        "1.2.4-dev1",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing post and existing development version",
+        "1.2.3-post6-dev1",
+        "1.2.3-post6-dev2",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing post and existing development version with local revision",
+        "1.2.3-post6-dev1+local9",
+        "1.2.3-post6-dev2+local9",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing development version with local revision",
+        "1.2.3-dev1+local9",
+        "1.2.3-dev2+local9",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing post and non-existing development version with local revision",
+        "1.2.3-post1+local9",
+        "1.2.4-dev1+local9",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+] # TODO Test Post Incrementing modifier
 _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
     tuple[str, str, Callable[[Version], VersionModifier]]
 ] = [
