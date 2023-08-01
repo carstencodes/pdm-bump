@@ -74,6 +74,10 @@ SUB_TEST_PARAMS_WHAT_SUCCESS: Iterable[tuple[str, str]] = [
     ("no-pre-release", "no-pre-release"),
     ("post", "post"),
     ("dev", "dev"),
+    ("prerelease", "prerelease"),
+    ("premajor", "premajor"),
+    ("preminor", "preminor"),
+    ("prepatch", "prepatch"),
 ]
 SUB_TEST_PARAMS_PRE_SUCCESS: Iterable[tuple[str, str]] = [
     ("alpha", "alpha"),

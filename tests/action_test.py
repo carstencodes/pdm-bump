@@ -31,7 +31,7 @@ from pdm_bump.actions.preview import (
     ReleaseCandidateIncrementingVersionModifier,
 )
 from pdm_bump.actions.poetry_like import (
-    PoetryLikePreRelease,
+    PoetryLikePreReleaseVersionModifier,
     PoetryLikePreMajorVersionModifier,
     PoetryLikePreMinorVersionModifier,
     PoetryLikePrePatchVersionModifier,
@@ -194,7 +194,7 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         lambda v: MinorIncrementingVersionModifier(v, _unit_test_persister, False),
     ),
     (
-        "Increment minor parts without removing pre-parts and beta pre-parts",
+        "Increment minor parVersionModifierts without removing pre-parts and beta pre-parts",
         "1.0.0b1",
         "1.1.0b1",
         lambda v: MinorIncrementingVersionModifier(v, _unit_test_persister, False),
@@ -733,6 +733,48 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         "1.2.3-post1+local1",
         lambda v: PostVersionIncrementingVersionModifier(v, _unit_test_persister),
     ),
+    (
+        "Run premajor from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.2",
+        "2.0.0a0",
+        lambda v: PoetryLikePreMajorVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run preminor from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.2",
+        "1.1.0a0",
+        lambda v: PoetryLikePreMinorVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run prepatch from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.2",
+        "1.0.3a0",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run prerelease from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.2",
+        "1.0.3a0",
+        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run prerelease from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.3a0",
+        "1.0.3a1",
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run prerelease from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.3b0",
+        "1.0.3b1",
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Run prerelease from poetry version commands (demo from https://python-poetry.org/docs/cli/#version)",
+        "1.0.3rc0",
+        "1.0.3rc1",
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
+    ),
 ]
 _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
     tuple[str, str, Callable[[Version], VersionModifier]]
@@ -866,19 +908,19 @@ _CREATE_NEXT_VERSION_ERROR_PARAMS: list[
     (
         "Pre-Patch if version is alpha version",
         "1.2.3a23",
-        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
         ValueError,
     ),
     (
         "Pre-Patch if version is beta version",
         "1.2.3b23",
-        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
         ValueError,
     ),
     (
         "Pre-Patch if version is release candidate",
         "1.2.3rc23",
-        lambda v: PoetryLikePrePatchVersionModifier(v, _unit_test_persister),
+        lambda v: PoetryLikePreReleaseVersionModifier(v, _unit_test_persister),
         ValueError,
     ),
 ]
