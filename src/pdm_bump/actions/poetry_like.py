@@ -27,6 +27,7 @@ from .base import VersionModifier, VersionPersister, action
 @final
 @action
 class PoetryLikePreMajorVersionModifier(VersionModifier):
+    """"""
     name: str = "premajor"
     description: str = (
         "Prepares a new major version - like `poetry version premajor`"
@@ -39,6 +40,7 @@ class PoetryLikePreMajorVersionModifier(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         if not self.current_version.is_final:
             logger.error(
                 "Cannot create a pre-release from non-final version %s",
@@ -65,6 +67,7 @@ class PoetryLikePreMajorVersionModifier(VersionModifier):
 @final
 @action
 class PoetryLikePreMinorVersionModifier(VersionModifier):
+    """"""
     name: str = "preminor"
     description: str = (
         "Prepares a new minor version - like `poetry version preminor`"
@@ -77,6 +80,7 @@ class PoetryLikePreMinorVersionModifier(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         if not self.current_version.is_final:
             logger.error(
                 "Cannot create a pre-release from non-final version %s",
@@ -103,6 +107,7 @@ class PoetryLikePreMinorVersionModifier(VersionModifier):
 @final
 @action
 class PoetryLikePrePatchVersionModifier(VersionModifier):
+    """"""
     name: str = "prepatch"
     description: str = (
         "Prepares a new patch (micro) version - like `poetry version prepatch`"
@@ -115,6 +120,7 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         if not self.current_version.is_final:
             logger.error(
                 "Cannot create a pre-release from non-final version %s",
@@ -145,6 +151,7 @@ class PoetryLikePrePatchVersionModifier(VersionModifier):
 @final
 @action
 class PoetryLikePreRelease(VersionModifier):
+    """"""
     name: str = "prerelease"
     description: str = (
         "Prepares a new release version - like `poetry version prerelease`"
@@ -157,6 +164,7 @@ class PoetryLikePreRelease(VersionModifier):
 
     @traced_function
     def create_new_version(self) -> Version:
+        """"""
         release_part = (self.current_version.major, self.current_version.minor, self.current_version.micro)
         preview_part = None
 
