@@ -12,6 +12,8 @@
 """"""
 
 
+from abc import abstractmethod
+from functools import cached_property
 from typing import Optional, final
 
 from ..core.logging import logger, silenced
@@ -24,13 +26,7 @@ from ..vcs import (
     VcsProviderAggregator,
 )
 from .base import VersionConsumer, VersionModifier, VersionPersister, action
-from .increment import (
-    DevelopmentVersionIncrementingVersionModifier,
-    MajorIncrementingVersionModifier,
-    MicroIncrementingVersionModifier,
-    MinorIncrementingVersionModifier,
-    PostVersionIncrementingVersionModifier,
-)
+from .version_providers import SemanticVersionPolicy, VersionPolicy
 
 
 @final
@@ -99,9 +95,7 @@ class _VcsVersionDerivatingVersionConsumer(
         # This does not persist anything
         pass  # pylint: disable=W0107
 
-        # This must be refactored - Refactor! TODO  # pylint: disable=W0511
-
-    def derive_next_version(self) -> Optional[Version]:  # pylint:disable=R0914
+    def derive_next_version(self) -> Optional[Version]:
         """"""
         history: History = self.vcs_provider.get_history()
         stats: CommitStatistics = history.get_commit_stats
@@ -112,60 +106,19 @@ class _VcsVersionDerivatingVersionConsumer(
             logger.info("History clean. No need to update version")
             return None
 
-        has_features: bool = CommitType.Feature in keys
-        has_bugfixes: bool = CommitType.Bugfix in keys
-        has_chores: bool = CommitType.Chore in keys
-        has_documentation: bool = CommitType.Documentation in keys
-        has_quality_assurance: bool = CommitType.QualityAssurance in keys
-        has_build: bool = CommitType.Build in keys
-        has_ci: bool = CommitType.ContinuousIntegration in keys
-        has_code_style: bool = CommitType.CodeStyle in keys
-        has_refactoring: bool = CommitType.Refactoring in keys
-        has_performance: bool = CommitType.Performance in keys
-        has_test: bool = CommitType.Test in keys
-        has_undefined: bool = CommitType.Undefined in keys
-
-        modifier: VersionModifier
-        if stats.contains_breaking_changes:
-            logger.info("History contains breaking changes.")
-            modifier = MajorIncrementingVersionModifier(
-                self.current_version, self, True
-            )
-        elif has_features or has_performance or has_refactoring:
-            logger.info("History contains non-breaking feature commits")
-            modifier = MinorIncrementingVersionModifier(
-                self.current_version, self, True
-            )
-        elif has_bugfixes or has_documentation or has_chores:
-            logger.info("History only contains minor fixes in commits")
-            modifier = MicroIncrementingVersionModifier(
-                self.current_version, self, True
-            )
-        elif (
-            has_quality_assurance
-            or has_test
-            or has_code_style
-            or has_build
-            or has_ci
-        ):
-            logger.info(
-                "History does not contain functional or relevant changes"
-            )
-            modifier = PostVersionIncrementingVersionModifier(
-                self.current_version, self
-            )
-        elif has_undefined or not self.vcs_provider.is_clean:
-            logger.info("History contains no relevant changes.")
-            modifier = DevelopmentVersionIncrementingVersionModifier(
-                self.current_version, self
-            )
-        else:
-            logger.info("Nothing to do")
-            return None
+        modifier: VersionModifier = self._version_policy.get_modifier(
+            stats, self.vcs_provider.is_clean
+        )
 
         with silenced(logger):
             new_version: Version = modifier.create_new_version()
             return new_version
+
+    @property
+    @abstractmethod
+    def _version_policy(self) -> VersionPolicy:
+        """"""
+        raise NotImplementedError()
 
 
 @final
@@ -184,9 +137,13 @@ class SuggestNewVersion(_VcsVersionDerivatingVersionConsumer):
             next_version: str = Pep440VersionFormatter().format(new_version)
             logger.info("Would suggest new version: %s", next_version)
 
+    @cached_property
+    def _version_policy(self) -> VersionPolicy:
+        return SemanticVersionPolicy(self.current_version)
+
 
 @final
-@action
+# when implemented, add @action
 class AutoSelectVersionModifier(
     VersionModifier, _VcsVersionDerivatingVersionConsumer
 ):
@@ -211,3 +168,7 @@ class AutoSelectVersionModifier(
     def create_new_version(self) -> Version:
         """"""
         raise NotImplementedError
+
+    @cached_property
+    def _version_policy(self) -> VersionPolicy:
+        raise NotImplementedError()
