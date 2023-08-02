@@ -250,7 +250,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
             commit_texts: list[str] = output.split("\n")
 
-            commits: list[Commit] = [Commit(t) for t in commit_texts]
+            commits: list[Commit] = [
+                Commit(t) for t in commit_texts if t.strip() != ""
+            ]
 
             return History(commits)
 
