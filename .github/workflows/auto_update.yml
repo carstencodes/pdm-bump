@@ -110,7 +110,7 @@ jobs:
           body: ${{ env.PDM_PACKAGES_TO_UPDATE }}
           assignees: ${{ github.repository_owner }}
       - name: Close Pull request automatically, if it succeeds
-        uses: peter-evans/enable-pull-request-automerge@v4
+        uses: peter-evans/enable-pull-request-automerge@v3
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
           token: ${{ secrets.AUTOUPDATE_TOKEN }}
