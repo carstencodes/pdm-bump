@@ -251,6 +251,9 @@ class VersionModifier(VersionConsumer):
             VersionConsumer.get_allowed_arguments()
         )
 
+    def __str__(self) -> str:
+        return self.__class__.__name__.replace(VersionModifier.__name__, "")
+
 
 class ActionRegistry:
     """"""
