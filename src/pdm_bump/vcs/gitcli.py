@@ -256,7 +256,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
         except CalledProcessError as cpe:
             raise VcsProviderError(
-                f"Failed to receive commit history." f" Reason: {cpe.stderr}"
+                f"Failed to receive commit history. Reason: {cpe.stderr}"
             ) from cpe
 
 
