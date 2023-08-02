@@ -8,7 +8,7 @@ on:
 
 jobs:
   clean-up-branches:
-    name: Remove branches already merge
+    name: Remove branches already merged
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -26,6 +26,15 @@ jobs:
             git branch --merged ${MAIN_BRANCH} | egrep -v "(^\*|${MAIN_BRANCH})" | xargs git push -d origin
             echo Removed all branches already merged.
           fi
+        if: false
+  clean-up-auto-updates:
+    name: Remove pending auto-update branches
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch entire history
       - name: Find stale auto-update branches
         shell: bash
         run: |
