@@ -49,6 +49,51 @@ You can create tags based on your `pyproject.toml` version (or dynamic version) 
 $ pdm bump tag # creates a git tag with a leading v
 ```
 
+### Semantic versioning and conventional commits
+
+If you are using [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/), `pdm bump` can analyze your
+commit history up to the most recent tag. This history will be categorized upon the commit subjects, i.e. the first
+line of the commit. These categorized commits will then be handed over to a policy that will suggest a new version.
+
+Currently, an approach for a [semantic version v2](https://semver.org/spec/v2.0.0.html) is implemented.
+
+The implementation is as follows:
+- Features, Performance Tweaks and Refactorings will trigger a minor upgrade
+- Chore, Documentation and Bugfixes will trigger a micro (or patch) upgrade
+- Any other commit will trigger a post upgrade
+- Breaking changes will trigger a major upgrade
+
+The highest rating will win.
+
+Currently, only a suggestion command is implemented.
+
+```shell
+$ grep version= pyproject.toml
+version=0.1.0
+$ git log $(git describe --tags --abbrev=0)..HEAD --format=%s
+fix: Formatting is erroneous
+$ pdm bump suggest
+Would suggest a new version of 0.1.1
+$ # some more commits
+$ git log $(git describe --tags --abbrev=0)..HEAD --format=%s
+fix: Formatting is erroneous
+build: corrected PDM scripts
+chore: Updated 3 dependencies
+$ pdm bump suggest
+Would suggest a new version of 0.1.1
+$ # some more commits
+$ git log $(git describe --tags --abbrev=0)..HEAD --format=%s
+fix: Formatting is erroneous
+build: corrected PDM scripts
+chore: Updated 3 dependencies
+feat: Added a new formatter
+$ pdm bump suggest
+Would suggest a new version of 0.2.0
+$
+```
+
+This feature is currently experimental. Feedback appreciated.
+
 ## Contributing
 
 Feel free to submit issues and pull requests. Contributions are welcome.
