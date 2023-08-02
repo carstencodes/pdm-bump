@@ -50,8 +50,9 @@ class CommitType(_StrEnum):
     @classmethod
     def all_values(cls) -> Mapping["CommitType", str]:
         mapping: dict["CommitType", str] = {}
+        base_items: List[str] = dir(_StrEnum)
         for key in dir(cls):
-            if not key.startswith("_") and key != "all_values":
+            if not key.startswith("_") and key != "all_values" and key not in base_items:
                 mapping[cls[key]] = cls[key].value
 
         return mapping
@@ -130,7 +131,7 @@ class Commit:
     )
     commit_parser_factory: InitVar[
         Optional[Callable[[], "CommitParser"]]
-    ] = None
+    ] = None  # NOSONAR
 
     def __post_init__(
         self,
