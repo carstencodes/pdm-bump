@@ -38,5 +38,5 @@ jobs:
       - name: Find stale auto-update branches
         shell: bash
         run: |
-          git branch --remotes | grep "auto-update/dependencies" | sed 's@origin/@@g' | head -n-1 | xargs git push -n -d origin
+          git branch --remotes | grep "auto-update/dependencies" | sed 's@origin/@@g' | head -n-1 | xargs git push -d origin
           echo Remove all pending auto-update branches, but the last
