@@ -334,12 +334,10 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
             logger.debug("Incrementing development version part by one")
             dev_version = dev_version + 1
         elif self.current_version.preview is not None:
-            logger.debug(
-                "Incrementing preview version as this is a preview"
-            )
+            logger.debug("Incrementing preview version as this is a preview")
             pre = (
                 self.current_version.preview[0],
-                self.current_version.preview[1] + 1
+                self.current_version.preview[1] + 1,
             )
         else:
             logger.debug(
