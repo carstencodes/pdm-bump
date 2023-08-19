@@ -329,21 +329,23 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
         dev_version: NonNegativeInteger = 1
         micro_version = self.current_version.micro
         pre = None
-        if not self.current_version.preview is not None:
-            if self.current_version.dev is not None:
-                _, dev_version = self.current_version.dev
-                logger.debug("Incrementing development version part by one")
-                dev_version = dev_version + 1
-            else:
-                logger.debug(
-                    "Incrementing micro version as it is no dev version yet"
-                )
-                micro_version = micro_version + 1
-        else:
+        if self.current_version.dev is not None:
+            _, dev_version = self.current_version.dev
+            logger.debug("Incrementing development version part by one")
+            dev_version = dev_version + 1
+        elif self.current_version.preview is not None:
+            logger.debug(
+                "Incrementing preview version as this is a preview"
+            )
             pre = (
                 self.current_version.preview[0],
                 self.current_version.preview[1] + 1
             )
+        else:
+            logger.debug(
+                "Incrementing micro version as it is no dev version yet"
+            )
+            micro_version = micro_version + 1
 
         constructional_args: dict[str, Any] = dataclass_to_dict(
             self.current_version
