@@ -75,11 +75,11 @@ jobs:
           fi
       - name: Install plugin itself
         shell: bash
-        run: pdm install --no-lock --prod
+        run: pdm install --plugins
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: "Increase dev version"
         shell: bash
-        run: pdm run pdm bump dev
+        run: pdm bump dev
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: Setup Commit message and PR Title
         id: text_formatting
