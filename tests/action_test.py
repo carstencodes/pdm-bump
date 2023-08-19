@@ -662,6 +662,24 @@ _CREATE_NEXT_VERSION_PARAMS: list[
         lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
     ),
     (
+        "Increment development part of existing development version",
+        "1.2.0a1",
+        "1.2.0a2-dev1",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing development version",
+        "1.2.0b2",
+        "1.2.0b3-dev1",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
+        "Increment development part of existing development version",
+        "1.2.0rc1",
+        "1.2.0rc2-dev1",
+        lambda v: DevelopmentVersionIncrementingVersionModifier(v, _unit_test_persister),
+    ),
+    (
         "Increment development part of non-existing development version",
         "1.2.3",
         "1.2.4-dev1",
