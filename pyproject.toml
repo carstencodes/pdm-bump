@@ -39,6 +39,11 @@ requires = [
 ]
 build-backend = "pdm.backend"
 
+[tool.pdm]
+plugins = [
+    "-e file:///${PROJECT_ROOT}"
+]
+
 [tool.black]
 line-length = 79
 target-version = [
@@ -125,8 +130,6 @@ composite = [
 
 [tool.pdm.scripts.check-commits]
 shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"
-
-[tool.pdm.plugins]
 
 [tool.pylint.MAIN]
 fail-under = 9
