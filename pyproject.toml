@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.8.0a2.dev7"
+version = "0.8.0a2.dev8"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -41,13 +41,7 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 plugins = [
-    "-e file:///${PROJECT_ROOT}"
-]
-
-[tool.black]
-line-length = 79
-target-version = [
-    "py39",
+    "-e file:///${PROJECT_ROOT}",
 ]
 
 [tool.pdm.dev-dependencies]
@@ -130,6 +124,12 @@ composite = [
 
 [tool.pdm.scripts.check-commits]
 shell = "gitlint --commits $(git describe --tags --abbrev=0)..HEAD lint"
+
+[tool.black]
+line-length = 79
+target-version = [
+    "py39",
+]
 
 [tool.pylint.MAIN]
 fail-under = 9
