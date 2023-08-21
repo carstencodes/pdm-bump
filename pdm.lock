@@ -1528,7 +1528,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.9.0"
+version = "4.10.0"
 requires_python = ">=3.8"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -1544,8 +1544,8 @@ dependencies = [
     "virtualenv>=20.24.3",
 ]
 files = [
-    {file = "tox-4.9.0-py3-none-any.whl", hash = "sha256:c80de60fe26f9a009b0a763888bf2099ccfbef50a0279a6b9f6de40eb4eb7457"},
-    {file = "tox-4.9.0.tar.gz", hash = "sha256:9b6d38fe422599d084afd89375b4803f4bc1f8f16573c77c8fd8ffcc6938f1ff"},
+    {file = "tox-4.10.0-py3-none-any.whl", hash = "sha256:e4a1b1438955a6da548d69a52350054350cf6a126658c20943261c48ed6d4c92"},
+    {file = "tox-4.10.0.tar.gz", hash = "sha256:e041b2165375be690aca0ec4d96360c6906451380520e4665bf274f66112be35"},
 ]
 
 [[package]]
@@ -1613,15 +1613,15 @@ files = [
 
 [[package]]
 name = "vulture"
-version = "2.8"
-requires_python = ">=3.6"
+version = "2.9.1"
+requires_python = ">=3.7"
 summary = "Find dead code"
 dependencies = [
     "toml",
 ]
 files = [
-    {file = "vulture-2.8-py2.py3-none-any.whl", hash = "sha256:78bd44972b71d914ac382e64cacd4f56682017dcfa5929d3110ad09453796133"},
-    {file = "vulture-2.8.tar.gz", hash = "sha256:393293f183508064294b0feb4c8579e7f1f27e5bf74c9def6a3d52f38b29b599"},
+    {file = "vulture-2.9.1-py2.py3-none-any.whl", hash = "sha256:a46857014619bd4b785a506b9ddb738cd4621043558309b03a879d18f86e2d72"},
+    {file = "vulture-2.9.1.tar.gz", hash = "sha256:b6a2aa632b6fd51488a8eeac650ab4a509bb1a032e81943817a8a2e6a63a30b3"},
 ]
 
 [[package]]
