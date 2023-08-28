@@ -366,7 +366,7 @@ files = [
 
 [[package]]
 name = "cyclonedx-python-lib"
-version = "4.0.1"
+version = "4.1.0"
 requires_python = ">=3.7,<4.0"
 summary = "A library for producing CycloneDX SBOM (Software Bill of Materials) files."
 dependencies = [
@@ -375,8 +375,8 @@ dependencies = [
     "sortedcontainers<3.0.0,>=2.4.0",
 ]
 files = [
-    {file = "cyclonedx_python_lib-4.0.1-py3-none-any.whl", hash = "sha256:907b64f00df85d727a425de86604768b248cf19285993729e04f17bec767f692"},
-    {file = "cyclonedx_python_lib-4.0.1.tar.gz", hash = "sha256:878e33b8e0080c786f6cbd4c6f87ad610db65d6a3a686a5698415d9cfcd8925d"},
+    {file = "cyclonedx_python_lib-4.1.0-py3-none-any.whl", hash = "sha256:28b8c6c96372345c61464561b3040ede38d1c82026f706d87e8728ba5f7f4ddb"},
+    {file = "cyclonedx_python_lib-4.1.0.tar.gz", hash = "sha256:7996657f9788758ed05bea8c247e3e6ffcccfbc48818cd34795a4ae094b307bd"},
 ]
 
 [[package]]
@@ -429,12 +429,15 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.12.2"
-requires_python = ">=3.7"
+version = "3.12.3"
+requires_python = ">=3.8"
 summary = "A platform independent file lock."
+dependencies = [
+    "typing-extensions>=4.7.1; python_version < \"3.11\"",
+]
 files = [
-    {file = "filelock-3.12.2-py3-none-any.whl", hash = "sha256:cbb791cdea2a72f23da6ac5b5269ab0a0d161e9ef0100e653b69049a7706d1ec"},
-    {file = "filelock-3.12.2.tar.gz", hash = "sha256:002740518d8aa59a26b0c76e10fb8c6e15eae825d34b6fdf670333fd7b938d81"},
+    {file = "filelock-3.12.3-py3-none-any.whl", hash = "sha256:f067e40ccc40f2b48395a80fcbd4728262fab54e232e090a4063ab804179efeb"},
+    {file = "filelock-3.12.3.tar.gz", hash = "sha256:0ecc1dd2ec4672a10c8550a8182f1bd0c0a5088470ecd5a125e45f49472fac3d"},
 ]
 
 [[package]]
@@ -944,12 +947,12 @@ files = [
 
 [[package]]
 name = "pluggy"
-version = "1.2.0"
-requires_python = ">=3.7"
+version = "1.3.0"
+requires_python = ">=3.8"
 summary = "plugin and hook calling mechanisms for python"
 files = [
-    {file = "pluggy-1.2.0-py3-none-any.whl", hash = "sha256:c2fd55a7d7a3863cba1a013e4e2414658b1d07b6bc57b3919e0c63c9abb99849"},
-    {file = "pluggy-1.2.0.tar.gz", hash = "sha256:d12f0c4b579b15f5e054301bb226ee85eeeba08ffec228092f8defbaa3a4c4b3"},
+    {file = "pluggy-1.3.0-py3-none-any.whl", hash = "sha256:d89c696a773f8bd377d18e5ecda92b7a3793cbe66c87060a6fb58c7b6e1061f7"},
+    {file = "pluggy-1.3.0.tar.gz", hash = "sha256:cf61ae8f126ac6f7c451172cf30e3e43d3ca77615509771b3a984a0730651e12"},
 ]
 
 [[package]]
