@@ -49,7 +49,7 @@ files = [
 
 [[package]]
 name = "autoflake"
-version = "2.2.0"
+version = "2.2.1"
 requires_python = ">=3.8"
 summary = "Removes unused imports and unused variables"
 dependencies = [
@@ -57,8 +57,8 @@ dependencies = [
     "tomli>=2.0.1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "autoflake-2.2.0-py3-none-any.whl", hash = "sha256:de409b009a34c1c2a7cc2aae84c4c05047f9773594317c6a6968bd497600d4a0"},
-    {file = "autoflake-2.2.0.tar.gz", hash = "sha256:62e1f74a0fdad898a96fee6f99fe8241af90ad99c7110c884b35855778412251"},
+    {file = "autoflake-2.2.1-py3-none-any.whl", hash = "sha256:265cde0a43c1f44ecfb4f30d95b0437796759d07be7706a2f70e4719234c0f79"},
+    {file = "autoflake-2.2.1.tar.gz", hash = "sha256:62b7b6449a692c3c9b0c916919bbc21648da7281e8506bcf8d3f8280e431ebc1"},
 ]
 
 [[package]]
@@ -542,15 +542,15 @@ files = [
 
 [[package]]
 name = "gitpython"
-version = "3.1.32"
+version = "3.1.33"
 requires_python = ">=3.7"
 summary = "GitPython is a Python library used to interact with Git repositories"
 dependencies = [
     "gitdb<5,>=4.0.1",
 ]
 files = [
-    {file = "GitPython-3.1.32-py3-none-any.whl", hash = "sha256:e3d59b1c2c6ebb9dfa7a184daf3b6dd4914237e7488a1730a6d8f6f5d0b4187f"},
-    {file = "GitPython-3.1.32.tar.gz", hash = "sha256:8d9b8cb1e80b9735e8717c9362079d3ce4c6e5ddeebedd0361b228c3a67a62f6"},
+    {file = "GitPython-3.1.33-py3-none-any.whl", hash = "sha256:11f22466f982211ad8f3bdb456c03be8466c71d4da8774f3a9f68344e89559cb"},
+    {file = "GitPython-3.1.33.tar.gz", hash = "sha256:13aaa3dff88a23afec2d00eb3da3f2e040e2282e41de484c5791669b31146084"},
 ]
 
 [[package]]
@@ -836,7 +836,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.8.2"
+version = "2.9.0"
 requires_python = ">=3.7"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -856,12 +856,13 @@ dependencies = [
     "shellingham>=1.3.2",
     "tomli>=1.1.0; python_version < \"3.11\"",
     "tomlkit<1,>=0.11.1",
+    "truststore; python_version >= \"3.10\"",
     "unearth>=0.10.0",
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.8.2-py3-none-any.whl", hash = "sha256:b1de3411d26cc7525741c7f0a84a00e6834f63105c19da13df9a61c229ba45d9"},
-    {file = "pdm-2.8.2.tar.gz", hash = "sha256:b948d00bf620682b0ac4c80d228cb305a2b0150e497ee6931da30e3cc305bfdc"},
+    {file = "pdm-2.9.0-py3-none-any.whl", hash = "sha256:b2c74f2b1685817ee5a3e8b259cf24a11c30ff2e53e31a3a06216157b5651a5f"},
+    {file = "pdm-2.9.0.tar.gz", hash = "sha256:7962656a31e29a126d5f23906528b75e1b14b72952ab8250057a40726ae47d01"},
 ]
 
 [[package]]
@@ -1572,6 +1573,16 @@ dependencies = [
 files = [
     {file = "tox-pdm-0.6.1.tar.gz", hash = "sha256:952ea67f2ec891f11eb00749f63fc0f980384435ca782c448d154390f9f42f5e"},
     {file = "tox_pdm-0.6.1-py3-none-any.whl", hash = "sha256:9e3cf83b7b55c3e33aaee0e65cf341739581ff4604a4178f0ef7dbab73a0bb35"},
+]
+
+[[package]]
+name = "truststore"
+version = "0.7.0"
+requires_python = ">= 3.10"
+summary = "Verify certificates using native system trust stores"
+files = [
+    {file = "truststore-0.7.0-py3-none-any.whl", hash = "sha256:a4b410a365cafec4c2b386b30df53d89a6a4466cc229c7026e41c2d847f94fe9"},
+    {file = "truststore-0.7.0.tar.gz", hash = "sha256:72e784507a624375434381e4bad3eff8614bc8c845a7f5ae16a25a2624d0683f"},
 ]
 
 [[package]]
