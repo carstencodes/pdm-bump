@@ -174,6 +174,31 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
 @final
 @action
+class ResetNonSemanticPartsModifier(VersionModifier):
+    """"""
+
+    name: str = "reset-locals"
+    description: str = (
+        "Remove all non-semantiv parts (dev, post, local) from the version"
+    )
+
+    def __init__(
+        self, version: Version, persister: VersionPersister, **kwargs
+    ) -> None:
+        super().__init__(version, persister, **kwargs)
+
+    @traced_function
+    def create_new_version(self) -> Version:
+        """"""
+        return Version(
+            epoch=self.current_version.epoch,
+            release_tuple=self.current_version.release_tuple,
+            preview=self.current_version.preview,
+        )
+
+
+@final
+@action
 class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     """"""
 
