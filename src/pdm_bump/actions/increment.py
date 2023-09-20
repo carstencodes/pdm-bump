@@ -190,11 +190,14 @@ class ResetNonSemanticPartsModifier(VersionModifier):
     @traced_function
     def create_new_version(self) -> Version:
         """"""
-        return Version(
+        next_version: Version = Version(
             epoch=self.current_version.epoch,
             release_tuple=self.current_version.release_tuple,
             preview=self.current_version.preview,
         )
+        self._report_new_version(next_version)
+
+        return next_version
 
 
 @final
