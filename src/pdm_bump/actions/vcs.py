@@ -143,14 +143,15 @@ class SuggestNewVersion(_VcsVersionDerivatingVersionConsumer):
 
 
 @final
-# when implemented, add @action
+@action
 class AutoSelectVersionModifier(
     VersionModifier, _VcsVersionDerivatingVersionConsumer
 ):
     """"""
 
     name: str = "auto"
-    description: str = "Create a new version from the VCS"
+    description: str = "Automatically create a new "
+    "version for the project based on recent history."
 
     def __init__(
         self,
@@ -160,15 +161,28 @@ class AutoSelectVersionModifier(
         **kwargs,
     ) -> None:
         """"""
-        VersionModifier.__init__(self, version, persister, **kwargs)
+        # For unknown reasons, the modifier complains
+        # about a missing vcs_provider argument
+        VersionModifier.__init__(
+            self, version, persister, vcs_provider=vcs_provider, **kwargs
+        )
         _VcsVersionDerivatingVersionConsumer.__init__(
             self, version, vcs_provider, **kwargs
         )
 
     def create_new_version(self) -> Version:
         """"""
-        raise NotImplementedError
+        new_version: Optional[Version] = self.derive_next_version()
+
+        return new_version or self.current_version
+
+    @classmethod
+    def get_allowed_arguments(cls) -> set[str]:
+        """"""
+        return set(["vcs_provider"]).union(
+            VersionModifier.get_allowed_arguments()
+        )
 
     @cached_property
     def _version_policy(self) -> VersionPolicy:
-        raise NotImplementedError()
+        return SemanticVersionPolicy(self.current_version)
