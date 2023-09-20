@@ -50,7 +50,7 @@ class _DummyPersister:  # pylint: disable=R0903
         raise NotImplementedError()
 
 
-class _PreReleaseIncrementingVersionModified(VersionModifier):
+class _PreReleaseIncrementingVersionModifier(VersionModifier):
     """"""
 
     def __init__(
@@ -260,11 +260,11 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         VersionModifier._update_command(sub_parser)
         # Justification: Class is a mixin
         # pylint: disable=W0212
-        _PreReleaseIncrementingVersionModified._update_command(sub_parser)
+        _PreReleaseIncrementingVersionModifier._update_command(sub_parser)
 
 
 @final
-class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
+class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModifier):
     """"""
 
     name: str = "alpha"
@@ -284,7 +284,7 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 
 
 @final
-class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
+class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModifier):
     """"""
 
     name: str = "beta"
@@ -305,7 +305,7 @@ class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
 
 @final
 class ReleaseCandidateIncrementingVersionModifier(
-    _PreReleaseIncrementingVersionModified
+    _PreReleaseIncrementingVersionModifier
 ):
     """"""
 
