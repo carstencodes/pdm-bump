@@ -33,18 +33,6 @@ from .poetry_like import PoetryLikePreReleaseVersionModifier
 from .preview import PreReleaseIncrementingVersionModifier
 
 
-def _shift_preview_part(pre_release_part: str) -> str:
-    if pre_release_part in ("a", "alpha"):
-        return "beta"
-    return pre_release_part
-
-
-def _select_preview_part(pre_release_part: Optional[tuple[str, int]]) -> str:
-    if pre_release_part is not None:
-        return pre_release_part[0]
-    return "alpha"
-
-
 class _NoopVersionModifier(VersionModifier):
     def create_new_version(self) -> Version:
         return self.current_version
@@ -116,39 +104,9 @@ class RatingBasedVersionPolicy(VersionPolicy):
         elif max_rating >= Rating.MAJOR:
             modifier = MajorIncrementingVersionModifier(self.__version, self)
         elif max_rating >= Rating.MINOR:
-            modifier = MinorIncrementingVersionModifier(self.__version, self)
-            # During development, it might actually shift only the kind of pre-
-            # release instead of increasing the minor version
-            if self.__version.is_pre_release:
-                if self.__version.is_development_version:
-                    modifier = ResetNonSemanticPartsModifier(
-                        self.__version, self
-                    )
-                else:
-                    pre_release_part = _select_preview_part(
-                        self.__version.preview
-                    )
-                    pre_release_part = _shift_preview_part(pre_release_part)
-                    modifier = PreReleaseIncrementingVersionModifier(
-                        self.__version, self, pre_release_part, False
-                    )
+            modifier = self.__select_minor_version_modifier()
         elif max_rating >= Rating.MICRO:
-            modifier = MicroIncrementingVersionModifier(self.__version, self)
-            # During development phases, micro-changes will
-            # simply increment the pre-release
-            if self.__version.is_pre_release:
-                if not self.__version.is_development_version:
-                    pre_release_part = _select_preview_part(
-                        self.__version.preview
-                    )
-                    modifier = PreReleaseIncrementingVersionModifier(
-                        self.__version, self, pre_release_part, False
-                    )
-                else:
-                    modifier = ResetNonSemanticPartsModifier(
-                        self.__version, self
-                    )
-
+            modifier = self.__select_micro_version_modifier()
         elif max_rating >= Rating.PRERELEASE:
             modifier = PoetryLikePreReleaseVersionModifier(
                 self.__version, self
@@ -212,6 +170,51 @@ class RatingBasedVersionPolicy(VersionPolicy):
 
         logger.debug("Rating set to %i", max_rating)
         return max_rating
+
+    def __select_micro_version_modifier(self):
+        modifier = MicroIncrementingVersionModifier(self.__version, self)
+        # During development phases, micro-changes will
+        # simply increment the pre-release
+        if self.__version.is_pre_release:
+            if not self.__version.is_development_version:
+                pre_release_part = self.__select_preview_part(
+                    self.__version.preview
+                )
+                modifier = PreReleaseIncrementingVersionModifier(
+                    self.__version, self, pre_release_part, False
+                )
+            else:
+                modifier = ResetNonSemanticPartsModifier(self.__version, self)
+        return modifier
+
+    def __select_minor_version_modifier(self):
+        modifier = MinorIncrementingVersionModifier(self.__version, self)
+        # During development, it might actually shift only the kind of pre-
+        # release instead of increasing the minor version
+        if self.__version.is_pre_release:
+            if self.__version.is_development_version:
+                modifier = ResetNonSemanticPartsModifier(self.__version, self)
+            else:
+                pre_release_part = self.__select_preview_part(
+                    self.__version.preview
+                )
+                pre_release_part = self.__shift_preview_part(pre_release_part)
+                modifier = PreReleaseIncrementingVersionModifier(
+                    self.__version, self, pre_release_part, False
+                )
+        return modifier
+
+    def __shift_preview_part(self, pre_release_part: str) -> str:
+        if pre_release_part in ("a", "alpha"):
+            return "beta"
+        return pre_release_part
+
+    def __select_preview_part(
+        self, pre_release_part: Optional[tuple[str, int]]
+    ) -> str:
+        if pre_release_part is not None:
+            return pre_release_part[0]
+        return "alpha"
 
     @abstractmethod
     def _rate_commit_type(self, c_type: CommitType) -> Union[Rating, int]:
