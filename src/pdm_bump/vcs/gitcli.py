@@ -264,6 +264,10 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
         """"""
+        self.__apply_cached_patch(hunks)
+        self.__commit_staged_files(message)
+
+    def __apply_cached_patch(self, hunks: tuple[HunkSource, ...]):
         with NamedTemporaryFile(
             "w+", suffix=".patch", prefix="pdm.bump.git", delete=False
         ) as target_file:
@@ -284,15 +288,17 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
             target_file.close()
 
-            self.run(
-                self.git_executable_path,
-                ("apply", "--cached", f"'{target_file.name}'"),
-                raise_on_exit=True,
-                cwd=self.current_path,
-            )
+            try:
+                self.run(
+                    self.git_executable_path,
+                    ("apply", "--cached", f"'{target_file.name}'"),
+                    raise_on_exit=True,
+                    cwd=self.current_path,
+                )
+            finally:
+                Path(target_file.name).unlink()
 
-            Path(target_file.name).unlink()
-
+    def __commit_staged_files(self, message) -> None:
         with NamedTemporaryFile(
             "w+", suffix="message", prefix="pdm.bump.git", delete=False
         ) as target_file:
@@ -301,14 +307,15 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             target_file.flush()
             target_file.close()
 
-            self.run(
-                self.git_executable_path,
-                ("commit", "-f", f"'{target_file.name}'"),
-                raise_on_exit=True,
-                cwd=self.current_path,
-            )
-
-            Path(target_file.name).unlink()
+            try:
+                self.run(
+                    self.git_executable_path,
+                    ("commit", "-f", f"'{target_file.name}'"),
+                    raise_on_exit=True,
+                    cwd=self.current_path,
+                )
+            finally:
+                Path(target_file.name).unlink()
 
 
 @vcs_provider("git-cli")
