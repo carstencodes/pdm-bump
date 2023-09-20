@@ -17,6 +17,7 @@
 from . import gitcli  # noqa: F401
 from .core import (
     DefaultVcsProvider,
+    HunkSource,
     VcsProvider,
     VcsProviderAggregator,
     VcsProviderFactory,
@@ -36,6 +37,7 @@ __all__ = (
     "vcs_provider",
     "vcs_providers",
     "VcsProvider",
+    "HunkSource",
     "VcsProviderAggregator",
     "VcsProviderFactory",
     "VcsProviderRegistry",
