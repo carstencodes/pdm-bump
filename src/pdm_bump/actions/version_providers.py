@@ -27,8 +27,10 @@ from .increment import (
     MicroIncrementingVersionModifier,
     MinorIncrementingVersionModifier,
     PostVersionIncrementingVersionModifier,
+    ResetNonSemanticPartsModifier,
 )
 from .poetry_like import PoetryLikePreReleaseVersionModifier
+from .preview import PreReleaseIncrementingVersionModifier
 
 
 class _NoopVersionModifier(VersionModifier):
@@ -105,6 +107,16 @@ class RatingBasedVersionPolicy(VersionPolicy):
             modifier = MinorIncrementingVersionModifier(self.__version, self)
         elif max_rating >= Rating.MICRO:
             modifier = MicroIncrementingVersionModifier(self.__version, self)
+            # During development phases, micro-changes will
+            # simply increment the pre-release
+            if self.__version.is_pre_release:
+                if not self.__version.is_development_version:
+                    modifier = PreReleaseIncrementingVersionModifier(
+                        self.__version, self, self.__version.preview[0], False
+                    )
+                else:
+                    modifier = ResetNonSemanticPartsModifier(self.__version, self)
+
         elif max_rating >= Rating.PRERELEASE:
             modifier = PoetryLikePreReleaseVersionModifier(
                 self.__version, self

@@ -189,11 +189,17 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
     ) -> None:
         super().__init__(version, persister, **kwargs)
         self.__sub_modifier: VersionModifier
-        if pre_release_part in (AlphaIncrementingVersionModifier.name,):
+        if (
+            pre_release_part in (AlphaIncrementingVersionModifier.name,)
+            or pre_release_part in AlphaIncrementingVersionModifier.aliases
+        ):
             self.__sub_modifier = AlphaIncrementingVersionModifier(
                 version, _DummyPersister(), increment_micro
             )
-        elif pre_release_part in (BetaIncrementingVersionModifier.name,):
+        elif (
+            pre_release_part in (BetaIncrementingVersionModifier.name,)
+            or pre_release_part in BetaIncrementingVersionModifier.aliases
+        ):
             self.__sub_modifier = BetaIncrementingVersionModifier(
                 version, _DummyPersister(), increment_micro
             )
@@ -262,6 +268,7 @@ class AlphaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     """"""
 
     name: str = "alpha"
+    aliases: tuple[str] = ("a",)
     description: str = "Increment the alpha pre-release version part"
 
     @property
@@ -281,6 +288,7 @@ class BetaIncrementingVersionModifier(_PreReleaseIncrementingVersionModified):
     """"""
 
     name: str = "beta"
+    aliases: tuple[str] = ("b",)
     description: str = "Increment the beta pre-release version part"
 
     @property
