@@ -11,6 +11,8 @@
 #
 """"""
 
+from difflib import unified_diff
+from pathlib import Path
 from typing import Protocol, Union, cast, runtime_checkable
 
 from .core.config import Config, ConfigKeys
@@ -76,6 +78,7 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
         config: Config,
     ) -> None:
         self.__config = config
+        self.__original_file_content = self.__load_config_content()
 
     @property
     def is_enabled(self) -> bool:
@@ -84,6 +87,11 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
             self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
             is not None
         )
+
+    @property
+    def source_file(self) -> Path:
+        """"""
+        return self.__config.pyproject_file
 
     def __get_current_version(self) -> Version:
         version: str = cast(
@@ -98,3 +106,19 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
         self.__config.set_pyproject_metadata(version, ConfigKeys.VERSION)
 
     current_version = property(__get_current_version, __set_current_version)
+
+    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+        """"""
+        relative_path: Path = self.source_file.relative_to(repository_root)
+        return list(
+            unified_diff(
+                self.__original_file_content,
+                self.__load_config_content(),
+                fromfile=str(Path("a") / relative_path),
+                tofile=str(Path("b") / relative_path),
+                lineterm="",
+            )
+        )
+
+    def __load_config_content(self) -> list[str]:
+        return self.source_file.read_text().splitlines()
