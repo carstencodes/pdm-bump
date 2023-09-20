@@ -15,12 +15,36 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator
 from pathlib import Path
-from typing import AnyStr, Callable, Final, NamedTuple, Optional, Union, cast
+from typing import (
+    AnyStr,
+    Callable,
+    Final,
+    NamedTuple,
+    Optional,
+    Protocol,
+    Union,
+    cast,
+)
 
 from ..core.version import Pep440VersionFormatter, Version
 from .history import History
 
 _Pathlike = Union[Path, AnyStr]
+
+
+# Justification: Minimal protocol. Maybe false positive,
+# since 2 public methods available
+class HunkSource(Protocol):  # pylint: disable=R0903
+    """"""
+
+    @property
+    def source_file(self) -> Path:
+        """"""
+        raise NotImplementedError()
+
+    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+        """"""
+        raise NotImplementedError()
 
 
 class _PathLikeConverter(ABC):
@@ -150,6 +174,11 @@ class VcsProvider(_PathLikeConverter, ABC):
 
     @abstractmethod
     def get_history(self, since_last_tag: bool = True) -> History:
+        """"""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
         """"""
         raise NotImplementedError()
 
@@ -486,7 +515,13 @@ class DefaultVcsProvider(VcsProvider):
         return 0
 
     def get_history(self, since_last_tag: bool = True) -> History:
+        """"""
         return History([])
+
+    def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
+        """"""
+        # Must not be provided
+        pass
 
 
 class VcsProviderError(Exception):

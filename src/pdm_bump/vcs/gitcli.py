@@ -15,11 +15,12 @@
 from functools import cached_property
 from pathlib import Path
 from subprocess import CalledProcessError
+from tempfile import NamedTemporaryFile
 from typing import Optional, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
-from .core import VcsProvider, VcsProviderError, vcs_provider
+from .core import HunkSource, VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
 from .history import Commit, History
 from .mixins import CliRunnerMixin
@@ -260,6 +261,54 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             raise VcsProviderError(
                 f"Failed to receive commit history. Reason: {cpe.stderr}"
             ) from cpe
+
+    def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
+        """"""
+        with NamedTemporaryFile(
+            "w+", suffix=".patch", prefix="pdm.bump.git", delete=False
+        ) as target_file:
+            for hunk in hunks:
+                rel_path: Path = hunk.source_file.relative_to(
+                    self.current_path
+                )
+                target_file.write(
+                    f"diff --git {Path('a') / rel_path}"
+                    f" {Path('b') / rel_path}\n"
+                )
+                for line in hunk.get_source_file_change_hunks(
+                    self.current_path
+                ):
+                    target_file.write(f"{line}\n")
+
+            target_file.flush()
+
+            target_file.close()
+
+            self.run(
+                self.git_executable_path,
+                ("apply", "--cached", f"'{target_file.name}'"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+
+            Path(target_file.name).unlink()
+
+        with NamedTemporaryFile(
+            "w+", suffix="message", prefix="pdm.bump.git", delete=False
+        ) as target_file:
+            target_file.write(message)
+
+            target_file.flush()
+            target_file.close()
+
+            self.run(
+                self.git_executable_path,
+                ("commit", "-f", f"'{target_file.name}'"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+
+            Path(target_file.name).unlink()
 
 
 @vcs_provider("git-cli")

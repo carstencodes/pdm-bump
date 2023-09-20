@@ -80,6 +80,11 @@ class _VersionSource(Protocol):  # pylint: disable=R0903
         """"""
         raise NotImplementedError()
 
+    @property
+    def source_file(self) -> Path:
+        """"""
+        raise NotImplementedError()
+
     def __get_current_version(self) -> Version:
         raise NotImplementedError()
 
@@ -89,6 +94,10 @@ class _VersionSource(Protocol):  # pylint: disable=R0903
     current_version: property = property(
         __get_current_version, __set_current_version
     )
+
+    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+        """"""
+        raise NotImplementedError()
 
 
 @final
