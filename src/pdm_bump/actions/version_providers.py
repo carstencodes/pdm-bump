@@ -14,7 +14,7 @@
 from abc import ABC, abstractmethod
 from enum import IntEnum
 from functools import cached_property
-from typing import Union, cast
+from typing import Optional, Union, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
@@ -36,8 +36,13 @@ from .preview import PreReleaseIncrementingVersionModifier
 def _shift_preview_part(pre_release_part: str) -> str:
     if pre_release_part in ("a", "alpha"):
         return "beta"
-    else:
-        return pre_release_part
+    return pre_release_part
+
+
+def _select_preview_part(pre_release_part: Optional[tuple[str, int]]) -> str:
+    if pre_release_part is not None:
+        return pre_release_part[0]
+    return "alpha"
 
 
 class _NoopVersionModifier(VersionModifier):
@@ -116,9 +121,14 @@ class RatingBasedVersionPolicy(VersionPolicy):
             # release instead of increasing the minor version
             if self.__version.is_pre_release:
                 if self.__version.is_development_version:
-                    modifier = ResetNonSemanticPartsModifier(self.__version, self)
+                    modifier = ResetNonSemanticPartsModifier(
+                        self.__version, self
+                    )
                 else:
-                    pre_release_part = _shift_preview_part(self.__version.preview[0])
+                    pre_release_part = _select_preview_part(
+                        self.__version.preview
+                    )
+                    pre_release_part = _shift_preview_part(pre_release_part)
                     modifier = PreReleaseIncrementingVersionModifier(
                         self.__version, self, pre_release_part, False
                     )
@@ -128,11 +138,16 @@ class RatingBasedVersionPolicy(VersionPolicy):
             # simply increment the pre-release
             if self.__version.is_pre_release:
                 if not self.__version.is_development_version:
+                    pre_release_part = _select_preview_part(
+                        self.__version.preview
+                    )
                     modifier = PreReleaseIncrementingVersionModifier(
-                        self.__version, self, self.__version.preview[0], False
+                        self.__version, self, pre_release_part, False
                     )
                 else:
-                    modifier = ResetNonSemanticPartsModifier(self.__version, self)
+                    modifier = ResetNonSemanticPartsModifier(
+                        self.__version, self
+                    )
 
         elif max_rating >= Rating.PRERELEASE:
             modifier = PoetryLikePreReleaseVersionModifier(
