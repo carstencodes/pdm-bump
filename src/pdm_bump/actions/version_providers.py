@@ -33,6 +33,13 @@ from .poetry_like import PoetryLikePreReleaseVersionModifier
 from .preview import PreReleaseIncrementingVersionModifier
 
 
+def _shift_preview_part(pre_release_part: str) -> str:
+    if pre_release_part in ("a", "alpha"):
+        return "beta"
+    else:
+        return pre_release_part
+
+
 class _NoopVersionModifier(VersionModifier):
     def create_new_version(self) -> Version:
         return self.current_version
@@ -105,6 +112,16 @@ class RatingBasedVersionPolicy(VersionPolicy):
             modifier = MajorIncrementingVersionModifier(self.__version, self)
         elif max_rating >= Rating.MINOR:
             modifier = MinorIncrementingVersionModifier(self.__version, self)
+            # During development, it might actually shift only the kind of pre-
+            # release instead of increasing the minor version
+            if self.__version.is_pre_release:
+                if self.__version.is_development_version:
+                    modifier = ResetNonSemanticPartsModifier(self.__version, self)
+                else:
+                    pre_release_part = _shift_preview_part(self.__version.preview[0])
+                    modifier = PreReleaseIncrementingVersionModifier(
+                        self.__version, self, pre_release_part, False
+                    )
         elif max_rating >= Rating.MICRO:
             modifier = MicroIncrementingVersionModifier(self.__version, self)
             # During development phases, micro-changes will
