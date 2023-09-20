@@ -181,6 +181,7 @@ class VersionConsumer(ActionBase):
     """"""
 
     def __init__(self, version: Version, **kwargs) -> None:
+        super().__init__(**kwargs)
         self.__version = version
 
     @property
@@ -239,6 +240,10 @@ class VersionModifier(VersionConsumer):
 
         """
         next_version: Version = self.create_new_version()
+        if next_version is self.current_version:
+            # Intentionally removed
+            return
+
         if not dry_run:
             self.__persister.save_version(next_version)
         else:
