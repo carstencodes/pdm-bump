@@ -503,15 +503,15 @@ files = [
 
 [[package]]
 name = "gitdb"
-version = "4.0.10"
+version = "4.0.11"
 requires_python = ">=3.7"
 summary = "Git Object Database"
 dependencies = [
     "smmap<6,>=3.0.1",
 ]
 files = [
-    {file = "gitdb-4.0.10-py3-none-any.whl", hash = "sha256:c286cf298426064079ed96a9e4a9d39e7f3e9bf15ba60701e95f5492f28415c7"},
-    {file = "gitdb-4.0.10.tar.gz", hash = "sha256:6eb990b69df4e15bad899ea868dc46572c3f75339735663b81de79b06f17eb9a"},
+    {file = "gitdb-4.0.11-py3-none-any.whl", hash = "sha256:81a3407ddd2ee8df444cbacea00e2d038e40150acfa3001696fe0dcf1d3adfa4"},
+    {file = "gitdb-4.0.11.tar.gz", hash = "sha256:bf5421126136d6d0af55bc1e7c1af1c397a34f5b7bd79e776cd3e89785c2b04b"},
 ]
 
 [[package]]
@@ -1655,7 +1655,7 @@ files = [
 
 [[package]]
 name = "unearth"
-version = "0.11.2"
+version = "0.12.0"
 requires_python = ">=3.7"
 summary = "A utility to fetch and download python packages"
 dependencies = [
@@ -1663,8 +1663,8 @@ dependencies = [
     "requests>=2.25",
 ]
 files = [
-    {file = "unearth-0.11.2-py3-none-any.whl", hash = "sha256:046a996466de40a16e257fc883ae08157e7ab78a85bcec00313f3fdf9131bd37"},
-    {file = "unearth-0.11.2.tar.gz", hash = "sha256:0eb5a8800fda0610e095fef768b48d47c858c9b8417a785af647046c2df5ed2b"},
+    {file = "unearth-0.12.0-py3-none-any.whl", hash = "sha256:48e0ac07dadf2530f31385f4be605ec4fbf4604fbb3ff654bc8a9e3e8e243dc5"},
+    {file = "unearth-0.12.0.tar.gz", hash = "sha256:a9809c2069640010eb588f3179a96a873d7a18c4ad686c3023a0e141ebe2dfcb"},
 ]
 
 [[package]]
