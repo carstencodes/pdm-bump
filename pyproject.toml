@@ -28,8 +28,6 @@ paths = [
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
 
-[project.optional-dependencies]
-
 [project.entry-points.pdm]
 pdm-bump = "pdm_bump:main"
 
@@ -83,6 +81,7 @@ mypy = "mypy src/"
 pylint = "pylint src/"
 isort = "isort src/"
 black = "black src/"
+unimport = "unimport src/"
 autoflake = "autoflake --ignore-pass-statements --remove-all-unused-imports --in-place --recursive src"
 radon_cc = "radon cc --total-average --show-complexity --json --output-file radon.cc.json src/"
 radon_mi = "radon mi --show --json --output-file radon.mi.json src/"
@@ -102,6 +101,7 @@ composite = [
 [tool.pdm.scripts.format]
 composite = [
     "copyright-headers",
+#     "unimport",
     "isort",
     "black",
     "autoflake",
