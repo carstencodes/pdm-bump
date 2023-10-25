@@ -165,7 +165,7 @@ filterwarnings = [
 ]
 
 [tool.tox]
-legacy_tox_ini = "[tox]\nminversion = 3.25.0\nrequires = tox-pdm\nskip_missing_interpreters = false\nenvlist = py{39, 310, 311}\nisolated_build = true\nskipsdist = true\n\n\n[testenv]\nsetenv =\n    PDM_IGNORE_SAVED_PYTHON=\"1\"\nallowlist_externals =\n    mv\n    mkdir\n    pytest\n    pdm\n    python\ndeps = pdm\nrecreate = true\npassenv =\n    PYTHONPATH\ncommands =\n    pdm install --dev\n    pytest\ncommands_pre =\n    mkdir -p {toxinidir}/results/{envname}\ncommands_post =\n    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/\n"
+legacy_tox_ini = "[tox]\nminversion = 3.25.0\nrequires = tox-pdm\nskip_missing_interpreters = false\nenvlist = py{39, 310, 311, 312}\nisolated_build = true\nskipsdist = true\n\n\n[testenv]\nsetenv =\n    PDM_IGNORE_SAVED_PYTHON=\"1\"\nallowlist_externals =\n    mv\n    mkdir\n    pytest\n    pdm\n    python\ndeps = pdm\nrecreate = true\npassenv =\n    PYTHONPATH\ncommands =\n    pdm install --dev\n    pytest\ncommands_pre =\n    mkdir -p {toxinidir}/results/{envname}\ncommands_post =\n    mv {toxinidir}/pytest.result.xml {toxinidir}/pytest.coverage.xml {toxinidir}/results/{envname}/\n"
 
 [tool.git-cliff.changelog]
 header = "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n"
