@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.8.0a3.dev16"
+version = "0.8.0a3.dev17"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -101,7 +101,6 @@ composite = [
 [tool.pdm.scripts.format]
 composite = [
     "copyright-headers",
-#     "unimport",
     "isort",
     "black",
     "autoflake",
