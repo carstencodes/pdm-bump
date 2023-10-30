@@ -8,6 +8,12 @@ on:
     - cron: 0 18 * * FRI
   workflow_dispatch:
 
+permissions:
+  contents: write
+  checks: write
+  statuses: write
+  pull-requests: write
+
 jobs:
   auto_update:
     name: Run PDM Update
@@ -92,7 +98,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
-          token: ${{ secrets.AUTOUPDATE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           add-paths: |
             pyproject.toml
             pdm.lock
@@ -113,7 +119,7 @@ jobs:
         uses: peter-evans/enable-pull-request-automerge@v3
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
-          token: ${{ secrets.AUTOUPDATE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ steps.create-pr.outputs.pull-request-number }}
           merge-method: rebase
           delete-branch: true
