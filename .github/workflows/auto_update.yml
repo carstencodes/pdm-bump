@@ -115,6 +115,7 @@ jobs:
           title: ${{ env.GIT_PDM_TITLE }}
           body: ${{ env.PDM_PACKAGES_TO_UPDATE }}
           assignees: ${{ github.repository_owner }}
+          draft: true
       - name: Close Pull request automatically, if it succeeds
         uses: peter-evans/enable-pull-request-automerge@v3
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
