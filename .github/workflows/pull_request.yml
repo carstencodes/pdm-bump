@@ -18,6 +18,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -36,7 +37,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install production dependencies
         run: pdm install --prod
       - name: Build wheel
@@ -69,7 +70,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run unit tests
@@ -102,7 +103,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -135,7 +136,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -179,7 +180,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run and check for issues
