@@ -18,6 +18,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -36,7 +37,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install production dependencies
         run: pdm install --prod
       - name: Build wheel
@@ -51,6 +52,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -69,7 +71,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run unit tests
@@ -84,6 +86,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -102,7 +105,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -117,6 +120,7 @@ jobs:
           - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -135,7 +139,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run linters
@@ -157,8 +161,6 @@ jobs:
       matrix:
         python-version:
           - "3.9"
-          - "3.10"
-          - "3.11"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -179,7 +181,7 @@ jobs:
           version: ${{ env.pdm_version }}
           prerelease: true
           enable-pep582: true
-          allow-python-prereleases: false 
+          allow-python-prereleases: false
       - name: Install development dependencies
         run: pdm install --dev
       - name: Run and check for issues
