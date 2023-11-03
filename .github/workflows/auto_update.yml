@@ -116,4 +116,3 @@ jobs:
           body: ${{ env.PDM_PACKAGES_TO_UPDATE }}
           assignees: ${{ github.repository_owner }}
           draft: true
-
