@@ -836,17 +836,17 @@ files = [
 
 [[package]]
 name = "pbr"
-version = "5.11.1"
+version = "6.0.0"
 requires_python = ">=2.6"
 summary = "Python Build Reasonableness"
 files = [
-    {file = "pbr-5.11.1-py2.py3-none-any.whl", hash = "sha256:567f09558bae2b3ab53cb3c1e2e33e726ff3338e7bae3db5dc954b3a44eef12b"},
-    {file = "pbr-5.11.1.tar.gz", hash = "sha256:aefc51675b0b533d56bb5fd1c8c6c0522fe31896679882e1c4c63d5e4a0fccb3"},
+    {file = "pbr-6.0.0-py2.py3-none-any.whl", hash = "sha256:4a7317d5e3b17a3dccb6a8cfe67dab65b20551404c52c8ed41279fa4f0cb4cda"},
+    {file = "pbr-6.0.0.tar.gz", hash = "sha256:d1377122a5a00e2f940ee482999518efe16d745d423a670c27773dfbc3c9a7d9"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.10.0"
+version = "2.10.1"
 requires_python = ">=3.7"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -871,8 +871,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.10.0-py3-none-any.whl", hash = "sha256:2486cb9e66d4a3e3723fd5a8178ebb285d50f8448ecc165e1a2e80124ff066a9"},
-    {file = "pdm-2.10.0.tar.gz", hash = "sha256:ce2249595af9f61b0926a0899632df49b1c711261e8056a4fae14b53f93d9193"},
+    {file = "pdm-2.10.1-py3-none-any.whl", hash = "sha256:2b2853b83830ed110a8a1eb3feb62cf4e55165de4809a5278bc9453c788898d3"},
+    {file = "pdm-2.10.1.tar.gz", hash = "sha256:d166531c659fc4905933546544dd2e16cf648c2ba6d898c82126ad6a42117a81"},
 ]
 
 [[package]]
