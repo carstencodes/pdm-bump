@@ -457,15 +457,15 @@ files = [
 
 [[package]]
 name = "findpython"
-version = "0.4.0"
+version = "0.4.1"
 requires_python = ">=3.7"
 summary = "A utility to find python versions on your system"
 dependencies = [
     "packaging>=20",
 ]
 files = [
-    {file = "findpython-0.4.0-py3-none-any.whl", hash = "sha256:087148ac5935f9be458f36a05f3fa479efdf2c629f5d386c73ea481cfecff15e"},
-    {file = "findpython-0.4.0.tar.gz", hash = "sha256:18b14d115678da18ae92ee22d7001cc30915ea531053f77010ee05a39680f438"},
+    {file = "findpython-0.4.1-py3-none-any.whl", hash = "sha256:ca3a5272704b0b8a2f5e8d03d816701ec99f13eafee9bb2a316cbf099c937ede"},
+    {file = "findpython-0.4.1.tar.gz", hash = "sha256:d7d014558681b3761d57a5b2342a713a8bf302f6c1fc9d99f81b9d8bd1681b04"},
 ]
 
 [[package]]
@@ -806,12 +806,12 @@ files = [
 
 [[package]]
 name = "packageurl-python"
-version = "0.11.2"
+version = "0.12.0"
 requires_python = ">=3.7"
 summary = "A purl aka. Package URL parser and builder"
 files = [
-    {file = "packageurl-python-0.11.2.tar.gz", hash = "sha256:01fbf74a41ef85cf413f1ede529a1411f658bda66ed22d45d27280ad9ceba471"},
-    {file = "packageurl_python-0.11.2-py3-none-any.whl", hash = "sha256:799acfe8d9e6e3534bbc19660be97d5b66754bc033e62c39f1e2f16323fcfa84"},
+    {file = "packageurl-python-0.12.0.tar.gz", hash = "sha256:5b3d6c476cc61503c9c37f8a001b4878fd635ee995b20cb3b2310447c18d6304"},
+    {file = "packageurl_python-0.12.0-py3-none-any.whl", hash = "sha256:aaac84dbc15419035cc8a60778170121d46dcdbef65743e805c1e569c68d6464"},
 ]
 
 [[package]]
