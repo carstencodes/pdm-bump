@@ -13,3 +13,4 @@ install-output.json
 radon.*.json
 .venv
 build/
+.idea/sonarlint/
