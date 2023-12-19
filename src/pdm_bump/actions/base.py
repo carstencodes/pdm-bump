@@ -192,7 +192,7 @@ class VersionConsumer(ActionBase):
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return set(["version"]).union(ActionBase.get_allowed_arguments())
+        return {"version"}.union(ActionBase.get_allowed_arguments())
 
 
 class VersionModifier(VersionConsumer):
@@ -252,7 +252,7 @@ class VersionModifier(VersionConsumer):
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return set(["persister"]).union(
+        return {"persister"}.union(
             VersionConsumer.get_allowed_arguments()
         )
 
