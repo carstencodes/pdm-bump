@@ -18,6 +18,9 @@
     <option name="format" value="PLAIN" />
     <option name="myDocStringFormat" value="Plain" />
   </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="f5889020-2aee-4ee8-9056-9fbe0170705d" />
+  </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_FOLDERS">
       <list>
