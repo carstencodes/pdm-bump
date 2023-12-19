@@ -57,7 +57,7 @@ class CommitType(_StrEnum):
                 and key != "all_values"
                 and key not in base_items
             ):
-                mapping[cls[key]] = cls[key].value
+                mapping[cls[key]] = str(cls[key].value)
 
         return mapping
 
@@ -207,10 +207,8 @@ class History:
 
     def __format_for_debug(self) -> str:
         """"""
-        lines = []
-
-        lines.append("[B] | Type      | Commit     ")
-        lines.append("-----------------------------")
+        lines = ["[B] | Type      | Commit     ",
+                 "-----------------------------"]
 
         for commit in self.commits:
             b = " X " if commit.is_breaking_change else "   "

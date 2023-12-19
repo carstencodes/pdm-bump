@@ -66,7 +66,7 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return set(["vcs_provider"]).union(
+        return {"vcs_provider"}.union(
             VersionConsumer.get_allowed_arguments()
         )
 
@@ -86,7 +86,7 @@ class _VcsVersionDerivatingVersionConsumer(
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return set(["vcs_provider"]).union(
+        return {"vcs_provider"}.union(
             VersionConsumer.get_allowed_arguments()
         )
 
@@ -179,7 +179,7 @@ class AutoSelectVersionModifier(
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return set(["vcs_provider"]).union(
+        return {"vcs_provider"}.union(
             VersionModifier.get_allowed_arguments()
         )
 
