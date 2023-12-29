@@ -257,9 +257,6 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             + " See PEP440 for details.",
         )
 
-        VersionModifier._update_command(sub_parser)
-        # Justification: Class is a mixin
-        # pylint: disable=W0212
         _PreReleaseIncrementingVersionModifier._update_command(sub_parser)
 
 
