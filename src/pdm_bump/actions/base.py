@@ -14,7 +14,7 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from typing import Any, Callable, Protocol
+from typing import Any, Callable, Optional, Protocol, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
@@ -137,6 +137,16 @@ class _ArgumentParserFactoryMixin:
         return parser
 
 
+class _BeforeRunAction:
+    def before_run(self, **kwargs) -> None:
+        logger.debug("Called __before_run__", extra={"kwargs": kwargs})
+
+
+class _AfterRunAction:
+    def after_run(self, **kwargs) -> None:
+        logger.debug("Called __after_run__", extra={"kwargs": kwargs})
+
+
 class ActionBase(ABC, _ArgumentParserFactoryMixin):
     """"""
 
@@ -189,13 +199,16 @@ class VersionConsumer(ActionBase):
         """"""
         return self.__version
 
+    def _overwrite_current_version(self, version: Version) -> None:
+        self.__version = version
+
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
         return {"version"}.union(ActionBase.get_allowed_arguments())
 
 
-class VersionModifier(VersionConsumer):
+class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
     """"""
 
     def __init__(
@@ -203,6 +216,7 @@ class VersionModifier(VersionConsumer):
     ) -> None:
         super().__init__(version, **kwargs)
         self.__persister = persister
+        self.__has_new_version = False
 
     @abstractmethod
     def create_new_version(self) -> Version:
@@ -246,6 +260,7 @@ class VersionModifier(VersionConsumer):
 
         if not dry_run:
             self.__persister.save_version(next_version)
+            self._overwrite_current_version(next_version)
         else:
             logger.info("Would write new version %s", next_version)
 
@@ -255,6 +270,42 @@ class VersionModifier(VersionConsumer):
         return {"persister"}.union(
             VersionConsumer.get_allowed_arguments()
         )
+
+    def _overwrite_current_version(self, version: Version) -> None:
+        super()._overwrite_current_version(version)
+        self.__has_new_version = True
+
+    @classmethod
+    def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        _ArgumentParserFactoryMixin._update_command(sub_parser)
+        sub_parser.add_argument(
+            "--tag",
+            "-t",
+            action='store_true',
+            default=False,
+            help="Create a tag after modifying the current version",
+        )
+
+        sub_parser.add_argument(
+            "--no-prepend-v",
+            dest="prepend_letter_v",
+            action='store_false',
+            default=True,
+            help="Do not prepend letter v for the tag",
+        )
+
+    def after_run(self, **kwargs) -> None:
+        tag: bool = kwargs.pop("tag", False)
+        dry_run: bool = kwargs.pop("dry_run", True)
+        if self.__has_new_version and tag and not dry_run:
+            vcs_provider: Optional[VcsProvider] = kwargs.pop(
+                "vcs_provider", None)
+            if vcs_provider is None:
+                raise ValueError("No VCS provider applied to this action")
+            vcs_provider = cast(vcs_provider, VcsProvider)
+            vcs_provider.create_tag_from_version(
+                self.current_version,
+                kwargs.pop("prepend_letter_v", True))
 
     def __str__(self) -> str:
         return self.__class__.__name__.replace(VersionModifier.__name__, "")
@@ -393,7 +444,19 @@ class ActionRegistry:
         kwargs.update(allowed_kwargs)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
+
+        hook_args: dict = {}
+        hook_args.update(vars(args))
+        hook_args.update({ "vcs_provider": vcs_provider })
+
+        if isinstance(command, _BeforeRunAction):
+            pre_hook: _BeforeRunAction = cast(command, _BeforeRunAction)
+            pre_hook.before_run(**hook_args)
         command.run(dry_run=dry_run)
+
+        if isinstance(command, _AfterRunAction):
+            post_hook: _AfterRunAction = cast(command, _AfterRunAction)
+            post_hook.after_run(**hook_args)
 
 
 actions = ActionRegistry()
