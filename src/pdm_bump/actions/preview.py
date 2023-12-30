@@ -14,7 +14,7 @@
 
 from abc import abstractmethod
 from argparse import ArgumentParser
-from typing import Literal, cast, final
+from typing import Literal, Optional, cast, final
 
 from ..core.logging import logger, traced_function
 from ..core.version import NonNegativeInteger, Pep440VersionFormatter, Version
@@ -183,11 +183,19 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         self,
         version: Version,
         persister: VersionPersister,
-        pre_release_part: str,
+        pre_release_part: Optional[str],
         increment_micro: bool = True,
         **kwargs,
     ) -> None:
         super().__init__(version, persister, **kwargs)
+        if pre_release_part is None:
+            pre_release_part = (
+                version.preview[0]
+                if version.preview is not None
+                else AlphaIncrementingVersionModifier.name
+            )
+            increment_micro = not version.is_pre_release
+
         self.__sub_modifier: VersionModifier
         if (
             pre_release_part in (AlphaIncrementingVersionModifier.name,)
