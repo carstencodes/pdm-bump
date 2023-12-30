@@ -13,11 +13,18 @@
 
 # Justification: load module for decoupling
 from . import explicit, increment, poetry_like, preview, vcs  # noqa: F401
-from .base import ActionBase, VersionConsumer, VersionModifier, actions
+from .base import (
+    ActionBase,
+    ExecutionContext,
+    VersionConsumer,
+    VersionModifier,
+    actions,
+)
 
 __all__ = [
     "actions",
     "ActionBase",
     "VersionConsumer",
     "VersionModifier",
+    "ExecutionContext",
 ]

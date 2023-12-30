@@ -43,7 +43,7 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
         VersionConsumer.__init__(self, version, **kwargs)
         VcsProviderAggregator.__init__(self, vcs_provider, **kwargs)
 
-    def run(self, dry_run: bool = False) -> None:
+    def run(self, dry_run: bool = False) -> Version:
         """
 
         Parameters
@@ -62,6 +62,8 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
                 "Would create tag v%s",
                 Pep440VersionFormatter().format(self.current_version),
             )
+
+        return self.current_version
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
@@ -125,13 +127,15 @@ class SuggestNewVersion(_VcsVersionDerivatingVersionConsumer):
     name: str = "suggest"
     description: str = "Suggests a new version from the VCS"
 
-    def run(self, dry_run: bool = False) -> None:
+    def run(self, dry_run: bool = False) -> Version:
         """"""
         logger.debug("Ignoring dry run parameter set to %s", dry_run)
         new_version: Optional[Version] = self.derive_next_version()
         if new_version is not None:
             next_version: str = Pep440VersionFormatter().format(new_version)
             logger.info("Would suggest new version: %s", next_version)
+
+        return new_version or self.current_version
 
     @cached_property
     def _version_policy(self) -> VersionPolicy:
