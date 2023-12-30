@@ -373,8 +373,10 @@ class TagChanges(Hook):
 
         """
         kwargs = vars(args)
-        if not context.vcs_provider.is_clean and not kwargs.pop(
-            "dry_run", False
+        if (
+            not context.vcs_provider.is_clean
+            and not kwargs.pop("dry_run", False)
+            and kwargs.pop("tag", False)
         ):
             raise RuntimeError("Repository root is not clean")
 
