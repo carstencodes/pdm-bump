@@ -137,6 +137,7 @@ ignore = "vcs"
 [tool.pylint."MESSAGES CONTROL"]
 disable = [
     "C0112",
+    "R0901",
 ]
 
 [tool.pytest.ini_options]
