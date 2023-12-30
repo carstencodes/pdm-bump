@@ -15,12 +15,18 @@
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
-from typing import Any, Callable, Protocol, Type, cast
+from typing import Any, Callable, Generator, Protocol, Type, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs.core import HunkSource, VcsProvider
-from .hook import HookExecutor, HookGenerator
+from .hook import (
+    CommitChanges,
+    HookExecutor,
+    HookGenerator,
+    HookInfo,
+    TagChanges,
+)
 
 _formatter = Pep440VersionFormatter()
 
@@ -211,6 +217,16 @@ class VersionModifier(VersionConsumer):
         """"""
         raise NotImplementedError()
 
+    @classmethod
+    def generate_hook_infos(cls) -> Generator[HookInfo, None, None]:
+        """
+
+        Returns:
+        --------
+        """
+        yield HookInfo(CommitChanges)
+        yield HookInfo(TagChanges)
+
     def _report_new_version(self, next_version: Version) -> None:
         """
 
@@ -399,6 +415,7 @@ class ActionRegistry:
         }
 
         kwargs.update(allowed_kwargs)
+        print(args)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
 
