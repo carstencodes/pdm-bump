@@ -435,9 +435,7 @@ class ActionRegistry:
             if not key.startswith("_")
         }
 
-        dry_run = False
-        if "dry_run" in kwargs:
-            dry_run = bool(kwargs.pop("dry_run"))
+        dry_run: bool = kwargs.pop("dry_run", False)
 
         selected_command: str = kwargs.pop("selected_command")
 
