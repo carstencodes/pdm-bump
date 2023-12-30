@@ -14,11 +14,13 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from typing import Any, Callable, Optional, Protocol, cast
+from dataclasses import dataclass, field
+from typing import Any, Callable, Protocol, Type, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
-from ..vcs.core import VcsProvider
+from ..vcs.core import HunkSource, VcsProvider
+from .hook import HookExecutor, HookGenerator
 
 _formatter = Pep440VersionFormatter()
 
@@ -137,36 +139,6 @@ class _ArgumentParserFactoryMixin:
         return parser
 
 
-class _ActionHookProvider:
-    """"""
-
-    def before_run(self, **kwargs) -> None:
-        """
-
-        Parameters:
-        -----------
-            **kwargs :
-
-        Returns:
-        --------
-
-        """
-        logger.debug("Called __before_run__", extra={"kwargs": kwargs})
-
-    def after_run(self, **kwargs) -> None:
-        """
-
-        Parameters:
-        -----------
-            **kwargs :
-
-        Returns:
-        --------
-
-        """
-        logger.debug("Called __after_run__", extra={"kwargs": kwargs})
-
-
 class ActionBase(ABC, _ArgumentParserFactoryMixin):
     """"""
 
@@ -175,7 +147,7 @@ class ActionBase(ABC, _ArgumentParserFactoryMixin):
         pass
 
     @abstractmethod
-    def run(self, dry_run: bool = False) -> None:
+    def run(self, dry_run: bool = False) -> Version:
         """
 
         Parameters
@@ -219,16 +191,13 @@ class VersionConsumer(ActionBase):
         """"""
         return self.__version
 
-    def _overwrite_current_version(self, version: Version) -> None:
-        self.__version = version
-
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
         return {"version"}.union(ActionBase.get_allowed_arguments())
 
 
-class VersionModifier(VersionConsumer, _ActionHookProvider):
+class VersionModifier(VersionConsumer):
     """"""
 
     def __init__(
@@ -236,7 +205,6 @@ class VersionModifier(VersionConsumer, _ActionHookProvider):
     ) -> None:
         super().__init__(version, **kwargs)
         self.__persister = persister
-        self.__has_new_version = False
 
     @abstractmethod
     def create_new_version(self) -> Version:
@@ -261,7 +229,7 @@ class VersionModifier(VersionConsumer, _ActionHookProvider):
             _formatter.format(next_version),
         )
 
-    def run(self, dry_run: bool = False) -> None:
+    def run(self, dry_run: bool = False) -> Version:
         """
 
         Parameters
@@ -275,61 +243,32 @@ class VersionModifier(VersionConsumer, _ActionHookProvider):
         """
         next_version: Version = self.create_new_version()
         if next_version is self.current_version:
-            # Intentionally removed
-            return
+            return next_version
 
         if not dry_run:
             self.__persister.save_version(next_version)
-            self._overwrite_current_version(next_version)
         else:
             logger.info("Would write new version %s", next_version)
+
+        return next_version
 
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
         return {"persister"}.union(VersionConsumer.get_allowed_arguments())
 
-    def _overwrite_current_version(self, version: Version) -> None:
-        super()._overwrite_current_version(version)
-        self.__has_new_version = True
-
-    @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
-        # Justification: Invoke overridden method.
-        # pylint: disable=W0212
-        _ArgumentParserFactoryMixin._update_command(sub_parser)
-        sub_parser.add_argument(
-            "--tag",
-            "-t",
-            action="store_true",
-            default=False,
-            help="Create a tag after modifying the current version",
-        )
-
-        sub_parser.add_argument(
-            "--no-prepend-v",
-            dest="prepend_letter_v",
-            action="store_false",
-            default=True,
-            help="Do not prepend letter v for the tag",
-        )
-
-    def after_run(self, **kwargs) -> None:
-        tag: bool = kwargs.pop("tag", False)
-        dry_run: bool = kwargs.pop("dry_run", True)
-        if self.__has_new_version and tag and not dry_run:
-            vcs_provider: Optional[VcsProvider] = kwargs.pop(
-                "vcs_provider", None
-            )
-            if vcs_provider is None:
-                raise ValueError("No VCS provider applied to this action")
-            vcs_provider = cast(VcsProvider, vcs_provider)
-            vcs_provider.create_tag_from_version(
-                self.current_version, kwargs.pop("prepend_letter_v", True)
-            )
-
     def __str__(self) -> str:
         return self.__class__.__name__.replace(VersionModifier.__name__, "")
+
+
+@dataclass(frozen=True)
+class ExecutionContext:
+    """"""
+
+    version: Version = field()
+    persister: VersionPersister = field()
+    vcs_provider: VcsProvider = field()
+    hunk_source: HunkSource = field()
 
 
 class ActionRegistry:
@@ -393,16 +332,21 @@ class ActionRegistry:
 
         for key in keys:
             clazz = self.__items[key]
-            clazz.create_command(parsers, exit_on_error=exit_on_error)
+            child_parser: ArgumentParser = clazz.create_command(
+                parsers, exit_on_error=exit_on_error
+            )
+            if issubclass(clazz, HookGenerator):
+                hook_generator: Type[HookGenerator] = cast(
+                    Type[HookGenerator], clazz
+                )
+                for hook_info in hook_generator.generate_hook_infos():
+                    hook_info.update_parser(child_parser)
 
-    def execute(
+    def execute(  # pylint: disable=R0913
         self,
         /,
         args: Namespace,
-        *,
-        version: Version,
-        persister: VersionPersister,
-        vcs_provider: VcsProvider,
+        context: ExecutionContext,
     ) -> None:
         """
 
@@ -412,13 +356,7 @@ class ActionRegistry:
 
         args: Namespace :
 
-        * :
-
-        version: Version :
-
-        persister: VersionPersister :
-
-        vcs_provider: VcsProvider :
+        context: ExecutionContext :
 
 
         Returns
@@ -449,9 +387,9 @@ class ActionRegistry:
 
         allowed_args: set[str] = clazz.get_allowed_arguments()
         allowed_kwargs: dict[str, Any] = {
-            "version": version,
-            "persister": persister,
-            "vcs_provider": vcs_provider,
+            "version": context.version,
+            "persister": context.persister,
+            "vcs_provider": context.vcs_provider,
         }
 
         allowed_kwargs = {
@@ -464,19 +402,17 @@ class ActionRegistry:
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
 
-        hook_args: dict = {}
-        hook_args.update(vars(args))
-        hook_args.update({"vcs_provider": vcs_provider})
+        executor: HookExecutor = HookExecutor(
+            context.hunk_source, context.vcs_provider
+        )
+        if issubclass(clazz, HookGenerator):
+            hook_generator: Type[HookGenerator] = cast(
+                Type[HookGenerator], clazz
+            )
+            for hook_info in hook_generator.generate_hook_infos():
+                executor.register(hook_info.create_hook())
 
-        hook_provider: Optional[_ActionHookProvider] = None
-        if isinstance(command, _ActionHookProvider):
-            hook_provider = cast(_ActionHookProvider, command)
-            hook_provider.before_run(**hook_args)
-
-        command.run(dry_run=dry_run)
-
-        if hook_provider is not None:
-            hook_provider.after_run(**hook_args)
+        executor.run(command, context.version, args, dry_run=dry_run)
 
 
 actions = ActionRegistry()
