@@ -267,9 +267,7 @@ class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return {"persister"}.union(
-            VersionConsumer.get_allowed_arguments()
-        )
+        return {"persister"}.union(VersionConsumer.get_allowed_arguments())
 
     def _overwrite_current_version(self, version: Version) -> None:
         super()._overwrite_current_version(version)
@@ -281,7 +279,7 @@ class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
         sub_parser.add_argument(
             "--tag",
             "-t",
-            action='store_true',
+            action="store_true",
             default=False,
             help="Create a tag after modifying the current version",
         )
@@ -289,7 +287,7 @@ class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
         sub_parser.add_argument(
             "--no-prepend-v",
             dest="prepend_letter_v",
-            action='store_false',
+            action="store_false",
             default=True,
             help="Do not prepend letter v for the tag",
         )
@@ -299,13 +297,14 @@ class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
         dry_run: bool = kwargs.pop("dry_run", True)
         if self.__has_new_version and tag and not dry_run:
             vcs_provider: Optional[VcsProvider] = kwargs.pop(
-                "vcs_provider", None)
+                "vcs_provider", None
+            )
             if vcs_provider is None:
                 raise ValueError("No VCS provider applied to this action")
-            vcs_provider = cast(vcs_provider, VcsProvider)
+            vcs_provider = cast(VcsProvider, vcs_provider)
             vcs_provider.create_tag_from_version(
-                self.current_version,
-                kwargs.pop("prepend_letter_v", True))
+                self.current_version, kwargs.pop("prepend_letter_v", True)
+            )
 
     def __str__(self) -> str:
         return self.__class__.__name__.replace(VersionModifier.__name__, "")
@@ -447,7 +446,7 @@ class ActionRegistry:
 
         hook_args: dict = {}
         hook_args.update(vars(args))
-        hook_args.update({ "vcs_provider": vcs_provider })
+        hook_args.update({"vcs_provider": vcs_provider})
 
         if isinstance(command, _BeforeRunAction):
             pre_hook: _BeforeRunAction = cast(_BeforeRunAction, command)

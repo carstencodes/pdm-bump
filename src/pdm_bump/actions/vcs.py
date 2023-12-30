@@ -66,9 +66,7 @@ class CreateTagFromVersion(VersionConsumer, VcsProviderAggregator):
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return {"vcs_provider"}.union(
-            VersionConsumer.get_allowed_arguments()
-        )
+        return {"vcs_provider"}.union(VersionConsumer.get_allowed_arguments())
 
 
 class _VcsVersionDerivatingVersionConsumer(
@@ -86,9 +84,7 @@ class _VcsVersionDerivatingVersionConsumer(
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return {"vcs_provider"}.union(
-            VersionConsumer.get_allowed_arguments()
-        )
+        return {"vcs_provider"}.union(VersionConsumer.get_allowed_arguments())
 
     def save_version(self, _: Version) -> None:
         """"""
@@ -179,9 +175,7 @@ class AutoSelectVersionModifier(
     @classmethod
     def get_allowed_arguments(cls) -> set[str]:
         """"""
-        return {"vcs_provider"}.union(
-            VersionModifier.get_allowed_arguments()
-        )
+        return {"vcs_provider"}.union(VersionModifier.get_allowed_arguments())
 
     @cached_property
     def _version_policy(self) -> VersionPolicy:

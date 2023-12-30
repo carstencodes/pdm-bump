@@ -207,8 +207,10 @@ class History:
 
     def __format_for_debug(self) -> str:
         """"""
-        lines = ["[B] | Type      | Commit     ",
-                 "-----------------------------"]
+        lines = [
+            "[B] | Type      | Commit     ",
+            "-----------------------------",
+        ]
 
         for commit in self.commits:
             b = " X " if commit.is_breaking_change else "   "
