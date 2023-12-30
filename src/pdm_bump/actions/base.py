@@ -415,7 +415,6 @@ class ActionRegistry:
         }
 
         kwargs.update(allowed_kwargs)
-        print(args)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
 
