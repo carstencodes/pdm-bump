@@ -21,7 +21,7 @@ from typing import Final, Optional, Protocol, cast, final
 from pdm.cli.commands.base import BaseCommand  # type: ignore
 from pdm.termui import UI  # type: ignore
 
-from .actions import actions
+from .actions import ExecutionContext, actions
 from .core.config import Config, ConfigHolder, ConfigKeys, ConfigSections
 from .core.logging import (
     logger,
@@ -34,9 +34,9 @@ from .dynamic import DynamicVersionSource
 from .source import StaticPep621VersionSource
 from .vcs import (
     DefaultVcsProvider,
+    HunkSource,
     VcsProvider,
     VcsProviderRegistry,
-    HunkSource,
     vcs_providers,
 )
 
@@ -193,9 +193,12 @@ class BumpCommand(BaseCommand):
         try:
             actions.execute(
                 options,
-                version=backend.current_version,
-                persister=self,
-                vcs_provider=vcs_provider,
+                ExecutionContext(
+                    version=backend.current_version,
+                    persister=self,
+                    vcs_provider=vcs_provider,
+                    hunk_source=backend,
+                ),
             )
         except ValueError as exc:
             logger.exception("Failed to execute action", exc_info=True)
