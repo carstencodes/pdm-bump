@@ -137,13 +137,33 @@ class _ArgumentParserFactoryMixin:
         return parser
 
 
-class _BeforeRunAction:
+class _ActionHookProvider:
+    """"""
+
     def before_run(self, **kwargs) -> None:
+        """
+
+        Parameters:
+        -----------
+            **kwargs :
+
+        Returns:
+        --------
+
+        """
         logger.debug("Called __before_run__", extra={"kwargs": kwargs})
 
-
-class _AfterRunAction:
     def after_run(self, **kwargs) -> None:
+        """
+
+        Parameters:
+        -----------
+            **kwargs :
+
+        Returns:
+        --------
+
+        """
         logger.debug("Called __after_run__", extra={"kwargs": kwargs})
 
 
@@ -208,7 +228,7 @@ class VersionConsumer(ActionBase):
         return {"version"}.union(ActionBase.get_allowed_arguments())
 
 
-class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
+class VersionModifier(VersionConsumer, _ActionHookProvider):
     """"""
 
     def __init__(
@@ -275,6 +295,8 @@ class VersionModifier(VersionConsumer, _AfterRunAction, _BeforeRunAction):
 
     @classmethod
     def _update_command(cls, sub_parser: ArgumentParser) -> None:
+        # Justification: Invoke overridden method.
+        # pylint: disable=W0212
         _ArgumentParserFactoryMixin._update_command(sub_parser)
         sub_parser.add_argument(
             "--tag",
@@ -448,14 +470,15 @@ class ActionRegistry:
         hook_args.update(vars(args))
         hook_args.update({"vcs_provider": vcs_provider})
 
-        if isinstance(command, _BeforeRunAction):
-            pre_hook: _BeforeRunAction = cast(_BeforeRunAction, command)
-            pre_hook.before_run(**hook_args)
+        hook_provider: Optional[_ActionHookProvider] = None
+        if isinstance(command, _ActionHookProvider):
+            hook_provider = cast(_ActionHookProvider, command)
+            hook_provider.before_run(**hook_args)
+
         command.run(dry_run=dry_run)
 
-        if isinstance(command, _AfterRunAction):
-            post_hook: _AfterRunAction = cast(_AfterRunAction, command)
-            post_hook.after_run(**hook_args)
+        if hook_provider is not None:
+            hook_provider.after_run(**hook_args)
 
 
 actions = ActionRegistry()
