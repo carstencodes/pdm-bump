@@ -36,6 +36,7 @@ from .vcs import (
     DefaultVcsProvider,
     VcsProvider,
     VcsProviderRegistry,
+    HunkSource,
     vcs_providers,
 )
 
@@ -72,7 +73,7 @@ class _ProjectLike(ConfigHolder, Protocol):
 
 # Justification: Minimal protocol. Maybe false positive,
 # since 2 public methods available
-class _VersionSource(Protocol):  # pylint: disable=R0903
+class _VersionSource(HunkSource, Protocol):  # pylint: disable=R0903
     """"""
 
     @property
