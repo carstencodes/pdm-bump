@@ -25,7 +25,7 @@ class _CompletedProcessLike(Protocol):
     """"""
 
     @property
-    def returncode(self) -> int:
+    def return_code(self) -> int:
         """"""
         raise NotImplementedError()
 
@@ -203,7 +203,7 @@ class CliRunnerMixin(ProcessRunner):
             encoding="utf-8",
         )
 
-        logger.debug("Process exited with code %d", completed.returncode)
+        logger.debug("Process exited with code %d", completed.return_code)
         logger.debug(
             "Process wrote the following to stdout: \n%s", completed.stdout
         )
@@ -212,7 +212,7 @@ class CliRunnerMixin(ProcessRunner):
         )
 
         return (
-            completed.returncode,
+            completed.return_code,
             completed.stdout,
             completed.stderr,
         )
