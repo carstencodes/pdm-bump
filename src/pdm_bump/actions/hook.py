@@ -352,6 +352,9 @@ class TagChanges(Hook):
             return
         kwargs = vars(args)
         if not kwargs.pop("dry_run", False) and kwargs.pop("tag", False):
+            if not context.vcs_provider.is_clean:
+                raise RuntimeError("This should only take place, if "
+                                   "the git repository is clean")
             context.vcs_provider.create_tag_from_version(
                 context.version, kwargs.pop("prepend_letter_v", True)
             )
