@@ -104,7 +104,8 @@ class _VersionSource(Protocol):  # pylint: disable=R0903
 class BumpCommand(BaseCommand):
     """"""
 
-    name: Final[str] = "bump"
+    # Justification: Fulfill a protocol
+    name: Final[str] = "bump"  # pylint: disable=C0103
     description: str = "Bumps the version to a next version following PEP440."
 
     def __init__(self) -> None:

@@ -257,6 +257,8 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             + " See PEP440 for details.",
         )
 
+        # Justification: Invoke overridden method.
+        # pylint: disable=W0212
         _PreReleaseIncrementingVersionModifier._update_command(sub_parser)
 
 
