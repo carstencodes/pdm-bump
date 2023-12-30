@@ -450,12 +450,12 @@ class ActionRegistry:
         hook_args.update({ "vcs_provider": vcs_provider })
 
         if isinstance(command, _BeforeRunAction):
-            pre_hook: _BeforeRunAction = cast(command, _BeforeRunAction)
+            pre_hook: _BeforeRunAction = cast(_BeforeRunAction, command)
             pre_hook.before_run(**hook_args)
         command.run(dry_run=dry_run)
 
         if isinstance(command, _AfterRunAction):
-            post_hook: _AfterRunAction = cast(command, _AfterRunAction)
+            post_hook: _AfterRunAction = cast(_AfterRunAction, command)
             post_hook.after_run(**hook_args)
 
 
