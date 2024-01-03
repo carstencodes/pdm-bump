@@ -10,8 +10,8 @@
 # Refer to LICENSE for more information
 #
 
-from typing import Optional, Generator
-from collections.abc import Iterable
+from typing import Optional
+from collections.abc import Generator, Iterable
 from argparse import ArgumentParser, Namespace, ArgumentError
 
 from pdm.project.config import ConfigItem
