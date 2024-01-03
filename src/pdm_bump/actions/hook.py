@@ -13,9 +13,10 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
+from collections.abc import Generator
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Generator, Protocol, Type, runtime_checkable
+from typing import Protocol, runtime_checkable
 
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import HunkSource, VcsProvider
@@ -137,7 +138,7 @@ class Hook(ABC):
 class HookInfo:
     """"""
 
-    hook_type: Type[Hook] = field()
+    hook_type: type[Hook] = field()
 
     def update_parser(self, parser: ArgumentParser) -> None:
         """

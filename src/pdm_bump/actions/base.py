@@ -14,8 +14,9 @@
 
 from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
+from collections.abc import Generator
 from dataclasses import dataclass, field
-from typing import Any, Callable, Generator, Protocol, Type, cast
+from typing import Any, Callable, Protocol, cast
 
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
@@ -352,8 +353,8 @@ class ActionRegistry:
                 parsers, exit_on_error=exit_on_error
             )
             if issubclass(clazz, HookGenerator):
-                hook_generator: Type[HookGenerator] = cast(
-                    Type[HookGenerator], clazz
+                hook_generator: type[HookGenerator] = cast(
+                    type[HookGenerator], clazz
                 )
                 for hook_info in hook_generator.generate_hook_infos():
                     hook_info.update_parser(child_parser)
@@ -422,8 +423,8 @@ class ActionRegistry:
             context.hunk_source, context.vcs_provider
         )
         if issubclass(clazz, HookGenerator):
-            hook_generator: Type[HookGenerator] = cast(
-                Type[HookGenerator], clazz
+            hook_generator: type[HookGenerator] = cast(
+                type[HookGenerator], clazz
             )
             for hook_info in hook_generator.generate_hook_infos():
                 executor.register(hook_info.create_hook())
