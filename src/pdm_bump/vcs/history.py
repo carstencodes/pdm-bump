@@ -10,12 +10,12 @@
 # Refer to LICENSE for more information
 #
 from abc import ABC, abstractmethod
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from dataclasses import InitVar, dataclass, field
 from enum import Enum, auto
 from functools import cached_property
 from re import Match, Pattern, compile
-from typing import Callable, Final, Mapping, Optional
+from typing import Callable, Final, Optional
 
 from ..core.logging import logger
 from ..core.version import NonNegativeInteger
