@@ -267,9 +267,12 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
         self.__apply_cached_patch(hunks)
         self.__commit_staged_files(message)
 
-    def __apply_cached_patch(self, hunks: tuple[HunkSource, ...]):
+    def __apply_cached_patch(self, hunks: tuple[HunkSource, ...]) -> None:
         with NamedTemporaryFile(
-            "w+", suffix=".patch", prefix="pdm.bump.git", delete=False
+            mode="wt",
+            suffix=".patch",
+            prefix="pdm-bump.git",
+            delete=False,
         ) as target_file:
             for hunk in hunks:
                 rel_path: Path = hunk.source_file.relative_to(
@@ -282,16 +285,17 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
                 for line in hunk.get_source_file_change_hunks(
                     self.current_path
                 ):
+                    logger.trace(line)
                     target_file.write(f"{line}\n")
 
             target_file.flush()
 
-            target_file.close()
+            logger.debug("Wrote hunks to %s", target_file.name)
 
             try:
                 self.run(
                     self.git_executable_path,
-                    ("apply", "--cached", f"'{target_file.name}'"),
+                    ("apply", "--cached", f"{target_file.name}"),
                     raise_on_exit=True,
                     cwd=self.current_path,
                 )
@@ -300,17 +304,21 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
     def __commit_staged_files(self, message) -> None:
         with NamedTemporaryFile(
-            "w+", suffix="message", prefix="pdm.bump.git", delete=False
+            "wt",
+            suffix="message",
+            prefix="pdm-bump.git",
+            delete=False,
         ) as target_file:
+            logger.trace(message)
             target_file.write(message)
 
             target_file.flush()
-            target_file.close()
+            logger.debug("Wrote message '%s' to %s", message, target_file.name)
 
             try:
                 self.run(
                     self.git_executable_path,
-                    ("commit", "-f", f"'{target_file.name}'"),
+                    ("commit", "-F", f"{target_file.name}"),
                     raise_on_exit=True,
                     cwd=self.current_path,
                 )
