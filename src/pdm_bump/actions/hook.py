@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import Protocol, runtime_checkable
 
+from ..core.logging import logger, traced_function
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import HunkSource, VcsProvider
 
@@ -100,6 +101,7 @@ class Hook(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    @traced_function
     def post_action_hook(
         self, context: PostHookContext, args: Namespace
     ) -> None:
@@ -118,6 +120,7 @@ class Hook(ABC):
         raise NotImplementedError()
 
     @classmethod
+    @traced_function
     # Justification: Protocol definition
     # pylint: disable=W0613
     def configure(cls, parser: ArgumentParser) -> None:
@@ -140,6 +143,7 @@ class HookInfo:
 
     hook_type: type[Hook] = field()
 
+    @traced_function
     def update_parser(self, parser: ArgumentParser) -> None:
         """
 
@@ -152,6 +156,7 @@ class HookInfo:
         """
         self.hook_type.configure(parser)
 
+    @traced_function
     def create_hook(self) -> Hook:
         """
 
@@ -198,6 +203,7 @@ class HookExecutor:
         self.__vcs_provider = vcs_provider
         self.__hooks: list[Hook] = []
 
+    @traced_function
     def run(
         self,
         executor: _Executable,
@@ -236,6 +242,7 @@ class HookExecutor:
         for hook in self.__hooks:
             hook.post_action_hook(post_call_ctx, args)
 
+    @traced_function
     def register(self, hook: Hook) -> None:
         """
 
@@ -258,6 +265,7 @@ class CommitChanges(Hook):
         "Created a commit with a new version"
     )
 
+    @traced_function
     def post_action_hook(
         self, context: PostHookContext, args: Namespace
     ) -> None:
@@ -273,6 +281,7 @@ class CommitChanges(Hook):
 
         """
         if not context.version_changed:
+            logger.debug("Cannot commit changes. Nothing to commit")
             return
         kwargs = vars(args)
         if kwargs.pop("commit", False) and not kwargs.pop("dry_run", False):
@@ -282,6 +291,7 @@ class CommitChanges(Hook):
             message = message.format(version=context.formatted_version)
             context.vcs_provider.check_in_deltas(message, context.hunk_source)
 
+    @traced_function
     def pre_action_hook(
         self, context: PreHookContext, args: Namespace
     ) -> None:
@@ -299,6 +309,7 @@ class CommitChanges(Hook):
         return
 
     @classmethod
+    @traced_function
     def configure(cls, parser: ArgumentParser) -> None:
         """
 
@@ -333,6 +344,7 @@ class CommitChanges(Hook):
 class TagChanges(Hook):
     """"""
 
+    @traced_function
     def post_action_hook(
         self, context: PostHookContext, args: Namespace
     ) -> None:
@@ -362,6 +374,7 @@ class TagChanges(Hook):
                 context.version, kwargs.pop("prepend_letter_v", True)
             )
 
+    @traced_function
     def pre_action_hook(
         self, context: PreHookContext, args: Namespace
     ) -> None:
