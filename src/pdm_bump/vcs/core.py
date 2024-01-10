@@ -26,6 +26,7 @@ from typing import (
     cast,
 )
 
+from ..core.logging import traced_function
 from ..core.version import Pep440VersionFormatter, Version
 from .history import History
 
@@ -105,6 +106,7 @@ class VcsProvider(_PathLikeConverter, ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    @traced_function
     def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         """
 
@@ -121,6 +123,7 @@ class VcsProvider(_PathLikeConverter, ABC):
         """
         raise NotImplementedError()
 
+    @traced_function
     def create_tag_from_version(
         self, version: Version, prepend_letter_v: bool = True
     ) -> None:
@@ -198,6 +201,7 @@ class VcsProviderAggregator:
 class VcsProviderFactory(_PathLikeConverter, ABC):
     """"""
 
+    @traced_function
     def force_create_provider(self, path: Path) -> VcsProvider:
         """
 
@@ -233,6 +237,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         """"""
         raise NotImplementedError()
 
+    @traced_function
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
         """
 
@@ -248,6 +253,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         real_path: Path = _PathLikeConverter._pathlike_to_path(path)
         return self.find_repository_root_from_path(real_path)
 
+    @traced_function
     def find_repository_root_from_path(
         self, path: Path
     ) -> Optional[VcsProvider]:
@@ -273,6 +279,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
 
         return None
 
+    @traced_function
     def _is_valid_fs_root_file(self, path: Path) -> bool:
         """
 
@@ -287,6 +294,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         """
         return path is not None and path.exists() and path.is_file()
 
+    @traced_function
     def _is_valid_fs_root_dir(self, path: Path) -> bool:
         """
 
@@ -301,6 +309,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         """
         return path is not None and path.exists() and path.is_dir()
 
+    @traced_function
     def _directory_exists(self, path: Path, directory_name: str) -> bool:
         """
 
@@ -318,6 +327,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         dir_path: Path = path / directory_name
         return self._is_valid_fs_root_dir(dir_path)
 
+    @traced_function
     def _file_exists(self, path: Path, file_name: str) -> bool:
         """
 
@@ -335,6 +345,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         file_path: Path = path / file_name
         return self._is_valid_fs_root_file(file_path)
 
+    @traced_function
     def _is_valid_root(self, path: Path) -> bool:
         """
 
@@ -369,6 +380,7 @@ class VcsProviderRegistry(
 ):
     """"""
 
+    @traced_function
     def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
         """
 
@@ -384,6 +396,7 @@ class VcsProviderRegistry(
         real_path: Path = _PathLikeConverter._pathlike_to_path(path)
         return self.find_repository_root_by_path(real_path)
 
+    @traced_function
     def find_repository_root_by_path(
         self, path: Path
     ) -> Optional[VcsProvider]:
@@ -408,6 +421,7 @@ class VcsProviderRegistry(
 
         return None
 
+    @traced_function
     def register(self, name: str) -> Callable:
         """
 
@@ -467,6 +481,7 @@ class DefaultVcsProvider(VcsProvider):
         """"""
         return True
 
+    @traced_function
     def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
         """
 
@@ -484,6 +499,7 @@ class DefaultVcsProvider(VcsProvider):
         # Must not be provided
         pass
 
+    @traced_function
     def create_tag_from_string(self, version_formatted: str) -> None:
         """
 
@@ -499,25 +515,30 @@ class DefaultVcsProvider(VcsProvider):
         # Must not be provided
         pass
 
+    @traced_function
     def get_most_recent_tag(self) -> Optional[Version]:
         """"""
         # Cannot be provided
         return None
 
+    @traced_function
     def get_number_of_changes_since_last_release(self) -> int:
         """"""
         # Cannot be provided
         return 0
 
+    @traced_function
     def get_changes_not_checked_in(self) -> int:
         """"""
         # Cannot be provided
         return 0
 
+    @traced_function
     def get_history(self, since_last_tag: bool = True) -> History:
         """"""
         return History([])
 
+    @traced_function
     def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
         """"""
         # Must not be provided
