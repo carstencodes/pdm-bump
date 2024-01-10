@@ -197,7 +197,7 @@ class CliRunnerMixin(ProcessRunner):
 
         completed: _CompletedProcessLike = self._run_process(
             cmd,
-            check=raise_on_exit,
+            check=False,
             capture_output=True,
             cwd=cwd,
             encoding="utf-8",
@@ -210,6 +210,11 @@ class CliRunnerMixin(ProcessRunner):
         logger.debug(
             "Process wrote the following to stderr: \n%s", completed.stderr
         )
+
+        if raise_on_exit and completed.returncode != 0:
+            raise SystemError(
+                completed.returncode, completed.stdout, completed.stderr
+            )
 
         return (
             completed.returncode,
