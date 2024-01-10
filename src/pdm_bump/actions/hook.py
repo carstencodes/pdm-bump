@@ -82,6 +82,7 @@ class Hook(ABC):
     """"""
 
     @abstractmethod
+    @traced_function
     def pre_action_hook(
         self, context: PreHookContext, args: Namespace
     ) -> None:
@@ -400,6 +401,7 @@ class TagChanges(Hook):
             raise RuntimeError("Repository root is not clean")
 
     @classmethod
+    @traced_function
     def configure(cls, parser: ArgumentParser) -> None:
         """
         Parameters:
