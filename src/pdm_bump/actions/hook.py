@@ -237,7 +237,7 @@ class HookExecutor:
             self.__vcs_provider,
             self.__hunk_source,
             version,
-            old_version == version,
+            old_version != version,
         )
         for hook in self.__hooks:
             hook.post_action_hook(post_call_ctx, args)
