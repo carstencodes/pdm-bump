@@ -413,9 +413,9 @@ class VcsProviderRegistry(
         """
         for _, value in self.items():
             factory: VcsProviderFactory = value()
-            result: Optional[
-                VcsProvider
-            ] = factory.find_repository_root_from_path(path)
+            result: Optional[VcsProvider] = (
+                factory.find_repository_root_from_path(path)
+            )
             if result is not None:
                 return result
 
