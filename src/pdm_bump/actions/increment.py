@@ -124,9 +124,9 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
             self.current_version
         )
 
-        next_release: tuple[
-            NonNegativeInteger, ...
-        ] = self._update_release_version_part(self.release_part)
+        next_release: tuple[NonNegativeInteger, ...] = (
+            self._update_release_version_part(self.release_part)
+        )
 
         if self.remove_non_final_parts:
             logger.debug("Removing non-final parts of version")
@@ -213,7 +213,7 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         """"""
         constructional_args: dict[
             str,
-            Any
+            Any,
             # Using type alias due to line length enforced by black
         ] = _NFPR._create_new_constructional_args(  # noqa: E501 pylint: disable=W0212
             self.current_version.release, self.current_version.epoch
@@ -303,9 +303,9 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
             constructional_args = dataclass_to_dict(Version.default())
             if not self.__reset_version:
                 logger.debug("Current version tuple shall not be reset")
-                constructional_args[
-                    "release_tuple"
-                ] = self.current_version.release
+                constructional_args["release_tuple"] = (
+                    self.current_version.release
+                )
 
         logger.debug("Incrementing Epoch of version")
         constructional_args["epoch"] = self.current_version.epoch + 1

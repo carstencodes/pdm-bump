@@ -220,10 +220,10 @@ class DynamicVersionSource:  # pylint: disable=R0903
     current_version = property(__get_current_version, __set_current_version)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
-        dynamic_version: Optional[
-            DynamicVersionConfig
-        ] = DynamicVersionConfig.find_dynamic_config(
-            self.__project_root, self.__config
+        dynamic_version: Optional[DynamicVersionConfig] = (
+            DynamicVersionConfig.find_dynamic_config(
+                self.__project_root, self.__config
+            )
         )
         if dynamic_version is not None:
             dynamic: DynamicVersionConfig = cast(

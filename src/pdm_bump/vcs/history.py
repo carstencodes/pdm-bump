@@ -133,9 +133,9 @@ class Commit:
     _commit_parser: "CommitParser" = field(
         init=False, compare=False, hash=False, repr=True
     )
-    commit_parser_factory: InitVar[
-        Optional[Callable[[], "CommitParser"]]
-    ] = None  # NOSONAR
+    commit_parser_factory: InitVar[Optional[Callable[[], "CommitParser"]]] = (
+        None  # NOSONAR
+    )
 
     def __post_init__(
         self,
