@@ -254,11 +254,9 @@ class _ConfigAccessor:
 
         """
         config: _ConfigMapping = self.get_pyproject_config(_ConfigSection.ROOT)
-        new_config: _ConfigMapping = config.get_config_value(
-            _ConfigKeys.PROJECT_METADATA, default_value={}
-        )
+        new_config: _ConfigMapping = _ConfigMapping(config)
         new_config.set_config_value(value, *keys)
-        self._write_config(config)
+        self._write_config(new_config)
 
     def _write_config(self, config: _ConfigMapping) -> None:
         """
