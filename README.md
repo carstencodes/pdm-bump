@@ -3,7 +3,7 @@
 ![PyPI](https://img.shields.io/pypi/v/pdm-bump?logo=python&logoColor=%23cccccc)
 [![pdm-managed](https://img.shields.io/badge/pdm-managed-blueviolet)](https://pdm.fming.dev)
 
-A small PEP440 compliant bump utility for PDM, the [Python Development Master](https://pdm.fming.dev/).
+A small PEP440 compliant bump utility for PDM, the [Python Development Master](https://pdm-project.org/).
 
 ## Why?
 
