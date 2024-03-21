@@ -237,43 +237,43 @@ class SetBasedVersionPolicy(RatingBasedVersionPolicy):
     @abstractmethod
     def epoch_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def major_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def minor_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def micro_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def post_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def dev_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     @abstractmethod
     def local_increments(self) -> frozenset[CommitType]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     def _rate_commit_type(self, c_type: CommitType) -> Union[Rating, int]:
         rating: Rating = Rating.NOOP
