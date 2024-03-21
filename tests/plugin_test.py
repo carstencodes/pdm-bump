@@ -42,7 +42,7 @@ class _CoreStub:
 
     @staticmethod
     def add_config(name: str, config_item: ConfigItem) -> None:
-        _registered_configurations[str] = config_item
+        _registered_configurations[name] = config_item
 
 @fixture
 def registrations() -> Generator:
@@ -62,7 +62,7 @@ def test_registration_command_name(registrations) -> None:
 def test_registered_config_items(registrations) -> None:
     core: _CoreStub = _CoreStub()
     main(core)
-    assert len(_registered_configurations) == 0, "No config item has been registered"
+    assert len(_registered_configurations) == 6, "Six config items have been registered"
 
 
 SUB_TEST_PARAMS_WHAT_SUCCESS: Iterable[tuple[str, str]] = [
