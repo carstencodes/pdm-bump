@@ -21,7 +21,7 @@ from re import Match, Pattern
 from re import compile as compile_re
 from typing import Final, Optional, cast
 
-from .core.config import Config, ConfigKeys, ConfigValues
+from .core.config import VERSION_CONFIG_KEY_NAME, Config
 from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 
@@ -39,6 +39,9 @@ class _DiffData:
     def merge(self, other: "_DiffData") -> "_DiffData":
         """"""
         return _DiffData(self.original_lines, other.new_lines)
+
+
+VERSION_IDENTIFIER: Final[str] = VERSION_CONFIG_KEY_NAME
 
 
 class DynamicVersionConfig:
@@ -74,7 +77,7 @@ class DynamicVersionConfig:
         with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             match = self.__pattern.search(file_ptr.read())
         if match is not None:
-            return match.group(ConfigKeys.VERSION)
+            return match.group(VERSION_IDENTIFIER)
         return None
 
     def replace_dynamic_version(self, new_version: str) -> _DiffData:
@@ -95,7 +98,7 @@ class DynamicVersionConfig:
             if match is None:
                 raise ValueError("Failed to fetch version")
             match = cast(Match[str], match)
-            version_start, version_end = match.span(ConfigKeys.VERSION)
+            version_start, version_end = match.span(VERSION_IDENTIFIER)
             new_version_file = (
                 version_file[:version_start]
                 + new_version
@@ -126,50 +129,29 @@ class DynamicVersionConfig:
         -------
 
         """
-        if (
-            project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
-            == ConfigValues.DEPREACTED_BUILD_BACKEND_PDM_PEP517_API
-            and project_config.get_pyproject_tool_config(
-                ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
-            )
-            == ConfigValues.VERSION_SOURCE_FILE
-        ):
+        build_system = project_config.meta_data.build_system
+        if build_system.uses_deprecated_build_backed_pdm_pep517:
             logger.warning(
                 "Build backend pdm-pep517 is deprecated. Consider upgrading."
             )
-            file_path = project_config.get_pyproject_tool_config(
-                ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE_FILE_PATH
-            )
-            return DynamicVersionConfig(
-                file_path=root_path / file_path,
-                pattern=DEFAULT_REGEX,
-            )
-        if (
-            project_config.get_pyproject_build_system(ConfigKeys.BUILD_BACKEND)
-            == ConfigValues.BUILD_BACKEND_PDM_BACKEND
-        ):
-            if (
-                project_config.get_pyproject_tool_config(
-                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
-                )
-                == ConfigValues.VERSION_SOURCE_SCM
-            ):
-                logger.error(
-                    "PDM bump cannot be used if version is fetched from scm"
-                )
-            if (
-                project_config.get_pyproject_tool_config(
-                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE
-                )
-                == ConfigValues.VERSION_SOURCE_FILE
-            ):
-                file_path = project_config.get_pyproject_tool_config(
-                    ConfigKeys.VERSION, ConfigKeys.VERSION_SOURCE_FILE_PATH
-                )
+            file_path = build_system.version_source_file
+            if file_path is not None:
                 return DynamicVersionConfig(
                     file_path=root_path / file_path,
                     pattern=DEFAULT_REGEX,
                 )
+        if project_config.meta_data.build_system.uses_pdm_backend:
+            if project_config.meta_data.build_system.pdm_backend.use_scm:
+                logger.error(
+                    "PDM bump cannot be used if version is fetched from scm"
+                )
+            if project_config.meta_data.build_system.pdm_backend.use_file:
+                file_path = build_system.version_source_file
+                if file_path is not None:
+                    return DynamicVersionConfig(
+                        file_path=root_path / file_path,
+                        pattern=DEFAULT_REGEX,
+                    )
         return None
 
 
@@ -193,7 +175,9 @@ class DynamicVersionSource:  # pylint: disable=R0903
         """"""
         return self.__get_dynamic_version().file
 
-    def __get_current_version(self) -> Version:
+    @property
+    def current_version(self) -> Version:
+        """"""
         if self.__current_version is not None:
             return cast(Version, self.__current_version)
 
@@ -207,7 +191,8 @@ class DynamicVersionSource:  # pylint: disable=R0903
             f"Make sure it matches {dynamic.pattern}"
         )
 
-    def __set_current_version(self, version: Version) -> None:
+    @current_version.setter
+    def current_version(self, version: Version) -> None:
         self.__current_version = version
         ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
@@ -216,8 +201,6 @@ class DynamicVersionSource:  # pylint: disable=R0903
             self.__hunk = hunk
         else:
             self.__hunk = cast(_DiffData, self.__hunk).merge(hunk)
-
-    current_version = property(__get_current_version, __set_current_version)
 
     def __get_dynamic_version(self) -> DynamicVersionConfig:
         dynamic_version: Optional[DynamicVersionConfig] = (

@@ -22,7 +22,7 @@ from pdm.cli.commands.base import BaseCommand  # type: ignore
 from pdm.termui import UI  # type: ignore
 
 from .actions import ExecutionContext, actions
-from .core.config import Config, ConfigHolder, ConfigKeys, ConfigSections
+from .core.config import Config, ConfigHolder
 from .core.logging import (
     logger,
     setup_logger,
@@ -86,15 +86,14 @@ class _VersionSource(HunkSource, Protocol):  # pylint: disable=R0903
         """"""
         raise NotImplementedError()
 
-    def __get_current_version(self) -> Version:
+    @property
+    def current_version(self) -> Version:
+        """"""
         raise NotImplementedError()
 
-    def __set_current_version(self, version: Version) -> None:
+    @current_version.setter
+    def current_version(self, version: Version) -> None:
         raise NotImplementedError()
-
-    current_version: property = property(
-        __get_current_version, __set_current_version
-    )
 
     def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
         """"""
@@ -219,11 +218,7 @@ class BumpCommand(BaseCommand):
 
         """
         config: Config = Config(project)
-        value = config.get_config_or_pyproject_value(
-            ConfigSections.PDM_BUMP,
-            ConfigSections.PDM_BUMP_VCS,
-            ConfigKeys.VCS_PROVIDER,
-        )
+        value = config.pdm_bump.vcs.provider
 
         registry: VcsProviderRegistry = vcs_providers
 

@@ -15,7 +15,7 @@ from difflib import unified_diff
 from pathlib import Path
 from typing import Protocol, Union, cast, runtime_checkable
 
-from .core.config import Config, ConfigKeys
+from .core.config import Config
 from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 
@@ -83,29 +83,25 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
     @property
     def is_enabled(self) -> bool:
         """"""
-        return (
-            self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
-            is not None
-        )
+        return self.__config.meta_data.version is not None
 
     @property
     def source_file(self) -> Path:
         """"""
         return self.__config.pyproject_file
 
-    def __get_current_version(self) -> Version:
-        version: str = cast(
-            str, self.__config.get_pyproject_metadata(ConfigKeys.VERSION)
-        )
+    @property
+    def current_version(self) -> Version:
+        """"""
+        version: str = cast(str, self.__config.meta_data.version)
         return Version.from_string(version)
 
-    def __set_current_version(self, ver: Version) -> None:
+    @current_version.setter
+    def current_version(self, ver: Version) -> None:
         formatter: Pep440VersionFormatter = Pep440VersionFormatter()
         version: str = formatter.format(ver)
         logger.debug("Setting new version %s", version)
-        self.__config.set_pyproject_metadata(version, ConfigKeys.VERSION)
-
-    current_version = property(__get_current_version, __set_current_version)
+        self.__config.meta_data.version = version
 
     def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
         """"""
