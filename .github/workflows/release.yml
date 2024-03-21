@@ -14,16 +14,16 @@ jobs:
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch entire history
       - name: Set up git-cliff
-        uses: kenji-miyake/setup-git-cliff@v1
+        uses: kenji-miyake/setup-git-cliff@v2
       - name: Generate changelog
         run: |
           git cliff --verbose --config ${{ github.workspace }}/.gitcliff.toml --latest --strip all --output ${{ github.workspace }}/CHANGELOG.md
       - name: Export changelog
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: changelog
           path: ${{ github.workspace }}/CHANGELOG.md
@@ -32,9 +32,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.9'
     - name: Install dependencies
@@ -56,15 +56,15 @@ jobs:
     needs: [ changelog, deploy ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Get changelog
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: changelog
           path: ${{ github.workspace }}
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           body_path: ${{ github.workspace }}/CHANGELOG.md
           prerelease: ${{ (startsWith(steps.tag_name.outputs.version, 'v0')) || (endsWith(steps.tag_name.outputs.version, '-pre')) || (endsWith(steps.tag_name.outputs.version, '-dev')) }}
