@@ -34,7 +34,9 @@ else:
 class _ConfigMapping(dict[str, Any]):
     @traced_function
     def get_config_value(
-        self, *keys: str, default_value: Optional[Any] = None
+        self, *keys: str,
+        default_value: Optional[Any] = None,
+        store_default: bool = False,
     ) -> Optional[Any]:
         """
 
@@ -60,21 +62,29 @@ class _ConfigMapping(dict[str, Any]):
             front = keys[0]
             if front in config.keys():
                 logger.debug("Found configuration section %s", front)
-                config = _ConfigMapping(cast(dict[str, Any], config[front]))
+                cfg = _ConfigMapping(cast(dict[str, Any], config[front]))
+                config[front] = cfg
+                config = cfg
                 keys = tuple(keys[1:])
             else:
                 logger.debug("Could not find configuration section %s.", front)
+                if store_default:
+                    config[front] = default_value
                 return default_value
 
         front = keys[0]
 
-        result = default_value if front not in config.keys() else config[front]
+        is_default: bool = front not in config.keys()
+        result = default_value if is_default else config[front]
         logger.debug("Found value at '%s' is: %s", key, result)
 
         if _ConfigMapping.__is_primitive(result):
+            if is_default and store_default:
+                config[front] = result
             return result
 
         result = _ConfigMapping(cast(dict[str, Any], result))
+        config[front] = result
 
         return result
 
@@ -254,9 +264,11 @@ class _ConfigAccessor:
 
         """
         config: _ConfigMapping = self.get_pyproject_config(_ConfigSection.ROOT)
-        new_config: _ConfigMapping = _ConfigMapping(config)
+        new_config: _ConfigMapping = config.get_config_value(
+            _ConfigKeys.PROJECT_METADATA, default_value={}
+        )
         new_config.set_config_value(value, *keys)
-        self._write_config(new_config)
+        self._write_config(config)
 
     def _write_config(self, config: _ConfigMapping) -> None:
         """
