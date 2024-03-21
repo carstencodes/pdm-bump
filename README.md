@@ -113,6 +113,26 @@ $
 
 This feature is currently experimental. Feedback appreciated.
 
+## Configuration
+
+In your `pyproject.toml`, you can add the following configuration values:
+
+### Table tools.pdm.bump_plugin
+
+| Name           | Type | Description                                                 | ENV_VAR | CLI Parameter  |
+|----------------|------|-------------------------------------------------------------|---------|----------------|
+| commit_msg_tpl | str  | The default commit message. Uses templates 'from' and 'to'. |         | -m, --message  |
+| perform_commit | bool | If set to true, commit the bumped changes automatically     |         | -c, --commit   |
+| auto_tag       | bool | Create a tag after bumping and committing the changes       |         | -t, --tag      |
+| tag_add_prefix | bool | Adds the prefix v to the version tag (Defaults to true)     |         | --no-prepend-v |
+| allow_dirty    | bool | Allows tagging the project, if it is dirty                  |         | -d, --dirty    |
+
+### Table tools.pdm.bump_plugin.vcs
+
+| Name     | Type | Description                          | ENV_VAR               | CLI Parameter |
+|----------|------|--------------------------------------|-----------------------|---------------|
+| provider | str  | "Configures the VCS Provider to use. | PDM_BUMP_VCS_PROVIDER |               |
+
 ## Contributing
 
 Feel free to submit issues and pull requests. Contributions are welcome.
