@@ -197,6 +197,7 @@ class BumpCommand(BaseCommand):
                     persister=self,
                     vcs_provider=vcs_provider,
                     hunk_source=backend,
+                    config=config.pdm_bump,
                 ),
             )
         except ValueError as exc:
