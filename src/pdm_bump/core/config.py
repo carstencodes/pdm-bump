@@ -59,27 +59,30 @@ class _ConfigMapping(dict[str, Any]):
         -------
 
         """
-        front: str
-
         key: str = ".".join(keys)
         logger.debug("Searching for '%s' in configuration", key)
         logger.debug("Configuration is set to: \n%s", self)
 
+        front: str
         config: _ConfigMapping = self
-        while len(keys) > 1:
+        if len(keys) > 1:
             front = keys[0]
             if front in config.keys():
                 logger.debug("Found configuration section %s", front)
                 cfg = _ConfigMapping(cast(dict[str, Any], config[front]))
                 if not readonly:
                     config[front] = cfg
-                config = cfg
-                keys = tuple(keys[1:])
-            else:
-                logger.debug("Could not find configuration section %s.", front)
-                if not readonly and store_default:
-                    config[front] = default_value
-                return default_value
+                return cfg.get_config_value(
+                    *tuple(keys[1:]),
+                    default_value=default_value,
+                    store_default=store_default,
+                    readonly=readonly,
+                )
+
+            logger.debug("Could not find configuration section %s.", front)
+            if not readonly and store_default:
+                config[front] = default_value
+            return default_value
 
         front = keys[0]
 
