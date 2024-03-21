@@ -1,11 +1,6 @@
-_ConfigKeys.VERSION = "0.8.0b3"
-
-[_ConfigKeys]
-VERSION = "0.8.0b3.dev8"
-
 [project]
 name = "pdm-bump"
-version = "0.8.0b3.dev7"
+version = "0.8.0b3"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
