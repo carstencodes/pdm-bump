@@ -116,13 +116,13 @@ def main(core: _CoreLike) -> None:
     )
 
     vcs_config_namespace: Final[str] = f"{config_prefix}.vcs"
-    vcs_env_var_prefix: Final[str] = f"{env_var_prefix}_VCS"
+    vcs_env_var_prefix: Final[str] = f"{env_var_prefix}VCS_"
 
     core.add_config(
         f"{vcs_config_namespace}.provider",
         _ConfigItem(
             "Configures the VCS Provider to use.",
             "git-cli",
-            env_var=f"{vcs_env_var_prefix}_PROVIDER",
+            env_var=f"{vcs_env_var_prefix}PROVIDER",
         ),
     )
