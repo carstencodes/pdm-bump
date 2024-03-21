@@ -49,6 +49,12 @@ class _ConfigMapping(dict[str, Any]):
         default_value: Optional[Any] :
              (Default value = None)
 
+        store_default: bool:
+            (Default value = False)
+
+        readonly: bool:
+            (Default value = True)
+
         Returns
         -------
 
