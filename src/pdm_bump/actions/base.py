@@ -18,6 +18,7 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from typing import Any, Callable, Protocol, cast
 
+from ..core.config import PdmBumpConfig
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs.core import HunkSource, VcsProvider
@@ -286,6 +287,7 @@ class ExecutionContext:
     persister: VersionPersister = field()
     vcs_provider: VcsProvider = field()
     hunk_source: HunkSource = field()
+    config: PdmBumpConfig = field()
 
 
 class ActionRegistry:
@@ -418,6 +420,7 @@ class ActionRegistry:
         kwargs.update(allowed_kwargs)
 
         command: "ActionBase" = clazz.create_from_command(**kwargs)
+        args = context.config.add_values_missing_in_cli(args)
 
         executor: HookExecutor = HookExecutor(
             context.hunk_source, context.vcs_provider

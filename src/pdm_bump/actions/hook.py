@@ -16,8 +16,9 @@ from argparse import ArgumentParser, Namespace
 from collections.abc import Generator
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import Protocol, runtime_checkable
+from typing import ClassVar, Protocol, runtime_checkable
 
+from ..core.config import MissingValue
 from ..core.logging import logger, traced_function
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import HunkSource, VcsProvider
@@ -66,6 +67,7 @@ class PostHookContext:
     vcs_provider: VcsProvider = field()
     hunk_source: HunkSource = field()
     version: Version = field()
+    previous_version: Version = field()
     version_changed: bool = field()
 
     @cached_property
@@ -76,6 +78,15 @@ class PostHookContext:
         --------
         """
         return Pep440VersionFormatter().format(self.version)
+
+    @cached_property
+    def formatted_previous_version(self) -> str:
+        """
+
+        Returns:
+        --------
+        """
+        return Pep440VersionFormatter().format(self.previous_version)
 
 
 class Hook(ABC):
@@ -218,6 +229,7 @@ class HookExecutor:
         -----------
             executor: _Executable :
             version: Version :
+            old_version: Version :
             args: Namespace :
             dry_run: bool :
 
@@ -238,6 +250,7 @@ class HookExecutor:
             self.__vcs_provider,
             self.__hunk_source,
             version,
+            old_version,
             old_version != version,
         )
         for hook in self.__hooks:
@@ -261,10 +274,12 @@ class HookExecutor:
 class CommitChanges(Hook):
     """"""
 
-    __default_commit_message: str = (
-        "chore: Bump version to {version}\n\n"
-        "Created a commit with a new version"
+    default_commit_message: ClassVar[str] = (
+        "chore: Bump version {from} to {to}\n\n"
+        "Created a commit with a new version {to}.\n"
+        "Previous version was {from}."
     )
+    perform_commit: ClassVar[bool] = False
 
     @traced_function
     def post_action_hook(
@@ -287,9 +302,16 @@ class CommitChanges(Hook):
         kwargs = vars(args)
         if kwargs.pop("commit", False) and not kwargs.pop("dry_run", False):
             message: str = kwargs.pop(
-                "commit_message", CommitChanges.__default_commit_message
+                "commit_message", CommitChanges.default_commit_message
             )
-            message = message.format(version=context.formatted_version)
+
+            f_args: dict[str, str] = {
+                "to": context.formatted_version,
+                "from": context.formatted_previous_version,
+            }
+
+            message = message.format(**f_args)
+
             context.vcs_provider.check_in_deltas(message, context.hunk_source)
 
     @traced_function
@@ -307,7 +329,7 @@ class CommitChanges(Hook):
         --------
 
         """
-        return
+        return  # NOSONAR
 
     @classmethod
     @traced_function
@@ -327,8 +349,9 @@ class CommitChanges(Hook):
             "--commit",
             "-c",
             action="store_true",
-            default=False,
-            help="Commit changes to repository",
+            default=MissingValue(CommitChanges.perform_commit),
+            help="Commit changes to repository. Uses configuration value "
+            "'perform_commit' to store default action.",
         )
 
         parser.add_argument(
@@ -336,14 +359,19 @@ class CommitChanges(Hook):
             "-m",
             dest="commit_message",
             action="store",
-            default=CommitChanges.__default_commit_message,
+            default=MissingValue(CommitChanges.default_commit_message),
             help="The commit message template. May contain "
-            "{version} as format identifier",
+            "{from} and {to} as format identifier. Uses configuration value "
+            "'commit_msg_tmpl' as configured default value.",
         )
 
 
 class TagChanges(Hook):
     """"""
+
+    do_tag: ClassVar[bool] = False
+    allow_dirty: ClassVar[bool] = False
+    prepend_to_tag: ClassVar[bool] = True
 
     @traced_function
     def post_action_hook(
@@ -366,7 +394,7 @@ class TagChanges(Hook):
             return
         kwargs = vars(args)
         if not kwargs.pop("dry_run", False) and kwargs.pop("tag", False):
-            if not context.vcs_provider.is_clean:
+            if not args.dirty and not context.vcs_provider.is_clean:
                 raise RuntimeError(
                     "This should only take place, if "
                     "the git repository is clean"
@@ -416,14 +444,27 @@ class TagChanges(Hook):
             "--tag",
             "-t",
             action="store_true",
-            default=False,
-            help="Create a tag after modifying the current version",
+            default=MissingValue(TagChanges.do_tag),
+            help="Create a tag after modifying the current version. Uses "
+            "configuration value 'auto_tag' to store its default value.",
+        )
+
+        parser.add_argument(
+            "--dirty",
+            "-d",
+            action="store_true",
+            default=MissingValue(TagChanges.allow_dirty),
+            help="Create a tag, even if the repository is dirty. Uses "
+            "configuration value 'allow_dirty' to store its "
+            "default value.",
         )
 
         parser.add_argument(
             "--no-prepend-v",
             dest="prepend_letter_v",
             action="store_false",
-            default=True,
-            help="Do not prepend letter v for the tag",
+            default=MissingValue(TagChanges.prepend_to_tag),
+            help="Do not prepend letter v for the tag. Uses "
+            "configuration value 'tag_add_prefix' to store its "
+            "default value.",
         )

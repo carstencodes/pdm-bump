@@ -10,13 +10,15 @@
 # Refer to LICENSE for more information
 #
 """"""
+import argparse
 import sys
+from abc import ABC, abstractmethod
 from collections.abc import Iterable, Mapping
 from enum import Enum, IntEnum, auto
 from functools import cached_property
 from io import BytesIO
 from pathlib import Path
-from typing import Any, Final, Optional, Protocol, cast
+from typing import Any, Final, Generic, Optional, Protocol, TypeVar, cast
 
 from pyproject_metadata import StandardMetadata
 from tomli_w import dump as dump_toml
@@ -217,6 +219,25 @@ class _ConfigAccessor:
         self.__config = config
         self.__mapping = _ConfigMapping(cfg_holder.config)
 
+    @staticmethod
+    def get_config_section_path(section: _ConfigSection) -> Iterable[str]:
+        """"""
+        section_key: Iterable[str] = tuple()
+        if section in (
+            _ConfigSection.TOOL_CONFIG,
+            _ConfigSection.PLUGIN_CONFIG,
+        ):
+            sk: list[str] = ["tool", "pdm"]
+            if _ConfigSection.PLUGIN_CONFIG == section:
+                sk.extend(["bump-plugin"])
+            section_key = tuple(sk)
+        elif _ConfigSection.BUILD_SYSTEM == section:
+            section_key = ("build-system",)
+        elif _ConfigSection.METADATA == section:
+            section_key = ("project",)
+
+        return tuple(section_key)
+
     @property
     def pyproject_file(self) -> Path:
         """"""
@@ -319,22 +340,11 @@ class _ConfigAccessor:
 
         """
         project_data: _ConfigMapping = self._read_config()
-        section_key: Iterable[str] = ()
-        if section in (
-            _ConfigSection.TOOL_CONFIG,
-            _ConfigSection.PLUGIN_CONFIG,
-        ):
-            sk: list[str] = ["tool", "pdm"]
-            if _ConfigSection.PLUGIN_CONFIG == section:
-                sk.extend(["bump-plugin"])
-            section_key = tuple(sk)
-        elif _ConfigSection.BUILD_SYSTEM == section:
-            section_key = ("build-system",)
-        elif _ConfigSection.METADATA == section:
-            section_key = ("project",)
-        elif _ConfigSection.ROOT == section:
+        section_key: Iterable[str]
+        if _ConfigSection.ROOT == section:
             return project_data or _ConfigMapping({})
 
+        section_key = _ConfigAccessor.get_config_section_path(section)
         data = project_data.get_config_value(
             *section_key, default_value=_ConfigMapping({})
         )
@@ -434,7 +444,7 @@ class _ConfigNamespace:
 
 class _PdmBumpVcsConfig(_ConfigNamespace):
     def __init__(
-        self, accessor: _ConfigAccessor, pdm_bump: "_PdmBumpConfig"
+        self, accessor: _ConfigAccessor, pdm_bump: "PdmBumpConfig"
     ) -> None:
         super().__init__(_ConfigSections.PDM_BUMP_VCS, accessor, pdm_bump)
 
@@ -444,7 +454,64 @@ class _PdmBumpVcsConfig(_ConfigNamespace):
         return self._get_value(_ConfigKeys.VCS_PROVIDER)
 
 
-class _PdmBumpConfig(_ConfigNamespace):
+# pylint: disable=C0103
+# Justification: TypeVar naming
+_TConfigValue = TypeVar("_TConfigValue", bool, int, float, str)
+
+
+class _IsMissing(ABC):
+    @abstractmethod
+    def __int__(self) -> int:  # pylint: disable=R0801
+        """"""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def __float__(self) -> float:  # pylint: disable=R0801
+        """"""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def __bool__(self) -> bool:  # pylint: disable=R0801
+        """"""
+        raise NotImplementedError()
+
+    @abstractmethod
+    def __str__(self) -> str:  # pylint: disable=R0801
+        """"""
+        raise NotImplementedError()
+
+
+class MissingValue(Generic[_TConfigValue], _IsMissing):
+    """"""
+
+    def __init__(self, value: _TConfigValue) -> None:
+        self.__value: Final[_TConfigValue] = value
+
+    @property
+    def value(self) -> _TConfigValue:
+        """"""
+        return self.__value
+
+    def __int__(self) -> int:
+        """"""
+        return int(self.__value)
+
+    def __float__(self) -> float:
+        """"""
+        return float(self.__value)
+
+    def __bool__(self) -> bool:
+        """"""
+        return bool(self.__value)
+
+    def __str__(self) -> str:
+        """"""
+        return str(self.__value)
+
+
+class PdmBumpConfig(_ConfigNamespace):
+    """"""
+
     def __init__(self, accessor: _ConfigAccessor) -> None:
         super().__init__(_ConfigSections.PDM_BUMP, accessor, None)
         self.__vcs = _PdmBumpVcsConfig(accessor, self)
@@ -453,6 +520,60 @@ class _PdmBumpConfig(_ConfigNamespace):
     def vcs(self) -> _PdmBumpVcsConfig:
         """"""
         return self.__vcs
+
+    @property
+    def commit_msg_tpl(self) -> str:
+        """"""
+        return self._get_value("commit_msg_tpl")
+
+    @property
+    def perform_commit(self) -> bool:
+        """"""
+        return self._get_value("perform_commit") or False
+
+    @property
+    def auto_tag(self) -> bool:
+        """"""
+        return self._get_value("auto_tag") or False
+
+    @property
+    def tag_allow_dirty(self) -> bool:
+        """"""
+        return self._get_value("allow_dirty") or False
+
+    @property
+    def tag_add_prefix(self) -> bool:
+        """"""
+        return self._get_value("tag_add_prefix") or True
+
+    def add_values_missing_in_cli(
+        self, args: argparse.Namespace
+    ) -> argparse.Namespace:
+        """"""
+
+        def is_missing(ns: argparse.Namespace, key: str) -> bool:
+            if key not in ns:
+                return False
+
+            value: Any = getattr(ns, key)
+            return isinstance(value, _IsMissing)
+
+        if is_missing(args, "perform_commit"):
+            args.perform_commit = self.perform_commit
+
+        if is_missing(args, "commit_message"):
+            args.commit_message = self.commit_msg_tpl
+
+        if is_missing(args, "tag"):
+            args.tag = self.tag_add_prefix
+
+        if is_missing(args, "dirty"):
+            args.dirty = self.tag_allow_dirty
+
+        if is_missing(args, "prepend_letter_v"):
+            args.prepend_letter_v = self.tag_add_prefix
+
+        return args
 
 
 class _PdmBackendConfig:
@@ -569,11 +690,20 @@ class Config:
     def __init__(self, project: ConfigHolder) -> None:
         self.__project: ConfigHolder = project
         accessor: _ConfigAccessor = _ConfigAccessor(self, project)
-        self.__pdm_bump = _PdmBumpConfig(accessor)
+        self.__pdm_bump = PdmBumpConfig(accessor)
         self.__meta_data = _MetaDataConfig(accessor)
 
+    @staticmethod
+    def get_plugin_config_key_prefix() -> str:
+        """"""
+        section: _ConfigSection = _ConfigSection.PLUGIN_CONFIG
+        paths: Iterable[str]
+        paths = _ConfigAccessor.get_config_section_path(section)
+
+        return ".".join(paths)
+
     @property
-    def pdm_bump(self) -> _PdmBumpConfig:
+    def pdm_bump(self) -> PdmBumpConfig:
         """"""
         return self.__pdm_bump
 
