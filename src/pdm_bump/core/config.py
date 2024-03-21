@@ -10,10 +10,8 @@
 # Refer to LICENSE for more information
 #
 """"""
-
-
 import sys
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 from enum import Enum, IntEnum, auto
 from functools import cached_property
 from io import BytesIO
@@ -57,7 +55,7 @@ class _ConfigMapping(dict[str, Any]):
         logger.debug("Searching for '%s' in configuration", key)
         logger.debug("Configuration is set to: \n%s", self)
 
-        config = self
+        config: _ConfigMapping = self
         while len(keys) > 1:
             front = keys[0]
             if front in config.keys():
@@ -72,7 +70,17 @@ class _ConfigMapping(dict[str, Any]):
 
         result = default_value if front not in config.keys() else config[front]
         logger.debug("Found value at '%s' is: %s", key, result)
+
+        if _ConfigMapping.__is_primitive(result):
+            return result
+
+        result = _ConfigMapping(cast(dict[str, Any], result))
+
         return result
+
+    @staticmethod
+    def __is_primitive(value: Any) -> bool:
+        return isinstance(value, (bool, str, int, float, type(None)))
 
     @traced_function
     def set_config_value(self, value: Any, *keys: str) -> None:
@@ -117,7 +125,7 @@ class ConfigHolder(Protocol):  # pylint: disable=R0903
     PYPROJECT_FILENAME: str
 
     @property
-    def config(self) -> _ConfigMapping:
+    def config(self) -> Mapping[str, Any]:
         """"""
         # Method empty: Only a protocol stub
         raise NotImplementedError()
@@ -184,7 +192,7 @@ class _Config(Protocol):  # pylint: disable=R0903
 class _ConfigAccessor:
     def __init__(self, config: _Config, cfg_holder: ConfigHolder) -> None:
         self.__config = config
-        self.__cfg_holder = cfg_holder
+        self.__mapping = _ConfigMapping(cfg_holder.config)
 
     @property
     def pyproject_file(self) -> Path:
@@ -204,8 +212,7 @@ class _ConfigAccessor:
         -------
 
         """
-        config: _ConfigMapping = self.__cfg_holder.config
-        return config.get_config_value(*keys)
+        return self.__mapping.get_config_value(*keys)
 
     @traced_function
     def get_config_or_pyproject_value(
@@ -222,7 +229,7 @@ class _ConfigAccessor:
         -------
 
         """
-        config1: _ConfigMapping = self.__cfg_holder.config
+        config1: _ConfigMapping = self.__mapping
         config2: _ConfigMapping = self.get_pyproject_config(
             _ConfigSection.PLUGIN_CONFIG
         )
@@ -297,7 +304,7 @@ class _ConfigAccessor:
             sk: list[str] = ["tool", "pdm"]
             if _ConfigSection.PLUGIN_CONFIG == section:
                 sk.extend(["bump-plugin"])
-            section_key = tuple(section_key)
+            section_key = tuple(sk)
         elif _ConfigSection.BUILD_SYSTEM == section:
             section_key = ("build-system",)
         elif _ConfigSection.METADATA == section:
@@ -305,7 +312,9 @@ class _ConfigAccessor:
         elif _ConfigSection.ROOT == section:
             return project_data or _ConfigMapping({})
 
-        data = project_data.get_config_value(*section_key, default_value={})
+        data = project_data.get_config_value(
+            *section_key, default_value=_ConfigMapping({})
+        )
 
         return cast(_ConfigMapping, data)
 
@@ -535,10 +544,10 @@ class Config:
     """"""
 
     def __init__(self, project: ConfigHolder) -> None:
+        self.__project: ConfigHolder = project
         accessor: _ConfigAccessor = _ConfigAccessor(self, project)
         self.__pdm_bump = _PdmBumpConfig(accessor)
         self.__meta_data = _MetaDataConfig(accessor)
-        self.__project: ConfigHolder = project
 
     @property
     def pdm_bump(self) -> _PdmBumpConfig:
