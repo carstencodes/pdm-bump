@@ -34,9 +34,11 @@ else:
 class _ConfigMapping(dict[str, Any]):
     @traced_function
     def get_config_value(
-        self, *keys: str,
+        self,
+        *keys: str,
         default_value: Optional[Any] = None,
         store_default: bool = False,
+        readonly: bool = True,
     ) -> Optional[Any]:
         """
 
@@ -63,12 +65,13 @@ class _ConfigMapping(dict[str, Any]):
             if front in config.keys():
                 logger.debug("Found configuration section %s", front)
                 cfg = _ConfigMapping(cast(dict[str, Any], config[front]))
-                config[front] = cfg
+                if not readonly:
+                    config[front] = cfg
                 config = cfg
                 keys = tuple(keys[1:])
             else:
                 logger.debug("Could not find configuration section %s.", front)
-                if store_default:
+                if not readonly and store_default:
                     config[front] = default_value
                 return default_value
 
@@ -79,12 +82,13 @@ class _ConfigMapping(dict[str, Any]):
         logger.debug("Found value at '%s' is: %s", key, result)
 
         if _ConfigMapping.__is_primitive(result):
-            if is_default and store_default:
+            if not readonly and is_default and store_default:
                 config[front] = result
             return result
 
         result = _ConfigMapping(cast(dict[str, Any], result))
-        config[front] = result
+        if not readonly:
+            config[front] = result
 
         return result
 
@@ -265,7 +269,7 @@ class _ConfigAccessor:
         """
         config: _ConfigMapping = self.get_pyproject_config(_ConfigSection.ROOT)
         new_config: _ConfigMapping = config.get_config_value(
-            _ConfigKeys.PROJECT_METADATA, default_value={}
+            _ConfigKeys.PROJECT_METADATA, default_value={}, readonly=False
         )
         new_config.set_config_value(value, *keys)
         self._write_config(config)
