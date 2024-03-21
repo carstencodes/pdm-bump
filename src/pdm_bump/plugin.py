@@ -79,25 +79,25 @@ class _VersionSource(HunkSource, Protocol):  # pylint: disable=R0903
     @property
     def is_enabled(self) -> bool:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     def source_file(self) -> Path:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @property
     def current_version(self) -> Version:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     @current_version.setter
     def current_version(self, version: Version) -> None:
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
     def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
         """"""
-        raise NotImplementedError()
+        raise NotImplementedError()  # pylint: disable=R0801
 
 
 @final
