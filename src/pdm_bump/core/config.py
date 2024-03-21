@@ -434,7 +434,7 @@ class _ConfigNamespace:
     def namespace(self) -> tuple[str, ...]:
         """"""
         if self.__parent is None:
-            return tuple(self.__namespace)
+            return tuple([self.__namespace])
         return tuple(list(self.__parent.namespace) + [self.__namespace])
 
     def _get_value(self, name: str) -> Any:
@@ -480,6 +480,11 @@ class _IsMissing(ABC):
         """"""
         raise NotImplementedError()
 
+    @abstractmethod
+    def raw_value(self) -> Any:  # pylint: disable=R0801
+        """"""
+        raise NotImplementedError()
+
 
 class MissingValue(Generic[_TConfigValue], _IsMissing):
     """"""
@@ -507,6 +512,10 @@ class MissingValue(Generic[_TConfigValue], _IsMissing):
     def __str__(self) -> str:
         """"""
         return str(self.__value)
+
+    def raw_value(self) -> Any:
+        """"""
+        return self.__value
 
 
 class PdmBumpConfig(_ConfigNamespace):
@@ -551,29 +560,35 @@ class PdmBumpConfig(_ConfigNamespace):
     ) -> argparse.Namespace:
         """"""
 
-        def is_missing(ns: argparse.Namespace, key: str) -> bool:
-            if key not in ns:
-                return False
-
-            value: Any = getattr(ns, key)
-            return isinstance(value, _IsMissing)
-
-        if is_missing(args, "perform_commit"):
-            args.perform_commit = self.perform_commit
-
-        if is_missing(args, "commit_message"):
-            args.commit_message = self.commit_msg_tpl
-
-        if is_missing(args, "tag"):
-            args.tag = self.tag_add_prefix
-
-        if is_missing(args, "dirty"):
-            args.dirty = self.tag_allow_dirty
-
-        if is_missing(args, "prepend_letter_v"):
-            args.prepend_letter_v = self.tag_add_prefix
+        args = PdmBumpConfig.__update_args(args, "commit", self.perform_commit)
+        args = PdmBumpConfig.__update_args(
+            args, "commit_message", self.commit_msg_tpl
+        )
+        args = PdmBumpConfig.__update_args(args, "tag", self.auto_tag)
+        args = PdmBumpConfig.__update_args(args, "dirty", self.tag_allow_dirty)
+        args = PdmBumpConfig.__update_args(
+            args, "prepend_letter_v", self.tag_add_prefix
+        )
 
         return args
+
+    @staticmethod
+    def __update_args(
+        ns: argparse.Namespace, key: str, value: Any
+    ) -> argparse.Namespace:
+        if key not in ns:
+            setattr(ns, key, value)
+        else:
+            stored_value: Optional[Any] = getattr(ns, key)
+            if stored_value is None and value is not None:
+                setattr(ns, key, value)
+            elif isinstance(stored_value, _IsMissing):
+                if value is None:
+                    setattr(ns, key, stored_value.raw_value())
+                else:
+                    setattr(ns, key, value)
+
+        return ns
 
 
 class _PdmBackendConfig:
