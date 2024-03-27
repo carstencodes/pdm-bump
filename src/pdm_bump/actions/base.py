@@ -188,13 +188,13 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
 
         selected_command: str = kwargs.pop("selected_command")
 
-        if selected_command not in self.__items:
+        if selected_command not in self._items:
             raise ValueError(
                 f"Failed to get command {selected_command}. "
-                + f"Valid values are {', '.join(self.__items.keys())}."
+                + f"Valid values are {', '.join(self._items.keys())}."
             )
 
-        clazz: type[ActionBase] = self.__items[selected_command]
+        clazz: type[ActionBase] = self._items[selected_command]
 
         allowed_args: set[str] = clazz.get_allowed_arguments()
         allowed_kwargs: dict[str, Any] = {

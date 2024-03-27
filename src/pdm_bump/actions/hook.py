@@ -134,7 +134,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
         pre_call_ctx: PreHookContext = PreHookContext(
             self.__vcs_provider, version
         )
-        for hook in self.__hooks:
+        for hook in self._hooks:
             hook.pre_action_hook(pre_call_ctx, args)
 
         old_version = version
@@ -147,7 +147,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
             old_version,
             old_version != version,
         )
-        for hook in self.__hooks:
+        for hook in self._hooks:
             hook.post_action_hook(post_call_ctx, args)
 
 
