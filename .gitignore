@@ -14,3 +14,4 @@ radon.*.json
 .venv
 build/
 .idea/sonarlint/
+.idea
