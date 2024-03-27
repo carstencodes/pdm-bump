@@ -12,12 +12,13 @@
 """"""
 
 
-from abc import ABC, abstractmethod
-from argparse import ArgumentParser, Namespace
+from abc import abstractmethod
+from argparse import Namespace
 from collections.abc import Generator
 from dataclasses import dataclass, field
-from typing import Any, Callable, Protocol, cast
+from typing import Any, Protocol, cast
 
+from pdm_pfsc.actions import ActionBase, ActionRegistry
 from pdm_pfsc.hook import HookGenerator, HookInfo
 from pdm_pfsc.logging import logger
 
@@ -27,27 +28,6 @@ from ..vcs.core import HunkSource, VcsProvider
 from .hook import CommitChanges, HookExecutor, TagChanges
 
 _formatter = Pep440VersionFormatter()
-
-
-# Justification: Just a protocol
-class _HasAddSubParser(Protocol):  # pylint: disable=R0903
-    """"""
-
-    def add_parser(self, name, **kwargs) -> ArgumentParser:
-        """
-
-        Parameters
-        ----------
-        name :
-
-        **kwargs :
-
-
-        Returns
-        -------
-
-        """
-        raise NotImplementedError()
 
 
 # Justification: Just a protocol
@@ -69,121 +49,7 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
         raise NotImplementedError()
 
 
-class _ArgumentParserFactoryMixin:
-    """"""
-
-    name: str
-    description: str
-
-    @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
-        """
-
-        Parameters
-        ----------
-        sub_parser: ArgumentParser :
-
-
-        Returns
-        -------
-
-        """
-        # Justification: Zen of Python: Explicit is better than implicit
-        # Must be implemented if necessary
-        pass  # pylint: disable=W0107
-
-    @classmethod
-    def get_allowed_arguments(cls) -> set[str]:
-        """"""
-        return set()
-
-    @classmethod
-    def create_command(
-        cls, sub_parser_collection: _HasAddSubParser, **kwargs
-    ) -> ArgumentParser:
-        """
-
-        Parameters
-        ----------
-        sub_parser_collection: _HasAddSubParser :
-
-        **kwargs :
-
-
-        Returns
-        -------
-
-        """
-        aliases: list[str] = []
-
-        if "aliases" in vars(cls):
-            aliases = list(getattr(cls, "aliases"))
-
-        exit_on_error = True
-        if "exit_on_error" in kwargs:
-            exit_on_error = bool(kwargs.pop("exit_on_error"))
-
-        parser = sub_parser_collection.add_parser(
-            cls.name,
-            description=cls.description,
-            aliases=aliases,
-            exit_on_error=exit_on_error,
-        )
-
-        parser.add_argument(
-            "--dry-run",
-            "-n",
-            action="store_true",
-            dest="dry_run",
-            help="Do not perform any action, just check if it would work.",
-        )
-
-        cls._update_command(parser)
-
-        return parser
-
-
-class ActionBase(ABC, _ArgumentParserFactoryMixin):
-    """"""
-
-    def __init__(self, **kwargs) -> None:
-        # Just to ignore key word arguments
-        pass
-
-    @abstractmethod
-    def run(self, dry_run: bool = False) -> Version:
-        """
-
-        Parameters
-        ----------
-        dry_run: bool :
-             (Default value = False)
-
-        Returns
-        -------
-
-        """
-        raise NotImplementedError()
-
-    @classmethod
-    def create_from_command(cls, **kwargs) -> "ActionBase":
-        """
-
-        Parameters
-        ----------
-        **kwargs :
-
-
-        Returns
-        -------
-
-        """
-        instance: "ActionBase" = cls(**kwargs)
-
-        return instance
-
-
-class VersionConsumer(ActionBase):
+class VersionConsumer(ActionBase[Version]):
     """"""
 
     def __init__(self, version: Version, **kwargs) -> None:
@@ -286,77 +152,7 @@ class ExecutionContext:
     config: PdmBumpConfig = field()
 
 
-class ActionRegistry:
-    """"""
-
-    def __init__(self) -> None:
-        self.__items: dict[str, type[ActionBase]] = {}
-
-    def register(self) -> Callable:
-        """"""
-
-        def decorator(clazz: type[ActionBase]):
-            """
-
-            Parameters
-            ----------
-            clazz: type[ActionBase] :
-
-
-            Returns
-            -------
-
-            """
-            if not issubclass(clazz, ActionBase):
-                raise ValueError(
-                    f"{clazz.__name__} is not an sub-type of "
-                    f"{ActionBase.__name__}"
-                )
-            self.__items[clazz.name] = clazz
-
-            return clazz
-
-        return decorator
-
-    def update_parser(self, parser: ArgumentParser) -> None:
-        """
-
-        Parameters
-        ----------
-        parser: ArgumentParser :
-
-
-        Returns
-        -------
-
-        """
-        parsers: _HasAddSubParser = parser.add_subparsers(  # type: ignore
-            dest="selected_command",
-            description="Either the part of the version to bump "
-            + "according to PEP 440:"
-            + " major.minor.micro, "
-            + "or VCS based actions to take.",
-            required=True,
-        )
-        parser.add_help = True
-        keys = list(self.__items.keys())
-        keys.sort()
-        exit_on_error = False
-        if "exit_on_error" in vars(parser):
-            exit_on_error = getattr(parser, "exit_on_error")
-
-        for key in keys:
-            clazz = self.__items[key]
-            child_parser: ArgumentParser = clazz.create_command(
-                parsers, exit_on_error=exit_on_error
-            )
-            if issubclass(clazz, HookGenerator):
-                hook_generator: type[HookGenerator] = cast(
-                    type[HookGenerator], clazz
-                )
-                for hook_info in hook_generator.generate_hook_infos():
-                    hook_info.update_parser(child_parser)
-
+class _VersionActions(ActionRegistry[ExecutionContext]):
     def execute(  # pylint: disable=R0913
         self,
         /,
@@ -431,5 +227,5 @@ class ActionRegistry:
         executor.run((command, context.version), args, dry_run=dry_run)
 
 
-actions = ActionRegistry()
+actions = _VersionActions()
 action = actions.register()
