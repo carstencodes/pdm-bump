@@ -15,8 +15,9 @@ from difflib import unified_diff
 from pathlib import Path
 from typing import Protocol, Union, cast, runtime_checkable
 
+from pdm_pfsc.logging import logger
+
 from .core.config import Config
-from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 
 

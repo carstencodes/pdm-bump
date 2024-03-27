@@ -16,7 +16,8 @@ from abc import abstractmethod
 from functools import cached_property
 from typing import Optional, final
 
-from ..core.logging import logger, silenced
+from pdm_pfsc.logging import logger, silenced
+
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import (
     CommitStatistics,

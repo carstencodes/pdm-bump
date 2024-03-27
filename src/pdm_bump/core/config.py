@@ -20,10 +20,9 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any, Final, Generic, Optional, Protocol, TypeVar, cast
 
+from pdm_pfsc.logging import logger, traced_function
 from pyproject_metadata import StandardMetadata
 from tomli_w import dump as dump_toml
-
-from .logging import logger, traced_function
 
 if sys.version_info >= (3, 11, 0):
     # suspicious mypy behavior

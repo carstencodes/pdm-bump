@@ -18,9 +18,9 @@ from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
 from typing import Optional, cast
 
+from pdm_pfsc.logging import logger
 from pdm_pfsc.proc import CliRunnerMixin
 
-from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
 from .core import HunkSource, VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory

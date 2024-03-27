@@ -16,7 +16,8 @@ from argparse import ArgumentParser
 from traceback import format_exc as get_traceback
 from typing import final
 
-from ..core.logging import logger
+from pdm_pfsc.logging import logger
+
 from ..core.version import Version
 from .base import VersionModifier, VersionPersister, action
 
