@@ -276,19 +276,28 @@ class _EmptyConfig:
 
     # Justification: Fulfill protocol
     @property
-    def PYPROJECT_FILENAME(self) -> str:  # noqa: N802 pylint: disable=C0103
+    # pylint: disable=C0103
+    def PYPROJECT_FILENAME(self) -> str:  # NOSONAR noqa: N802
         """"""
         raise NotImplementedError()
 
     # Justification: Fulfill protocol
     @PYPROJECT_FILENAME.setter
     # pylint: disable=C0103
-    def PYPROJECT_FILENAME(self, value: str) -> None:  # noqa: N802
+    def PYPROJECT_FILENAME(self, value: str) -> None:  # NOSONAR noqa: N802
         """"""
         raise NotImplementedError()
 
     @property
     def config(self) -> Mapping[str, Any]:
+        """"""
+        return {}
+
+
+# Justification: Just a protocol implementation
+class _DummyConfig:  # pylint: disable=R0903
+    @property
+    def pyproject_file(self) -> Path:
         """"""
         raise NotImplementedError()
 
@@ -307,7 +316,7 @@ class Config:
         """"""
         config: ConfigHolder = _EmptyConfig()
         accessor: ConfigAccessor = _PdmBumpConfigAccessor(
-            Config(config), config
+            _DummyConfig(), config
         )
         section: ConfigSection = ConfigSection.PLUGIN_CONFIG
         paths: Iterable[str]
