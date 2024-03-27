@@ -1035,7 +1035,7 @@ files = [
 
 [[package]]
 name = "pdm-pfsc"
-version = "0.11.1"
+version = "0.11.2"
 requires_python = ">=3.9"
 summary = "Core functionPlug-In Foundation Service Collection)"
 dependencies = [
@@ -1044,7 +1044,7 @@ dependencies = [
     "tomli-w>=1.0.0",
 ]
 files = [
-    {file = "pdm_pfsc-0.11.1-py3-none-any.whl", hash = "sha256:11c4bb97445b11061fd04ce3b52f04372d823a316bf5268f1336cd901448344a"},
+    {file = "pdm_pfsc-0.11.2-py3-none-any.whl", hash = "sha256:c291ffcf916e11a8d59974c88321ccdbdc2d0da71b1b9f94756d57499cff4ff7"},
 ]
 
 [[package]]
