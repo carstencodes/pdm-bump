@@ -197,7 +197,7 @@ class DynamicVersionSource:  # pylint: disable=R0903
         ver: str = Pep440VersionFormatter().format(version)
         config: DynamicVersionConfig = self.__get_dynamic_version()
         hunk = config.replace_dynamic_version(ver)
-        if self.__hunk is not None:
+        if self.__hunk is None:
             self.__hunk = hunk
         else:
             self.__hunk = cast(_DiffData, self.__hunk).merge(hunk)
