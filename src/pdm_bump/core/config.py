@@ -277,14 +277,14 @@ class _EmptyConfig:
     # Justification: Fulfill protocol
     @property
     # pylint: disable=C0103
-    def PYPROJECT_FILENAME(self) -> str:  # NOSONAR noqa: N802
+    def PYPROJECT_FILENAME(self) -> str:  # noqa: N802 NOSONAR
         """"""
         raise NotImplementedError()
 
     # Justification: Fulfill protocol
     @PYPROJECT_FILENAME.setter
     # pylint: disable=C0103
-    def PYPROJECT_FILENAME(self, value: str) -> None:  # NOSONAR noqa: N802
+    def PYPROJECT_FILENAME(self, value: str) -> None:  # noqa: N802 NOSONAR
         """"""
         raise NotImplementedError()
 
