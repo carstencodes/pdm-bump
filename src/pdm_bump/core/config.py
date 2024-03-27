@@ -11,148 +11,20 @@
 #
 """"""
 import argparse
-import sys
-from abc import ABC, abstractmethod
 from collections.abc import Iterable, Mapping
-from enum import Enum, IntEnum, auto
+from enum import Enum
 from functools import cached_property
-from io import BytesIO
 from pathlib import Path
-from typing import Any, Final, Generic, Optional, Protocol, TypeVar, cast
+from typing import Any, Final, Optional
 
-from pdm_pfsc.logging import logger, traced_function
-from pyproject_metadata import StandardMetadata
-from tomli_w import dump as dump_toml
-
-if sys.version_info >= (3, 11, 0):
-    # suspicious mypy behavior
-    from tomllib import load as load_toml  # type: ignore
-else:
-    # Python 3.11 -> mypy will not recognize this
-    from tomli import load as load_toml  # type: ignore
-
-
-class _ConfigMapping(dict[str, Any]):
-    @traced_function
-    def get_config_value(
-        self,
-        *keys: str,
-        default_value: Optional[Any] = None,
-        store_default: bool = False,
-        readonly: bool = True,
-    ) -> Optional[Any]:
-        """
-
-        Parameters
-        ----------
-        *keys: str :
-
-        default_value: Optional[Any] :
-             (Default value = None)
-
-        store_default: bool:
-            (Default value = False)
-
-        readonly: bool:
-            (Default value = True)
-
-        Returns
-        -------
-
-        """
-        key: str = ".".join(keys)
-        logger.debug("Searching for '%s' in configuration", key)
-        logger.debug("Configuration is set to: \n%s", self)
-
-        front: str
-        config: _ConfigMapping = self
-        if len(keys) > 1:
-            front = keys[0]
-            if front in config.keys():
-                logger.debug("Found configuration section %s", front)
-                cfg = _ConfigMapping(cast(dict[str, Any], config[front]))
-                if not readonly:
-                    config[front] = cfg
-                return cfg.get_config_value(
-                    *tuple(keys[1:]),
-                    default_value=default_value,
-                    store_default=store_default,
-                    readonly=readonly,
-                )
-
-            logger.debug("Could not find configuration section %s.", front)
-            if not readonly and store_default:
-                config[front] = default_value
-            return default_value
-
-        front = keys[0]
-
-        is_default: bool = front not in config.keys()
-        result = default_value if is_default else config[front]
-        logger.debug("Found value at '%s' is: %s", key, result)
-
-        if _ConfigMapping.__is_primitive(result):
-            if not readonly and is_default and store_default:
-                config[front] = result
-            return result
-
-        result = _ConfigMapping(cast(dict[str, Any], result))
-        if not readonly:
-            config[front] = result
-
-        return result
-
-    @staticmethod
-    def __is_primitive(value: Any) -> bool:
-        return isinstance(value, (bool, str, int, float, type(None)))
-
-    @traced_function
-    def set_config_value(self, value: Any, *keys: str) -> None:
-        """
-
-        Parameters
-        ----------
-        value: Any :
-
-        *keys: str :
-
-
-        Returns
-        -------
-
-        """
-        front: str
-
-        key: str = ".".join(keys)
-        logger.debug("Setting '%s' to '%s'", key, value)
-
-        config = self
-        while len(keys) > 1:
-            front = keys[0]
-            if front not in config.keys():
-                logger.debug(
-                    "Key '%s' was not found. Adding empty configuration", front
-                )
-                config[front] = {}
-            config = config[front]
-            keys = tuple(keys[1:])
-
-        front = keys[0]
-        config[front] = value
-
-
-# Justification: Minimal protocol
-class ConfigHolder(Protocol):  # pylint: disable=R0903
-    """"""
-
-    root: Path
-    PYPROJECT_FILENAME: str
-
-    @property
-    def config(self) -> Mapping[str, Any]:
-        """"""
-        # Method empty: Only a protocol stub
-        raise NotImplementedError()
+from pdm_pfsc.abstractions import ConfigHolder
+from pdm_pfsc.config import (
+    ConfigAccessor,
+    ConfigNamespace,
+    ConfigSection,
+    IsMissing,
+)
+from pdm_pfsc.logging import traced_function
 
 
 class _StringEnum(str, Enum):
@@ -160,13 +32,6 @@ class _StringEnum(str, Enum):
 
     # Justification: Zen of python: Explicit is better than implicit
     pass  # pylint: disable=W0107
-
-
-class _ConfigSections(_StringEnum):
-    """"""
-
-    PDM_BUMP: Final[str] = "pdm_bump"
-    PDM_BUMP_VCS: Final[str] = "vcs"
 
 
 class _ConfigKeys(_StringEnum):
@@ -192,258 +57,16 @@ class _ConfigValues(_StringEnum):
     BUILD_BACKEND_PDM_BACKEND: Final[str] = "pdm.backend"
 
 
-class _ConfigSection(IntEnum):
+class _ConfigSections(_StringEnum):
     """"""
 
-    ROOT = auto()
-    METADATA = auto()
-    PLUGIN_CONFIG = auto()
-    BUILD_SYSTEM = auto()
-    TOOL_CONFIG = auto()
+    PDM_BUMP: Final[str] = "pdm_bump"
+    PDM_BUMP_VCS: Final[str] = "vcs"
 
 
-# only a protocol
-class _Config(Protocol):  # pylint: disable=R0903
-    """"""
-
-    @cached_property
-    @traced_function
-    def pyproject_file(self) -> Path:
-        """"""
-        raise NotImplementedError()
-
-
-class _ConfigAccessor:
-    def __init__(self, config: _Config, cfg_holder: ConfigHolder) -> None:
-        self.__config = config
-        self.__mapping = _ConfigMapping(cfg_holder.config)
-
-    @staticmethod
-    def get_config_section_path(section: _ConfigSection) -> Iterable[str]:
-        """"""
-        section_key: Iterable[str] = tuple()
-        if section in (
-            _ConfigSection.TOOL_CONFIG,
-            _ConfigSection.PLUGIN_CONFIG,
-        ):
-            sk: list[str] = ["tool", "pdm"]
-            if _ConfigSection.PLUGIN_CONFIG == section:
-                sk.extend(["bump-plugin"])
-            section_key = tuple(sk)
-        elif _ConfigSection.BUILD_SYSTEM == section:
-            section_key = ("build-system",)
-        elif _ConfigSection.METADATA == section:
-            section_key = ("project",)
-
-        return tuple(section_key)
-
-    @property
-    def pyproject_file(self) -> Path:
-        """"""
-        return self.__config.pyproject_file
-
-    @traced_function
-    def get_config_value(self, *keys: tuple[str, ...]) -> Optional[Any]:
-        """
-
-        Parameters
-        ----------
-        *keys: tuple[str, ...] :
-
-
-        Returns
-        -------
-
-        """
-        return self.__mapping.get_config_value(*keys)
-
-    @traced_function
-    def get_config_or_pyproject_value(
-        self, *keys: tuple[str, ...]
-    ) -> Optional[Any]:
-        """
-
-        Parameters
-        ----------
-        *keys: tuple[str, ...] :
-
-
-        Returns
-        -------
-
-        """
-        config1: _ConfigMapping = self.__mapping
-        config2: _ConfigMapping = self.get_pyproject_config(
-            _ConfigSection.PLUGIN_CONFIG
-        )
-
-        return config1.get_config_value(*keys) or config2.get_config_value(
-            *keys
-        )
-
-    @traced_function
-    def set_pyproject_metadata(self, value: Any, *keys: str) -> None:
-        """
-
-        Parameters
-        ----------
-        value: Any :
-
-        *keys: tuple[str, ...] :
-
-
-        Returns
-        -------
-
-        """
-        config: _ConfigMapping = self.get_pyproject_config(_ConfigSection.ROOT)
-        new_config: _ConfigMapping = config.get_config_value(
-            _ConfigKeys.PROJECT_METADATA, default_value={}, readonly=False
-        )
-        new_config.set_config_value(value, *keys)
-        self._write_config(config)
-
-    def _write_config(self, config: _ConfigMapping) -> None:
-        """
-
-        Parameters
-        ----------
-        config: _ConfigMapping :
-
-
-        Returns
-        -------
-
-        """
-        with BytesIO() as buffer:
-            dump_toml(config, buffer)
-
-            with open(self.pyproject_file, "wb+") as file_ptr:
-                file_ptr.write(buffer.getvalue())
-                logger.info(
-                    "Successfully saved configuration to %s",
-                    self.pyproject_file,
-                )
-
-    @traced_function
-    def get_pyproject_config(self, section: _ConfigSection) -> _ConfigMapping:
-        """
-
-        Parameters
-        ----------
-        section: _ConfigSection :
-
-
-        Returns
-        -------
-
-        """
-        project_data: _ConfigMapping = self._read_config()
-        section_key: Iterable[str]
-        if _ConfigSection.ROOT == section:
-            return project_data or _ConfigMapping({})
-
-        section_key = _ConfigAccessor.get_config_section_path(section)
-        data = project_data.get_config_value(
-            *section_key, default_value=_ConfigMapping({})
-        )
-
-        return cast(_ConfigMapping, data)
-
-    @traced_function
-    def _read_config(self) -> _ConfigMapping:
-        """"""
-        project_file = self.pyproject_file
-        with open(project_file, "rb") as file_pointer:
-            return _ConfigMapping(load_toml(file_pointer))
-
-    @traced_function
-    def get_pyproject_metadata(self, *keys: str) -> Optional[Any]:
-        """
-
-        Parameters
-        ----------
-        *keys: tuple[str, ...] :
-
-
-        Returns
-        -------
-
-        """
-        config: _ConfigMapping = self.get_pyproject_config(
-            _ConfigSection.METADATA
-        )
-        return config.get_config_value(*keys)
-
-    @traced_function
-    def get_pyproject_tool_config(self, *keys: str) -> Optional[Any]:
-        """
-
-        Parameters
-        ----------
-        *keys: tuple[str, ...] :
-
-
-        Returns
-        -------
-
-        """
-        config: _ConfigMapping = self.get_pyproject_config(
-            _ConfigSection.TOOL_CONFIG
-        )
-        return config.get_config_value(*keys)
-
-    @cached_property
-    @traced_function
-    def meta_data(self) -> StandardMetadata:
-        """"""
-        data: _ConfigMapping = self.get_pyproject_config(_ConfigSection.ROOT)
-        meta: StandardMetadata = StandardMetadata.from_pyproject(data)
-        return meta
-
-
-class _ConfigNamespace:
+class _PdmBumpVcsConfig(ConfigNamespace):
     def __init__(
-        self,
-        namespace: str,
-        accessor: _ConfigAccessor,
-        parent: "_ConfigNamespace | None" = None,
-    ) -> None:
-        """
-        Parameters
-        ----------
-        namespace: str :
-        parent : _ConfigNamespace | None :
-
-
-        Returns
-        -------
-
-        """
-        self.__parent = parent
-        self.__namespace = namespace
-        self.__accessor = accessor
-
-    @property
-    def parent(self) -> "_ConfigNamespace | None":
-        """"""
-        return self.__parent
-
-    @property
-    def namespace(self) -> tuple[str, ...]:
-        """"""
-        if self.__parent is None:
-            return tuple([self.__namespace])
-        return tuple(list(self.__parent.namespace) + [self.__namespace])
-
-    def _get_value(self, name: str) -> Any:
-        config_names: tuple[str, ...] = tuple(list(self.namespace) + [name])
-        return self.__accessor.get_config_value(*config_names)
-
-
-class _PdmBumpVcsConfig(_ConfigNamespace):
-    def __init__(
-        self, accessor: _ConfigAccessor, pdm_bump: "PdmBumpConfig"
+        self, accessor: ConfigAccessor, pdm_bump: "PdmBumpConfig"
     ) -> None:
         super().__init__(_ConfigSections.PDM_BUMP_VCS, accessor, pdm_bump)
 
@@ -453,74 +76,10 @@ class _PdmBumpVcsConfig(_ConfigNamespace):
         return self._get_value(_ConfigKeys.VCS_PROVIDER)
 
 
-# pylint: disable=C0103
-# Justification: TypeVar naming
-_TConfigValue = TypeVar("_TConfigValue", bool, int, float, str)
-
-
-class _IsMissing(ABC):
-    @abstractmethod
-    def __int__(self) -> int:  # pylint: disable=R0801
-        """"""
-        raise NotImplementedError()
-
-    @abstractmethod
-    def __float__(self) -> float:  # pylint: disable=R0801
-        """"""
-        raise NotImplementedError()
-
-    @abstractmethod
-    def __bool__(self) -> bool:  # pylint: disable=R0801
-        """"""
-        raise NotImplementedError()
-
-    @abstractmethod
-    def __str__(self) -> str:  # pylint: disable=R0801
-        """"""
-        raise NotImplementedError()
-
-    @abstractmethod
-    def raw_value(self) -> Any:  # pylint: disable=R0801
-        """"""
-        raise NotImplementedError()
-
-
-class MissingValue(Generic[_TConfigValue], _IsMissing):
+class PdmBumpConfig(ConfigNamespace):
     """"""
 
-    def __init__(self, value: _TConfigValue) -> None:
-        self.__value: Final[_TConfigValue] = value
-
-    @property
-    def value(self) -> _TConfigValue:
-        """"""
-        return self.__value
-
-    def __int__(self) -> int:
-        """"""
-        return int(self.__value)
-
-    def __float__(self) -> float:
-        """"""
-        return float(self.__value)
-
-    def __bool__(self) -> bool:
-        """"""
-        return bool(self.__value)
-
-    def __str__(self) -> str:
-        """"""
-        return str(self.__value)
-
-    def raw_value(self) -> Any:
-        """"""
-        return self.__value
-
-
-class PdmBumpConfig(_ConfigNamespace):
-    """"""
-
-    def __init__(self, accessor: _ConfigAccessor) -> None:
+    def __init__(self, accessor: ConfigAccessor) -> None:
         super().__init__(_ConfigSections.PDM_BUMP, accessor, None)
         self.__vcs = _PdmBumpVcsConfig(accessor, self)
 
@@ -581,7 +140,7 @@ class PdmBumpConfig(_ConfigNamespace):
             stored_value: Optional[Any] = getattr(ns, key)
             if stored_value is None and value is not None:
                 setattr(ns, key, value)
-            elif isinstance(stored_value, _IsMissing):
+            elif isinstance(stored_value, IsMissing):
                 if value is None:
                     setattr(ns, key, stored_value.raw_value())
                 else:
@@ -593,10 +152,10 @@ class PdmBumpConfig(_ConfigNamespace):
 class _PdmBackendConfig:
     """"""
 
-    def __init__(self, accessor: _ConfigAccessor) -> None:
+    def __init__(self, accessor: ConfigAccessor) -> None:
         """"""
         self.__mapping = accessor.get_pyproject_config(
-            _ConfigSection.TOOL_CONFIG
+            ConfigSection.TOOL_CONFIG
         )
 
     @property
@@ -623,14 +182,14 @@ class _PdmBackendConfig:
 class _BuildSystemConfig:
     """"""
 
-    def __init__(self, accessor: _ConfigAccessor) -> None:
+    def __init__(self, accessor: ConfigAccessor) -> None:
         """"""
         self.__accessor = accessor
         self.__mapping = accessor.get_pyproject_config(
-            _ConfigSection.BUILD_SYSTEM
+            ConfigSection.BUILD_SYSTEM
         )
         self.__tool_mapping = accessor.get_pyproject_config(
-            _ConfigSection.TOOL_CONFIG
+            ConfigSection.TOOL_CONFIG
         )
         self.__backend = _PdmBackendConfig(accessor)
 
@@ -672,7 +231,7 @@ class _BuildSystemConfig:
 class _MetaDataConfig:
     """"""
 
-    def __init__(self, accessor: _ConfigAccessor) -> None:
+    def __init__(self, accessor: ConfigAccessor) -> None:
         """"""
         self.__accessor = accessor
         self.__build_system = _BuildSystemConfig(accessor)
@@ -698,21 +257,61 @@ class _MetaDataConfig:
         return _ConfigKeys.VERSION in self.__accessor.meta_data.dynamic
 
 
+class _PdmBumpConfigAccessor(ConfigAccessor):
+    @property
+    def plugin_config_name(self) -> Iterable[str]:
+        return {"bump-plugin"}
+
+
+class _EmptyConfig:
+    @property
+    def root(self) -> Path:
+        """"""
+        raise NotImplementedError()
+
+    @root.setter
+    def root(self, value: Path) -> None:
+        """"""
+        raise NotImplementedError()
+
+    # Justification: Fulfill protocol
+    @property
+    def PYPROJECT_FILENAME(self) -> str:  # noqa: N802 pylint: disable=C0103
+        """"""
+        raise NotImplementedError()
+
+    # Justification: Fulfill protocol
+    @PYPROJECT_FILENAME.setter
+    # pylint: disable=C0103
+    def PYPROJECT_FILENAME(self, value: str) -> None:  # noqa: N802
+        """"""
+        raise NotImplementedError()
+
+    @property
+    def config(self) -> Mapping[str, Any]:
+        """"""
+        raise NotImplementedError()
+
+
 class Config:
     """"""
 
     def __init__(self, project: ConfigHolder) -> None:
         self.__project: ConfigHolder = project
-        accessor: _ConfigAccessor = _ConfigAccessor(self, project)
+        accessor: ConfigAccessor = _PdmBumpConfigAccessor(self, project)
         self.__pdm_bump = PdmBumpConfig(accessor)
         self.__meta_data = _MetaDataConfig(accessor)
 
     @staticmethod
     def get_plugin_config_key_prefix() -> str:
         """"""
-        section: _ConfigSection = _ConfigSection.PLUGIN_CONFIG
+        config: ConfigHolder = _EmptyConfig()
+        accessor: ConfigAccessor = _PdmBumpConfigAccessor(
+            Config(config), config
+        )
+        section: ConfigSection = ConfigSection.PLUGIN_CONFIG
         paths: Iterable[str]
-        paths = _ConfigAccessor.get_config_section_path(section)
+        paths = accessor.get_config_section_path(section)
 
         return ".".join(paths)
 
