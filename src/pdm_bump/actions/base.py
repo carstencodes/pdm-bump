@@ -18,8 +18,9 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from typing import Any, Callable, Protocol, cast
 
+from pdm_pfsc.logging import logger
+
 from ..core.config import PdmBumpConfig
-from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs.core import HunkSource, VcsProvider
 from .hook import (

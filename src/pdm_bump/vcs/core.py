@@ -26,7 +26,8 @@ from typing import (
     cast,
 )
 
-from ..core.logging import traced_function
+from pdm_pfsc.logging import traced_function
+
 from ..core.version import Pep440VersionFormatter, Version
 from .history import History
 

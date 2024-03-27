@@ -20,15 +20,15 @@ from typing import Final, Optional, Protocol, cast, final
 # MyPy does not recognize this during pull requests
 from pdm.cli.commands.base import BaseCommand  # type: ignore
 from pdm.termui import UI  # type: ignore
-
-from .actions import ExecutionContext, actions
-from .core.config import Config, ConfigHolder
-from .core.logging import (
+from pdm_pfsc.logging import (
     logger,
     setup_logger,
     traced_function,
     update_logger_from_project_ui,
 )
+
+from .actions import ExecutionContext, actions
+from .core.config import Config, ConfigHolder
 from .core.version import Pep440VersionFormatter, Version
 from .dynamic import DynamicVersionSource
 from .source import StaticPep621VersionSource

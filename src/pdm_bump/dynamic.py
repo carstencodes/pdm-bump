@@ -21,8 +21,9 @@ from re import Match, Pattern
 from re import compile as compile_re
 from typing import Final, Optional, cast
 
+from pdm_pfsc.logging import logger
+
 from .core.config import VERSION_CONFIG_KEY_NAME, Config
-from .core.logging import logger
 from .core.version import Pep440VersionFormatter, Version
 
 DEFAULT_REGEX: Final[Pattern[str]] = compile_re(

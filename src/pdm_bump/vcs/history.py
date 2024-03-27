@@ -17,7 +17,8 @@ from functools import cached_property
 from re import Match, Pattern, compile
 from typing import Callable, Final, Optional
 
-from ..core.logging import logger
+from pdm_pfsc.logging import logger
+
 from ..core.version import NonNegativeInteger
 
 """"""

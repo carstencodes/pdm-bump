@@ -13,7 +13,8 @@
 
 from typing import Literal, Optional, final
 
-from ..core.logging import logger, traced_function
+from pdm_pfsc.logging import logger, traced_function
+
 from ..core.version import Version
 from .base import VersionModifier, action
 

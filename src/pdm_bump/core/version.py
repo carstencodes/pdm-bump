@@ -20,8 +20,7 @@ from typing import Annotated, Any, Final, Literal, Optional, cast, final
 from annotated_types import Ge
 from packaging.version import InvalidVersion
 from packaging.version import Version as BaseVersion
-
-from .logging import traced_function
+from pdm_pfsc.logging import traced_function
 
 
 @final

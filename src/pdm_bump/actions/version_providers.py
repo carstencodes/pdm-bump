@@ -16,7 +16,8 @@ from enum import IntEnum
 from functools import cached_property
 from typing import Optional, Union, cast
 
-from ..core.logging import logger
+from pdm_pfsc.logging import logger
+
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import CommitStatistics, CommitType
 from .base import VersionModifier

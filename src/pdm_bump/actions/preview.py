@@ -16,7 +16,8 @@ from abc import abstractmethod
 from argparse import ArgumentParser
 from typing import Literal, Optional, cast, final
 
-from ..core.logging import logger, traced_function
+from pdm_pfsc.logging import logger, traced_function
+
 from ..core.version import NonNegativeInteger, Pep440VersionFormatter, Version
 from .base import VersionModifier, VersionPersister, action
 
