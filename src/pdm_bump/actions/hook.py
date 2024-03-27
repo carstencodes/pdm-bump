@@ -18,9 +18,9 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from typing import ClassVar, Protocol, runtime_checkable
 
+from pdm_pfsc.config import MissingValue
 from pdm_pfsc.logging import logger, traced_function
 
-from ..core.config import MissingValue
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs import HunkSource, VcsProvider
 
