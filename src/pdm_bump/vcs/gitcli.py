@@ -18,12 +18,13 @@ from subprocess import CalledProcessError
 from tempfile import NamedTemporaryFile
 from typing import Optional, cast
 
+from pdm_pfsc.proc import CliRunnerMixin
+
 from ..core.logging import logger
 from ..core.version import Pep440VersionFormatter, Version
 from .core import HunkSource, VcsProvider, VcsProviderError, vcs_provider
 from .git import GitCommonVcsProviderFactory
 from .history import Commit, History
-from .mixins import CliRunnerMixin
 
 
 class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
