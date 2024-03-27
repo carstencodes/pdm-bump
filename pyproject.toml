@@ -14,6 +14,7 @@ dependencies = [
     "tomli>=2.0.1; python_version<='3.10'",
     "pyproject-metadata>=0.6.1",
     "tomli-w>=1.0.0",
+    "pdm-pfsc>=0.10.0",
 ]
 requires-python = ">=3.9"
 
