@@ -18,18 +18,13 @@ from collections.abc import Generator
 from dataclasses import dataclass, field
 from typing import Any, Callable, Protocol, cast
 
+from pdm_pfsc.hook import HookGenerator, HookInfo
 from pdm_pfsc.logging import logger
 
 from ..core.config import PdmBumpConfig
 from ..core.version import Pep440VersionFormatter, Version
 from ..vcs.core import HunkSource, VcsProvider
-from .hook import (
-    CommitChanges,
-    HookExecutor,
-    HookGenerator,
-    HookInfo,
-    TagChanges,
-)
+from .hook import CommitChanges, HookExecutor, TagChanges
 
 _formatter = Pep440VersionFormatter()
 
@@ -433,7 +428,7 @@ class ActionRegistry:
             for hook_info in hook_generator.generate_hook_infos():
                 executor.register(hook_info.create_hook())
 
-        executor.run(command, context.version, args, dry_run=dry_run)
+        executor.run((command, context.version), args, dry_run=dry_run)
 
 
 actions = ActionRegistry()
