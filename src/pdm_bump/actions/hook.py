@@ -11,14 +11,13 @@
 #
 """"""
 
-from abc import ABC, abstractmethod
 from argparse import ArgumentParser, Namespace
-from collections.abc import Generator
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import ClassVar, Protocol, runtime_checkable
+from typing import ClassVar, Protocol
 
 from pdm_pfsc.config import MissingValue
+from pdm_pfsc.hook import HookBase, HookExecutorBase
 from pdm_pfsc.logging import logger, traced_function
 
 from ..core.version import Pep440VersionFormatter, Version
@@ -90,112 +89,7 @@ class PostHookContext:
         return Pep440VersionFormatter().format(self.previous_version)
 
 
-class Hook(ABC):
-    """"""
-
-    @abstractmethod
-    @traced_function
-    def pre_action_hook(
-        self, context: PreHookContext, args: Namespace
-    ) -> None:
-        """
-
-        Parameters
-        ----------
-            context :
-
-            args :
-
-
-        Returns
-        -------
-
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
-    @traced_function
-    def post_action_hook(
-        self, context: PostHookContext, args: Namespace
-    ) -> None:
-        """
-
-        Parameters
-        ----------
-            context :
-
-            args :
-
-        Returns
-        -------
-
-        """
-        raise NotImplementedError()
-
-    @classmethod
-    @traced_function
-    # Justification: Protocol definition
-    # pylint: disable=W0613
-    def configure(cls, parser: ArgumentParser) -> None:
-        """
-
-        Parameters
-        ----------
-            parser:
-
-        Returns
-        -------
-
-        """
-        return  # NOSONAR
-
-
-@dataclass(frozen=True)
-class HookInfo:
-    """"""
-
-    hook_type: type[Hook] = field()
-
-    @traced_function
-    def update_parser(self, parser: ArgumentParser) -> None:
-        """
-
-        Parameters:
-        -----------
-            parser: ArgumentParser :
-
-        Returns:
-        --------
-        """
-        self.hook_type.configure(parser)
-
-    @traced_function
-    def create_hook(self) -> Hook:
-        """
-
-        Returns:
-        --------
-        """
-        return self.hook_type()
-
-
-@runtime_checkable
-class HookGenerator(Protocol):  # pylint: disable=R0903
-    # Justification: Just a protocol
-    """"""
-
-    @classmethod
-    def generate_hook_infos(cls) -> Generator[HookInfo, None, None]:
-        """
-
-        Returns:
-        --------
-
-        """
-        raise NotImplementedError()
-
-
-class HookExecutor:
+class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
     """"""
 
     def __init__(
@@ -214,13 +108,12 @@ class HookExecutor:
         """
         self.__hunk_source = hunk_source
         self.__vcs_provider = vcs_provider
-        self.__hooks: list[Hook] = []
+        super().__init__()
 
     @traced_function
     def run(
         self,
-        executor: _Executable,
-        version: Version,
+        context: tuple[_Executable, Version],
         args: Namespace,
         dry_run: bool = False,
     ) -> None:
@@ -228,9 +121,7 @@ class HookExecutor:
 
         Parameters:
         -----------
-            executor: _Executable :
-            version: Version :
-            old_version: Version :
+            context: tuple[_Executable, Version] :
             args: Namespace :
             dry_run: bool :
 
@@ -238,6 +129,8 @@ class HookExecutor:
         --------
 
         """
+        (executor, version) = context
+
         pre_call_ctx: PreHookContext = PreHookContext(
             self.__vcs_provider, version
         )
@@ -257,22 +150,8 @@ class HookExecutor:
         for hook in self.__hooks:
             hook.post_action_hook(post_call_ctx, args)
 
-    @traced_function
-    def register(self, hook: Hook) -> None:
-        """
 
-        Parameters:
-        -----------
-            hook: Hook :
-
-        Returns:
-        --------
-
-        """
-        self.__hooks.append(hook)
-
-
-class CommitChanges(Hook):
+class CommitChanges(HookBase):
     """"""
 
     default_commit_message: ClassVar[str] = (
@@ -367,7 +246,7 @@ class CommitChanges(Hook):
         )
 
 
-class TagChanges(Hook):
+class TagChanges(HookBase):
     """"""
 
     do_tag: ClassVar[bool] = False
