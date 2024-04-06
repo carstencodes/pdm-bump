@@ -24,9 +24,9 @@
     "pruneStaleBranches": true,
     "rebaseWhen": "behind-base-branch",
     "schedule": [
-        "0 18 * * MON",
-        "0 18 * * WED",
-        "0 18 * * FRI"
+        "0 18 * * 1",
+        "0 18 * * 3",
+        "0 18 * * 5"
     ],
     "timezone": "Etc/UTC",
     "updateLockFiles": true,
