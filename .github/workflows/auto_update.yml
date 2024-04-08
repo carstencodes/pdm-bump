@@ -95,7 +95,7 @@ jobs:
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
       - name: Commit and create Pull request
         id: create-pr
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
