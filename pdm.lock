@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:7247d99966b18a271392c972968512bece60a7a1d4754ef20608a0cea9c85613"
+content_hash = "sha256:7234e3ec4419ee03cb4e479f6ae7b0268733d28e1631d35f244711f827314c69"
 
 [[package]]
 name = "annotated-types"
@@ -273,6 +273,16 @@ files = [
 ]
 
 [[package]]
+name = "classify-imports"
+version = "4.2.0"
+requires_python = ">=3.7"
+summary = "Utilities for refactoring imports in python-like syntax."
+files = [
+    {file = "classify_imports-4.2.0-py2.py3-none-any.whl", hash = "sha256:dbbc264b70a470ed8c6c95976a11dfb8b7f63df44ed1af87328bbed2663f5161"},
+    {file = "classify_imports-4.2.0.tar.gz", hash = "sha256:7abfb7ea92149b29d046bd34573d247ba6e68cc28100c801eba4af17964fc40e"},
+]
+
+[[package]]
 name = "click"
 version = "8.1.3"
 requires_python = ">=3.7"
@@ -527,6 +537,20 @@ dependencies = [
 files = [
     {file = "flake8-7.1.0-py2.py3-none-any.whl", hash = "sha256:2e416edcc62471a64cea09353f4e7bdba32aeb079b6e360554c659a122b1bc6a"},
     {file = "flake8-7.1.0.tar.gz", hash = "sha256:48a07b626b55236e0fb4784ee69a465fbf59d79eec1f5b4785c3d3bc57d17aa5"},
+]
+
+[[package]]
+name = "flake8-type-checking"
+version = "2.9.1"
+requires_python = ">=3.8"
+summary = "A flake8 plugin for managing type-checking imports & forward references"
+dependencies = [
+    "classify-imports",
+    "flake8",
+]
+files = [
+    {file = "flake8_type_checking-2.9.1-py3-none-any.whl", hash = "sha256:9f9be261a2b1f2bbd25e6f14acbcd92d060ec59062af5724ebaa909c8bea0d7b"},
+    {file = "flake8_type_checking-2.9.1.tar.gz", hash = "sha256:1a14f300c8e32183cef95798b86a650dc38463664ea10b0bf0884115b47d4cfe"},
 ]
 
 [[package]]
