@@ -13,12 +13,14 @@
 
 from difflib import unified_diff
 from pathlib import Path
-from typing import Protocol, Union, cast, runtime_checkable
+from typing import TYPE_CHECKING, Protocol, Union, cast, runtime_checkable
 
 from pdm_pfsc.logging import logger
 
-from .core.config import Config
 from .core.version import Pep440VersionFormatter, Version
+
+if TYPE_CHECKING:
+    from .core.config import Config
 
 
 # Justification: Minimal protocol
@@ -75,8 +77,8 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
 
     def __init__(
         self,
-        _: Union[_ProjectWriterHolder, _ProjectWriterClassic],
-        config: Config,
+        _: "Union[_ProjectWriterHolder, _ProjectWriterClassic]",
+        config: "Config",
     ) -> None:
         self.__config = config
         self.__original_file_content = self.__load_config_content()
@@ -87,26 +89,28 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
         return self.__config.meta_data.version is not None
 
     @property
-    def source_file(self) -> Path:
+    def source_file(self) -> "Path":
         """"""
         return self.__config.pyproject_file
 
     @property
-    def current_version(self) -> Version:
+    def current_version(self) -> "Version":
         """"""
-        version: str = cast(str, self.__config.meta_data.version)
+        version: str = cast("str", self.__config.meta_data.version)
         return Version.from_string(version)
 
     @current_version.setter
-    def current_version(self, ver: Version) -> None:
-        formatter: Pep440VersionFormatter = Pep440VersionFormatter()
+    def current_version(self, ver: "Version") -> None:
+        formatter: "Pep440VersionFormatter" = Pep440VersionFormatter()
         version: str = formatter.format(ver)
         logger.debug("Setting new version %s", version)
         self.__config.meta_data.version = version
 
-    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+    def get_source_file_change_hunks(
+        self, repository_root: "Path"
+    ) -> list[str]:
         """"""
-        relative_path: Path = self.source_file.relative_to(repository_root)
+        relative_path: "Path" = self.source_file.relative_to(repository_root)
         return list(
             unified_diff(
                 self.__original_file_content,
@@ -117,5 +121,5 @@ class StaticPep621VersionSource:  # pylint: disable=R0903
             )
         )
 
-    def __load_config_content(self) -> list[str]:
+    def __load_config_content(self) -> "list[str]":
         return self.source_file.read_text().splitlines()

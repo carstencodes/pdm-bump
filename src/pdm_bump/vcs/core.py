@@ -13,9 +13,9 @@
 
 
 from abc import ABC, abstractmethod
-from collections.abc import Iterator
 from pathlib import Path
 from typing import (
+    TYPE_CHECKING,
     AnyStr,
     Callable,
     Final,
@@ -31,6 +31,9 @@ from pdm_pfsc.logging import traced_function
 from ..core.version import Pep440VersionFormatter, Version
 from .history import History
 
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+
 _Pathlike = Union[Path, AnyStr]
 
 
@@ -40,11 +43,13 @@ class HunkSource(Protocol):  # pylint: disable=R0903
     """"""
 
     @property
-    def source_file(self) -> Path:
+    def source_file(self) -> "Path":
         """"""
         raise NotImplementedError()
 
-    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+    def get_source_file_change_hunks(
+        self, repository_root: "Path"
+    ) -> list[str]:
         """"""
         raise NotImplementedError()
 
@@ -53,7 +58,7 @@ class _PathLikeConverter(ABC):
     """"""
 
     @staticmethod
-    def _pathlike_to_path(path: _Pathlike) -> Path:
+    def _pathlike_to_path(path: _Pathlike) -> "Path":
         """
 
         Parameters
@@ -66,11 +71,11 @@ class _PathLikeConverter(ABC):
 
         """
         if isinstance(path, Path):
-            return cast(Path, path)
+            return cast("Path", path)
         if isinstance(path, str):
             return Path(path)
         if isinstance(path, bytes):
-            return Path(cast(bytes, path).decode("utf-8"))
+            return Path(cast("bytes", path).decode("utf-8"))
 
         raise ValueError(
             f"'{path}' must be a valid path, string or bytes instance"
@@ -80,14 +85,14 @@ class _PathLikeConverter(ABC):
 class VcsFileSystemIdentifier(NamedTuple):
     """"""
 
-    file_name: Optional[str]
-    dir_name: Optional[str]
+    file_name: "Optional[str]"
+    dir_name: "Optional[str]"
 
 
 class VcsProvider(_PathLikeConverter, ABC):
     """"""
 
-    def __init__(self, path: _Pathlike) -> None:
+    def __init__(self, path: "_Pathlike") -> None:
         self.__path = _PathLikeConverter._pathlike_to_path(path)
 
     @property
@@ -96,7 +101,7 @@ class VcsProvider(_PathLikeConverter, ABC):
         return False
 
     @property
-    def current_path(self) -> Path:
+    def current_path(self) -> "Path":
         """"""
         return self.__path
 
@@ -126,7 +131,7 @@ class VcsProvider(_PathLikeConverter, ABC):
 
     @traced_function
     def create_tag_from_version(
-        self, version: Version, prepend_letter_v: bool = True
+        self, version: "Version", prepend_letter_v: bool = True
     ) -> None:
         """
 
@@ -162,7 +167,7 @@ class VcsProvider(_PathLikeConverter, ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_most_recent_tag(self) -> Optional[Version]:
+    def get_most_recent_tag(self) -> "Optional[Version]":
         """"""
         raise NotImplementedError()
 
@@ -177,12 +182,12 @@ class VcsProvider(_PathLikeConverter, ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_history(self, since_last_tag: bool = True) -> History:
+    def get_history(self, since_last_tag: bool = True) -> "History":
         """"""
         raise NotImplementedError()
 
     @abstractmethod
-    def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
+    def check_in_deltas(self, message: str, *hunks: "HunkSource") -> None:
         """"""
         raise NotImplementedError()
 
@@ -190,11 +195,11 @@ class VcsProvider(_PathLikeConverter, ABC):
 class VcsProviderAggregator:
     """"""
 
-    def __init__(self, vcs_provider: VcsProvider, **kwargs) -> None:
-        self.__vcs_provider: VcsProvider = vcs_provider
+    def __init__(self, vcs_provider: "VcsProvider", **kwargs) -> None:
+        self.__vcs_provider: "VcsProvider" = vcs_provider
 
     @property
-    def vcs_provider(self) -> VcsProvider:
+    def vcs_provider(self) -> "VcsProvider":
         """"""
         return self.__vcs_provider
 
@@ -203,7 +208,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
     """"""
 
     @traced_function
-    def force_create_provider(self, path: Path) -> VcsProvider:
+    def force_create_provider(self, path: "Path") -> "VcsProvider":
         """
 
         Parameters
@@ -218,7 +223,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         return self._create_provider(path)
 
     @abstractmethod
-    def _create_provider(self, path: Path) -> VcsProvider:
+    def _create_provider(self, path: "Path") -> "VcsProvider":
         """
 
         Parameters
@@ -234,12 +239,14 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
 
     @property
     @abstractmethod
-    def vcs_fs_root(self) -> Iterator[VcsFileSystemIdentifier]:
+    def vcs_fs_root(self) -> "Iterator[VcsFileSystemIdentifier]":
         """"""
         raise NotImplementedError()
 
     @traced_function
-    def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
+    def find_repository_root(
+        self, path: "_Pathlike"
+    ) -> "Optional[VcsProvider]":
         """
 
         Parameters
@@ -251,13 +258,13 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         -------
 
         """
-        real_path: Path = _PathLikeConverter._pathlike_to_path(path)
+        real_path: "Path" = _PathLikeConverter._pathlike_to_path(path)
         return self.find_repository_root_from_path(real_path)
 
     @traced_function
     def find_repository_root_from_path(
-        self, path: Path
-    ) -> Optional[VcsProvider]:
+        self, path: "Path"
+    ) -> "Optional[VcsProvider]":
         """
 
         Parameters
@@ -272,7 +279,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         if not path.is_dir():
             raise ValueError(f"{path} must refer to a directory.")
 
-        cur_path: Path = path
+        cur_path: "Path" = path
         while len(cur_path.parts) > 1:  # First part refers to root level
             if self._is_valid_root(cur_path):
                 return self._create_provider(cur_path)
@@ -281,7 +288,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         return None
 
     @traced_function
-    def _is_valid_fs_root_file(self, path: Path) -> bool:
+    def _is_valid_fs_root_file(self, path: "Path") -> bool:
         """
 
         Parameters
@@ -296,7 +303,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         return path is not None and path.exists() and path.is_file()
 
     @traced_function
-    def _is_valid_fs_root_dir(self, path: Path) -> bool:
+    def _is_valid_fs_root_dir(self, path: "Path") -> bool:
         """
 
         Parameters
@@ -311,7 +318,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         return path is not None and path.exists() and path.is_dir()
 
     @traced_function
-    def _directory_exists(self, path: Path, directory_name: str) -> bool:
+    def _directory_exists(self, path: "Path", directory_name: str) -> bool:
         """
 
         Parameters
@@ -329,7 +336,7 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         return self._is_valid_fs_root_dir(dir_path)
 
     @traced_function
-    def _file_exists(self, path: Path, file_name: str) -> bool:
+    def _file_exists(self, path: "Path", file_name: str) -> bool:
         """
 
         Parameters
@@ -343,11 +350,11 @@ class VcsProviderFactory(_PathLikeConverter, ABC):
         -------
 
         """
-        file_path: Path = path / file_name
+        file_path: "Path" = path / file_name
         return self._is_valid_fs_root_file(file_path)
 
     @traced_function
-    def _is_valid_root(self, path: Path) -> bool:
+    def _is_valid_root(self, path: "Path") -> bool:
         """
 
         Parameters
@@ -382,7 +389,9 @@ class VcsProviderRegistry(
     """"""
 
     @traced_function
-    def find_repository_root(self, path: _Pathlike) -> Optional[VcsProvider]:
+    def find_repository_root(
+        self, path: "_Pathlike"
+    ) -> "Optional[VcsProvider]":
         """
 
         Parameters
@@ -399,8 +408,8 @@ class VcsProviderRegistry(
 
     @traced_function
     def find_repository_root_by_path(
-        self, path: Path
-    ) -> Optional[VcsProvider]:
+        self, path: "Path"
+    ) -> "Optional[VcsProvider]":
         """
 
         Parameters
@@ -413,8 +422,8 @@ class VcsProviderRegistry(
 
         """
         for _, value in self.items():
-            factory: VcsProviderFactory = value()
-            result: Optional[VcsProvider] = (
+            factory: "VcsProviderFactory" = value()
+            result: "Optional[VcsProvider]" = (
                 factory.find_repository_root_from_path(path)
             )
             if result is not None:
@@ -423,7 +432,7 @@ class VcsProviderRegistry(
         return None
 
     @traced_function
-    def register(self, name: str) -> Callable:
+    def register(self, name: str) -> "Callable":
         """
 
         Parameters
@@ -436,7 +445,7 @@ class VcsProviderRegistry(
 
         """
 
-        def decorator(clazz: type[VcsProvider]):
+        def decorator(clazz: "type[VcsProvider]"):
             """
 
             Parameters
@@ -460,13 +469,13 @@ class VcsProviderRegistry(
 
     def __missing__(
         self, key: str
-    ) -> Optional[Callable[..., VcsProviderFactory]]:
+    ) -> "Optional[Callable[..., VcsProviderFactory]]":
         return None
 
 
-vcs_providers: Final[VcsProviderRegistry] = VcsProviderRegistry()
+vcs_providers: "Final[VcsProviderRegistry]" = VcsProviderRegistry()
 
-vcs_provider: Final[Callable[[str], Callable]] = vcs_providers.register
+vcs_provider: "Final[Callable[[str], Callable]]" = vcs_providers.register
 
 
 class DefaultVcsProvider(VcsProvider):
@@ -483,7 +492,7 @@ class DefaultVcsProvider(VcsProvider):
         return True
 
     @traced_function
-    def check_in_items(self, message: str, *files: tuple[Path, ...]) -> None:
+    def check_in_items(self, message: str, *files: "tuple[Path, ...]") -> None:
         """
 
         Parameters
@@ -517,7 +526,7 @@ class DefaultVcsProvider(VcsProvider):
         pass
 
     @traced_function
-    def get_most_recent_tag(self) -> Optional[Version]:
+    def get_most_recent_tag(self) -> "Optional[Version]":
         """"""
         # Cannot be provided
         return None
@@ -535,12 +544,12 @@ class DefaultVcsProvider(VcsProvider):
         return 0
 
     @traced_function
-    def get_history(self, since_last_tag: bool = True) -> History:
+    def get_history(self, since_last_tag: bool = True) -> "History":
         """"""
         return History([])
 
     @traced_function
-    def check_in_deltas(self, message: str, *hunks: HunkSource) -> None:
+    def check_in_deltas(self, message: str, *hunks: "HunkSource") -> None:
         """"""
         # Must not be provided
         pass

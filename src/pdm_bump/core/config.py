@@ -10,14 +10,10 @@
 # Refer to LICENSE for more information
 #
 """"""
-import argparse
-from collections.abc import Iterable, Mapping
 from enum import Enum
 from functools import cached_property
-from pathlib import Path
-from typing import Any, Final, Optional
+from typing import TYPE_CHECKING, Any, Final, Optional
 
-from pdm_pfsc.abstractions import ConfigHolder
 from pdm_pfsc.config import (
     ConfigAccessor,
     ConfigNamespace,
@@ -25,6 +21,13 @@ from pdm_pfsc.config import (
     IsMissing,
 )
 from pdm_pfsc.logging import traced_function
+
+if TYPE_CHECKING:
+    import argparse
+    from collections.abc import Iterable, Mapping
+    from pathlib import Path
+
+    from pdm_pfsc.abstractions import ConfigHolder
 
 
 class _StringEnum(str, Enum):
@@ -37,36 +40,36 @@ class _StringEnum(str, Enum):
 class _ConfigKeys(_StringEnum):
     """"""
 
-    VERSION: Final[str] = "version"
-    VERSION_SOURCE: Final[str] = "source"
-    VERSION_SOURCE_FILE_PATH: Final[str] = "path"
-    BUILD_BACKEND: Final[str] = "build-backend"
-    VCS_PROVIDER: Final[str] = "provider"
-    PROJECT_METADATA: Final[str] = "project"
+    VERSION: "Final[str]" = "version"
+    VERSION_SOURCE: "Final[str]" = "source"
+    VERSION_SOURCE_FILE_PATH: "Final[str]" = "path"
+    BUILD_BACKEND: "Final[str]" = "build-backend"
+    VCS_PROVIDER: "Final[str]" = "provider"
+    PROJECT_METADATA: "Final[str]" = "project"
 
 
-VERSION_CONFIG_KEY_NAME: Final[str] = _ConfigKeys.VERSION
+VERSION_CONFIG_KEY_NAME: "Final[str]" = _ConfigKeys.VERSION
 
 
 class _ConfigValues(_StringEnum):
     """"""
 
-    VERSION_SOURCE_FILE: Final[str] = "file"
-    VERSION_SOURCE_SCM: Final[str] = "scm"
-    DEPRECATED_BUILD_BACKEND_PDM_PEP517_API: Final[str] = "pdm.pep517.api"
-    BUILD_BACKEND_PDM_BACKEND: Final[str] = "pdm.backend"
+    VERSION_SOURCE_FILE: "Final[str]" = "file"
+    VERSION_SOURCE_SCM: "Final[str]" = "scm"
+    DEPRECATED_BUILD_BACKEND_PDM_PEP517_API: "Final[str]" = "pdm.pep517.api"
+    BUILD_BACKEND_PDM_BACKEND: "Final[str]" = "pdm.backend"
 
 
 class _ConfigSections(_StringEnum):
     """"""
 
-    PDM_BUMP: Final[str] = "pdm_bump"
-    PDM_BUMP_VCS: Final[str] = "vcs"
+    PDM_BUMP: "Final[str]" = "pdm_bump"
+    PDM_BUMP_VCS: "Final[str]" = "vcs"
 
 
 class _PdmBumpVcsConfig(ConfigNamespace):
     def __init__(
-        self, accessor: ConfigAccessor, pdm_bump: "PdmBumpConfig"
+        self, accessor: "ConfigAccessor", pdm_bump: "PdmBumpConfig"
     ) -> None:
         super().__init__(_ConfigSections.PDM_BUMP_VCS, accessor, pdm_bump)
 
@@ -79,12 +82,12 @@ class _PdmBumpVcsConfig(ConfigNamespace):
 class PdmBumpConfig(ConfigNamespace):
     """"""
 
-    def __init__(self, accessor: ConfigAccessor) -> None:
+    def __init__(self, accessor: "ConfigAccessor") -> None:
         super().__init__(_ConfigSections.PDM_BUMP, accessor, None)
         self.__vcs = _PdmBumpVcsConfig(accessor, self)
 
     @property
-    def vcs(self) -> _PdmBumpVcsConfig:
+    def vcs(self) -> "_PdmBumpVcsConfig":
         """"""
         return self.__vcs
 
@@ -114,8 +117,8 @@ class PdmBumpConfig(ConfigNamespace):
         return self._get_value("tag_add_prefix") or True
 
     def add_values_missing_in_cli(
-        self, args: argparse.Namespace
-    ) -> argparse.Namespace:
+        self, args: "argparse.Namespace"
+    ) -> "argparse.Namespace":
         """"""
 
         args = PdmBumpConfig.__update_args(args, "commit", self.perform_commit)
@@ -132,8 +135,8 @@ class PdmBumpConfig(ConfigNamespace):
 
     @staticmethod
     def __update_args(
-        ns: argparse.Namespace, key: str, value: Any
-    ) -> argparse.Namespace:
+        ns: "argparse.Namespace", key: str, value: Any
+    ) -> "argparse.Namespace":
         if key not in ns:
             setattr(ns, key, value)
         else:
@@ -152,7 +155,7 @@ class PdmBumpConfig(ConfigNamespace):
 class _PdmBackendConfig:
     """"""
 
-    def __init__(self, accessor: ConfigAccessor) -> None:
+    def __init__(self, accessor: "ConfigAccessor") -> None:
         """"""
         self.__mapping = accessor.get_pyproject_config(
             ConfigSection.TOOL_CONFIG
@@ -182,7 +185,7 @@ class _PdmBackendConfig:
 class _BuildSystemConfig:
     """"""
 
-    def __init__(self, accessor: ConfigAccessor) -> None:
+    def __init__(self, accessor: "ConfigAccessor") -> None:
         """"""
         self.__accessor = accessor
         self.__mapping = accessor.get_pyproject_config(
@@ -216,12 +219,12 @@ class _BuildSystemConfig:
         return self.build_backend == _ConfigValues.BUILD_BACKEND_PDM_BACKEND
 
     @property
-    def pdm_backend(self) -> _PdmBackendConfig:
+    def pdm_backend(self) -> "_PdmBackendConfig":
         """"""
         return self.__backend
 
     @property
-    def version_source_file(self) -> Optional[str]:
+    def version_source_file(self) -> "Optional[str]":
         """"""
         return self.__tool_mapping.get_config_value(
             _ConfigKeys.VERSION, _ConfigKeys.VERSION_SOURCE_FILE_PATH
@@ -231,13 +234,13 @@ class _BuildSystemConfig:
 class _MetaDataConfig:
     """"""
 
-    def __init__(self, accessor: ConfigAccessor) -> None:
+    def __init__(self, accessor: "ConfigAccessor") -> None:
         """"""
         self.__accessor = accessor
         self.__build_system = _BuildSystemConfig(accessor)
 
     @property
-    def version(self) -> Optional[str]:
+    def version(self) -> "Optional[str]":
         """"""
         return self.__accessor.get_pyproject_metadata(_ConfigKeys.VERSION)
 
@@ -247,7 +250,7 @@ class _MetaDataConfig:
         self.__accessor.set_pyproject_metadata(value, _ConfigKeys.VERSION)
 
     @property
-    def build_system(self) -> _BuildSystemConfig:
+    def build_system(self) -> "_BuildSystemConfig":
         """"""
         return self.__build_system
 
@@ -259,18 +262,18 @@ class _MetaDataConfig:
 
 class _PdmBumpConfigAccessor(ConfigAccessor):
     @property
-    def plugin_config_name(self) -> Iterable[str]:
+    def plugin_config_name(self) -> "Iterable[str]":
         return {"bump-plugin"}
 
 
 class _EmptyConfig:
     @property
-    def root(self) -> Path:
+    def root(self) -> "Path":
         """"""
         raise NotImplementedError()
 
     @root.setter
-    def root(self, value: Path) -> None:
+    def root(self, value: "Path") -> None:
         """"""
         raise NotImplementedError()
 
@@ -289,7 +292,7 @@ class _EmptyConfig:
         raise NotImplementedError()
 
     @property
-    def config(self) -> Mapping[str, Any]:
+    def config(self) -> "Mapping[str, Any]":
         """"""
         return {}
 
@@ -297,7 +300,7 @@ class _EmptyConfig:
 # Justification: Just a protocol implementation
 class _DummyConfig:  # pylint: disable=R0903
     @property
-    def pyproject_file(self) -> Path:
+    def pyproject_file(self) -> "Path":
         """"""
         raise NotImplementedError()
 
@@ -305,37 +308,37 @@ class _DummyConfig:  # pylint: disable=R0903
 class Config:
     """"""
 
-    def __init__(self, project: ConfigHolder) -> None:
-        self.__project: ConfigHolder = project
-        accessor: ConfigAccessor = _PdmBumpConfigAccessor(self, project)
+    def __init__(self, project: "ConfigHolder") -> None:
+        self.__project: "ConfigHolder" = project
+        accessor: "ConfigAccessor" = _PdmBumpConfigAccessor(self, project)
         self.__pdm_bump = PdmBumpConfig(accessor)
         self.__meta_data = _MetaDataConfig(accessor)
 
     @staticmethod
     def get_plugin_config_key_prefix() -> str:
         """"""
-        config: ConfigHolder = _EmptyConfig()
-        accessor: ConfigAccessor = _PdmBumpConfigAccessor(
+        config: "ConfigHolder" = _EmptyConfig()
+        accessor: "ConfigAccessor" = _PdmBumpConfigAccessor(
             _DummyConfig(), config
         )
-        section: ConfigSection = ConfigSection.PLUGIN_CONFIG
-        paths: Iterable[str]
+        section: "ConfigSection" = ConfigSection.PLUGIN_CONFIG
+        paths: "Iterable[str]"
         paths = accessor.get_config_section_path(section)
 
         return ".".join(paths)
 
     @property
-    def pdm_bump(self) -> PdmBumpConfig:
+    def pdm_bump(self) -> "PdmBumpConfig":
         """"""
         return self.__pdm_bump
 
     @property
-    def meta_data(self) -> _MetaDataConfig:
+    def meta_data(self) -> "_MetaDataConfig":
         """"""
         return self.__meta_data
 
     @cached_property
     @traced_function
-    def pyproject_file(self) -> Path:
+    def pyproject_file(self) -> "Path":
         """"""
         return self.__project.root / self.__project.PYPROJECT_FILENAME

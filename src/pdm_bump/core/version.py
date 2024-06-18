@@ -42,22 +42,22 @@ NonNegativeInteger = Annotated[int, NonNegative]
 class Version:
     """"""
 
-    epoch: NonNegativeInteger = field(
+    epoch: "NonNegativeInteger" = field(
         default=0, repr=True, hash=True, compare=True
     )
-    release_tuple: tuple[NonNegativeInteger, ...] = field(default=(1, 0, 0))
+    release_tuple: "tuple[NonNegativeInteger, ...]" = field(default=(1, 0, 0))
     preview: Optional[
         tuple[
             Literal["a", "b", "c", "alpha", "beta", "rc"], NonNegativeInteger
         ]
     ] = field(default=None, repr=True, hash=True, compare=True)
-    post: Optional[tuple[Literal["post"], NonNegativeInteger]] = field(
+    post: 'Optional[tuple[Literal["post"], NonNegativeInteger]]' = field(
         default=None, repr=True, hash=True, compare=True
     )
-    dev: Optional[tuple[Literal["dev"], NonNegativeInteger]] = field(
+    dev: 'Optional[tuple[Literal["dev"], NonNegativeInteger]]' = field(
         default=None, repr=True, hash=True, compare=True
     )
-    local: Optional[str] = field(
+    local: "Optional[str]" = field(
         default=None, repr=True, hash=True, compare=True
     )
 
@@ -69,24 +69,24 @@ class Version:
                 )
 
     @property
-    def major(self) -> NonNegativeInteger:
+    def major(self) -> "NonNegativeInteger":
         """"""
         return self.release_tuple[0] if len(self.release_tuple) >= 1 else 0
 
     @property
-    def minor(self) -> NonNegativeInteger:
+    def minor(self) -> "NonNegativeInteger":
         """"""
         return self.release_tuple[1] if len(self.release_tuple) >= 2 else 0
 
     @property
-    def micro(self) -> NonNegativeInteger:
+    def micro(self) -> "NonNegativeInteger":
         """"""
         return self.release_tuple[2] if len(self.release_tuple) >= 3 else 0
 
     @property
     def release(
         self,
-    ) -> tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]:
+    ) -> "tuple[NonNegativeInteger, NonNegativeInteger, NonNegativeInteger]":
         """"""
         return (
             self.major,
@@ -144,14 +144,14 @@ class Version:
 
     def __compare_preview(self, valid_parts: tuple[str, ...]) -> bool:
         if self.preview is not None:
-            pre: tuple[str, int] = cast(tuple[str, int], self.preview)
+            pre: tuple[str, int] = cast("tuple[str, int]", self.preview)
             return pre[0] in valid_parts
         return False
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Version):
             raise ValueError(f"{other} must be an instance of Version")
-        other_version: Version = cast(Version, other)
+        other_version: Version = cast("Version", other)
         return (
             self.epoch == other.epoch
             and self.release == other_version.release
@@ -164,7 +164,7 @@ class Version:
     def __lt__(self, other: Any) -> bool:
         if not isinstance(other, Version):
             raise ValueError(f"{other} must be an instance of Version")
-        other_version: Version = cast(Version, other)
+        other_version: Version = cast("Version", other)
         my_data = (
             self.epoch,
             self.release,
@@ -205,17 +205,17 @@ class Version:
 
         """
         try:
-            _version: BaseVersion = BaseVersion(version)
+            _version: "BaseVersion" = BaseVersion(version)
 
             return Version(
                 _version.epoch,
                 _version.release,
                 cast(
-                    Optional[
-                        tuple[
-                            Literal["a", "b", "c", "alpha", "beta", "rc"], int
-                        ]
-                    ],
+                    "Optional["
+                    "tuple["
+                    "Literal['a', 'b', 'c', 'alpha', 'beta', 'rc'], int"
+                    "]"
+                    "]",
                     _version.pre,
                 ),
                 ("post", _version.post) if _version.post is not None else None,
@@ -253,7 +253,7 @@ class Pep440VersionFormatter:  # pylint: disable=R0903
     """"""
 
     @traced_function
-    def format(self, version: Version) -> str:
+    def format(self, version: "Version") -> str:
         """
 
         Parameters

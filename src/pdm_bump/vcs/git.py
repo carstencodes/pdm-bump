@@ -13,10 +13,13 @@
 
 
 from abc import abstractmethod
-from collections.abc import Iterator
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .core import VcsFileSystemIdentifier, VcsProvider, VcsProviderFactory
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from pathlib import Path
 
 
 class GitCommonVcsProviderFactory(VcsProviderFactory):
@@ -30,7 +33,7 @@ class GitCommonVcsProviderFactory(VcsProviderFactory):
     )
 
     @abstractmethod
-    def _create_provider(self, path: Path) -> VcsProvider:
+    def _create_provider(self, path: "Path") -> "VcsProvider":
         """
 
         Parameters
@@ -45,7 +48,7 @@ class GitCommonVcsProviderFactory(VcsProviderFactory):
         raise NotImplementedError()
 
     @property
-    def vcs_fs_root(self) -> Iterator[VcsFileSystemIdentifier]:
+    def vcs_fs_root(self) -> "Iterator[VcsFileSystemIdentifier]":
         """"""
         yield self.__git_dir_provider
         yield self.__git_wt_file_provider

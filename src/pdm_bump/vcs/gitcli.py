@@ -43,7 +43,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             raise FileNotFoundError(
                 f"No executable '{self.__GIT_EXECUTABLE_NAME}' found in PATH"
             )
-        return cast(Path, git_executable_path)
+        return cast("Path", git_executable_path)
 
     @property
     def is_available(self) -> bool:

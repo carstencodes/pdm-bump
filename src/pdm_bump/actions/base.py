@@ -13,28 +13,31 @@
 
 
 from abc import abstractmethod
-from argparse import Namespace
-from collections.abc import Generator
 from dataclasses import dataclass, field
-from typing import Any, Protocol, cast
+from typing import TYPE_CHECKING, Any, Protocol, cast
 
 from pdm_pfsc.actions import ActionBase, ActionRegistry
 from pdm_pfsc.hook import HookGenerator, HookInfo
 from pdm_pfsc.logging import logger
 
-from ..core.config import PdmBumpConfig
 from ..core.version import Pep440VersionFormatter, Version
-from ..vcs.core import HunkSource, VcsProvider
 from .hook import CommitChanges, HookExecutor, TagChanges
 
 _formatter = Pep440VersionFormatter()
+
+if TYPE_CHECKING:
+    from argparse import Namespace
+    from collections.abc import Generator
+
+    from ..core.config import PdmBumpConfig
+    from ..vcs.core import HunkSource, VcsProvider
 
 
 # Justification: Just a protocol
 class VersionPersister(Protocol):  # pylint: disable=R0903
     """"""
 
-    def save_version(self, version: Version) -> None:
+    def save_version(self, version: "Version") -> None:
         """
 
         Parameters
@@ -52,12 +55,12 @@ class VersionPersister(Protocol):  # pylint: disable=R0903
 class VersionConsumer(ActionBase[Version]):
     """"""
 
-    def __init__(self, version: Version, **kwargs) -> None:
+    def __init__(self, version: "Version", **kwargs) -> None:
         super().__init__(**kwargs)
         self.__version = version
 
     @property
-    def current_version(self) -> Version:
+    def current_version(self) -> "Version":
         """"""
         return self.__version
 
@@ -71,18 +74,18 @@ class VersionModifier(VersionConsumer):
     """"""
 
     def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
+        self, version: "Version", persister: "VersionPersister", **kwargs
     ) -> None:
         super().__init__(version, **kwargs)
         self.__persister = persister
 
     @abstractmethod
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         raise NotImplementedError()
 
     @classmethod
-    def generate_hook_infos(cls) -> Generator[HookInfo, None, None]:
+    def generate_hook_infos(cls) -> "Generator[HookInfo, None, None]":
         """
 
         Returns:
@@ -91,7 +94,7 @@ class VersionModifier(VersionConsumer):
         yield HookInfo(CommitChanges)
         yield HookInfo(TagChanges)
 
-    def _report_new_version(self, next_version: Version) -> None:
+    def _report_new_version(self, next_version: "Version") -> None:
         """
 
         Parameters
@@ -109,7 +112,7 @@ class VersionModifier(VersionConsumer):
             _formatter.format(next_version),
         )
 
-    def run(self, dry_run: bool = False) -> Version:
+    def run(self, dry_run: bool = False) -> "Version":
         """
 
         Parameters
@@ -121,7 +124,7 @@ class VersionModifier(VersionConsumer):
         -------
 
         """
-        next_version: Version = self.create_new_version()
+        next_version: "Version" = self.create_new_version()
         if next_version is self.current_version:
             return next_version
 
@@ -145,19 +148,19 @@ class VersionModifier(VersionConsumer):
 class ExecutionContext:
     """"""
 
-    version: Version = field()
-    persister: VersionPersister = field()
-    vcs_provider: VcsProvider = field()
-    hunk_source: HunkSource = field()
-    config: PdmBumpConfig = field()
+    version: "Version" = field()
+    persister: "VersionPersister" = field()
+    vcs_provider: "VcsProvider" = field()
+    hunk_source: "HunkSource" = field()
+    config: "PdmBumpConfig" = field()
 
 
 class _VersionActions(ActionRegistry[ExecutionContext]):
     def execute(  # pylint: disable=R0913
         self,
         /,
-        args: Namespace,
-        context: ExecutionContext,
+        args: "Namespace",
+        context: "ExecutionContext",
     ) -> None:
         """
 
@@ -219,7 +222,7 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
         )
         if issubclass(clazz, HookGenerator):
             hook_generator: type[HookGenerator] = cast(
-                type[HookGenerator], clazz
+                "type[HookGenerator]", clazz
             )
             for hook_info in hook_generator.generate_hook_infos():
                 executor.register(hook_info.create_hook())
