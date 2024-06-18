@@ -141,7 +141,7 @@ class RatingBasedVersionPolicy(VersionPolicy):
 
             if isinstance(current_rating, Rating):
                 current_rating = current_rating.value
-            current_rating = cast(int, current_rating)
+            current_rating = cast("int", current_rating)
             max_rating = max(max_rating, current_rating)
 
         logger.debug(
@@ -156,7 +156,7 @@ class RatingBasedVersionPolicy(VersionPolicy):
             )
             if isinstance(current_rating, Rating):
                 current_rating = current_rating.value
-            current_rating = cast(int, current_rating)
+            current_rating = cast("int", current_rating)
             max_rating = max(max_rating, current_rating)
 
         if not is_clean_repository:
@@ -166,7 +166,7 @@ class RatingBasedVersionPolicy(VersionPolicy):
             )
             if isinstance(current_rating, Rating):
                 current_rating = current_rating.value
-            current_rating = cast(int, current_rating)
+            current_rating = cast("int", current_rating)
             max_rating = max(max_rating, current_rating)
 
         logger.debug("Rating set to %i", max_rating)

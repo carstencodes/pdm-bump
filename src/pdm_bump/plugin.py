@@ -12,14 +12,12 @@
 """"""
 
 
-from argparse import ArgumentParser, Namespace
-from pathlib import Path
 from traceback import format_exc as get_traceback
-from typing import Final, Optional, Protocol, cast, final
+from typing import TYPE_CHECKING, Final, Optional, Protocol, cast, final
 
 # MyPy does not recognize this during pull requests
 from pdm.cli.commands.base import BaseCommand  # type: ignore
-from pdm.termui import UI  # type: ignore
+from pdm_pfsc.config import ConfigHolder
 from pdm_pfsc.logging import (
     logger,
     setup_logger,
@@ -28,7 +26,7 @@ from pdm_pfsc.logging import (
 )
 
 from .actions import ExecutionContext, actions
-from .core.config import Config, ConfigHolder
+from .core.config import Config
 from .core.version import Pep440VersionFormatter, Version
 from .dynamic import DynamicVersionSource
 from .source import StaticPep621VersionSource
@@ -40,18 +38,24 @@ from .vcs import (
     vcs_providers,
 )
 
+if TYPE_CHECKING:
+    from argparse import ArgumentParser, Namespace
+    from pathlib import Path
+
+    from pdm.termui import UI  # type: ignore
+
 
 # Justification: Protocol for interoperability
 class _CoreLike(Protocol):  # pylint: disable=R0903
     """"""
 
-    ui: UI
+    ui: "UI"
 
 
 class _ProjectLike(ConfigHolder, Protocol):
     """"""
 
-    root: Path
+    root: "Path"
     core: _CoreLike
     PYPROJECT_FILENAME: str
 
@@ -82,20 +86,22 @@ class _VersionSource(HunkSource, Protocol):  # pylint: disable=R0903
         raise NotImplementedError()  # pylint: disable=R0801
 
     @property
-    def source_file(self) -> Path:
+    def source_file(self) -> "Path":
         """"""
         raise NotImplementedError()  # pylint: disable=R0801
 
     @property
-    def current_version(self) -> Version:
+    def current_version(self) -> "Version":
         """"""
         raise NotImplementedError()  # pylint: disable=R0801
 
     @current_version.setter
-    def current_version(self, version: Version) -> None:
+    def current_version(self, version: "Version") -> None:
         raise NotImplementedError()  # pylint: disable=R0801
 
-    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+    def get_source_file_change_hunks(
+        self, repository_root: "Path"
+    ) -> list[str]:
         """"""
         raise NotImplementedError()  # pylint: disable=R0801
 
@@ -105,15 +111,15 @@ class BumpCommand(BaseCommand):
     """"""
 
     # Justification: Fulfill a protocol
-    name: Final[str] = "bump"  # pylint: disable=C0103
+    name: "Final[str]" = "bump"  # pylint: disable=C0103
     description: str = "Bumps the version to a next version following PEP440."
 
     def __init__(self) -> None:
         super().__init__()
-        self.__backend: Optional[_VersionSource] = None
+        self.__backend: "Optional[_VersionSource]" = None
 
     @traced_function
-    def add_arguments(self, parser: ArgumentParser) -> None:
+    def add_arguments(self, parser: "ArgumentParser") -> None:
         """
 
         Parameters
@@ -128,7 +134,7 @@ class BumpCommand(BaseCommand):
         actions.update_parser(parser)
 
     @traced_function
-    def save_version(self, version: Version) -> None:
+    def save_version(self, version: "Version") -> None:
         """
 
         Parameters
@@ -153,7 +159,7 @@ class BumpCommand(BaseCommand):
         self.__backend.current_version = version
 
     @traced_function
-    def handle(self, project: _ProjectLike, options: Namespace) -> None:
+    def handle(self, project: "_ProjectLike", options: "Namespace") -> None:
         """
 
         Parameters
@@ -172,10 +178,10 @@ class BumpCommand(BaseCommand):
         if hasattr(options, "verbose"):
             setup_logger(options.verbose)
 
-        config: Config = Config(project)
+        config: "Config" = Config(project)
         update_logger_from_project_ui(project.core.ui)
 
-        selected_backend: Optional[_VersionSource] = self._select_backend(
+        selected_backend: "Optional[_VersionSource]" = self._select_backend(
             project, config
         )
 
@@ -186,8 +192,8 @@ class BumpCommand(BaseCommand):
             logger.error("Cannot find version in %s", pyproject_file)
             return
 
-        backend: _VersionSource = cast(_VersionSource, selected_backend)
-        vcs_provider: VcsProvider = self._get_vcs_provider(project)
+        backend: "_VersionSource" = cast("_VersionSource", selected_backend)
+        vcs_provider: "VcsProvider" = self._get_vcs_provider(project)
 
         try:
             actions.execute(
@@ -206,7 +212,7 @@ class BumpCommand(BaseCommand):
             raise SystemExit(1) from exc
 
     @traced_function
-    def _get_vcs_provider(self, project: _ProjectLike) -> VcsProvider:
+    def _get_vcs_provider(self, project: "_ProjectLike") -> VcsProvider:
         """
 
         Parameters
@@ -218,10 +224,10 @@ class BumpCommand(BaseCommand):
         -------
 
         """
-        config: Config = Config(project)
+        config: "Config" = Config(project)
         value = config.pdm_bump.vcs.provider
 
-        registry: VcsProviderRegistry = vcs_providers
+        registry: "VcsProviderRegistry" = vcs_providers
 
         if value is not None:
             provider_name: str = str(value)
@@ -238,8 +244,8 @@ class BumpCommand(BaseCommand):
 
     @traced_function
     def _select_backend(
-        self, project: _ProjectLike, config: Config
-    ) -> Optional[_VersionSource]:
+        self, project: "_ProjectLike", config: "Config"
+    ) -> "Optional[_VersionSource]":
         """
 
         Parameters
@@ -253,14 +259,14 @@ class BumpCommand(BaseCommand):
         -------
 
         """
-        static_backend: _VersionSource = StaticPep621VersionSource(
+        static_backend: "_VersionSource" = StaticPep621VersionSource(
             project, config
         )
-        dynamic_backend: _VersionSource = DynamicVersionSource(
+        dynamic_backend: "_VersionSource" = DynamicVersionSource(
             project.root, config
         )
 
-        selected_backend: Optional[_VersionSource] = None
+        selected_backend: "Optional[_VersionSource]" = None
         for backend in (static_backend, dynamic_backend):
             if backend.is_enabled:
                 selected_backend = backend
@@ -269,7 +275,7 @@ class BumpCommand(BaseCommand):
         return selected_backend
 
     @traced_function
-    def _version_to_string(self, version: Version) -> str:
+    def _version_to_string(self, version: "Version") -> str:
         """
 
         Parameters

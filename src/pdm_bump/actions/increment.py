@@ -14,21 +14,22 @@
 
 import sys
 from abc import abstractmethod
-from argparse import ArgumentParser
 from dataclasses import asdict as dataclass_to_dict
-from typing import Any, Final, final
+from typing import TYPE_CHECKING, Any, Final, final
 
 from pdm_pfsc.logging import logger, traced_function
 
 from ..core.version import NonNegativeInteger, Pep440VersionFormatter, Version
 from .base import VersionModifier, VersionPersister, action
 
-if sys.version_info >= (3, 10, 0):
-    # suspicious mypy behavior
-    from typing import TypeAlias  # type: ignore
-else:
-    from typing_extensions import TypeAlias
+if TYPE_CHECKING:
+    from argparse import ArgumentParser
 
+    if sys.version_info >= (3, 10, 0):
+        # suspicious mypy behavior
+        from typing import TypeAlias  # type: ignore
+    else:
+        from typing_extensions import TypeAlias
 
 _formatter = Pep440VersionFormatter()
 
@@ -38,8 +39,8 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
 
     def __init__(
         self,
-        version: Version,
-        persister: VersionPersister,
+        version: "Version",
+        persister: "VersionPersister",
         remove_parts: bool = True,
         **kwargs,
     ) -> None:
@@ -52,13 +53,14 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
         return self.__remove_parts
 
     @abstractmethod
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         raise NotImplementedError()
 
     @staticmethod
     def _create_new_constructional_args(
-        release: tuple[NonNegativeInteger, ...], epoch: NonNegativeInteger = 0
+        release: "tuple[NonNegativeInteger, ...]",
+        epoch: "NonNegativeInteger" = 0,
     ) -> dict[str, Any]:
         """
 
@@ -83,7 +85,7 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
         }
 
     @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
+    def _update_command(cls, sub_parser: "ArgumentParser") -> None:
         """
 
         Parameters
@@ -106,7 +108,7 @@ class _NonFinalPartsRemovingVersionModifier(VersionModifier):
         VersionModifier._update_command(sub_parser)
 
 
-_NFPR: TypeAlias = _NonFinalPartsRemovingVersionModifier
+_NFPR: "TypeAlias" = _NonFinalPartsRemovingVersionModifier
 
 
 class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
@@ -114,18 +116,18 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
     @property
     @abstractmethod
-    def release_part(self) -> NonNegativeInteger:
+    def release_part(self) -> "NonNegativeInteger":
         """"""
         raise NotImplementedError()
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
-        construction_args: dict[str, Any] = dataclass_to_dict(
+        construction_args: "dict[str, Any]" = dataclass_to_dict(
             self.current_version
         )
 
-        next_release: tuple[NonNegativeInteger, ...] = (
+        next_release: "tuple[NonNegativeInteger, ...]" = (
             self._update_release_version_part(self.release_part)
         )
 
@@ -138,14 +140,14 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         else:
             construction_args["release_tuple"] = next_release
 
-        next_version: Version = Version(**construction_args)
+        next_version: "Version" = Version(**construction_args)
         self._report_new_version(next_version)
 
         return next_version
 
     def _update_release_version_part(
-        self, part_id: NonNegativeInteger
-    ) -> tuple[NonNegativeInteger, ...]:
+        self, part_id: "NonNegativeInteger"
+    ) -> "tuple[NonNegativeInteger, ...]":
         """
 
         Parameters
@@ -157,7 +159,7 @@ class _ReleaseVersionModifier(_NonFinalPartsRemovingVersionModifier):
         -------
 
         """
-        release_part: list[NonNegativeInteger] = list(
+        release_part: "list[NonNegativeInteger]" = list(
             self.current_version.release
         )
 
@@ -184,7 +186,7 @@ class ResetNonSemanticPartsModifier(VersionModifier):
     )
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         next_version: Version = Version(
             epoch=self.current_version.epoch,
@@ -205,12 +207,12 @@ class FinalizingVersionModifier(_NonFinalPartsRemovingVersionModifier):
     description: str = "Remove all pre-release parts from the version"
 
     def __init__(
-        self, version: Version, persister: VersionPersister, **kwargs
+        self, version: "Version", persister: "VersionPersister", **kwargs
     ) -> None:
         super().__init__(version, persister, **kwargs)
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         constructional_args: dict[
             str,
@@ -234,10 +236,10 @@ class MajorIncrementingVersionModifier(_ReleaseVersionModifier):
     name: str = "major"
     description: str = "Increment the major part of the version"
 
-    __MAJOR_PART: Final[NonNegativeInteger] = 0
+    __MAJOR_PART: "Final[NonNegativeInteger]" = 0
 
     @property
-    def release_part(self) -> NonNegativeInteger:
+    def release_part(self) -> "NonNegativeInteger":
         """"""
         return self.__MAJOR_PART
 
@@ -250,10 +252,10 @@ class MinorIncrementingVersionModifier(_ReleaseVersionModifier):
     name: str = "minor"
     description: str = "Increment the minor part of the version"
 
-    __MINOR_PART: Final[NonNegativeInteger] = 1
+    __MINOR_PART: "Final[NonNegativeInteger]" = 1
 
     @property
-    def release_part(self) -> NonNegativeInteger:
+    def release_part(self) -> "NonNegativeInteger":
         """"""
         return self.__MINOR_PART
 
@@ -267,7 +269,7 @@ class MicroIncrementingVersionModifier(_ReleaseVersionModifier):
     description: str = "Increment the micro (or patch) part of the version"
     aliases: tuple[str] = ("patch",)
 
-    __MICRO_PART: Final[NonNegativeInteger] = 2
+    __MICRO_PART: "Final[NonNegativeInteger]" = 2
 
     @property
     def release_part(self) -> int:
@@ -285,8 +287,8 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
 
     def __init__(
         self,
-        version: Version,
-        persister: VersionPersister,
+        version: "Version",
+        persister: "VersionPersister",
         remove_parts: bool = True,
         reset_version: bool = True,
     ):
@@ -294,7 +296,7 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         self.__reset_version = reset_version
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         constructional_args: dict[str, Any] = dataclass_to_dict(
             self.current_version
@@ -311,12 +313,12 @@ class EpochIncrementingVersionModifier(_NonFinalPartsRemovingVersionModifier):
         logger.debug("Incrementing Epoch of version")
         constructional_args["epoch"] = self.current_version.epoch + 1
 
-        next_version: Version = Version(**constructional_args)
+        next_version: "Version" = Version(**constructional_args)
         self._report_new_version(next_version)
         return next_version
 
     @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
+    def _update_command(cls, sub_parser: "ArgumentParser") -> None:
         """
 
         Parameters
@@ -348,9 +350,9 @@ class DevelopmentVersionIncrementingVersionModifier(VersionModifier):
     description: str = "Increment the local development part"
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
-        dev_version: NonNegativeInteger = 1
+        dev_version: "NonNegativeInteger" = 1
         micro_version = self.current_version.micro
         pre = None
         if self.current_version.dev is not None:
@@ -403,9 +405,9 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
     description: str = "Increment the post version part"
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
-        post_version: NonNegativeInteger = 1
+        post_version: "NonNegativeInteger" = 1
         if self.current_version.post is not None:
             _, post_version = self.current_version.post
             logger.debug("Incrementing post version part by one")
@@ -418,7 +420,7 @@ class PostVersionIncrementingVersionModifier(VersionModifier):
         if self.current_version.is_development_version:
             constructional_args["dev"] = None
 
-        next_version: Version = Version(**constructional_args)
+        next_version: "Version" = Version(**constructional_args)
         self._report_new_version(next_version)
 
         return next_version

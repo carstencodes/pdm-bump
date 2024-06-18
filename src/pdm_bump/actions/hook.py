@@ -11,24 +11,27 @@
 #
 """"""
 
-from argparse import ArgumentParser, Namespace
 from dataclasses import dataclass, field
 from functools import cached_property
-from typing import ClassVar, Protocol
+from typing import TYPE_CHECKING, ClassVar, Protocol
 
 from pdm_pfsc.config import MissingValue
 from pdm_pfsc.hook import HookBase, HookExecutorBase
 from pdm_pfsc.logging import logger, traced_function
 
 from ..core.version import Pep440VersionFormatter, Version
-from ..vcs import HunkSource, VcsProvider
+
+if TYPE_CHECKING:
+    from argparse import ArgumentParser, Namespace
+
+    from ..vcs import HunkSource, VcsProvider
 
 
 class _Executable(Protocol):  # pylint: disable=R0903
     # Justification: Just a protocol
     """"""
 
-    def run(self, dry_run: bool = False) -> Version:
+    def run(self, dry_run: bool = False) -> "Version":
         """
 
         Parameters
@@ -47,8 +50,8 @@ class _Executable(Protocol):  # pylint: disable=R0903
 class PreHookContext:
     """"""
 
-    vcs_provider: VcsProvider = field()
-    version: Version = field()
+    vcs_provider: "VcsProvider" = field()
+    version: "Version" = field()
 
     @cached_property
     def formatted_version(self) -> str:
@@ -64,10 +67,10 @@ class PreHookContext:
 class PostHookContext:
     """"""
 
-    vcs_provider: VcsProvider = field()
-    hunk_source: HunkSource = field()
-    version: Version = field()
-    previous_version: Version = field()
+    vcs_provider: "VcsProvider" = field()
+    hunk_source: "HunkSource" = field()
+    version: "Version" = field()
+    previous_version: "Version" = field()
     version_changed: bool = field()
 
     @cached_property
@@ -93,7 +96,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
     """"""
 
     def __init__(
-        self, hunk_source: HunkSource, vcs_provider: VcsProvider
+        self, hunk_source: "HunkSource", vcs_provider: "VcsProvider"
     ) -> None:
         """
 
@@ -113,8 +116,8 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
     @traced_function
     def run(
         self,
-        context: tuple[_Executable, Version],
-        args: Namespace,
+        context: "tuple[_Executable, Version]",
+        args: "Namespace",
         dry_run: bool = False,
     ) -> None:
         """
@@ -131,7 +134,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
         """
         (executor, version) = context
 
-        pre_call_ctx: PreHookContext = PreHookContext(
+        pre_call_ctx: "PreHookContext" = PreHookContext(
             self.__vcs_provider, version
         )
         for hook in self._hooks:
@@ -140,7 +143,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
         old_version = version
         version = executor.run(dry_run)
 
-        post_call_ctx: PostHookContext = PostHookContext(
+        post_call_ctx: "PostHookContext" = PostHookContext(
             self.__vcs_provider,
             self.__hunk_source,
             version,
@@ -154,16 +157,16 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
 class CommitChanges(HookBase):
     """"""
 
-    default_commit_message: ClassVar[str] = (
+    default_commit_message: "ClassVar[str]" = (
         "chore: Bump version {from} to {to}\n\n"
         "Created a commit with a new version {to}.\n"
         "Previous version was {from}."
     )
-    perform_commit: ClassVar[bool] = False
+    perform_commit: "ClassVar[bool]" = False
 
     @traced_function
     def post_action_hook(
-        self, context: PostHookContext, args: Namespace
+        self, context: "PostHookContext", args: "Namespace"
     ) -> None:
         """
 
@@ -196,7 +199,7 @@ class CommitChanges(HookBase):
 
     @traced_function
     def pre_action_hook(
-        self, context: PreHookContext, args: Namespace
+        self, context: "PreHookContext", args: "Namespace"
     ) -> None:
         """
 
@@ -213,7 +216,7 @@ class CommitChanges(HookBase):
 
     @classmethod
     @traced_function
-    def configure(cls, parser: ArgumentParser) -> None:
+    def configure(cls, parser: "ArgumentParser") -> None:
         """
 
         Parameters:
@@ -249,13 +252,13 @@ class CommitChanges(HookBase):
 class TagChanges(HookBase):
     """"""
 
-    do_tag: ClassVar[bool] = False
-    allow_dirty: ClassVar[bool] = False
-    prepend_to_tag: ClassVar[bool] = True
+    do_tag: "ClassVar[bool]" = False
+    allow_dirty: "ClassVar[bool]" = False
+    prepend_to_tag: "ClassVar[bool]" = True
 
     @traced_function
     def post_action_hook(
-        self, context: PostHookContext, args: Namespace
+        self, context: "PostHookContext", args: "Namespace"
     ) -> None:
         """
 
@@ -285,7 +288,7 @@ class TagChanges(HookBase):
 
     @traced_function
     def pre_action_hook(
-        self, context: PreHookContext, args: Namespace
+        self, context: "PreHookContext", args: "Namespace"
     ) -> None:
         """
 
@@ -310,7 +313,7 @@ class TagChanges(HookBase):
 
     @classmethod
     @traced_function
-    def configure(cls, parser: ArgumentParser) -> None:
+    def configure(cls, parser: "ArgumentParser") -> None:
         """
         Parameters:
         -----------

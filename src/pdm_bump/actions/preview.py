@@ -13,13 +13,15 @@
 
 
 from abc import abstractmethod
-from argparse import ArgumentParser
-from typing import Literal, Optional, cast, final
+from typing import TYPE_CHECKING, Literal, Optional, cast, final
 
 from pdm_pfsc.logging import logger, traced_function
 
 from ..core.version import NonNegativeInteger, Pep440VersionFormatter, Version
 from .base import VersionModifier, VersionPersister, action
+
+if TYPE_CHECKING:
+    from argparse import ArgumentParser
 
 _formatter = Pep440VersionFormatter()
 
@@ -35,7 +37,7 @@ class PreviewMismatchError(Exception):
 class _DummyPersister:  # pylint: disable=R0903
     """"""
 
-    def save_version(self, version: Version) -> None:
+    def save_version(self, version: "Version") -> None:
         """
 
         Parameters
@@ -56,8 +58,8 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
 
     def __init__(
         self,
-        version: Version,
-        persister: VersionPersister,
+        version: "Version",
+        persister: "VersionPersister",
         increment_micro: bool = True,
         **kwargs,
     ) -> None:
@@ -65,7 +67,7 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
         self.__increment_micro = increment_micro
 
     @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
+    def _update_command(cls, sub_parser: "ArgumentParser") -> None:
         """
 
         Parameters
@@ -89,9 +91,9 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
         VersionModifier._update_command(sub_parser)
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
-        letter: Literal["a", "b", "c", "alpha", "beta", "rc"]
+        letter: 'Literal["a", "b", "c", "alpha", "beta", "rc"]'
         name: str
         letter, name = self.pre_release_part
         pre: tuple[
@@ -116,17 +118,18 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
                     + " version."
                 )
             pre = cast(
-                tuple[
-                    Literal["a", "b", "c", "alpha", "beta", "rc"],
-                    NonNegativeInteger,
-                ],
+                "tuple["
+                "Literal['a', 'b', 'c', "
+                "'alpha', 'beta', 'rc'],"
+                "NonNegativeInteger,"
+                "]",
                 self.current_version.preview,
             )
             number = pre[1] + 1 if letter == pre[0] else 1
 
             pre = (letter, number)
 
-        result: Version = Version(
+        result: "Version" = Version(
             self.current_version.epoch,
             self._get_next_release(),
             pre,
@@ -152,13 +155,13 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
         """"""
         raise NotImplementedError()
 
-    def _get_next_release(self) -> tuple[NonNegativeInteger, ...]:
+    def _get_next_release(self) -> "tuple[NonNegativeInteger, ...]":
         """"""
         micro = self.current_version.micro
         if self.__increment_micro and self.current_version.preview is None:
             micro = micro + 1
 
-        ret: list[NonNegativeInteger] = []
+        ret: "list[NonNegativeInteger]" = []
         for val in self.current_version.release:
             ret.append(val)
 
@@ -182,9 +185,9 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
 
     def __init__(
         self,
-        version: Version,
-        persister: VersionPersister,
-        pre_release_part: Optional[str],
+        version: "Version",
+        persister: "VersionPersister",
+        pre_release_part: "Optional[str]",
         increment_micro: bool = True,
         **kwargs,
     ) -> None:
@@ -227,12 +230,12 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             )
 
     @traced_function
-    def create_new_version(self) -> Version:
+    def create_new_version(self) -> "Version":
         """"""
         return self.__sub_modifier.create_new_version()
 
     @classmethod
-    def _update_command(cls, sub_parser: ArgumentParser) -> None:
+    def _update_command(cls, sub_parser: "ArgumentParser") -> None:
         """
 
         Parameters

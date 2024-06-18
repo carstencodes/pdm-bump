@@ -17,16 +17,19 @@ from difflib import unified_diff
 from functools import cached_property
 from pathlib import Path
 from re import M as MultilinePattern  # noqa: N811
-from re import Match, Pattern
+from re import Pattern
 from re import compile as compile_re
-from typing import Final, Optional, cast
+from typing import TYPE_CHECKING, Final, Optional, cast
 
 from pdm_pfsc.logging import logger
 
 from .core.config import VERSION_CONFIG_KEY_NAME, Config
 from .core.version import Pep440VersionFormatter, Version
 
-DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
+if TYPE_CHECKING:
+    from re import Match
+
+DEFAULT_REGEX: "Final[Pattern[str]]" = compile_re(
     r"^__version__\s*=\s*[\"'](?P<version>.+?)[\"']\s*(?:#.*)?$",
     MultilinePattern,
 )
@@ -34,28 +37,28 @@ DEFAULT_REGEX: Final[Pattern[str]] = compile_re(
 
 @dataclass
 class _DiffData:
-    original_lines: list[str] = field()
-    new_lines: list[str] = field()
+    original_lines: "list[str]" = field()
+    new_lines: "list[str]" = field()
 
     def merge(self, other: "_DiffData") -> "_DiffData":
         """"""
         return _DiffData(self.original_lines, other.new_lines)
 
 
-VERSION_IDENTIFIER: Final[str] = VERSION_CONFIG_KEY_NAME
+VERSION_IDENTIFIER: "Final[str]" = VERSION_CONFIG_KEY_NAME
 
 
 class DynamicVersionConfig:
     """"""
 
-    __file: Path
-    __pattern: Pattern[str]
+    __file: "Path"
+    __pattern: "Pattern[str]"
     __file_encoding: str
 
     def __init__(
         self,
-        file_path: Path,
-        pattern: Pattern[str],
+        file_path: "Path",
+        pattern: "Pattern[str]",
         encoding: str = "utf-8",
     ) -> None:
         self.__file = file_path
@@ -63,17 +66,17 @@ class DynamicVersionConfig:
         self.__file_encoding = encoding
 
     @property
-    def file(self) -> Path:
+    def file(self) -> "Path":
         """"""
         return self.__file
 
     @property
-    def pattern(self) -> Pattern[str]:
+    def pattern(self) -> "Pattern[str]":
         """"""
         return self.__pattern
 
     @cached_property
-    def dynamic_version(self) -> Optional[str]:
+    def dynamic_version(self) -> "Optional[str]":
         """"""
         with self.__file.open("r", encoding=self.__file_encoding) as file_ptr:
             match = self.__pattern.search(file_ptr.read())
@@ -81,7 +84,7 @@ class DynamicVersionConfig:
             return match.group(VERSION_IDENTIFIER)
         return None
 
-    def replace_dynamic_version(self, new_version: str) -> _DiffData:
+    def replace_dynamic_version(self, new_version: str) -> "_DiffData":
         """
 
         Parameters
@@ -98,7 +101,7 @@ class DynamicVersionConfig:
             match = self.__pattern.search(version_file)
             if match is None:
                 raise ValueError("Failed to fetch version")
-            match = cast(Match[str], match)
+            match = cast("Match[str]", match)
             version_start, version_end = match.span(VERSION_IDENTIFIER)
             new_version_file = (
                 version_file[:version_start]
@@ -115,8 +118,8 @@ class DynamicVersionConfig:
 
     @staticmethod
     def find_dynamic_config(
-        root_path: Path, project_config: Config
-    ) -> Optional["DynamicVersionConfig"]:
+        root_path: "Path", project_config: "Config"
+    ) -> "Optional[DynamicVersionConfig]":
         """
 
         Parameters
@@ -160,11 +163,11 @@ class DynamicVersionConfig:
 class DynamicVersionSource:  # pylint: disable=R0903
     """"""
 
-    def __init__(self, project_root: Path, config: Config) -> None:
+    def __init__(self, project_root: "Path", config: "Config") -> None:
         self.__project_root = project_root
         self.__config = config
-        self.__current_version: Optional[Version] = None
-        self.__hunk: Optional[_DiffData] = None
+        self.__current_version: "Optional[Version]" = None
+        self.__hunk: "Optional[_DiffData]" = None
 
     @property
     def is_enabled(self) -> bool:
@@ -172,18 +175,18 @@ class DynamicVersionSource:  # pylint: disable=R0903
         return self.__config.meta_data.is_dynamic_version
 
     @property
-    def source_file(self) -> Path:
+    def source_file(self) -> "Path":
         """"""
         return self.__get_dynamic_version().file
 
     @property
-    def current_version(self) -> Version:
+    def current_version(self) -> "Version":
         """"""
         if self.__current_version is not None:
-            return cast(Version, self.__current_version)
+            return cast("Version", self.__current_version)
 
-        dynamic: DynamicVersionConfig = self.__get_dynamic_version()
-        version: Optional[str] = dynamic.dynamic_version
+        dynamic: "DynamicVersionConfig" = self.__get_dynamic_version()
+        version: "Optional[str]" = dynamic.dynamic_version
         if version is not None:
             self.__current_version = Version.from_string(version)
             return self.__current_version
@@ -193,25 +196,25 @@ class DynamicVersionSource:  # pylint: disable=R0903
         )
 
     @current_version.setter
-    def current_version(self, version: Version) -> None:
+    def current_version(self, version: "Version") -> None:
         self.__current_version = version
         ver: str = Pep440VersionFormatter().format(version)
-        config: DynamicVersionConfig = self.__get_dynamic_version()
+        config: "DynamicVersionConfig" = self.__get_dynamic_version()
         hunk = config.replace_dynamic_version(ver)
         if self.__hunk is None:
             self.__hunk = hunk
         else:
-            self.__hunk = cast(_DiffData, self.__hunk).merge(hunk)
+            self.__hunk = cast("_DiffData", self.__hunk).merge(hunk)
 
-    def __get_dynamic_version(self) -> DynamicVersionConfig:
-        dynamic_version: Optional[DynamicVersionConfig] = (
+    def __get_dynamic_version(self) -> "DynamicVersionConfig":
+        dynamic_version: "Optional[DynamicVersionConfig]" = (
             DynamicVersionConfig.find_dynamic_config(
                 self.__project_root, self.__config
             )
         )
         if dynamic_version is not None:
-            dynamic: DynamicVersionConfig = cast(
-                DynamicVersionConfig, dynamic_version
+            dynamic: "DynamicVersionConfig" = cast(
+                "DynamicVersionConfig", dynamic_version
             )
             return dynamic
         raise ValueError(
@@ -219,17 +222,19 @@ class DynamicVersionSource:  # pylint: disable=R0903
             f" Only pdm-pep517 `file` types are supported."
         )
 
-    def get_source_file_change_hunks(self, repository_root: Path) -> list[str]:
+    def get_source_file_change_hunks(
+        self, repository_root: "Path"
+    ) -> list[str]:
         """"""
-        dynamic_version_provider: Path = self.source_file
-        relative_file_path: Path = dynamic_version_provider.relative_to(
+        dynamic_version_provider: "Path" = self.source_file
+        relative_file_path: "Path" = dynamic_version_provider.relative_to(
             str(repository_root)
         )
 
         if self.__hunk is None:
             return []
 
-        hunk: _DiffData = cast(_DiffData, self.__hunk)
+        hunk: "_DiffData" = cast("_DiffData", self.__hunk)
 
         return list(
             unified_diff(
