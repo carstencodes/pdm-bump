@@ -3,5 +3,5 @@ use_venv = true
 
 [venv]
 in_project = true
-backend = "virtualenv"
+backend = "venv"
 with_pip = true
