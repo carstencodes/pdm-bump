@@ -2,10 +2,10 @@
 # It is not intended for manual editing.
 
 [metadata]
-groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
+groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test", ":checkstyle"]
 strategy = ["cross_platform"]
-lock_version = "4.4.2"
-content_hash = "sha256:464ea404b75cd0cadf9746e56b263a8636bdcc8b9da406db47d37f7e2acf4fa3"
+lock_version = "4.4.1"
+content_hash = "sha256:1e887b9ce402b9fe7c22182643aa7228d8fcf88cc9b3b0ee547215e5f2d59e90"
 
 [[package]]
 name = "annotated-types"
