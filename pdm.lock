@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test", ":checkstyle"]
 strategy = ["cross_platform"]
-lock_version = "4.4.1"
-content_hash = "sha256:1e887b9ce402b9fe7c22182643aa7228d8fcf88cc9b3b0ee547215e5f2d59e90"
+lock_version = "4.4.2"
+content_hash = "sha256:c387773e83d0f1109145b02c8d3c5f828f91619c810c7bae730532bb03bbb7f0"
 
 [[package]]
 name = "annotated-types"
@@ -174,12 +174,12 @@ files = [
 
 [[package]]
 name = "cachetools"
-version = "5.3.3"
+version = "5.4.0"
 requires_python = ">=3.7"
 summary = "Extensible memoizing collections and decorators"
 files = [
-    {file = "cachetools-5.3.3-py3-none-any.whl", hash = "sha256:0abad1021d3f8325b2fc1d2e9c8b9c9d57b04c3932657a72465447332c24d945"},
-    {file = "cachetools-5.3.3.tar.gz", hash = "sha256:ba29e2dfa0b8b556606f097407ed1aa62080ee108ab0dc5ec9d6a723a007d105"},
+    {file = "cachetools-5.4.0-py3-none-any.whl", hash = "sha256:3ae3b49a3d5e28a77a0be2b37dbcb89005058959cb2323858c2657c4a8cab474"},
+    {file = "cachetools-5.4.0.tar.gz", hash = "sha256:b8adc2e7c07f105ced7bc56dbb6dfbe7c4a00acce20e2227b3f355be89bc6827"},
 ]
 
 [[package]]
