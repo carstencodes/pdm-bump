@@ -36,7 +36,7 @@ $ pdm bump pre-release --pre release-candidate # creates 0.1.1rc1 from 0.1.1b1
 $ pdm bump no-pre-release # creates 0.1.1 from 0.1.1rc1
 $ pdm bump micro # creates 0.1.2 from 0.1.1
 $ pdm bump minor # creates 0.2.0 from 0.1.2
-$ pdm bump major # creates 1.0.0 from 1.0.0
+$ pdm bump major # creates 1.0.0 from 0.2.0
 ```
 
 ### Migrating from `poetry`
