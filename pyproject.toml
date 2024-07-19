@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.9.1.dev6"
+version = "0.9.1.dev7"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 authors = [
@@ -76,8 +76,7 @@ checkstyle = [
     "pep8-naming>=0.13.3",
     "flake8-type-checking>=2.9.1",
 ]
-":checkstyle" = [
-]
+":checkstyle" = []
 
 [tool.pdm.scripts]
 flake = "flake518 src/"
