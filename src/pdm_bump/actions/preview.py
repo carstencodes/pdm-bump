@@ -80,11 +80,11 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
 
         """
         sub_parser.add_argument(
-            "--micro",
-            action="store_true",
+            "--no-micro",
+            action="store_false",
             dest="increment_micro",
             help="When setting pre-release, specifies "
-            + "whether micro version shall "
+            + "that micro version shall not "
             + "be incremented as well",
         )
 
