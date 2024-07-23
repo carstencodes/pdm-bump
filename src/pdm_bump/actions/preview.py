@@ -60,7 +60,7 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
         self,
         version: "Version",
         persister: "VersionPersister",
-        increment_micro: bool = True,
+        increment_micro: bool,
         **kwargs,
     ) -> None:
         super().__init__(version, persister, **kwargs)
@@ -79,13 +79,23 @@ class _PreReleaseIncrementingVersionModifier(VersionModifier):
         -------
 
         """
-        sub_parser.add_argument(
-            "--no-micro",
-            action="store_false",
+        grp = sub_parser.add_mutually_exclusive_group(required=False)
+        grp.add_argument(
+            "--micro",
+            action="store_true",
             dest="increment_micro",
-            help="When setting pre-release, specifies "
-            + "that micro version shall not "
-            + "be incremented as well",
+            help="If set, the micro version will be incremented. This is the "
+            "default, if you are not incrementing a version that is a pre-"
+            "release yet. Cannot be mixed with --no-micro.",
+        )
+
+        grp.add_argument(
+            "--no-micro",
+            action="store_true",
+            dest="no_increment_micro",
+            help="If set, do not increment the micro version, even it would"
+            "apply as it is no pre-release version yet. Cannot be mixed "
+            "with --micro.",
         )
 
         VersionModifier._update_command(sub_parser)
@@ -183,22 +193,31 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
         "Increment a pre-release part (alpha, beta, release-candidate)"
     )
 
-    def __init__(
+    # Justification: self and kwargs should not count, both boolean
+    #                arguments must be applied due to arg-parse implementation
+    def __init__(  # pylint: disable=R0913
         self,
         version: "Version",
         persister: "VersionPersister",
         pre_release_part: "Optional[str]",
-        increment_micro: bool = True,
+        increment_micro: bool,
+        no_increment_micro: bool,
         **kwargs,
     ) -> None:
         super().__init__(version, persister, **kwargs)
+
+        do_increment_micro: bool = (
+            increment_micro
+            or not no_increment_micro
+            or not version.is_pre_release
+        )
+
         if pre_release_part is None:
             pre_release_part = (
                 version.preview[0]
                 if version.preview is not None
                 else AlphaIncrementingVersionModifier.name
             )
-            increment_micro = not version.is_pre_release
 
         self.__sub_modifier: VersionModifier
         if (
@@ -206,14 +225,14 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             or pre_release_part in AlphaIncrementingVersionModifier.aliases
         ):
             self.__sub_modifier = AlphaIncrementingVersionModifier(
-                version, _DummyPersister(), increment_micro
+                version, _DummyPersister(), do_increment_micro
             )
         elif (
             pre_release_part in (BetaIncrementingVersionModifier.name,)
             or pre_release_part in BetaIncrementingVersionModifier.aliases
         ):
             self.__sub_modifier = BetaIncrementingVersionModifier(
-                version, _DummyPersister(), increment_micro
+                version, _DummyPersister(), do_increment_micro
             )
         elif (
             pre_release_part
@@ -222,7 +241,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
             in ReleaseCandidateIncrementingVersionModifier.aliases
         ):
             self.__sub_modifier = ReleaseCandidateIncrementingVersionModifier(
-                version, _DummyPersister(), increment_micro
+                version, _DummyPersister(), do_increment_micro
             )
         else:
             raise ValueError(
