@@ -182,7 +182,7 @@ class RatingBasedVersionPolicy(VersionPolicy):
                     self.__version.preview
                 )
                 modifier = PreReleaseIncrementingVersionModifier(
-                    self.__version, self, pre_release_part, False
+                    self.__version, self, pre_release_part, False, True
                 )
             else:
                 modifier = ResetNonSemanticPartsModifier(self.__version, self)
@@ -201,7 +201,7 @@ class RatingBasedVersionPolicy(VersionPolicy):
                 )
                 pre_release_part = self.__shift_preview_part(pre_release_part)
                 modifier = PreReleaseIncrementingVersionModifier(
-                    self.__version, self, pre_release_part, False
+                    self.__version, self, pre_release_part, False, True
                 )
         return modifier
 
