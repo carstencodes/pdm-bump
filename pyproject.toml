@@ -76,7 +76,6 @@ checkstyle = [
     "pep8-naming>=0.13.3",
     "flake8-type-checking>=2.9.1",
 ]
-":checkstyle" = []
 
 [tool.pdm.scripts]
 flake = "flake518 src/"
