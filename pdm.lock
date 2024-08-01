@@ -171,7 +171,7 @@ extras = ["filecache"]
 requires_python = ">=3.7"
 summary = "httplib2 caching for requests"
 dependencies = [
-    "CacheControl==0.14.0",
+    "cachecontrol==0.14.0",
     "filelock>=3.8.0",
 ]
 files = [
@@ -972,7 +972,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.17.2"
+version = "2.17.3"
 requires_python = ">=3.8"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1001,8 +1001,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.17.2-py3-none-any.whl", hash = "sha256:82a3dbfdb22e37dc519550f6851cbd4070eca27a8cf6f1e1cae102c0fb6be8bc"},
-    {file = "pdm-2.17.2.tar.gz", hash = "sha256:bf1e9b8e22838ec572a1f78e75dbac30ea23f3cb583655b9084740cb92f05cd3"},
+    {file = "pdm-2.17.3-py3-none-any.whl", hash = "sha256:3cc0fab468d68ce9c52ce1f2f2270ecb5396b23f17be4ac048ca901be88b15f1"},
+    {file = "pdm-2.17.3.tar.gz", hash = "sha256:f49220f225ec71258cbf7148b14a76caeac612745bedab67f9062398ea56a7a5"},
 ]
 
 [[package]]
