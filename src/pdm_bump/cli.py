@@ -11,7 +11,7 @@
 #
 """"""
 
-from typing import Optional, Protocol, TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional, Protocol
 
 from .core.config import Config
 from .plugin import BumpCommand as _Command
