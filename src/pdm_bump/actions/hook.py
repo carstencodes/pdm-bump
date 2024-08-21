@@ -19,6 +19,13 @@ from pdm_pfsc.config import MissingValue
 from pdm_pfsc.hook import HookBase, HookExecutorBase
 from pdm_pfsc.logging import logger, traced_function
 
+from ..core.config import (
+    ALLOW_DIRTY_DEFAULT,
+    AUTO_TAG_DEFAULT,
+    COMMIT_MESSAGE_TEMPLATE_DEFAULT,
+    PERFORM_COMMIT_DEFAULT,
+    TAG_ADD_PREFIX_DEFAULT,
+)
 from ..core.version import Pep440VersionFormatter, Version
 
 if TYPE_CHECKING:
@@ -157,12 +164,8 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
 class CommitChanges(HookBase):
     """"""
 
-    default_commit_message: "ClassVar[str]" = (
-        "chore: Bump version {from} to {to}\n\n"
-        "Created a commit with a new version {to}.\n"
-        "Previous version was {from}."
-    )
-    perform_commit: "ClassVar[bool]" = False
+    default_commit_message: "ClassVar[str]" = COMMIT_MESSAGE_TEMPLATE_DEFAULT
+    perform_commit: "ClassVar[bool]" = PERFORM_COMMIT_DEFAULT
 
     @traced_function
     def post_action_hook(
@@ -252,9 +255,9 @@ class CommitChanges(HookBase):
 class TagChanges(HookBase):
     """"""
 
-    do_tag: "ClassVar[bool]" = False
-    allow_dirty: "ClassVar[bool]" = False
-    prepend_to_tag: "ClassVar[bool]" = True
+    do_tag: "ClassVar[bool]" = AUTO_TAG_DEFAULT
+    allow_dirty: "ClassVar[bool]" = ALLOW_DIRTY_DEFAULT
+    prepend_to_tag: "ClassVar[bool]" = TAG_ADD_PREFIX_DEFAULT
 
     @traced_function
     def post_action_hook(

@@ -192,7 +192,7 @@ class BumpCommand(BaseCommand):
 
         """
         config: "Config" = Config(project)
-        value = config.pdm_bump.vcs.provider
+        value = config.pdm_bump.vcs_provider
 
         registry: "VcsProviderRegistry" = vcs_providers
 

@@ -156,7 +156,7 @@ class ExecutionContext:
 
 
 class _VersionActions(ActionRegistry[ExecutionContext]):
-    def execute(  # pylint: disable=R0913
+    def execute(  # pylint: disable=R0913,R0914
         self,
         /,
         args: "Namespace",
@@ -196,8 +196,10 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
         dry_run: bool = kwargs.pop("dry_run", False)
 
         selected_command: str = kwargs.pop("selected_command")
-        if selected_command in known_aliases:
-            selected_command = known_aliases[selected_command]
+        selected_command = known_aliases.get(
+            selected_command,
+            selected_command
+        )
 
         if selected_command not in self._items:
             raise ValueError(
