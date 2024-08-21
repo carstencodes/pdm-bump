@@ -330,10 +330,6 @@ class TagChanges(HookBase):
 
         """
         kwargs = vars(args)
-        print(
-            not context.vcs_provider.is_clean
-            and _str_as_bool(kwargs.pop("tag", self.do_tag))
-        )
         if not context.vcs_provider.is_clean and _str_as_bool(
             kwargs.pop("tag", self.do_tag)
         ):
