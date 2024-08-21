@@ -12,11 +12,11 @@
 """"""
 from enum import Enum
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, Final, Optional
+from typing import TYPE_CHECKING, Any, Final, Optional, Protocol
 
 from pdm_pfsc.config import (
     ConfigAccessor,
-    ConfigNamespace,
+    ConfigItems,
     ConfigSection,
     IsMissing,
 )
@@ -26,8 +26,20 @@ if TYPE_CHECKING:
     import argparse
     from collections.abc import Iterable, Mapping
     from pathlib import Path
+    from types import SimpleNamespace
+
+    from pdm.project.config import ConfigItem
 
     from pdm_pfsc.abstractions import ConfigHolder
+    from pdm_pfsc.config import Config as SupportsConfigFile
+
+
+class _SupportsAddConfigItems(Protocol):  # pylint: disable=R0903
+    """"""
+
+    def add_config(self, name: str, value: "ConfigItem") -> None:
+        """"""
+        raise NotImplementedError()
 
 
 class _StringEnum(str, Enum):
@@ -50,6 +62,17 @@ class _ConfigKeys(_StringEnum):
 
 VERSION_CONFIG_KEY_NAME: "Final[str]" = _ConfigKeys.VERSION
 
+COMMIT_MESSAGE_TEMPLATE_DEFAULT: "Final[str]" = (
+    "chore: Bump version {from} to {to}\n\n"
+    "Created a commit with a new version {to}.\n"
+    "Previous version was {from}."
+)
+PERFORM_COMMIT_DEFAULT: "Final[bool]" = False
+AUTO_TAG_DEFAULT: "Final[bool]" = False
+TAG_ADD_PREFIX_DEFAULT: "Final[bool]" = True
+ALLOW_DIRTY_DEFAULT: "Final[bool]" = False
+VCS_PROVIDER_DEFAULT: "Final[str]" = "git-cli"
+
 
 class _ConfigValues(_StringEnum):
     """"""
@@ -60,61 +83,47 @@ class _ConfigValues(_StringEnum):
     BUILD_BACKEND_PDM_BACKEND: "Final[str]" = "pdm.backend"
 
 
-class _ConfigSections(_StringEnum):
+class PdmBumpConfig:
     """"""
 
-    PDM_BUMP: "Final[str]" = "pdm_bump"
-    PDM_BUMP_VCS: "Final[str]" = "vcs"
-
-
-class _PdmBumpVcsConfig(ConfigNamespace):
-    def __init__(
-        self, accessor: "ConfigAccessor", pdm_bump: "PdmBumpConfig"
-    ) -> None:
-        super().__init__(_ConfigSections.PDM_BUMP_VCS, accessor, pdm_bump)
-
-    @property
-    def provider(self) -> str:
-        """"""
-        return self._get_value(_ConfigKeys.VCS_PROVIDER)
-
-
-class PdmBumpConfig(ConfigNamespace):
-    """"""
-
-    def __init__(self, accessor: "ConfigAccessor") -> None:
-        super().__init__(_ConfigSections.PDM_BUMP, accessor, None)
-        self.__vcs = _PdmBumpVcsConfig(accessor, self)
+    def __init__(self, accessor: "_PdmBumpConfigAccessor") -> None:
+        namespace = accessor.values
+        self.__vcs_provider: str = namespace.vcs_provider
+        self.__commit_msg_tpl: str = namespace.commit_msg_tpl
+        self.__perform_commit: bool = namespace.perform_commit
+        self.__auto_tag: bool = namespace.auto_tag
+        self.__tag_add_prefix: bool = namespace.tag_add_prefix
+        self.__allow_dirty: bool = namespace.allow_dirty
 
     @property
-    def vcs(self) -> "_PdmBumpVcsConfig":
+    def vcs_provider(self) -> "str":
         """"""
-        return self.__vcs
+        return self.__vcs_provider
 
     @property
     def commit_msg_tpl(self) -> str:
         """"""
-        return self._get_value("commit_msg_tpl")
+        return self.__commit_msg_tpl
 
     @property
     def perform_commit(self) -> bool:
         """"""
-        return self._get_value("perform_commit") or False
+        return self.__perform_commit
 
     @property
     def auto_tag(self) -> bool:
         """"""
-        return self._get_value("auto_tag") or False
+        return self.__auto_tag
 
     @property
     def tag_allow_dirty(self) -> bool:
         """"""
-        return self._get_value("allow_dirty") or False
+        return self.__allow_dirty
 
     @property
     def tag_add_prefix(self) -> bool:
         """"""
-        return self._get_value("tag_add_prefix") or True
+        return self.__tag_add_prefix
 
     def add_values_missing_in_cli(
         self, args: "argparse.Namespace"
@@ -256,9 +265,60 @@ class _MetaDataConfig:
 
 
 class _PdmBumpConfigAccessor(ConfigAccessor):
+    def __init__(
+        self,
+        config: "SupportsConfigFile",
+        cfg_holder: "ConfigHolder",
+    ) -> None:
+        super().__init__(config, cfg_holder)
+        self.__items = ConfigItems(self)
+        self.__items.add_config_value(
+            "commit_msg_tpl",
+            description=("The default commit message. "
+                         "Uses templates 'from' and 'to'."),
+            default=COMMIT_MESSAGE_TEMPLATE_DEFAULT,
+        )
+        self.__items.add_config_value(
+            "perform_commit",
+            description=("If set to true, commit the "
+                         "bumped changes automatically"),
+            default=PERFORM_COMMIT_DEFAULT,
+        )
+        self.__items.add_config_value(
+            "auto_tag",
+            description=("Create a tag after bumping "
+                         "and committing the changes"),
+            default=AUTO_TAG_DEFAULT,
+        )
+        self.__items.add_config_value(
+            "tag_add_prefix",
+            description="Adds the prefix v to the version tag",
+            default=TAG_ADD_PREFIX_DEFAULT,
+        )
+        self.__items.add_config_value(
+            "allow_dirty",
+            description="Allows tagging the project, if it is dirty",
+            default=ALLOW_DIRTY_DEFAULT,
+        )
+        self.__items.add_config_value(
+            "vcs_provider",
+            description="Configures the VCS Provider to use.",
+            default=VCS_PROVIDER_DEFAULT,
+            use_env_var=True,
+        )
+
     @property
     def plugin_config_name(self) -> "Iterable[str]":
-        return {"bump-plugin"}
+        return {"bump"}
+
+    @property
+    def values(self) -> "SimpleNamespace":
+        """"""
+        return self.__items.to_namespace()
+
+    def propagate(self, target: "_SupportsAddConfigItems") -> None:
+        """"""
+        self.__items.propagate(target)
 
 
 class _EmptyConfig:
@@ -305,22 +365,21 @@ class Config:
 
     def __init__(self, project: "ConfigHolder") -> None:
         self.__project: "ConfigHolder" = project
-        accessor: "ConfigAccessor" = _PdmBumpConfigAccessor(self, project)
+        accessor: "_PdmBumpConfigAccessor" = _PdmBumpConfigAccessor(
+            self, project
+        )
         self.__pdm_bump = PdmBumpConfig(accessor)
         self.__meta_data = _MetaDataConfig(accessor)
 
     @staticmethod
-    def get_plugin_config_key_prefix() -> str:
+    def get_config() -> "_PdmBumpConfigAccessor":
         """"""
         config: "ConfigHolder" = _EmptyConfig()
-        accessor: "ConfigAccessor" = _PdmBumpConfigAccessor(
+        accessor: "_PdmBumpConfigAccessor" = _PdmBumpConfigAccessor(
             _DummyConfig(), config
         )
-        section: "ConfigSection" = ConfigSection.PLUGIN_CONFIG
-        paths: "Iterable[str]"
-        paths = accessor.get_config_section_path(section)
 
-        return ".".join(paths)
+        return accessor
 
     @property
     def pdm_bump(self) -> "PdmBumpConfig":
