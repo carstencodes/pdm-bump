@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:87b904ef16279075501cd20964e137d2013c858ebbc36ca74286c0003d1b7146"
+content_hash = "sha256:ce8617b996b762d499f65e04ac010e59f6d1fa83ee3d1b917ecdcad96c5b4c1d"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1047,16 +1047,15 @@ files = [
 
 [[package]]
 name = "pdm-pfsc"
-version = "0.11.3"
+version = "0.12.0"
 requires_python = ">=3.9"
 summary = "Core functionPlug-In Foundation Service Collection)"
 dependencies = [
     "pdm>=2.12.4",
     "pyproject-metadata>=0.7.1",
-    "tomli-w>=1.0.0",
 ]
 files = [
-    {file = "pdm_pfsc-0.11.3-py3-none-any.whl", hash = "sha256:97cd9a2e56fbf09f0016c786f169d7b7cf517302c4331e090192c5b9a5640b46"},
+    {file = "pdm_pfsc-0.12.0-py3-none-any.whl", hash = "sha256:9af522562fa32db416f16e54deea89774fdc296b89f63ab09974aebf9ad9e010"},
 ]
 
 [[package]]
@@ -1728,16 +1727,6 @@ summary = "A lil' TOML parser"
 files = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
-]
-
-[[package]]
-name = "tomli-w"
-version = "1.0.0"
-requires_python = ">=3.7"
-summary = "A lil' TOML writer"
-files = [
-    {file = "tomli_w-1.0.0-py3-none-any.whl", hash = "sha256:9f2a07e8be30a0729e533ec968016807069991ae2fd921a78d42f429ae5f4463"},
-    {file = "tomli_w-1.0.0.tar.gz", hash = "sha256:f463434305e0336248cac9c2dc8076b707d8a12d019dd349f5c1e382dd1ae1b9"},
 ]
 
 [[package]]
