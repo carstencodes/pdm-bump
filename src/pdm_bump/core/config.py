@@ -244,11 +244,6 @@ class _MetaDataConfig:
         """"""
         return self.__accessor.get_pyproject_metadata(_ConfigKeys.VERSION)
 
-    @version.setter
-    def version(self, value: str) -> None:
-        """"""
-        self.__accessor.set_pyproject_metadata(value, _ConfigKeys.VERSION)
-
     @property
     def build_system(self) -> "_BuildSystemConfig":
         """"""
