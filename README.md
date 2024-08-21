@@ -60,7 +60,8 @@ Hence, replacing `poetry version` with `pdm bump` should be sufficient with pdm-
 
 ## VCS based actions
 
-**NOTE**: Currently, only `git` is supported as VCS provider.
+**NOTE**: Currently, only `git` is supported as VCS provider. It requires git(.exe) to be available on your `PATH`.
+Hence the configuration key `git-cli`.
 
 You can create tags based on your `pyproject.toml` version (or dynamic version) using the following command.
 
@@ -83,8 +84,6 @@ The implementation is as follows:
 - Breaking changes will trigger a major upgrade
 
 The highest rating will win.
-
-Currently, only a suggestion command is implemented.
 
 ```shell
 $ grep version= pyproject.toml
@@ -111,27 +110,35 @@ Would suggest a new version of 0.2.0
 $
 ```
 
-This feature is currently experimental. Feedback appreciated.
+If you agree with it, you can use `pdm bump auto` to set the new version. Add parameter `-c` to create a commit of
+your version file automatically.
 
 ## Configuration
 
-In your `pyproject.toml`, you can add the following configuration values:
+In your `pdm.toml`, you can add the following configuration values:
 
-### Table tools.pdm.bump_plugin
+### Table plugins.bump
 
-| Name           | Type | Description                                                 | ENV_VAR | CLI Parameter  |
-|----------------|------|-------------------------------------------------------------|---------|----------------|
-| commit_msg_tpl | str  | The default commit message. Uses templates 'from' and 'to'. |         | -m, --message  |
-| perform_commit | bool | If set to true, commit the bumped changes automatically     |         | -c, --commit   |
-| auto_tag       | bool | Create a tag after bumping and committing the changes       |         | -t, --tag      |
-| tag_add_prefix | bool | Adds the prefix v to the version tag (Defaults to true)     |         | --no-prepend-v |
-| allow_dirty    | bool | Allows tagging the project, if it is dirty                  |         | -d, --dirty    |
+| Name           | Type | Description                                                 | ENV_VAR                       | CLI Parameter                                 | Default Value |
+|----------------|------|-------------------------------------------------------------|-------------------------------|-----------------------------------------------|---------------|
+| commit_msg_tpl | str  | The default commit message. Uses templates 'from' and 'to'. |                               | -m, --message                                 | _cf. below_   |
+| perform_commit | bool | If set to true, commit the bumped changes automatically     |                               | -c, --commit                                  | False         |
+| auto_tag       | bool | Create a tag after bumping and committing the changes       |                               | -t, --tag                                     | False         |
+| tag_add_prefix | bool | Adds the prefix v to the version tag                        |                               | --no-prepend-v (Note: This inverts the logic) | True          |
+| allow_dirty    | bool | Allows tagging the project, if it is dirty                  |                               | -d, --dirty                                   | False         |
+| provider       | str  | "Configures the VCS Provider to use.                        | PDM_PLUGINS_BUMP_VCS_PROVIDER |                                               | git-cli       |
 
-### Table tools.pdm.bump_plugin.vcs
+The default commit message template is set to:
 
-| Name     | Type | Description                          | ENV_VAR               | CLI Parameter |
-|----------|------|--------------------------------------|-----------------------|---------------|
-| provider | str  | "Configures the VCS Provider to use. | PDM_BUMP_VCS_PROVIDER |               |
+```txt
+chore: Bump version {from} to {to}
+
+Created a commit with a new version {to}.
+Previous version was {from}.
+```
+
+You can only use the variables `from` representing the previous version and `to`
+representing the new version.
 
 ## Contributing
 
