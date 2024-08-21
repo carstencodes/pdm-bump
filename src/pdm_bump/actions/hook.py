@@ -30,8 +30,19 @@ from ..core.version import Pep440VersionFormatter, Version
 
 if TYPE_CHECKING:
     from argparse import ArgumentParser, Namespace
+    from typing import Any
 
     from ..vcs import HunkSource, VcsProvider
+
+
+def _str_as_bool(match: "Any") -> bool:
+    match_str = str(match)
+    false_strings = ("false",)
+
+    if match_str.lower() in false_strings:
+        return False
+
+    return bool(match)
 
 
 class _Executable(Protocol):  # pylint: disable=R0903
@@ -144,8 +155,10 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
         pre_call_ctx: "PreHookContext" = PreHookContext(
             self.__vcs_provider, version
         )
-        for hook in self._hooks:
-            hook.pre_action_hook(pre_call_ctx, args)
+
+        if not dry_run:
+            for hook in self._hooks:
+                hook.pre_action_hook(pre_call_ctx, args)
 
         old_version = version
         version = executor.run(dry_run)
@@ -157,8 +170,10 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
             old_version,
             old_version != version,
         )
-        for hook in self._hooks:
-            hook.post_action_hook(post_call_ctx, args)
+
+        if not dry_run:
+            for hook in self._hooks:
+                hook.post_action_hook(post_call_ctx, args)
 
 
 class CommitChanges(HookBase):
@@ -182,13 +197,14 @@ class CommitChanges(HookBase):
         --------
 
         """
+        kwargs = vars(args)
         if not context.version_changed:
             logger.debug("Cannot commit changes. Nothing to commit")
             return
-        kwargs = vars(args)
-        if kwargs.pop("commit", False) and not kwargs.pop("dry_run", False):
-            message: str = kwargs.pop(
-                "commit_message", CommitChanges.default_commit_message
+
+        if _str_as_bool(kwargs.pop("commit", self.perform_commit)):
+            message: str = str(
+                kwargs.pop("commit_message", self.default_commit_message)
             )
 
             f_args: dict[str, str] = {
@@ -276,17 +292,24 @@ class TagChanges(HookBase):
         --------
 
         """
+        kwargs = vars(args)
         if not context.version_changed:
             return
-        kwargs = vars(args)
-        if not kwargs.pop("dry_run", False) and kwargs.pop("tag", False):
-            if not args.dirty and not context.vcs_provider.is_clean:
+
+        if _str_as_bool(kwargs.pop("tag", self.do_tag)):
+            if (
+                not _str_as_bool(kwargs.pop("dirty", self.allow_dirty))
+                and not context.vcs_provider.is_clean
+            ):
                 raise RuntimeError(
                     "This should only take place, if "
                     "the git repository is clean"
                 )
             context.vcs_provider.create_tag_from_version(
-                context.version, kwargs.pop("prepend_letter_v", True)
+                context.version,
+                _str_as_bool(
+                    kwargs.pop("prepend_letter_v", self.prepend_to_tag)
+                ),
             )
 
     @traced_function
@@ -307,10 +330,12 @@ class TagChanges(HookBase):
 
         """
         kwargs = vars(args)
-        if (
+        print(
             not context.vcs_provider.is_clean
-            and not kwargs.pop("dry_run", False)
-            and kwargs.pop("tag", False)
+            and _str_as_bool(kwargs.pop("tag", self.do_tag))
+        )
+        if not context.vcs_provider.is_clean and _str_as_bool(
+            kwargs.pop("tag", self.do_tag)
         ):
             raise RuntimeError("Repository root is not clean")
 
