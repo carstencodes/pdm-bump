@@ -179,6 +179,12 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
         """
         kwargs: dict = {}
 
+        known_aliases: dict = {}
+        for key, value in self._items.items():
+            if "aliases" in vars(value):
+                aliases = list(getattr(value, "aliases", []))
+                known_aliases.update({a: key for a in aliases})
+
         kwargs.update(vars(args))
 
         kwargs = {
@@ -190,6 +196,8 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
         dry_run: bool = kwargs.pop("dry_run", False)
 
         selected_command: str = kwargs.pop("selected_command")
+        if selected_command in known_aliases:
+            selected_command = known_aliases[selected_command]
 
         if selected_command not in self._items:
             raise ValueError(
