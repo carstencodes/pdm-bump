@@ -29,7 +29,6 @@ if TYPE_CHECKING:
     from types import SimpleNamespace
 
     from pdm.project.config import ConfigItem
-
     from pdm_pfsc.abstractions import ConfigHolder
     from pdm_pfsc.config import Config as SupportsConfigFile
 
@@ -274,20 +273,24 @@ class _PdmBumpConfigAccessor(ConfigAccessor):
         self.__items = ConfigItems(self)
         self.__items.add_config_value(
             "commit_msg_tpl",
-            description=("The default commit message. "
-                         "Uses templates 'from' and 'to'."),
+            description=(
+                "The default commit message. "
+                "Uses templates 'from' and 'to'."
+            ),
             default=COMMIT_MESSAGE_TEMPLATE_DEFAULT,
         )
         self.__items.add_config_value(
             "perform_commit",
-            description=("If set to true, commit the "
-                         "bumped changes automatically"),
+            description=(
+                "If set to true, commit the " "bumped changes automatically"
+            ),
             default=PERFORM_COMMIT_DEFAULT,
         )
         self.__items.add_config_value(
             "auto_tag",
-            description=("Create a tag after bumping "
-                         "and committing the changes"),
+            description=(
+                "Create a tag after bumping " "and committing the changes"
+            ),
             default=AUTO_TAG_DEFAULT,
         )
         self.__items.add_config_value(
