@@ -197,8 +197,7 @@ class _VersionActions(ActionRegistry[ExecutionContext]):
 
         selected_command: str = kwargs.pop("selected_command")
         selected_command = known_aliases.get(
-            selected_command,
-            selected_command
+            selected_command, selected_command
         )
 
         if selected_command not in self._items:
