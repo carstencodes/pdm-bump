@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:ce8617b996b762d499f65e04ac010e59f6d1fa83ee3d1b917ecdcad96c5b4c1d"
+content_hash = "sha256:422083f2f791996b12d980a721ae7dd786becb70a3db5a3afc8316895bb94773"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1047,7 +1047,7 @@ files = [
 
 [[package]]
 name = "pdm-pfsc"
-version = "0.12.0"
+version = "0.12.1"
 requires_python = ">=3.9"
 summary = "Core functionPlug-In Foundation Service Collection)"
 dependencies = [
@@ -1055,7 +1055,7 @@ dependencies = [
     "pyproject-metadata>=0.7.1",
 ]
 files = [
-    {file = "pdm_pfsc-0.12.0-py3-none-any.whl", hash = "sha256:9af522562fa32db416f16e54deea89774fdc296b89f63ab09974aebf9ad9e010"},
+    {file = "pdm_pfsc-0.12.1-py3-none-any.whl", hash = "sha256:417507e08e55fadf0b9017960a0675be5b9104761012ee2cf1e440841125aaa7"},
 ]
 
 [[package]]
