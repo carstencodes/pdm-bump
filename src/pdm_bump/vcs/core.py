@@ -43,13 +43,11 @@ class HunkSource(Protocol):  # pylint: disable=R0903
     """"""
 
     @property
-    def source_file(self) -> "Path":
+    def source_file_path(self) -> "Path":
         """"""
         raise NotImplementedError()
 
-    def get_source_file_change_hunks(
-        self, repository_root: "Path"
-    ) -> list[str]:
+    def get_source_file_change_hunks(self) -> list[str]:
         """"""
         raise NotImplementedError()
 

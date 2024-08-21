@@ -276,16 +276,14 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             delete=False,
         ) as target_file:
             for hunk in hunks:
-                rel_path: Path = hunk.source_file.relative_to(
+                rel_path: Path = hunk.source_file_path.relative_to(
                     self.current_path
                 )
                 target_file.write(
                     f"diff --git {Path('a') / rel_path}"
                     f" {Path('b') / rel_path}\n"
                 )
-                for line in hunk.get_source_file_change_hunks(
-                    self.current_path
-                ):
+                for line in hunk.get_source_file_change_hunks():
                     logger.trace(line)
                     target_file.write(f"{line}\n")
 
