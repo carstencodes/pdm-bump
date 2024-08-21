@@ -29,6 +29,7 @@ from .vcs import HunkSource
 
 if TYPE_CHECKING:
     from re import Match
+
     from .core.config import Config
 
 
