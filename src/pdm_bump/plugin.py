@@ -28,11 +28,9 @@ from pdm_pfsc.logging import (
 from .actions import ExecutionContext, actions
 from .core.config import Config
 from .core.version import Pep440VersionFormatter, Version
-from .dynamic import DynamicVersionSource
-from .source import StaticPep621VersionSource
+from .storage import VersionSource, get_backend
 from .vcs import (
     DefaultVcsProvider,
-    HunkSource,
     VcsProvider,
     VcsProviderRegistry,
     vcs_providers,
@@ -75,37 +73,6 @@ class _ProjectLike(ConfigHolder, Protocol):
         raise NotImplementedError()
 
 
-# Justification: Minimal protocol. Maybe false positive,
-# since 2 public methods available
-class _VersionSource(HunkSource, Protocol):  # pylint: disable=R0903
-    """"""
-
-    @property
-    def is_enabled(self) -> bool:
-        """"""
-        raise NotImplementedError()  # pylint: disable=R0801
-
-    @property
-    def source_file(self) -> "Path":
-        """"""
-        raise NotImplementedError()  # pylint: disable=R0801
-
-    @property
-    def current_version(self) -> "Version":
-        """"""
-        raise NotImplementedError()  # pylint: disable=R0801
-
-    @current_version.setter
-    def current_version(self, version: "Version") -> None:
-        raise NotImplementedError()  # pylint: disable=R0801
-
-    def get_source_file_change_hunks(
-        self, repository_root: "Path"
-    ) -> list[str]:
-        """"""
-        raise NotImplementedError()  # pylint: disable=R0801
-
-
 @final
 class BumpCommand(BaseCommand):
     """"""
@@ -116,7 +83,7 @@ class BumpCommand(BaseCommand):
 
     def __init__(self) -> None:
         super().__init__()
-        self.__backend: "Optional[_VersionSource]" = None
+        self.__backend: "Optional[VersionSource]" = None
 
     @traced_function
     def add_arguments(self, parser: "ArgumentParser") -> None:
@@ -181,8 +148,8 @@ class BumpCommand(BaseCommand):
         config: "Config" = Config(project)
         update_logger_from_project_ui(project.core.ui)
 
-        selected_backend: "Optional[_VersionSource]" = self._select_backend(
-            project, config
+        selected_backend: "Optional[VersionSource]" = get_backend(
+            config, project.root
         )
 
         self.__backend = selected_backend
@@ -192,7 +159,7 @@ class BumpCommand(BaseCommand):
             logger.error("Cannot find version in %s", pyproject_file)
             return
 
-        backend: "_VersionSource" = cast("_VersionSource", selected_backend)
+        backend: "VersionSource" = cast("VersionSource", selected_backend)
         vcs_provider: "VcsProvider" = self._get_vcs_provider(project)
 
         try:
@@ -241,38 +208,6 @@ class BumpCommand(BaseCommand):
                 return provider
 
         return DefaultVcsProvider(project.root)
-
-    @traced_function
-    def _select_backend(
-        self, project: "_ProjectLike", config: "Config"
-    ) -> "Optional[_VersionSource]":
-        """
-
-        Parameters
-        ----------
-        project: _ProjectLike :
-
-        config: Config :
-
-
-        Returns
-        -------
-
-        """
-        static_backend: "_VersionSource" = StaticPep621VersionSource(
-            project, config
-        )
-        dynamic_backend: "_VersionSource" = DynamicVersionSource(
-            project.root, config
-        )
-
-        selected_backend: "Optional[_VersionSource]" = None
-        for backend in (static_backend, dynamic_backend):
-            if backend.is_enabled:
-                selected_backend = backend
-                break
-
-        return selected_backend
 
     @traced_function
     def _version_to_string(self, version: "Version") -> str:
