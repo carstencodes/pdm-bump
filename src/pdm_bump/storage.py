@@ -303,7 +303,7 @@ class _DynamicStorageBackend(_VersionStorageBackend, ABC):
     @traced_function
     def is_enabled(self) -> "bool":
         """"""
-        return self.__config.meta_data.is_dynamic_version
+        return self._config.meta_data.is_dynamic_version
 
 
 class _PdmPep517StorageBackend(_DynamicStorageBackend):
