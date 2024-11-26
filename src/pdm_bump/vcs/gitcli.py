@@ -45,6 +45,25 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             )
         return cast("Path", git_executable_path)
 
+    @cached_property
+    def git_root_dir_path(self) -> Path:
+        """"""
+        try:
+            logger.debug("Searching for git root directory")
+            _ex, out, _err = self.run(
+                self.git_executable_path,
+                ("rev-parse", "--show-toplevel"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+            git_root_dir_path = out.strip()
+            logger.debug("Found git root directory at %s", git_root_dir_path)
+            return cast("Path", git_root_dir_path)
+        except CalledProcessError as cpe:
+            raise VcsProviderError(
+                f"Failed to receive git root directory. Reason: {cpe.stderr}"
+            ) from cpe
+
     @property
     def is_available(self) -> bool:
         """"""
@@ -292,12 +311,21 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             logger.debug("Wrote hunks to %s", target_file.name)
 
             try:
-                self.run(
-                    self.git_executable_path,
-                    ("apply", "--cached", f"{target_file.name}"),
-                    raise_on_exit=True,
-                    cwd=self.current_path,
-                )
+                if self.git_root_dir_path == self.current_path:
+                    self.run(
+                        self.git_executable_path,
+                        ("apply", "--cached", f"{target_file.name}"),
+                        raise_on_exit=True,
+                        cwd=self.current_path,
+                    )
+                else:
+                    directory = self.current_path.relative_to(self.git_root_dir_path)
+                    self.run(
+                        self.git_executable_path,
+                        ("apply", "--cached", "--directory", f"{directory}", f"{target_file.name}"),
+                        raise_on_exit=True,
+                        cwd=self.git_root_dir_path,
+                    )
             finally:
                 Path(target_file.name).unlink()
 
