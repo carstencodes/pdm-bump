@@ -312,8 +312,10 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
             args = ["apply", "--cached"]
             working_dir = self.current_path
-            if (self.git_root_dir_path != self.current_path):
-                directory = self.current_path.relative_to(self.git_root_dir_path)
+            if self.git_root_dir_path != self.current_path:
+                directory = self.current_path.relative_to(
+                    self.git_root_dir_path
+                )
                 args.extend(["--directory", f"{directory}"])
                 working_dir = self.git_root_dir_path
             args.append(f"{target_file.name}")
