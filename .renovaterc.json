@@ -1,10 +1,15 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base"
+        "config:recommended"
     ],
-    "addLabels": ["dependencies", "renovatebot"],
-    "assignees": ["carstencodes"],
+    "addLabels": [
+        "dependencies",
+        "renovatebot"
+    ],
+    "assignees": [
+        "carstencodes"
+    ],
     "assigneesFromCodeOwners": true,
     "automerge": true,
     "automergeStrategy": "rebase",
