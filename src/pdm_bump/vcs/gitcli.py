@@ -56,9 +56,9 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
                 raise_on_exit=True,
                 cwd=self.current_path,
             )
-            git_root_dir_path = out.strip()
+            git_root_dir_path = Path(out.strip())
             logger.debug("Found git root directory at %s", git_root_dir_path)
-            return cast("Path", git_root_dir_path)
+            return git_root_dir_path
         except CalledProcessError as cpe:
             raise VcsProviderError(
                 f"Failed to receive git root directory. Reason: {cpe.stderr}"
