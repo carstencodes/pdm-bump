@@ -195,7 +195,7 @@ class PreReleaseIncrementingVersionModifier(VersionModifier):
 
     # Justification: self and kwargs should not count, both boolean
     #                arguments must be applied due to arg-parse implementation
-    def __init__(  # pylint: disable=R0913
+    def __init__(  # pylint: disable=R0913,R0917
         self,
         version: "Version",
         persister: "VersionPersister",
