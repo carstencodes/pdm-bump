@@ -310,22 +310,21 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
 
             logger.debug("Wrote hunks to %s", target_file.name)
 
+            args = ["apply", "--cached"]
+            working_dir = self.current_path
+            if (self.git_root_dir_path != self.current_path):
+                directory = self.current_path.relative_to(self.git_root_dir_path)
+                args.extend(["--directory", f"{directory}"])
+                working_dir = self.git_root_dir_path
+            args.append(f"{target_file.name}")
+
             try:
-                if self.git_root_dir_path == self.current_path:
-                    self.run(
-                        self.git_executable_path,
-                        ("apply", "--cached", f"{target_file.name}"),
-                        raise_on_exit=True,
-                        cwd=self.current_path,
-                    )
-                else:
-                    directory = self.current_path.relative_to(self.git_root_dir_path)
-                    self.run(
-                        self.git_executable_path,
-                        ("apply", "--cached", "--directory", f"{directory}", f"{target_file.name}"),
-                        raise_on_exit=True,
-                        cwd=self.git_root_dir_path,
-                    )
+                self.run(
+                    self.git_executable_path,
+                    tuple(args),
+                    raise_on_exit=True,
+                    cwd=working_dir,
+                )
             finally:
                 Path(target_file.name).unlink()
 
