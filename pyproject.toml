@@ -3,6 +3,8 @@ name = "pdm-bump"
 version = "0.9.9.dev1"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
+license-files = ["LICENSE"]
+license = "MIT"
 authors = [
     { name = "Carsten Igel", email = "cig@bite-that-bit.de" },
 ]
@@ -16,14 +18,6 @@ dependencies = [
     "pdm-pfsc>=0.12.2",
 ]
 requires-python = ">=3.9"
-
-[project.license]
-text = "MIT"
-
-[project.license-files]
-paths = [
-    "LICENSE",
-]
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
