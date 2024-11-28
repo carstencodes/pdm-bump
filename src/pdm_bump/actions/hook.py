@@ -330,12 +330,12 @@ class TagChanges(HookBase):
 
         """
         kwargs = vars(args)
-        if _str_as_bool(kwargs.get("tag", self.do_tag)):
-            if (
-                not _str_as_bool(kwargs.get("dirty", self.allow_dirty))
-                and not context.vcs_provider.is_clean
-            ):
-                raise RuntimeError("Repository root is not clean")
+        if (
+            _str_as_bool(kwargs.get("tag", self.do_tag))
+            and not _str_as_bool(kwargs.get("dirty", self.allow_dirty))
+            and not context.vcs_provider.is_clean
+        ):
+            raise RuntimeError("Repository root is not clean")
 
     @classmethod
     @traced_function
