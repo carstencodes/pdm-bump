@@ -51,12 +51,12 @@ class _StringEnum(str, Enum):
 class _ConfigKeys(_StringEnum):
     """"""
 
-    VERSION: "Final[str]" = "version"
-    VERSION_SOURCE: "Final[str]" = "source"
-    VERSION_SOURCE_FILE_PATH: "Final[str]" = "path"
-    BUILD_BACKEND: "Final[str]" = "build-backend"
-    VCS_PROVIDER: "Final[str]" = "provider"
-    PROJECT_METADATA: "Final[str]" = "project"
+    VERSION = "version"
+    VERSION_SOURCE = "source"
+    VERSION_SOURCE_FILE_PATH = "path"
+    BUILD_BACKEND = "build-backend"
+    VCS_PROVIDER = "provider"
+    PROJECT_METADATA = "project"
 
 
 VERSION_CONFIG_KEY_NAME: "Final[str]" = _ConfigKeys.VERSION
@@ -76,10 +76,10 @@ VCS_PROVIDER_DEFAULT: "Final[str]" = "git-cli"
 class _ConfigValues(_StringEnum):
     """"""
 
-    VERSION_SOURCE_FILE: "Final[str]" = "file"
-    VERSION_SOURCE_SCM: "Final[str]" = "scm"
-    DEPRECATED_BUILD_BACKEND_PDM_PEP517_API: "Final[str]" = "pdm.pep517.api"
-    BUILD_BACKEND_PDM_BACKEND: "Final[str]" = "pdm.backend"
+    VERSION_SOURCE_FILE = "file"
+    VERSION_SOURCE_SCM = "scm"
+    DEPRECATED_BUILD_BACKEND_PDM_PEP517_API = "pdm.pep517.api"
+    BUILD_BACKEND_PDM_BACKEND = "pdm.backend"
 
 
 class PdmBumpConfig:
