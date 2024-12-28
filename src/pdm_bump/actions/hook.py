@@ -296,15 +296,21 @@ class TagChanges(HookBase):
         if not context.version_changed:
             return
 
-        if _str_as_bool(kwargs.pop("tag", self.do_tag)):
-            if (
-                not _str_as_bool(kwargs.pop("dirty", self.allow_dirty))
-                and not context.vcs_provider.is_clean
-            ):
+        tag_repo = _str_as_bool(kwargs.pop("tag", self.do_tag))
+        must_be_clean = not _str_as_bool(kwargs.pop("dirty", self.allow_dirty))
+        is_dirty = not context.vcs_provider.is_clean
+
+        if tag_repo:
+            if must_be_clean and is_dirty:
                 raise RuntimeError(
                     "This should only take place, if "
                     "the git repository is clean"
                 )
+            if is_dirty:
+                logger.warning(
+                    "The repository is not clean. Performing tag anyway."
+                )
+
             context.vcs_provider.create_tag_from_version(
                 context.version,
                 _str_as_bool(
@@ -330,8 +336,10 @@ class TagChanges(HookBase):
 
         """
         kwargs = vars(args)
-        if not context.vcs_provider.is_clean and _str_as_bool(
-            kwargs.pop("tag", self.do_tag)
+        if (
+            _str_as_bool(kwargs.get("tag", self.do_tag))
+            and not _str_as_bool(kwargs.get("dirty", self.allow_dirty))
+            and not context.vcs_provider.is_clean
         ):
             raise RuntimeError("Repository root is not clean")
 
