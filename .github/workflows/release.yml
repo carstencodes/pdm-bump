@@ -20,6 +20,7 @@ jobs:
       - name: Set up git-cliff
         uses: kenji-miyake/setup-git-cliff@v2
       - name: Generate changelog
+        shell: bash
         run: |
           git cliff --verbose --config ${{ github.workspace }}/.gitcliff.toml --latest --strip all --output ${{ github.workspace }}/CHANGELOG.md
       - name: Export changelog
@@ -27,25 +28,39 @@ jobs:
         with:
           name: changelog
           path: ${{ github.workspace }}/CHANGELOG.md
+
   deploy:
     name: Deploy wheel to pypi
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    - name: Get newest python version
+      id: setpyversion
+      shell: bash
+      run: |
+        export PY_VERSION=$(cat .python-version | sort -V | tail -1)
+        IFS=. read -r major minor patch <<< ${PY_VERSION}
+        echo "python_version=${major}.${minor}" >> "${GITHUB_OUTPUT}"
+    - name: Set PDM version
+      id: setpdmversion
+      run: |
+        echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.13'
+        python-version: ${{ steps.setpyversion.outputs.python_version }}
     - name: Install dependencies
+      shell: bash
       run: |
         python -m pip install --upgrade pip
-        pip install setuptools wheel pdm
-        pdm install -G:all
+        pip install pdm==${{ steps.setpdmversion.outputs.pdm_version }}
+        pdm install -G:all --no-version-file
     - name: Build and publish
       env:
         PDM_PUBLISH_USERNAME: ${{ secrets.PYPI_USERNAME }}
         PDM_PUBLISH_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       run: |
         pdm publish
 

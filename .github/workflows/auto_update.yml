@@ -21,30 +21,43 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-      - name: Set PDM version
+      - name: Get latest python version
+        id: setpyversion
         run: |
-          echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_ENV
+          export PY_VERSION=$(cat .python-version | sort -V | tail -1)
+          IFS=. read -r major minor patch <<< ${PY_VERSION}
+          echo "python_version=${major}.${minor}" >> "${GITHUB_OUTPUT}"
+      - name: Set PDM version
+        id: setpdmversion
+        run: |
+          echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
         uses: actions/setup-python@v5
         with:
-          python-version-file: .github/settings/auto_update.python_version
+          python-version: ${{ steps.setpyversion.outputs.python_version }}
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v4
         with:
           architecture: x64
-          version: ${{ env.pdm_version }}
+          version: ${{ steps.setpdmversion.outputs.pdm_version }}
           prerelease: true
           enable-pep582: true
           allow-python-prereleases: false
       - name: Disable update check
         shell: bash
         run: pdm config check_update false
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Use venv as backend
         shell: bash
         run: pdm config venv.backend venv
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Install all dependencies from lock file
         shell: bash
         run: pdm install -G:all
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Perform dry-run update
         shell: bash
         id: package_update
@@ -72,6 +85,8 @@ jobs:
       - name: "Update dependencies"
         run: pdm update --no-sync --update-all
         shell: bash
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Detect changes
         id: detect-changes
         shell: bash
@@ -82,20 +97,28 @@ jobs:
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Install plugin itself
         shell: bash
         run: pdm install --plugins
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: "Increase dev version"
         shell: bash
         run: pdm bump dev
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Setup Commit message and PR Title
         id: text_formatting
         shell: bash
         run: |
           echo "GIT_PDM_TITLE=chore: Updated ${{ env.PDM_NUMBER_OF_NEW_PACKAGES }} dependencies in pdm.lock" >> $GITHUB_ENV
         if: ${{ steps.detect-changes.outputs.changed == 'true' }}
+        env:
+          PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
       - name: Commit and create Pull request
         id: create-pr
         uses: peter-evans/create-pull-request@v7
