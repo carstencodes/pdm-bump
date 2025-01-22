@@ -194,13 +194,15 @@ jobs:
       - name: Check for changed files
         shell: bash
         run: |
-          no_changed_files=$(git status --porcelain | grep '.py' | wc -l)
-          if [ $no_changed_files -gt 0 ];
+          export no_changed_files=$(git status --porcelain | grep '.py' | wc -l)
+          if [ "${no_changed_files}" != "0" ];
           then
             echo "There are changed files:" >&2
             git status --porcelain >&2
             exit 1
           fi
+
+          exit 0
 
   commit-lint:
     name: Lint git commit messages
