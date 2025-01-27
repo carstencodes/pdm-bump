@@ -1039,7 +1039,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.22.2"
+version = "2.22.3"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1069,8 +1069,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.22.2-py3-none-any.whl", hash = "sha256:22c7489dfb3c261f9fd13627520b9fe89e56f4146e392b0438b6218c9f437e9e"},
-    {file = "pdm-2.22.2.tar.gz", hash = "sha256:907dbaa1659f07c763902f8429c1573aa32b5ef2d99b3b123b5f1e38015c917b"},
+    {file = "pdm-2.22.3-py3-none-any.whl", hash = "sha256:e868f5ff46aa716b33aa69a10678447af681c26864b2992c4cb1f853a0f958cc"},
+    {file = "pdm-2.22.3.tar.gz", hash = "sha256:f409d37b44f6b9938e4eed0bd0ca8016d15cd4514337640d6f962a74d022b412"},
 ]
 
 [[package]]
@@ -1101,12 +1101,12 @@ files = [
 
 [[package]]
 name = "pip"
-version = "24.3.1"
+version = "25.0"
 requires_python = ">=3.8"
 summary = "The PyPA recommended tool for installing Python packages."
 files = [
-    {file = "pip-24.3.1-py3-none-any.whl", hash = "sha256:3790624780082365f47549d032f3770eeb2b1e8bd1f7b2e02dace1afa361b4ed"},
-    {file = "pip-24.3.1.tar.gz", hash = "sha256:ebcb60557f2aefabc2e0f918751cd24ea0d56d8ec5445fe1807f1d2109660b99"},
+    {file = "pip-25.0-py3-none-any.whl", hash = "sha256:b6eb97a803356a52b2dd4bb73ba9e65b2ba16caa6bcb25a7497350a4e5859b65"},
+    {file = "pip-25.0.tar.gz", hash = "sha256:8e0a97f7b4c47ae4a494560da84775e9e2f671d415d8d828e052efefb206b30b"},
 ]
 
 [[package]]
@@ -1672,12 +1672,12 @@ files = [
 
 [[package]]
 name = "semver"
-version = "3.0.2"
+version = "3.0.4"
 requires_python = ">=3.7"
 summary = "Python helper for Semantic Versioning (https://semver.org)"
 files = [
-    {file = "semver-3.0.2-py3-none-any.whl", hash = "sha256:b1ea4686fe70b981f85359eda33199d60c53964284e0cfb4977d243e37cf4bf4"},
-    {file = "semver-3.0.2.tar.gz", hash = "sha256:6253adb39c70f6e51afed2fa7152bcd414c411286088fb4b9effb133885ab4cc"},
+    {file = "semver-3.0.4-py3-none-any.whl", hash = "sha256:9c824d87ba7f7ab4a1890799cec8596f15c1241cb473404ea1cb0c55e4b04746"},
+    {file = "semver-3.0.4.tar.gz", hash = "sha256:afc7d8c584a5ed0a11033af086e8af226a9c0b206f313e0301f8dd7b6b589602"},
 ]
 
 [[package]]
