@@ -1,6 +1,6 @@
 [project]
 name = "pdm-bump"
-version = "0.9.11.dev2"
+version = "0.9.11.dev3"
 readme = "README.md"
 description = "A plugin for PDM providing the ability to modify the version according to PEP440"
 license-files = ["LICENSE"]
