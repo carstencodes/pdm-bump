@@ -82,7 +82,7 @@ files = [
 
 [[package]]
 name = "bandit"
-version = "1.8.2"
+version = "1.8.3"
 requires_python = ">=3.9"
 summary = "Security oriented static analyser for python code."
 dependencies = [
@@ -92,8 +92,8 @@ dependencies = [
     "stevedore>=1.20.0",
 ]
 files = [
-    {file = "bandit-1.8.2-py3-none-any.whl", hash = "sha256:df6146ad73dd30e8cbda4e29689ddda48364e36ff655dbfc86998401fcf1721f"},
-    {file = "bandit-1.8.2.tar.gz", hash = "sha256:e00ad5a6bc676c0954669fe13818024d66b70e42cf5adb971480cf3b671e835f"},
+    {file = "bandit-1.8.3-py3-none-any.whl", hash = "sha256:28f04dc0d258e1dd0f99dee8eefa13d1cb5e3fde1a5ab0c523971f97b289bcd8"},
+    {file = "bandit-1.8.3.tar.gz", hash = "sha256:f5847beb654d309422985c36644649924e0ea4425c76dec2e89110b87506193a"},
 ]
 
 [[package]]
@@ -585,7 +585,7 @@ files = [
 
 [[package]]
 name = "flake8"
-version = "7.1.1"
+version = "7.1.2"
 requires_python = ">=3.8.1"
 summary = "the modular source code checker: pep8 pyflakes and co"
 dependencies = [
@@ -594,8 +594,8 @@ dependencies = [
     "pyflakes<3.3.0,>=3.2.0",
 ]
 files = [
-    {file = "flake8-7.1.1-py2.py3-none-any.whl", hash = "sha256:597477df7860daa5aa0fdd84bf5208a043ab96b8e96ab708770ae0364dd03213"},
-    {file = "flake8-7.1.1.tar.gz", hash = "sha256:049d058491e228e03e67b390f311bbf88fce2dbaa8fa673e7aea87b7198b8d38"},
+    {file = "flake8-7.1.2-py2.py3-none-any.whl", hash = "sha256:1cbc62e65536f65e6d754dfe6f1bada7f5cf392d6f5db3c2b85892466c3e7c1a"},
+    {file = "flake8-7.1.2.tar.gz", hash = "sha256:c586ffd0b41540951ae41af572e6790dbd49fc12b3aa2541685d253d9bd504bd"},
 ]
 
 [[package]]
@@ -1020,12 +1020,12 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.2.5"
+version = "2025.2.12"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.2.5-py3-none-any.whl", hash = "sha256:8494fa6499ec10243fdd79e874aef756777b2cd0e5ca0c1df69a2d768b42dab4"},
-    {file = "pbs_installer-2025.2.5.tar.gz", hash = "sha256:e2d75530fe49b814dc98baf6bbd960a21f43521006439c4f5bebe4d4ab8c07da"},
+    {file = "pbs_installer-2025.2.12-py3-none-any.whl", hash = "sha256:3d9034047945b2d5f169cd9bb324f1f28c37d0ec120d6110ddb10aa07016fb79"},
+    {file = "pbs_installer-2025.2.12.tar.gz", hash = "sha256:c6815165babf312c90d27ccd16afe598de641d616860f88e1855f183b0253b39"},
 ]
 
 [[package]]
