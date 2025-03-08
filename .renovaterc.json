@@ -25,6 +25,9 @@
         "pyenv",
         "github-actions"
     ],
+    "env": {
+        "PDM_PYTHON_VERSION": "3.13"
+    },
     "ignoreDeps": [],
     "osvVulnerabilityAlerts": true,
     "packageRules": [
