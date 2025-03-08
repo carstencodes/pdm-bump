@@ -27,6 +27,20 @@
     ],
     "ignoreDeps": [],
     "osvVulnerabilityAlerts": true,
+    "packageRules": [
+      {
+        "matchManagers": ["pep621"],
+        "rangeStrategy": "bump"
+      },
+      {
+        "matchManagers": ["pyenv"],
+        "rangeStrategy": "replace"
+      },
+      {
+        "matchManagers": ["github-actions"],
+        "rangeStrategy": "replace"
+      }
+    ],
     "platformAutomerge": true,
     "pruneBranchAfterAutomerge": true,
     "pruneStaleBranches": true,
