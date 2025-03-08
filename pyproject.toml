@@ -10,7 +10,7 @@ authors = [
 ]
 dependencies = [
     "pdm>=2.00",
-    "annotated-types>=0.2.0",
+    "annotated-types>=0.7.0",
     "typing-extensions>=4; python_version<='3.9'",
     "tomlkit>=0.11.6",
     "tomli>=2.0.1; python_version<='3.10'",
