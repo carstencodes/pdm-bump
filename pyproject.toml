@@ -62,7 +62,7 @@ static-code-analysis = [
 ]
 checkstyle = [
     "flake8>=3.9.2",
-    "flake518>=1.2.3",
+    "flake518>=1.6.0",
     "mypy>=0.971",
     "pylint>=2.14.5",
     "pycodestyle>=2.7.0",
