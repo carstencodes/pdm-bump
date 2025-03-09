@@ -56,7 +56,7 @@ release = [
 ]
 static-code-analysis = [
     "radon>=5.1.0",
-    "vulture>=2.7",
+    "vulture>=2.14",
     "bandit>=1.8.3",
     "prospector>=0.12.2",
 ]
