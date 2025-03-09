@@ -51,7 +51,7 @@ formatting = [
     "pyment>=0.3.3",
 ]
 release = [
-    "gitlint>=0.17.0",
+    "gitlint>=0.19.1",
     "pip-audit>=2.4.4",
 ]
 static-code-analysis = [
