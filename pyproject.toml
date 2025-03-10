@@ -38,7 +38,7 @@ plugins = [
 
 [tool.pdm.dev-dependencies]
 test = [
-    "pytest>=7.4.4",
+    "pytest>=8.3.5",
     "tox>=4.24.2",
     "tox-pdm>=0.6.0",
     "pytest-cov>=3.0.0",
