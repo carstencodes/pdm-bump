@@ -56,6 +56,8 @@ jobs:
         python -m pip install --upgrade pip
         pip install pdm==${{ steps.setpdmversion.outputs.pdm_version }}
         pdm install -G:all
+      env:
+        PDM_PYTHON_VERSION: ${{ steps.setpyversion.outputs.python_version }}
     - name: Build and publish
       env:
         PDM_PUBLISH_USERNAME: ${{ secrets.PYPI_USERNAME }}
