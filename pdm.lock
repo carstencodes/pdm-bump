@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:83ecb8aa90fe06a58b323cc79ef76c7273fe87612c5e60104c5c1e4ef469d994"
+content_hash = "sha256:c5c53ef0da3f3231dbb52e3c970e5b09b9a361ee08e583c8f54d339724f21ff8"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1105,7 +1105,7 @@ files = [
 
 [[package]]
 name = "pdm-pfsc"
-version = "0.12.2"
+version = "0.12.3"
 requires_python = ">=3.9"
 summary = "Core functionPlug-In Foundation Service Collection)"
 dependencies = [
@@ -1113,7 +1113,7 @@ dependencies = [
     "pyproject-metadata>=0.7.1",
 ]
 files = [
-    {file = "pdm_pfsc-0.12.2-py3-none-any.whl", hash = "sha256:fc1872e325ca61d2d98b98a87a3d22a663d4349493835801a4d3a26f24ff86dc"},
+    {file = "pdm_pfsc-0.12.3-py3-none-any.whl", hash = "sha256:f1811cc8e80d3d4414a239f6d484daf1accca934448d7cbfd11d2b3698cd23fe"},
 ]
 
 [[package]]
@@ -1208,7 +1208,7 @@ files = [
 
 [[package]]
 name = "prospector"
-version = "1.15.3"
+version = "1.16.0"
 requires_python = "<4.0,>=3.9"
 summary = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 dependencies = [
@@ -1223,15 +1223,14 @@ dependencies = [
     "pyflakes>=2.2.0",
     "pylint-celery==0.3",
     "pylint-django>=2.6.1",
-    "pylint-flask==0.6",
     "pylint>=3.0",
     "requirements-detector>=1.3.2",
     "setoptconf-tmp<0.4.0,>=0.3.1",
     "toml<0.11.0,>=0.10.2",
 ]
 files = [
-    {file = "prospector-1.15.3-py3-none-any.whl", hash = "sha256:240e75f9dcb6624574204a997004ef145f615540a00b50ba4203db9a429044f2"},
-    {file = "prospector-1.15.3.tar.gz", hash = "sha256:78bf3ff0a46e4b7d95df355d53a34c41e4dd9e24c72ddd01558a273c39df0df6"},
+    {file = "prospector-1.16.0-py3-none-any.whl", hash = "sha256:e621db4b7f215e39f98575297e4e61f00134ce0e4fe9b2baf0d6e5aaeff5c9f2"},
+    {file = "prospector-1.16.0.tar.gz", hash = "sha256:841aa6093c4a978b7cb8ba5457eec8b0fe069555986300846d74f830acca596c"},
 ]
 
 [[package]]
@@ -1342,19 +1341,6 @@ files = [
 ]
 
 [[package]]
-name = "pylint-flask"
-version = "0.6"
-summary = "pylint-flask is a Pylint plugin to aid Pylint in recognizing and understanding errors caused when using Flask"
-dependencies = [
-    "astroid>=1.0",
-    "pylint-plugin-utils>=0.2.1",
-    "pylint>=1.0",
-]
-files = [
-    {file = "pylint-flask-0.6.tar.gz", hash = "sha256:f4d97de2216bf7bfce07c9c08b166e978fe9f2725de2a50a9845a97de7e31517"},
-]
-
-[[package]]
 name = "pylint-plugin-utils"
 version = "0.8.2"
 requires_python = ">=3.7,<4.0"
@@ -1378,12 +1364,12 @@ files = [
 
 [[package]]
 name = "pyparsing"
-version = "3.2.1"
+version = "3.2.3"
 requires_python = ">=3.9"
 summary = "pyparsing module - Classes and methods to define and execute parsing grammars"
 files = [
-    {file = "pyparsing-3.2.1-py3-none-any.whl", hash = "sha256:506ff4f4386c4cec0590ec19e6302d3aedb992fdc02c761e90416f158dacf8e1"},
-    {file = "pyparsing-3.2.1.tar.gz", hash = "sha256:61980854fd66de3a90028d679a954d5f2623e83144b5afe5ee86f43d762e5f0a"},
+    {file = "pyparsing-3.2.3-py3-none-any.whl", hash = "sha256:a749938e02d6fd0b59b356ca504a24982314bb090c383e3cf201c95ef7e2bfcf"},
+    {file = "pyparsing-3.2.3.tar.gz", hash = "sha256:b9c13f1ab8b3b542f72e28f634bad4de758ab3ce4546e4301970ad6fa77c38be"},
 ]
 
 [[package]]
@@ -1471,12 +1457,12 @@ files = [
 
 [[package]]
 name = "python-dotenv"
-version = "1.0.1"
-requires_python = ">=3.8"
+version = "1.1.0"
+requires_python = ">=3.9"
 summary = "Read key-value pairs from a .env file and set them as environment variables"
 files = [
-    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
-    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+    {file = "python_dotenv-1.1.0-py3-none-any.whl", hash = "sha256:d7c01d9e2293916c18baf562d95698754b0dbbb5e74d457c45d4f6561fb9d55d"},
+    {file = "python_dotenv-1.1.0.tar.gz", hash = "sha256:41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5"},
 ]
 
 [[package]]
@@ -1711,12 +1697,12 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "77.0.3"
+version = "78.1.0"
 requires_python = ">=3.9"
 summary = "Easily download, build, install, upgrade, and uninstall Python packages"
 files = [
-    {file = "setuptools-77.0.3-py3-none-any.whl", hash = "sha256:67122e78221da5cf550ddd04cf8742c8fe12094483749a792d56cd669d6cf58c"},
-    {file = "setuptools-77.0.3.tar.gz", hash = "sha256:583b361c8da8de57403743e756609670de6fb2345920e36dc5c2d914c319c945"},
+    {file = "setuptools-78.1.0-py3-none-any.whl", hash = "sha256:3e386e96793c8702ae83d17b853fb93d3e09ef82ec62722e61da5cd22376dcd8"},
+    {file = "setuptools-78.1.0.tar.gz", hash = "sha256:18fd474d4a82a5f83dac888df697af65afa82dec7323d09c3e37d1f14288da54"},
 ]
 
 [[package]]
@@ -1917,12 +1903,12 @@ files = [
 
 [[package]]
 name = "typing-extensions"
-version = "4.12.2"
+version = "4.13.0"
 requires_python = ">=3.8"
 summary = "Backported and Experimental Type Hints for Python 3.8+"
 files = [
-    {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
-    {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
+    {file = "typing_extensions-4.13.0-py3-none-any.whl", hash = "sha256:c8dd92cc0d6425a97c18fbb9d1954e5ff92c1ca881a309c45f06ebc0b79058e5"},
+    {file = "typing_extensions-4.13.0.tar.gz", hash = "sha256:0a4ac55a5820789d87e297727d229866c9650f6521b64206413c4fbada24d95b"},
 ]
 
 [[package]]
