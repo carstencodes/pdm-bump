@@ -117,7 +117,7 @@ your version file automatically.
 
 In your `pdm.toml`, you can add the following configuration values:
 
-### Table plugins.bump
+### Table plugin.bump
 
 | Name           | Type | Description                                                 | ENV_VAR                       | CLI Parameter                                 | Default Value |
 |----------------|------|-------------------------------------------------------------|-------------------------------|-----------------------------------------------|---------------|
@@ -126,7 +126,7 @@ In your `pdm.toml`, you can add the following configuration values:
 | auto_tag       | bool | Create a tag after bumping and committing the changes       |                               | -t, --tag                                     | False         |
 | tag_add_prefix | bool | Adds the prefix v to the version tag                        |                               | --no-prepend-v (Note: This inverts the logic) | True          |
 | allow_dirty    | bool | Allows tagging the project, if it is dirty                  |                               | -d, --dirty                                   | False         |
-| provider       | str  | "Configures the VCS Provider to use.                        | PDM_PLUGINS_BUMP_VCS_PROVIDER |                                               | git-cli       |
+| vcs_provider   | str  | "Configures the VCS Provider to use.                        | PDM_PLUGINS_BUMP_VCS_PROVIDER |                                               | git-cli       |
 
 The default commit message template is set to:
 
