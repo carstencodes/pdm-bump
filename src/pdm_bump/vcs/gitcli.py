@@ -288,70 +288,71 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
         self.__commit_staged_files(message)
 
     def __apply_cached_patch(self, hunks: tuple[HunkSource, ...]) -> None:
-        with NamedTemporaryFile(
+        target_file = NamedTemporaryFile(
             mode="wt",
             suffix=".patch",
             prefix="pdm-bump.git",
             delete=False,
-        ) as target_file:
+        ) 
+        with target_file as fp:
             for hunk in hunks:
                 rel_path: Path = hunk.source_file_path.relative_to(
                     self.current_path
                 )
-                target_file.write(
+                fp.write(
                     f"diff --git {Path('a') / rel_path}"
                     f" {Path('b') / rel_path}\n"
                 )
                 for line in hunk.get_source_file_change_hunks():
-                    logger.trace(line)
-                    target_file.write(f"{line}\n")
+                    fp.write(f"{line}\n")
 
-            target_file.flush()
+            fp.flush()
 
-            logger.debug("Wrote hunks to %s", target_file.name)
+        logger.debug("Wrote hunks to %s", target_file.name)
 
-            args = ["apply", "--cached"]
-            working_dir = self.current_path
-            if self.git_root_dir_path != self.current_path:
-                directory = self.current_path.relative_to(
-                    self.git_root_dir_path
-                )
-                args.extend(["--directory", f"{directory}"])
-                working_dir = self.git_root_dir_path
-            args.append(f"{target_file.name}")
+        args = ["apply", "--cached"]
+        working_dir = self.current_path
+        if self.git_root_dir_path != self.current_path:
+            directory = self.current_path.relative_to(
+                self.git_root_dir_path
+            )
+            args.extend(["--directory", f"{directory}"])
+            working_dir = self.git_root_dir_path
+        args.append(f"{target_file.name}")
 
-            try:
-                self.run(
-                    self.git_executable_path,
-                    tuple(args),
-                    raise_on_exit=True,
-                    cwd=working_dir,
-                )
-            finally:
-                Path(target_file.name).unlink()
+        try:
+            self.run(
+                self.git_executable_path,
+                tuple(args),
+                raise_on_exit=True,
+                cwd=working_dir,
+            )
+        finally:
+            Path(target_file.name).unlink()
 
     def __commit_staged_files(self, message) -> None:
-        with NamedTemporaryFile(
+        target_file =  NamedTemporaryFile(
             "wt",
             suffix="message",
             prefix="pdm-bump.git",
             delete=False,
-        ) as target_file:
-            logger.trace(message)
-            target_file.write(message)
+        )
+        with target_file as fp:
+            fp.write(message)
 
-            target_file.flush()
-            logger.debug("Wrote message '%s' to %s", message, target_file.name)
+            fp.flush()
 
-            try:
-                self.run(
-                    self.git_executable_path,
-                    ("commit", "-F", f"{target_file.name}"),
-                    raise_on_exit=True,
-                    cwd=self.current_path,
-                )
-            finally:
-                Path(target_file.name).unlink()
+        logger.debug("Wrote message '%s' to %s", message, target_file.name)
+
+        try:
+            self.run(
+                self.git_executable_path,
+                ("commit", "-F", f"{target_file.name}"),
+                raise_on_exit=True,
+                cwd=self.current_path,
+            )
+        finally:
+            Path(target_file.name).unlink()
 
 
 @vcs_provider("git-cli")
