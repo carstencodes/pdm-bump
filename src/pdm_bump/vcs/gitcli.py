@@ -293,7 +293,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             suffix=".patch",
             prefix="pdm-bump.git",
             delete=False,
-        ) 
+        )
         with target_file as fp:
             for hunk in hunks:
                 rel_path: Path = hunk.source_file_path.relative_to(
@@ -313,9 +313,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
         args = ["apply", "--cached"]
         working_dir = self.current_path
         if self.git_root_dir_path != self.current_path:
-            directory = self.current_path.relative_to(
-                self.git_root_dir_path
-            )
+            directory = self.current_path.relative_to(self.git_root_dir_path)
             args.extend(["--directory", f"{directory}"])
             working_dir = self.git_root_dir_path
         args.append(f"{target_file.name}")
@@ -331,7 +329,7 @@ class GitCliVcsProvider(VcsProvider, CliRunnerMixin):
             Path(target_file.name).unlink()
 
     def __commit_staged_files(self, message) -> None:
-        target_file =  NamedTemporaryFile(
+        target_file = NamedTemporaryFile(
             "wt",
             suffix="message",
             prefix="pdm-bump.git",
