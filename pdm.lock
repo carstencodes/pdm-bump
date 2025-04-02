@@ -1069,7 +1069,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.22.4"
+version = "2.23.0"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1099,8 +1099,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.22.4-py3-none-any.whl", hash = "sha256:2859a1f788fee571803a0f1f27d6d05dbc95267a071d7f2e01c230c58836d971"},
-    {file = "pdm-2.22.4.tar.gz", hash = "sha256:8483f3d2285039cea7e07c5ba6ac7e1fcba358129f8831fb75065a797d27b923"},
+    {file = "pdm-2.23.0-py3-none-any.whl", hash = "sha256:965087f3ce1ad1f9ef84dc11c499ef5d1c5e0a5f09a1437148d9beaf7502d6c9"},
+    {file = "pdm-2.23.0.tar.gz", hash = "sha256:ec5ce439648b42b928f4afa91c2b6251e6a33f40cc83779d899ca970bd9eb131"},
 ]
 
 [[package]]
@@ -1430,7 +1430,7 @@ files = [
 
 [[package]]
 name = "pytest-cov"
-version = "6.0.0"
+version = "6.1.0"
 requires_python = ">=3.9"
 summary = "Pytest plugin for measuring coverage."
 dependencies = [
@@ -1438,8 +1438,8 @@ dependencies = [
     "pytest>=4.6",
 ]
 files = [
-    {file = "pytest-cov-6.0.0.tar.gz", hash = "sha256:fde0b595ca248bb8e2d76f020b465f3b107c9632e6a1d1705f17834c89dcadc0"},
-    {file = "pytest_cov-6.0.0-py3-none-any.whl", hash = "sha256:eee6f1b9e61008bd34975a4d5bab25801eb31898b032dd55addc93e96fcaaa35"},
+    {file = "pytest_cov-6.1.0-py3-none-any.whl", hash = "sha256:cd7e1d54981d5185ef2b8d64b50172ce97e6f357e6df5cb103e828c7f993e201"},
+    {file = "pytest_cov-6.1.0.tar.gz", hash = "sha256:ec55e828c66755e5b74a21bd7cc03c303a9f928389c0563e50ba454a6dbe71db"},
 ]
 
 [[package]]
