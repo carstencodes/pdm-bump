@@ -61,7 +61,7 @@ static-code-analysis = [
     "prospector>=1.15.3",
 ]
 checkstyle = [
-    "flake8>=7.1.2",
+    "flake8>=7.2.0",
     "flake518>=1.6.0",
     "mypy>=1.15.0",
     "pylint>=3.3.5",
