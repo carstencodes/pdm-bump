@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:053202bee435313d81d7755c5aca19234f626f042761cd4f2f12247005f22e5e"
+content_hash = "sha256:e5740ed284e411caf3333adf6667c5306d72a2b58f29534d36fe262adc653dcf"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -497,15 +497,15 @@ files = [
 
 [[package]]
 name = "dep-logic"
-version = "0.4.11"
+version = "0.5.0"
 requires_python = ">=3.8"
 summary = "Python dependency specifications supporting logical operations"
 dependencies = [
     "packaging>=22",
 ]
 files = [
-    {file = "dep_logic-0.4.11-py3-none-any.whl", hash = "sha256:44cf69b3e0e369315e7d4cafa4a5050aa70666753831bf0c27b7f3eadbcf70ce"},
-    {file = "dep_logic-0.4.11.tar.gz", hash = "sha256:6084c81ce683943a60394ca0f8531ff803dfd955b5d7f52fb0571b53b930a182"},
+    {file = "dep_logic-0.5.0-py3-none-any.whl", hash = "sha256:f16a73ec5baf1f126e253f6a6249c80999818e608f84677736591ac623c516a6"},
+    {file = "dep_logic-0.5.0.tar.gz", hash = "sha256:be92e772f15d2563edd6b8694a6818846ad2822310dfc8f39cd20ebb0b03e329"},
 ]
 
 [[package]]
@@ -1082,13 +1082,13 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.23.1"
+version = "2.24.0"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
     "blinker",
     "certifi>=2024.8.30",
-    "dep-logic>=0.4.4",
+    "dep-logic>=0.5",
     "filelock>=3.13",
     "findpython<1.0.0a0,>=0.6.0",
     "hishel>=0.0.32",
@@ -1113,8 +1113,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.23.1-py3-none-any.whl", hash = "sha256:202c217eef140f7fe933f2025cc2a7a7cc0638abe43c51c4a74d3c1aa686d6f7"},
-    {file = "pdm-2.23.1.tar.gz", hash = "sha256:cf12cd2201df78a6543a5485ac1d7015a73b3a6b10c98b66dfae6ebd481386fe"},
+    {file = "pdm-2.24.0-py3-none-any.whl", hash = "sha256:7e643b32fc2476d35aac734d862e49bf3f4a06c69e0cb77346f9c18dc0181acb"},
+    {file = "pdm-2.24.0.tar.gz", hash = "sha256:1bb831c97ed2267f9186f499e1f2946783c6ce1f1ad93020256cce08f4fad87c"},
 ]
 
 [[package]]
