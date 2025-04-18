@@ -52,7 +52,7 @@ formatting = [
 ]
 release = [
     "gitlint>=0.19.1",
-    "pip-audit>=2.8.0",
+    "pip-audit>=2.9.0",
 ]
 static-code-analysis = [
     "radon>=6.0.1",
