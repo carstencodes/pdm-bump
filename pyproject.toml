@@ -41,7 +41,7 @@ test = [
     "pytest>=8.3.5",
     "tox>=4.24.2",
     "tox-pdm>=0.7.2",
-    "pytest-cov>=6.0.0",
+    "pytest-cov>=6.1.1",
 ]
 formatting = [
     "black>=25.1.0",
