@@ -11,7 +11,7 @@ authors = [
 dependencies = [
     "pdm>=2.22.4",
     "annotated-types>=0.7.0",
-    "typing-extensions>=4.12.2; python_version<='3.9'",
+    "typing-extensions>=4.13.2; python_version<='3.9'",
     "tomlkit>=0.13.2",
     "tomli>=2.2.1; python_version<='3.10'",
     "pyproject-metadata>=0.9.1",
