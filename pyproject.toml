@@ -65,7 +65,7 @@ checkstyle = [
     "flake518>=1.6.0",
     "mypy>=1.15.0",
     "pylint>=3.3.5",
-    "pycodestyle>=2.12.1",
+    "pycodestyle>=2.13.0",
     "pep8-naming>=0.9.0",
     "flake8-type-checking>=3.0.0",
 ]
