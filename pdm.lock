@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:a71f309e091fcbe80ccbfcfe363b4a33465bf5135651bef5cf1e21c11e45fb99"
+content_hash = "sha256:7ac6acecbc2739fccb4f27fe35dd87aa1595bdf2b15beb25adfd5929415e7748"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -510,12 +510,12 @@ files = [
 
 [[package]]
 name = "dill"
-version = "0.3.9"
+version = "0.4.0"
 requires_python = ">=3.8"
 summary = "serialize all of Python"
 files = [
-    {file = "dill-0.3.9-py3-none-any.whl", hash = "sha256:468dff3b89520b474c0397703366b7b95eebe6303f108adf9b19da1f702be87a"},
-    {file = "dill-0.3.9.tar.gz", hash = "sha256:81aa267dddf68cbfe8029c42ca9ec6a4ab3b22371d1c450abc54422577b4512c"},
+    {file = "dill-0.4.0-py3-none-any.whl", hash = "sha256:44f54bf6412c2c8464c14e8243eb163690a9800dbe2c367330883b19c7561049"},
+    {file = "dill-0.4.0.tar.gz", hash = "sha256:0633f1d2df477324f53a895b02c901fb961bdbf65a17122586ea7019292cbcf0"},
 ]
 
 [[package]]
