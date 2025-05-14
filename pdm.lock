@@ -55,15 +55,15 @@ files = [
 
 [[package]]
 name = "astroid"
-version = "3.3.9"
+version = "3.3.10"
 requires_python = ">=3.9.0"
 summary = "An abstract syntax tree for Python with inference support."
 dependencies = [
-    "typing-extensions>=4.0.0; python_version < \"3.11\"",
+    "typing-extensions>=4; python_version < \"3.11\"",
 ]
 files = [
-    {file = "astroid-3.3.9-py3-none-any.whl", hash = "sha256:d05bfd0acba96a7bd43e222828b7d9bc1e138aaeb0649707908d3702a9831248"},
-    {file = "astroid-3.3.9.tar.gz", hash = "sha256:622cc8e3048684aa42c820d9d218978021c3c3d174fb03a9f0d615921744f550"},
+    {file = "astroid-3.3.10-py3-none-any.whl", hash = "sha256:104fb9cb9b27ea95e847a94c003be03a9e039334a8ebca5ee27dafaf5c5711eb"},
+    {file = "astroid-3.3.10.tar.gz", hash = "sha256:c332157953060c6deb9caa57303ae0d20b0fbdb2e59b4a4f2a6ba49d0a7961ce"},
 ]
 
 [[package]]
@@ -538,12 +538,15 @@ files = [
 
 [[package]]
 name = "exceptiongroup"
-version = "1.2.2"
+version = "1.3.0"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
+dependencies = [
+    "typing-extensions>=4.6.0; python_version < \"3.13\"",
+]
 files = [
-    {file = "exceptiongroup-1.2.2-py3-none-any.whl", hash = "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b"},
-    {file = "exceptiongroup-1.2.2.tar.gz", hash = "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"},
+    {file = "exceptiongroup-1.3.0-py3-none-any.whl", hash = "sha256:4d111e6e0c13d0644cad6ddaa7ed0261a0b36971f6d23e7ec9b4b9097da78a10"},
+    {file = "exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88"},
 ]
 
 [[package]]
@@ -1199,12 +1202,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.3.7"
+version = "4.3.8"
 requires_python = ">=3.9"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.3.7-py3-none-any.whl", hash = "sha256:a03875334331946f13c549dbd8f4bac7a13a50a895a0eb1e8c6a8ace80d40a94"},
-    {file = "platformdirs-4.3.7.tar.gz", hash = "sha256:eb437d586b6a0986388f0d6f74aa0cde27b48d0e3d66843640bfb6bdcdb6e351"},
+    {file = "platformdirs-4.3.8-py3-none-any.whl", hash = "sha256:ff7059bb7eb1179e2685604f4aaf157cfd9535242bd23742eadc3c13542139b4"},
+    {file = "platformdirs-4.3.8.tar.gz", hash = "sha256:3d512d96e16bcb959a814c9f348431070822a6496326a4be0911c40b5a74c2bc"},
 ]
 
 [[package]]
@@ -1385,16 +1388,16 @@ files = [
 
 [[package]]
 name = "pyproject-api"
-version = "1.9.0"
+version = "1.9.1"
 requires_python = ">=3.9"
 summary = "API to interact with the python pyproject.toml based projects"
 dependencies = [
-    "packaging>=24.2",
+    "packaging>=25",
     "tomli>=2.2.1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pyproject_api-1.9.0-py3-none-any.whl", hash = "sha256:326df9d68dea22d9d98b5243c46e3ca3161b07a1b9b18e213d1e24fd0e605766"},
-    {file = "pyproject_api-1.9.0.tar.gz", hash = "sha256:7e8a9854b2dfb49454fae421cb86af43efbb2b2454e5646ffb7623540321ae6e"},
+    {file = "pyproject_api-1.9.1-py3-none-any.whl", hash = "sha256:7d6238d92f8962773dd75b5f0c4a6a27cce092a14b623b811dba656f3b628948"},
+    {file = "pyproject_api-1.9.1.tar.gz", hash = "sha256:43c9918f49daab37e302038fc1aed54a8c7a91a9fa935d00b9a485f37e0f5335"},
 ]
 
 [[package]]
@@ -1708,12 +1711,12 @@ files = [
 
 [[package]]
 name = "setuptools"
-version = "80.3.1"
+version = "80.4.0"
 requires_python = ">=3.9"
 summary = "Easily download, build, install, upgrade, and uninstall Python packages"
 files = [
-    {file = "setuptools-80.3.1-py3-none-any.whl", hash = "sha256:ea8e00d7992054c4c592aeb892f6ad51fe1b4d90cc6947cc45c45717c40ec537"},
-    {file = "setuptools-80.3.1.tar.gz", hash = "sha256:31e2c58dbb67c99c289f51c16d899afedae292b978f8051efaf6262d8212f927"},
+    {file = "setuptools-80.4.0-py3-none-any.whl", hash = "sha256:6cdc8cb9a7d590b237dbe4493614a9b75d0559b888047c1f67d49ba50fc3edb2"},
+    {file = "setuptools-80.4.0.tar.gz", hash = "sha256:5a78f61820bc088c8e4add52932ae6b8cf423da2aff268c23f813cfbb13b4006"},
 ]
 
 [[package]]
@@ -1766,11 +1769,12 @@ files = [
 
 [[package]]
 name = "snowballstemmer"
-version = "2.2.0"
-summary = "This package provides 29 stemmers for 28 languages generated from Snowball algorithms."
+version = "3.0.1"
+requires_python = "!=3.0.*,!=3.1.*,!=3.2.*"
+summary = "This package provides 32 stemmers for 30 languages generated from Snowball algorithms."
 files = [
-    {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},
-    {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
+    {file = "snowballstemmer-3.0.1-py3-none-any.whl", hash = "sha256:6cd7b3897da8d6c9ffb968a6781fa6532dce9c3618a4b127d920dab764a19064"},
+    {file = "snowballstemmer-3.0.1.tar.gz", hash = "sha256:6d5eeeec8e9f84d4d56b847692bacf79bc2c8e90c7f80ca4444ff8b6f2e52895"},
 ]
 
 [[package]]
@@ -1867,8 +1871,8 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.25.0"
-requires_python = ">=3.8"
+version = "4.26.0"
+requires_python = ">=3.9"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
     "cachetools>=5.5.1",
@@ -1881,11 +1885,11 @@ dependencies = [
     "pyproject-api>=1.8",
     "tomli>=2.2.1; python_version < \"3.11\"",
     "typing-extensions>=4.12.2; python_version < \"3.11\"",
-    "virtualenv>=20.29.1",
+    "virtualenv>=20.31",
 ]
 files = [
-    {file = "tox-4.25.0-py3-none-any.whl", hash = "sha256:4dfdc7ba2cc6fdc6688dde1b21e7b46ff6c41795fb54586c91a3533317b5255c"},
-    {file = "tox-4.25.0.tar.gz", hash = "sha256:dd67f030317b80722cf52b246ff42aafd3ed27ddf331c415612d084304cf5e52"},
+    {file = "tox-4.26.0-py3-none-any.whl", hash = "sha256:75f17aaf09face9b97bd41645028d9f722301e912be8b4c65a3f938024560224"},
+    {file = "tox-4.26.0.tar.gz", hash = "sha256:a83b3b67b0159fa58e44e646505079e35a43317a62d2ae94725e0586266faeca"},
 ]
 
 [[package]]
@@ -1948,7 +1952,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "20.31.1"
+version = "20.31.2"
 requires_python = ">=3.8"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -1958,8 +1962,8 @@ dependencies = [
     "platformdirs<5,>=3.9.1",
 ]
 files = [
-    {file = "virtualenv-20.31.1-py3-none-any.whl", hash = "sha256:f448cd2f1604c831afb9ea238021060be2c0edbcad8eb0a4e8b4e14ff11a5482"},
-    {file = "virtualenv-20.31.1.tar.gz", hash = "sha256:65442939608aeebb9284cd30baca5865fcd9f12b58bb740a24b220030df46d26"},
+    {file = "virtualenv-20.31.2-py3-none-any.whl", hash = "sha256:36efd0d9650ee985f0cad72065001e66d49a6f24eb44d98980f630686243cf11"},
+    {file = "virtualenv-20.31.2.tar.gz", hash = "sha256:e10c0a9d02835e592521be48b332b6caee6887f332c111aa79a09b9e79efc2af"},
 ]
 
 [[package]]
