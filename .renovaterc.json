@@ -45,9 +45,6 @@
     "pruneBranchAfterAutomerge": true,
     "pruneStaleBranches": true,
     "rebaseWhen": "behind-base-branch",
-    "schedule": [
-        "at 6pm every weekday"
-    ],
     "timezone": "Etc/UTC",
     "updateLockFiles": true,
     "updateNotScheduled": true
