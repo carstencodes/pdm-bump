@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:211b7429d97baf5a19c947f041a6824b566b0247eb5412d23a0cd7034391af3d"
+content_hash = "sha256:3904ad579f58c11d54087bca406b269e4097393784f51799e44102cf3d113bf5"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
