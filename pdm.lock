@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:db13ef9dbe1e51cef28555387dcbdd84e63a3ceb911142f1598eec81ad4544fb"
+content_hash = "sha256:4071fc05636d174aa7a1bbd611f693a594ad3fdd19284f11ac5c7e3fb834dee4"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -175,6 +175,7 @@ extras = ["filecache"]
 requires_python = ">=3.9"
 summary = "httplib2 caching for requests"
 dependencies = [
+    "CacheControl==0.14.3",
     "CacheControl==0.14.3",
     "filelock>=3.8.0",
 ]
@@ -404,6 +405,7 @@ extras = ["toml"]
 requires_python = ">=3.9"
 summary = "Code coverage measurement for Python"
 dependencies = [
+    "coverage==7.9.0",
     "coverage==7.9.0",
     "tomli; python_full_version <= \"3.11.0a6\"",
 ]
@@ -687,6 +689,7 @@ dependencies = [
     "arrow==1.2.3",
     "click==8.1.3",
     "gitlint-core==0.19.1",
+    "gitlint-core==0.19.1",
     "sh==1.14.3; sys_platform != \"win32\"",
 ]
 files = [
@@ -768,6 +771,7 @@ extras = ["socks"]
 requires_python = ">=3.8"
 summary = "The next generation HTTP client."
 dependencies = [
+    "httpx==0.28.1",
     "httpx==0.28.1",
     "socksio==1.*",
 ]
@@ -1081,17 +1085,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.5.17"
+version = "2025.6.12"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.5.17-py3-none-any.whl", hash = "sha256:a235e6665efb4369e04267bbc6e547bbb8181cf405975fbbe9fe5c1c59452da6"},
-    {file = "pbs_installer-2025.5.17.tar.gz", hash = "sha256:8e319b17662ae583e607d5fd46900cb2a7b31ee9ae0c695126c1b9b38e6a78a0"},
+    {file = "pbs_installer-2025.6.12-py3-none-any.whl", hash = "sha256:438e75de131a2114ac5e86156fc51da7dadd6734844de329ad162cca63709297"},
+    {file = "pbs_installer-2025.6.12.tar.gz", hash = "sha256:ae2d3990848652dca699a680b00ea8e19b970cb6172967cb00539bfeed5a7465"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.24.2"
+version = "2.25.0"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1106,9 +1110,8 @@ dependencies = [
     "id>=1.5.0",
     "importlib-metadata>=3.6; python_version < \"3.10\"",
     "installer<0.8,>=0.7",
-    "msgpack>=1.0",
     "packaging!=22.0,>=20.9",
-    "pbs-installer>=2024.4.18",
+    "pbs-installer>=2025.6.6",
     "platformdirs",
     "pyproject-hooks",
     "python-dotenv>=0.15",
@@ -1122,8 +1125,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.24.2-py3-none-any.whl", hash = "sha256:8d6b3733abf331267d7c99aac4a243f4cfdc70232ba44820842c22a2a129a072"},
-    {file = "pdm-2.24.2.tar.gz", hash = "sha256:ce0d5e9005fe26238b8ba5cf0e37ac00acab2fb90f904bf0219a5e8445849dfb"},
+    {file = "pdm-2.25.0-py3-none-any.whl", hash = "sha256:b2131adbb70528bafe1bb97b3267223c0d5f351e08ca67d1437d72ea2f9dc93b"},
+    {file = "pdm-2.25.0.tar.gz", hash = "sha256:54189fc90113a93fa0f54770377fc0f5b17e4f09364f4ef17ada8493427cce18"},
 ]
 
 [[package]]
@@ -1646,7 +1649,7 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.32.3"
+version = "2.32.4"
 requires_python = ">=3.8"
 summary = "Python HTTP for Humans."
 dependencies = [
@@ -1656,8 +1659,8 @@ dependencies = [
     "urllib3<3,>=1.21.1",
 ]
 files = [
-    {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
-    {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
+    {file = "requests-2.32.4-py3-none-any.whl", hash = "sha256:27babd3cda2a6d50b30443204ee89830707d396671944c998b5975b031ac2b2c"},
+    {file = "requests-2.32.4.tar.gz", hash = "sha256:27d0316682c8a29834d3264820024b62a36942083d52caf2f14c0591336d3422"},
 ]
 
 [[package]]
@@ -1992,10 +1995,10 @@ files = [
 
 [[package]]
 name = "zipp"
-version = "3.22.0"
+version = "3.23.0"
 requires_python = ">=3.9"
 summary = "Backport of pathlib-compatible object wrapper for zip files"
 files = [
-    {file = "zipp-3.22.0-py3-none-any.whl", hash = "sha256:fe208f65f2aca48b81f9e6fd8cf7b8b32c26375266b009b413d45306b6148343"},
-    {file = "zipp-3.22.0.tar.gz", hash = "sha256:dd2f28c3ce4bc67507bfd3781d21b7bb2be31103b51a4553ad7d90b84e57ace5"},
+    {file = "zipp-3.23.0-py3-none-any.whl", hash = "sha256:071652d6115ed432f5ce1d34c336c0adfd6a884660d1e9712a256d3d3bd4b14e"},
+    {file = "zipp-3.23.0.tar.gz", hash = "sha256:a07157588a12518c9d4034df3fbbee09c814741a33ff63c05fa29d26a2404166"},
 ]
