@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:4071fc05636d174aa7a1bbd611f693a594ad3fdd19284f11ac5c7e3fb834dee4"
+content_hash = "sha256:6f7418e8bd2a5a2dddba846e242ac6ef69da71e4b4671c9515da06bf136dc249"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1095,7 +1095,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.25.0"
+version = "2.25.1"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1125,8 +1125,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.25.0-py3-none-any.whl", hash = "sha256:b2131adbb70528bafe1bb97b3267223c0d5f351e08ca67d1437d72ea2f9dc93b"},
-    {file = "pdm-2.25.0.tar.gz", hash = "sha256:54189fc90113a93fa0f54770377fc0f5b17e4f09364f4ef17ada8493427cce18"},
+    {file = "pdm-2.25.1-py3-none-any.whl", hash = "sha256:3d438237ade916cc220ae5fce2d2af9fe9b42eab2dcb29188954bde0b04eaa9e"},
+    {file = "pdm-2.25.1.tar.gz", hash = "sha256:3145251f37a3f94fa211ade992e7db7792da4c3e8e3eeeb1993d952adebe0b96"},
 ]
 
 [[package]]
