@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:613b836d10f7eb857401484abebcae97ea646785793f07a141940c19f8a87d74"
+content_hash = "sha256:b6b9fcec0ab7522d2f45daa1c1cd22b4ea4e5bc98db0ab5b4b127a3af1034e4c"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -82,7 +82,7 @@ files = [
 
 [[package]]
 name = "bandit"
-version = "1.8.3"
+version = "1.8.5"
 requires_python = ">=3.9"
 summary = "Security oriented static analyser for python code."
 dependencies = [
@@ -92,8 +92,8 @@ dependencies = [
     "stevedore>=1.20.0",
 ]
 files = [
-    {file = "bandit-1.8.3-py3-none-any.whl", hash = "sha256:28f04dc0d258e1dd0f99dee8eefa13d1cb5e3fde1a5ab0c523971f97b289bcd8"},
-    {file = "bandit-1.8.3.tar.gz", hash = "sha256:f5847beb654d309422985c36644649924e0ea4425c76dec2e89110b87506193a"},
+    {file = "bandit-1.8.5-py3-none-any.whl", hash = "sha256:cb2e57524e99e33ced48833c6cc9c12ac78ae970bb6a450a83c4b506ecc1e2f9"},
+    {file = "bandit-1.8.5.tar.gz", hash = "sha256:db812e9c39b8868c0fed5278b77fffbbaba828b4891bc80e34b9c50373201cfd"},
 ]
 
 [[package]]
