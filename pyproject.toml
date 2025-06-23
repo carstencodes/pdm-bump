@@ -58,7 +58,7 @@ static-code-analysis = [
     "radon>=6.0.1",
     "vulture>=2.14",
     "bandit>=1.8.5",
-    "prospector>=1.17.1",
+    "prospector>=1.17.2",
 ]
 checkstyle = [
     "flake8>=7.3.0",

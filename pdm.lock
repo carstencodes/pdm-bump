@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:e068f1cc90e1472ef4b5bb3dd3b6f6c4bf24053f3a1949934892d29ac3ca651b"
+content_hash = "sha256:2b9d93c551539d47f5915014e5f5dc440f3ddf517db6f095c4ab2e99c65ac0f2"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1225,7 +1225,7 @@ files = [
 
 [[package]]
 name = "prospector"
-version = "1.17.1"
+version = "1.17.2"
 requires_python = ">=3.9"
 summary = "Prospector is a tool to analyse Python code by aggregating the result of other tools."
 dependencies = [
@@ -1246,8 +1246,8 @@ dependencies = [
     "toml<0.11.0,>=0.10.2",
 ]
 files = [
-    {file = "prospector-1.17.1-py3-none-any.whl", hash = "sha256:da26d4f5c02af4ed38260ddb6dd8d5635f02ae0af8af17dccf20885f672f6ff5"},
-    {file = "prospector-1.17.1.tar.gz", hash = "sha256:3ea49d2969d876e199bacd337d89a7b0469e25997f20124f3daa59f01efb3111"},
+    {file = "prospector-1.17.2-py3-none-any.whl", hash = "sha256:b99206e7f214c3823cff155cd458f507d45beae86b2dbcead2260eda570ed8db"},
+    {file = "prospector-1.17.2.tar.gz", hash = "sha256:44a92f5027bfbac4cc00b2598a773bf2a546067f5a7a6a525e7a1e96a2635a52"},
 ]
 
 [[package]]
