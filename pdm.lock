@@ -569,15 +569,16 @@ files = [
 
 [[package]]
 name = "findpython"
-version = "0.6.3"
+version = "0.7.0"
 requires_python = ">=3.8"
 summary = "A utility to find python versions on your system"
 dependencies = [
     "packaging>=20",
+    "platformdirs>=4.3.6",
 ]
 files = [
-    {file = "findpython-0.6.3-py3-none-any.whl", hash = "sha256:a85bb589b559cdf1b87227cc233736eb7cad894b9e68021ee498850611939ebc"},
-    {file = "findpython-0.6.3.tar.gz", hash = "sha256:5863ea55556d8aadc693481a14ac4f3624952719efc1c5591abb0b4a9e965c94"},
+    {file = "findpython-0.7.0-py3-none-any.whl", hash = "sha256:f53cfcc29536f5b83c962cf922bba8ff6d6a3c2a05fda6a45aa58a47d005d8fc"},
+    {file = "findpython-0.7.0.tar.gz", hash = "sha256:8b31647c76352779a3c1a0806699b68e6a7bdc0b5c2ddd9af2a07a0d40c673dc"},
 ]
 
 [[package]]
@@ -845,15 +846,15 @@ files = [
 
 [[package]]
 name = "license-expression"
-version = "30.4.1"
+version = "30.4.3"
 requires_python = ">=3.9"
 summary = "license-expression is a comprehensive utility library to parse, compare, simplify and normalize license expressions (such as SPDX license expressions) using boolean logic."
 dependencies = [
     "boolean-py>=4.0",
 ]
 files = [
-    {file = "license_expression-30.4.1-py3-none-any.whl", hash = "sha256:679646bc3261a17690494a3e1cada446e5ee342dbd87dcfa4a0c24cc5dce13ee"},
-    {file = "license_expression-30.4.1.tar.gz", hash = "sha256:9f02105f9e0fcecba6a85dfbbed7d94ea1c3a70cf23ddbfb5adf3438a6f6fce0"},
+    {file = "license_expression-30.4.3-py3-none-any.whl", hash = "sha256:fd3db53418133e0eef917606623bc125fbad3d1225ba8d23950999ee87c99280"},
+    {file = "license_expression-30.4.3.tar.gz", hash = "sha256:49f439fea91c4d1a642f9f2902b58db1d42396c5e331045f41ce50df9b40b1f2"},
 ]
 
 [[package]]
@@ -1076,12 +1077,12 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.6.26"
+version = "2025.6.30"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.6.26-py3-none-any.whl", hash = "sha256:bb8bc2c489d8c5af6f7b5e4563e56070f828f2be555f06eb2fe67abd72ee44e1"},
-    {file = "pbs_installer-2025.6.26.tar.gz", hash = "sha256:e0a0995f6245dd38fcf178bfd8ee7253627cdbe52e46361228b91a173b7ea0de"},
+    {file = "pbs_installer-2025.6.30-py3-none-any.whl", hash = "sha256:c921b51d0d701c79c06ef3b496a72475f6650800a60f5fae3d840f0f468133b8"},
+    {file = "pbs_installer-2025.6.30.tar.gz", hash = "sha256:baf6b67b379644e5d7a67aec1a14df5fdb0114a9cb6e47001feb1b85b12a59b7"},
 ]
 
 [[package]]
@@ -1359,15 +1360,15 @@ files = [
 
 [[package]]
 name = "pylint-plugin-utils"
-version = "0.8.2"
-requires_python = ">=3.7,<4.0"
+version = "0.9.0"
+requires_python = "<4.0,>=3.9"
 summary = "Utilities and helpers for writing Pylint plugins"
 dependencies = [
     "pylint>=1.7",
 ]
 files = [
-    {file = "pylint_plugin_utils-0.8.2-py3-none-any.whl", hash = "sha256:ae11664737aa2effbf26f973a9e0b6779ab7106ec0adc5fe104b0907ca04e507"},
-    {file = "pylint_plugin_utils-0.8.2.tar.gz", hash = "sha256:d3cebf68a38ba3fba23a873809155562571386d4c1b03e5b4c4cc26c3eee93e4"},
+    {file = "pylint_plugin_utils-0.9.0-py3-none-any.whl", hash = "sha256:16e9b84e5326ba893a319a0323fcc8b4bcc9c71fc654fcabba0605596c673818"},
+    {file = "pylint_plugin_utils-0.9.0.tar.gz", hash = "sha256:5468d763878a18d5cc4db46eaffdda14313b043c962a263a7d78151b90132055"},
 ]
 
 [[package]]
