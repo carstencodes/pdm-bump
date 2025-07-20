@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:b90e2dc8782dfc01e1723a7a5618d057234c5525eb8b22eeef98c6ffe5b2354b"
+content_hash = "sha256:7f0b4405b9418c0af5e8d8eeb041a8d31ea2e0ab4e3a25afde8a9894baa81816"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -528,11 +528,11 @@ files = [
 
 [[package]]
 name = "distlib"
-version = "0.3.9"
+version = "0.4.0"
 summary = "Distribution utilities"
 files = [
-    {file = "distlib-0.3.9-py2.py3-none-any.whl", hash = "sha256:47f8c22fd27c27e25a65601af709b38e4f0a45ea4fc2e710f65755fa8caaaf87"},
-    {file = "distlib-0.3.9.tar.gz", hash = "sha256:a60f20dea646b8a33f3e7772f74dc0b2d0772d2837ee1342a00645c81edf9403"},
+    {file = "distlib-0.4.0-py2.py3-none-any.whl", hash = "sha256:9659f7d87e46584a30b5780e43ac7a2143098441670ff0a49d5f9034c54a6c16"},
+    {file = "distlib-0.4.0.tar.gz", hash = "sha256:feec40075be03a04501a973d81f633735b4b69f98b05450592310c0f401a4e0d"},
 ]
 
 [[package]]
@@ -1877,25 +1877,25 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.27.0"
+version = "4.28.0"
 requires_python = ">=3.9"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
-    "cachetools>=5.5.1",
+    "cachetools>=6.1",
     "chardet>=5.2",
     "colorama>=0.4.6",
-    "filelock>=3.16.1",
-    "packaging>=24.2",
-    "platformdirs>=4.3.6",
-    "pluggy>=1.5",
-    "pyproject-api>=1.8",
+    "filelock>=3.18",
+    "packaging>=25",
+    "platformdirs>=4.3.8",
+    "pluggy>=1.6",
+    "pyproject-api>=1.9.1",
     "tomli>=2.2.1; python_version < \"3.11\"",
-    "typing-extensions>=4.12.2; python_version < \"3.11\"",
-    "virtualenv>=20.31",
+    "typing-extensions>=4.14.1; python_version < \"3.11\"",
+    "virtualenv>=20.31.2",
 ]
 files = [
-    {file = "tox-4.27.0-py3-none-any.whl", hash = "sha256:2b8a7fb986b82aa2c830c0615082a490d134e0626dbc9189986da46a313c4f20"},
-    {file = "tox-4.27.0.tar.gz", hash = "sha256:b97d5ecc0c0d5755bcc5348387fef793e1bfa68eb33746412f4c60881d7f5f57"},
+    {file = "tox-4.28.0-py3-none-any.whl", hash = "sha256:3e2f5c0a00523a58666690108b66820150f6435cb6e4dd95caf21bb52133c1d1"},
+    {file = "tox-4.28.0.tar.gz", hash = "sha256:442347b1a415733850f097e7e78b8c5f38b5e1719f8b7205aade5d055f08068c"},
 ]
 
 [[package]]
