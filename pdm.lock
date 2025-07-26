@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:95722f1ac308b6116cb144a3cbd64d052d219340f8587310561814a67a6027da"
+content_hash = "sha256:c8ee01420c17a4adbe4198fee8316de305a6ef1de6e9903a4fdcf83d7454c3e9"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1877,7 +1877,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.28.1"
+version = "4.28.3"
 requires_python = ">=3.9"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -1894,8 +1894,8 @@ dependencies = [
     "virtualenv>=20.31.2",
 ]
 files = [
-    {file = "tox-4.28.1-py3-none-any.whl", hash = "sha256:d5c84de6efc5d7e8acadb09528943e87ee501a35e064cf852082bc600485c13d"},
-    {file = "tox-4.28.1.tar.gz", hash = "sha256:227ce1fdfea7763107aed3a8ac87d74b1bd1240ad7dd9c37fc2cb2b318006520"},
+    {file = "tox-4.28.3-py3-none-any.whl", hash = "sha256:1debe9daf0b7e64d425ef99a17292b0792385686b1d541df34c7298211e99269"},
+    {file = "tox-4.28.3.tar.gz", hash = "sha256:b91db7219e5242002cf4040a299c8852026d6af35fcd21274d456fb62dafee7b"},
 ]
 
 [[package]]
