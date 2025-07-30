@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:c8ee01420c17a4adbe4198fee8316de305a6ef1de6e9903a4fdcf83d7454c3e9"
+content_hash = "sha256:a5f70ee2c30a5c58b282d83dcace1ae96e72e054120c972c2ea573f89c2c1562"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1077,17 +1077,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.7.12"
+version = "2025.7.23"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.7.12-py3-none-any.whl", hash = "sha256:d73414224fceb60d4a07bea97facd9acc05de792dd7becc90a7f22383e7c1cab"},
-    {file = "pbs_installer-2025.7.12.tar.gz", hash = "sha256:343b8905e1da3cd4b03b68d630086330dde1814294963b77d2664b18b5002ac6"},
+    {file = "pbs_installer-2025.7.23-py3-none-any.whl", hash = "sha256:2710b68ace92489a47b621d9c9ec0ad37acc428db2bf5c93adfb64f349c594ad"},
+    {file = "pbs_installer-2025.7.23.tar.gz", hash = "sha256:0dcf3038b4d04f9b41c4f80fc43ac05de34c0bf949580308a6894836a0340752"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.25.4"
+version = "2.25.5"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1095,7 +1095,7 @@ dependencies = [
     "certifi>=2024.8.30",
     "dep-logic>=0.5",
     "filelock>=3.13",
-    "findpython<1.0.0a0,>=0.6.0",
+    "findpython<1.0.0a0,>=0.7.0",
     "hishel>=0.0.32",
     "httpcore>=1.0.6",
     "httpx[socks]<1,>0.20",
@@ -1117,8 +1117,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.25.4-py3-none-any.whl", hash = "sha256:3efab7367cb5d9d6e4ef9db6130e4f5620c247343c8e95e18bd0d76b201ff7da"},
-    {file = "pdm-2.25.4.tar.gz", hash = "sha256:bd655d789429928d6e27ff6693c19c82bc81aa75ba51d7b1c6102d039c8f211c"},
+    {file = "pdm-2.25.5-py3-none-any.whl", hash = "sha256:cec8085195cb00507b5214e19d9e29db1b5362f5f6d2649dd1fa3be94561d31a"},
+    {file = "pdm-2.25.5.tar.gz", hash = "sha256:063fa211dd6b062d3ca87b722e4010b802093d8b437486bfcf07ced802c544ea"},
 ]
 
 [[package]]
@@ -1683,17 +1683,16 @@ files = [
 
 [[package]]
 name = "rich"
-version = "14.0.0"
+version = "14.1.0"
 requires_python = ">=3.8.0"
 summary = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 dependencies = [
     "markdown-it-py>=2.2.0",
     "pygments<3.0.0,>=2.13.0",
-    "typing-extensions<5.0,>=4.0.0; python_version < \"3.11\"",
 ]
 files = [
-    {file = "rich-14.0.0-py3-none-any.whl", hash = "sha256:1c9491e1951aac09caffd42f448ee3d04e58923ffe14993f6e83068dc395d7e0"},
-    {file = "rich-14.0.0.tar.gz", hash = "sha256:82f1bc23a6a21ebca4ae0c45af9bdbc492ed20231dcb63f297d6d1021a9d5725"},
+    {file = "rich-14.1.0-py3-none-any.whl", hash = "sha256:536f5f1785986d6dbdea3c75205c473f970777b4a0d6c6dd1b696aa05a3fa04f"},
+    {file = "rich-14.1.0.tar.gz", hash = "sha256:e497a48b844b0320d45007cdebfeaeed8db2a4f4bcf49f15e455cfc4af11eaa8"},
 ]
 
 [[package]]
@@ -1914,12 +1913,12 @@ files = [
 
 [[package]]
 name = "truststore"
-version = "0.10.1"
+version = "0.10.3"
 requires_python = ">=3.10"
 summary = "Verify certificates using native system trust stores"
 files = [
-    {file = "truststore-0.10.1-py3-none-any.whl", hash = "sha256:b64e6025a409a43ebdd2807b0c41c8bff49ea7ae6550b5087ac6df6619352d4c"},
-    {file = "truststore-0.10.1.tar.gz", hash = "sha256:eda021616b59021812e800fa0a071e51b266721bef3ce092db8a699e21c63539"},
+    {file = "truststore-0.10.3-py3-none-any.whl", hash = "sha256:5bcc0889390f7b69e56be3df02f4912cfbb5a8bdb77a63fdcacb91049707879b"},
+    {file = "truststore-0.10.3.tar.gz", hash = "sha256:16ff5f6faf692acca470f9b92e66b4c0faccb9b702d0b0486d3d465932b6b3b1"},
 ]
 
 [[package]]
