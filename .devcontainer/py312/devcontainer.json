@@ -1,0 +1,32 @@
+{
+	"name": "Python 3.12",
+	"image": "mcr.microsoft.com/devcontainers/python:3.12",
+	"features": {
+		"ghcr.io/devcontainers-extra/features/pdm:2": {
+			"version": "latest"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.mypy-type-checker",
+				"ms-python.pylint",
+				"ms-python.flake8",
+				"ryanluker.vscode-coverage-gutters"
+			],
+			"settings": {
+				"python.testing.pytestEnabled": true,
+				"coverage-gutters.coverageFileNames": ["pytest.coverage.xml"],
+				"coverage-gutters.coverageBaseDir": "result/**/"
+			}
+		}
+	},
+
+	"postCreateCommand": "pdm install -dG:all; pdm install --plugins",
+	"updateRemoteUserUID": true,
+    "remoteUser": "${localEnv:USER}",
+	"containerEnv": {
+		"PDM_VENV_IN_PROJECT": "False",
+		"PDM_USE_VENV": "False"
+	}
+}
