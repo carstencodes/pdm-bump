@@ -17,7 +17,7 @@ dependencies = [
     "pyproject-metadata>=0.9.1",
     "pdm-pfsc>=0.13.3",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.13.6"
 
 [project.urls]
 homepage = "https://github.com/carstencodes/pdm-bump"
