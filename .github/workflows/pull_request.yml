@@ -16,7 +16,7 @@ jobs:
       versions: ${{ steps.versions.outputs.versions }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Read repo root .python-version file
         id: versions
         shell: bash
@@ -45,7 +45,7 @@ jobs:
         python-version: ${{ fromJSON(needs.set-versions.outputs.versions) }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set PDM version
         id: setpdmversion
         shell: bash
@@ -84,7 +84,7 @@ jobs:
         python-version: ${{ fromJSON(needs.set-versions.outputs.versions) }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set PDM version
         id: setpdmversion
         shell: bash
@@ -123,7 +123,7 @@ jobs:
         python-version: ${{ fromJSON(needs.set-versions.outputs.versions) }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set PDM version
         id: setpdmversion
         shell: bash
@@ -162,7 +162,7 @@ jobs:
         python-version: ${{ fromJSON(needs.set-versions.outputs.versions) }}
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set PDM version
         id: setpdmversion
         shell: bash
@@ -209,7 +209,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Fetch entire history
       - name: Get oldest python version
