@@ -185,12 +185,12 @@ files = [
 
 [[package]]
 name = "cachetools"
-version = "6.1.0"
+version = "6.2.0"
 requires_python = ">=3.9"
 summary = "Extensible memoizing collections and decorators"
 files = [
-    {file = "cachetools-6.1.0-py3-none-any.whl", hash = "sha256:1c7bb3cf9193deaf3508b7c5f2a79986c13ea38965c5adcff1f84519cf39163e"},
-    {file = "cachetools-6.1.0.tar.gz", hash = "sha256:b4c4f404392848db3ce7aac34950d17be4d864da4b8b66911008e430bc544587"},
+    {file = "cachetools-6.2.0-py3-none-any.whl", hash = "sha256:1c76a8960c0041fcc21097e357f882197c79da0dbff766e7317890a65d7d8ba6"},
+    {file = "cachetools-6.2.0.tar.gz", hash = "sha256:38b328c0889450f05f5e120f56ab68c8abaf424e1275522b138ffc93253f7e32"},
 ]
 
 [[package]]
@@ -1086,12 +1086,12 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.8.18"
+version = "2025.8.27"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.8.18-py3-none-any.whl", hash = "sha256:06cc58ac675caea2c49bf5674885e472e65bd4ad5b46c3306b674a8c9385320f"},
-    {file = "pbs_installer-2025.8.18.tar.gz", hash = "sha256:48dc683c6cc260140f8d8acf686a4ef6fc366ec4b25698a60dad344a36a00f9b"},
+    {file = "pbs_installer-2025.8.27-py3-none-any.whl", hash = "sha256:145ed15f222af5157f5d4512a75041bc3c32784d4939d678231d41b15c0f16be"},
+    {file = "pbs_installer-2025.8.27.tar.gz", hash = "sha256:606430ca10940f9600a1a7f20b2a4a0ea62d8e327dcaf8a7b9acf2a2a6a39cb4"},
 ]
 
 [[package]]
@@ -1215,12 +1215,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.3.8"
+version = "4.4.0"
 requires_python = ">=3.9"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.3.8-py3-none-any.whl", hash = "sha256:ff7059bb7eb1179e2685604f4aaf157cfd9535242bd23742eadc3c13542139b4"},
-    {file = "platformdirs-4.3.8.tar.gz", hash = "sha256:3d512d96e16bcb959a814c9f348431070822a6496326a4be0911c40b5a74c2bc"},
+    {file = "platformdirs-4.4.0-py3-none-any.whl", hash = "sha256:abd01743f24e5287cd7a5db3752faf1a2d65353f38ec26d98e25a6db65958c85"},
+    {file = "platformdirs-4.4.0.tar.gz", hash = "sha256:ca753cf4d81dc309bc67b0ea38fd15dc97bc30ce419a7f58d13eb3bf14c4febf"},
 ]
 
 [[package]]
