@@ -52,7 +52,7 @@ jobs:
         run: |
           echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
@@ -91,7 +91,7 @@ jobs:
         run: |
           echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
@@ -130,7 +130,7 @@ jobs:
         run: |
           echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
@@ -169,7 +169,7 @@ jobs:
         run: |
           echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Setup PDM
@@ -225,7 +225,7 @@ jobs:
         run: |
           echo "pdm_version=$(./.github/workflow_scripts/get-pdm-version-from-lock.awk pdm.lock)" >> $GITHUB_OUTPUT
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ steps.setpyversion.outputs.python_version }}
       - name: Setup PDM
