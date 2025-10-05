@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:fd6c2457c47cc1cf5202e785f2ae2331a564661a15d7ec642636c549bc626796"
+content_hash = "sha256:c2f4547dd3bdef6853ed5f1065514ada99dc89989f11fa56d93d09d49d3be786"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1322,7 +1322,7 @@ files = [
 
 [[package]]
 name = "pylint"
-version = "3.3.8"
+version = "3.3.9"
 requires_python = ">=3.9.0"
 summary = "python code static checker"
 dependencies = [
@@ -1339,8 +1339,8 @@ dependencies = [
     "typing-extensions>=3.10; python_version < \"3.10\"",
 ]
 files = [
-    {file = "pylint-3.3.8-py3-none-any.whl", hash = "sha256:7ef94aa692a600e82fabdd17102b73fc226758218c97473c7ad67bd4cb905d83"},
-    {file = "pylint-3.3.8.tar.gz", hash = "sha256:26698de19941363037e2937d3db9ed94fb3303fdadf7d98847875345a8bb6b05"},
+    {file = "pylint-3.3.9-py3-none-any.whl", hash = "sha256:01f9b0462c7730f94786c283f3e52a1fbdf0494bbe0971a78d7277ef46a751e7"},
+    {file = "pylint-3.3.9.tar.gz", hash = "sha256:d312737d7b25ccf6b01cc4ac629b5dcd14a0fcf3ec392735ac70f137a9d5f83a"},
 ]
 
 [[package]]
