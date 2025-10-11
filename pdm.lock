@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:81de66fdce3164222cba65dc548002f1dd9c74863a9ad7c796d5fe8ae433450d"
+content_hash = "sha256:09940177665217073c29266d1c39792776a505db72f4523df686b9c7c8fed35b"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -1133,17 +1133,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.10.7"
+version = "2025.10.10"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.10.7-py3-none-any.whl", hash = "sha256:7574aff70432bbb8ec449975a41b587d3dd8ed91dd2c92081452cc169388132c"},
-    {file = "pbs_installer-2025.10.7.tar.gz", hash = "sha256:49e89b22f45f0bcadf43989e4ffb0ec3c801ae4f89adcf7b64b0e6bf0b305381"},
+    {file = "pbs_installer-2025.10.10-py3-none-any.whl", hash = "sha256:657023cca9587640e5295b2ab707bf5bd35e69a35f96dda3958b6f262a5755f5"},
+    {file = "pbs_installer-2025.10.10.tar.gz", hash = "sha256:568999771793eb337c107b089272c2269a011b1770f0f16c7afb3dbbb4a72ae9"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.25.9"
+version = "2.26.0"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1159,7 +1159,7 @@ dependencies = [
     "importlib-metadata>=3.6; python_version < \"3.10\"",
     "installer<0.8,>=0.7",
     "packaging>22.0",
-    "pbs-installer>=2025.6.6",
+    "pbs-installer>=2025.10.7",
     "platformdirs",
     "pyproject-hooks",
     "python-dotenv>=0.15",
@@ -1173,8 +1173,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.25.9-py3-none-any.whl", hash = "sha256:86d9726bdd33206f1150972940d6cfff0a67440c223ee6f44854a27b24a7da6f"},
-    {file = "pdm-2.25.9.tar.gz", hash = "sha256:fb5fcd561986db1d83255d01e97e2e16f80debf743934d891a62ff2933ccc80c"},
+    {file = "pdm-2.26.0-py3-none-any.whl", hash = "sha256:ed164843f1849148a5c66073b29028a701205465484e3f0a7066016b42d5e3fb"},
+    {file = "pdm-2.26.0.tar.gz", hash = "sha256:70da10a2a8bb09858418eb7ffc5d0449c487aca1f73641611843f3adfd4ff2b4"},
 ]
 
 [[package]]
@@ -1795,12 +1795,12 @@ files = [
 
 [[package]]
 name = "resolvelib"
-version = "1.2.0"
+version = "1.2.1"
 requires_python = ">=3.9"
 summary = "Resolve abstract dependencies into concrete ones"
 files = [
-    {file = "resolvelib-1.2.0-py3-none-any.whl", hash = "sha256:8e3e2000beaf53fdfd8772fda1a7b1df97e803ab7c8925621bbb87c4d187a94d"},
-    {file = "resolvelib-1.2.0.tar.gz", hash = "sha256:c27fbb5098acd7dfc01fb2be3724bd0881168edc2bd3b4dc876ca3f46b8e4a3d"},
+    {file = "resolvelib-1.2.1-py3-none-any.whl", hash = "sha256:fb06b66c8da04172d9e72a21d7d06186d8919e32ae5ab5cdf5b9d920be805ac2"},
+    {file = "resolvelib-1.2.1.tar.gz", hash = "sha256:7d08a2022f6e16ce405d60b68c390f054efcfd0477d4b9bd019cc941c28fad1c"},
 ]
 
 [[package]]
@@ -2066,7 +2066,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "20.35.2"
+version = "20.35.3"
 requires_python = ">=3.8"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2077,8 +2077,8 @@ dependencies = [
     "typing-extensions>=4.13.2; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-20.35.2-py3-none-any.whl", hash = "sha256:e0cbdff9afbd6a89eacbff54dbdcde5901add75ae3eb086b1a32ff5ac6eff790"},
-    {file = "virtualenv-20.35.2.tar.gz", hash = "sha256:332b71e3a0d62051a6b893f533deac9bc2e987599eb8e3328654b8faada95263"},
+    {file = "virtualenv-20.35.3-py3-none-any.whl", hash = "sha256:63d106565078d8c8d0b206d48080f938a8b25361e19432d2c9db40d2899c810a"},
+    {file = "virtualenv-20.35.3.tar.gz", hash = "sha256:4f1a845d131133bdff10590489610c98c168ff99dc75d6c96853801f7f67af44"},
 ]
 
 [[package]]
