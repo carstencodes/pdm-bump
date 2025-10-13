@@ -186,12 +186,12 @@ files = [
 
 [[package]]
 name = "cachetools"
-version = "6.2.0"
+version = "6.2.1"
 requires_python = ">=3.9"
 summary = "Extensible memoizing collections and decorators"
 files = [
-    {file = "cachetools-6.2.0-py3-none-any.whl", hash = "sha256:1c76a8960c0041fcc21097e357f882197c79da0dbff766e7317890a65d7d8ba6"},
-    {file = "cachetools-6.2.0.tar.gz", hash = "sha256:38b328c0889450f05f5e120f56ab68c8abaf424e1275522b138ffc93253f7e32"},
+    {file = "cachetools-6.2.1-py3-none-any.whl", hash = "sha256:09868944b6dde876dfd44e1d47e18484541eaf12f26f29b7af91b26cc892d701"},
+    {file = "cachetools-6.2.1.tar.gz", hash = "sha256:3f391e4bd8f8bf0931169baf7456cc822705f4e2a31f840d218f445b9a854201"},
 ]
 
 [[package]]
@@ -841,12 +841,12 @@ files = [
 
 [[package]]
 name = "idna"
-version = "3.10"
-requires_python = ">=3.6"
+version = "3.11"
+requires_python = ">=3.8"
 summary = "Internationalized Domain Names in Applications (IDNA)"
 files = [
-    {file = "idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"},
-    {file = "idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9"},
+    {file = "idna-3.11-py3-none-any.whl", hash = "sha256:771a87f49d9defaf64091e6e6fe9c18d4833f140bd19464795bc32d966ca37ea"},
+    {file = "idna-3.11.tar.gz", hash = "sha256:795dafcc9c04ed0c1fb032c2aa73654d8e8c5023a7df64a53f39190ada629902"},
 ]
 
 [[package]]
@@ -2042,16 +2042,16 @@ files = [
 
 [[package]]
 name = "unearth"
-version = "0.17.5"
-requires_python = ">=3.8"
+version = "0.18.0"
+requires_python = ">=3.9"
 summary = "A utility to fetch and download python packages"
 dependencies = [
     "httpx<1,>=0.27.0",
     "packaging>=20",
 ]
 files = [
-    {file = "unearth-0.17.5-py3-none-any.whl", hash = "sha256:9963e66b14f0484644c9b45b517e530befb2de6a8da4b06a9a38bed2d086dfe6"},
-    {file = "unearth-0.17.5.tar.gz", hash = "sha256:a19e1c02e64b40518d088079c7416fc41b45a648b81a4128aac02597234ee6ba"},
+    {file = "unearth-0.18.0-py3-none-any.whl", hash = "sha256:dfdf72c3b13674b9dfe0574cc246f86423b69f749ba035442963fee402eb8ac6"},
+    {file = "unearth-0.18.0.tar.gz", hash = "sha256:03553742271f04e340691b6464575c8b4b807c89e9403c91783ea732d4337948"},
 ]
 
 [[package]]
