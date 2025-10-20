@@ -813,7 +813,7 @@ files = [
 
 [[package]]
 name = "hishel"
-version = "0.1.4"
+version = "0.1.5"
 requires_python = ">=3.9"
 summary = "Persistent cache implementation for httpx and httpcore"
 dependencies = [
@@ -824,8 +824,8 @@ dependencies = [
     "typing-extensions>=4.14.1",
 ]
 files = [
-    {file = "hishel-0.1.4-py3-none-any.whl", hash = "sha256:2e90c9d747a8f785426d7e196655d1e6a4ca5f668b1322b4a0d39c9cca6b4588"},
-    {file = "hishel-0.1.4.tar.gz", hash = "sha256:e298ca4585dc2c01cc3a3dd59796651c3ca0d22d649eb38d64cee44555b1a1b1"},
+    {file = "hishel-0.1.5-py3-none-any.whl", hash = "sha256:0bfbe9a2b9342090eba82ba6de88258092e1c4c7b730cd4cb4b570e4b40e44a7"},
+    {file = "hishel-0.1.5.tar.gz", hash = "sha256:9d40c682cd94fd6e1394fb05713ae20a75ed8aeba6f5272380444039ce6257f2"},
 ]
 
 [[package]]
@@ -1180,12 +1180,12 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.10.10"
+version = "2025.10.14"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.10.10-py3-none-any.whl", hash = "sha256:657023cca9587640e5295b2ab707bf5bd35e69a35f96dda3958b6f262a5755f5"},
-    {file = "pbs_installer-2025.10.10.tar.gz", hash = "sha256:568999771793eb337c107b089272c2269a011b1770f0f16c7afb3dbbb4a72ae9"},
+    {file = "pbs_installer-2025.10.14-py3-none-any.whl", hash = "sha256:6f14d7bf39e5ba9c628be2be76ebda2d2fb26e49d25c33c862fc4d6cca913a81"},
+    {file = "pbs_installer-2025.10.14.tar.gz", hash = "sha256:1e6d5ca8bd2260bd3b68d4d1f91dc6b609a63f8fa99791c5685c9207cbcccfbe"},
 ]
 
 [[package]]
