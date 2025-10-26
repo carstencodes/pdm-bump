@@ -24,7 +24,7 @@ jobs:
         run: |
           git cliff --verbose --config ${{ github.workspace }}/.gitcliff.toml --latest --strip all --output ${{ github.workspace }}/CHANGELOG.md
       - name: Export changelog
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: changelog
           path: ${{ github.workspace }}/CHANGELOG.md
@@ -74,7 +74,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
       - name: Get changelog
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: changelog
           path: ${{ github.workspace }}
