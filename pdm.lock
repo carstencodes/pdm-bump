@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:e52b17785b0746ba50c942bd5fb668ce188d7dbf04eb7a20d83a4cc46662897f"
+content_hash = "sha256:a87d0c0b53bfb34f6ef2ce53c86882f9b79ebd671bbaaf6e91ce7e506d5f59c1"
 
 [[metadata.targets]]
 requires_python = ">=3.9"
@@ -669,15 +669,15 @@ files = [
 
 [[package]]
 name = "exceptiongroup"
-version = "1.3.0"
+version = "1.3.1"
 requires_python = ">=3.7"
 summary = "Backport of PEP 654 (exception groups)"
 dependencies = [
     "typing-extensions>=4.6.0; python_version < \"3.13\"",
 ]
 files = [
-    {file = "exceptiongroup-1.3.0-py3-none-any.whl", hash = "sha256:4d111e6e0c13d0644cad6ddaa7ed0261a0b36971f6d23e7ec9b4b9097da78a10"},
-    {file = "exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88"},
+    {file = "exceptiongroup-1.3.1-py3-none-any.whl", hash = "sha256:a7a39a3bd276781e98394987d3a5701d0c4edffb633bb7a5144577f82c773598"},
+    {file = "exceptiongroup-1.3.1.tar.gz", hash = "sha256:8b412432c6055b0b7d14c310000ae93352ed6754f70fa8f7c34141f91c4e3219"},
 ]
 
 [[package]]
@@ -1184,17 +1184,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.10.31"
+version = "2025.11.20"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.10.31-py3-none-any.whl", hash = "sha256:f24e8f01f13fee9a203feb62e90c8d204d64d71ad0a3f3abfd69673b02bbc68b"},
-    {file = "pbs_installer-2025.10.31.tar.gz", hash = "sha256:8529dbac1054408ccce5fb218a85a2d4a02f3657ddbde56eff79464105bba659"},
+    {file = "pbs_installer-2025.11.20-py3-none-any.whl", hash = "sha256:5588b40a41b03101514c71cadb37ad75a3476dee43ba5fdaeec699e51ec0e94a"},
+    {file = "pbs_installer-2025.11.20.tar.gz", hash = "sha256:6469b854835fa316c24c938df4563a72adae3d14b659eb4b23fa4bb347fd45f3"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.26.1"
+version = "2.26.2"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1224,8 +1224,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.26.1-py3-none-any.whl", hash = "sha256:20c95f799c182c8ea4c33d81e51571e8fc6e2ab4c1fd34827856014a32f1f8c6"},
-    {file = "pdm-2.26.1.tar.gz", hash = "sha256:60a568201424a7193b661f6fed6e446e39695b52edc5e0904ba0b07fcaf2e787"},
+    {file = "pdm-2.26.2-py3-none-any.whl", hash = "sha256:b3b0199f6eec37284192a6feb26bef21f911d45d5aa4b02323ff211752abf04b"},
+    {file = "pdm-2.26.2.tar.gz", hash = "sha256:98207f8aabd6913a25ee0b4985e79e1652e2db274915f3ccf9408e33191ede4e"},
 ]
 
 [[package]]
