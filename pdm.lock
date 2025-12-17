@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:a986c9f6f20af181b9a0cc28da4eb3391d6a25ff94911b906c79f36d6a8aa492"
+content_hash = "sha256:1cbbf40540d1f58181519f5eeff71128eab1547ad72aa8f20d7c0667c9dbd2d9"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -899,15 +899,12 @@ files = [
 
 [[package]]
 name = "isort"
-version = "6.1.0"
-requires_python = ">=3.9.0"
+version = "7.0.0"
+requires_python = ">=3.10.0"
 summary = "A Python utility / library to sort Python imports."
-dependencies = [
-    "importlib-metadata>=4.6.0; python_version < \"3.10\"",
-]
 files = [
-    {file = "isort-6.1.0-py3-none-any.whl", hash = "sha256:58d8927ecce74e5087aef019f778d4081a3b6c98f15a80ba35782ca8a2097784"},
-    {file = "isort-6.1.0.tar.gz", hash = "sha256:9b8f96a14cfee0677e78e941ff62f03769a06d412aabb9e2a90487b3b7e8d481"},
+    {file = "isort-7.0.0-py3-none-any.whl", hash = "sha256:1bcabac8bc3c36c7fb7b98a76c8abb18e0f841a3ba81decac7691008592499c1"},
+    {file = "isort-7.0.0.tar.gz", hash = "sha256:5513527951aadb3ac4292a41a16cbc50dd1642432f5e8c20057d414bdafb4187"},
 ]
 
 [[package]]
