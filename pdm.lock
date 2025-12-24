@@ -757,19 +757,33 @@ files = [
 
 [[package]]
 name = "hishel"
-version = "0.1.5"
+version = "1.1.7"
 requires_python = ">=3.9"
-summary = "Persistent cache implementation for httpx and httpcore"
+summary = "Elegant HTTP Caching for Python"
 dependencies = [
-    "anyio>=4.9.0",
-    "anysqlite>=0.0.5",
-    "httpx>=0.28.0",
     "msgpack>=1.1.2",
     "typing-extensions>=4.14.1",
 ]
 files = [
-    {file = "hishel-0.1.5-py3-none-any.whl", hash = "sha256:0bfbe9a2b9342090eba82ba6de88258092e1c4c7b730cd4cb4b570e4b40e44a7"},
-    {file = "hishel-0.1.5.tar.gz", hash = "sha256:9d40c682cd94fd6e1394fb05713ae20a75ed8aeba6f5272380444039ce6257f2"},
+    {file = "hishel-1.1.7-py3-none-any.whl", hash = "sha256:436c2a5a62d705528e581cbeba85b10d130c47c861906b21262a07ac02463a9f"},
+    {file = "hishel-1.1.7.tar.gz", hash = "sha256:32c625be581e94dc50b773a8cfb9a65cba487660561950fe976ae49945455179"},
+]
+
+[[package]]
+name = "hishel"
+version = "1.1.7"
+extras = ["httpx"]
+requires_python = ">=3.9"
+summary = "Elegant HTTP Caching for Python"
+dependencies = [
+    "anyio>=4.9.0",
+    "anysqlite>=0.0.5",
+    "hishel==1.1.7",
+    "httpx>=0.28.1",
+]
+files = [
+    {file = "hishel-1.1.7-py3-none-any.whl", hash = "sha256:436c2a5a62d705528e581cbeba85b10d130c47c861906b21262a07ac02463a9f"},
+    {file = "hishel-1.1.7.tar.gz", hash = "sha256:32c625be581e94dc50b773a8cfb9a65cba487660561950fe976ae49945455179"},
 ]
 
 [[package]]
@@ -1178,7 +1192,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.26.2"
+version = "2.26.3"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1187,7 +1201,7 @@ dependencies = [
     "dep-logic>=0.5",
     "filelock>=3.13",
     "findpython<1.0.0a0,>=0.7.0",
-    "hishel<1.0.0,>=0.0.32",
+    "hishel[httpx]>=1.0.0",
     "httpcore>=1.0.6",
     "httpx[socks]<1,>0.20",
     "id>=1.5.0",
@@ -1208,8 +1222,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.26.2-py3-none-any.whl", hash = "sha256:b3b0199f6eec37284192a6feb26bef21f911d45d5aa4b02323ff211752abf04b"},
-    {file = "pdm-2.26.2.tar.gz", hash = "sha256:98207f8aabd6913a25ee0b4985e79e1652e2db274915f3ccf9408e33191ede4e"},
+    {file = "pdm-2.26.3-py3-none-any.whl", hash = "sha256:6dd822dcc2db3198cc6da39f3d357bf2531f78dc3666d6607dc6d523f2d77c61"},
+    {file = "pdm-2.26.3.tar.gz", hash = "sha256:30e17ed5b1697949ac509d8c8e1ad96160eab21c88dea4f1a6cf101bdb2787e5"},
 ]
 
 [[package]]
@@ -1394,12 +1408,12 @@ files = [
 
 [[package]]
 name = "pyparsing"
-version = "3.2.5"
+version = "3.3.1"
 requires_python = ">=3.9"
 summary = "pyparsing - Classes and methods to define and execute parsing grammars"
 files = [
-    {file = "pyparsing-3.2.5-py3-none-any.whl", hash = "sha256:e38a4f02064cf41fe6593d328d0512495ad1f3d8a91c4f73fc401b3079a59a5e"},
-    {file = "pyparsing-3.2.5.tar.gz", hash = "sha256:2df8d5b7b2802ef88e8d016a2eb9c7aeaa923529cd251ed0fe4608275d4105b6"},
+    {file = "pyparsing-3.3.1-py3-none-any.whl", hash = "sha256:023b5e7e5520ad96642e2c6db4cb683d3970bd640cdf7115049a6e9c3682df82"},
+    {file = "pyparsing-3.3.1.tar.gz", hash = "sha256:47fad0f17ac1e2cad3de3b458570fbc9b03560aa029ed5e16ee5554da9a2251c"},
 ]
 
 [[package]]
@@ -1919,7 +1933,7 @@ files = [
 
 [[package]]
 name = "unearth"
-version = "0.18.1"
+version = "0.18.2"
 requires_python = ">=3.9"
 summary = "A utility to fetch and download python packages"
 dependencies = [
@@ -1927,8 +1941,8 @@ dependencies = [
     "packaging>=20",
 ]
 files = [
-    {file = "unearth-0.18.1-py3-none-any.whl", hash = "sha256:6d2dd6cd65a28cc8e13f08d7de93135bc1976078999c0f8116c42e53be0dc9ad"},
-    {file = "unearth-0.18.1.tar.gz", hash = "sha256:e8b132f73bf0dac7556a36419cb43125ced3bd172682bde1383cc5b193ccf73d"},
+    {file = "unearth-0.18.2-py3-none-any.whl", hash = "sha256:31fd55d67c0e46a1ebb78993a2010568e6c4231334a3207d18d5d4a549d8d692"},
+    {file = "unearth-0.18.2.tar.gz", hash = "sha256:1e53d7f52f46dd5f875e77ff1c55b12477e215a092e4b66c9764a77df4a9b520"},
 ]
 
 [[package]]
