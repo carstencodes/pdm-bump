@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:3072b31701db871b5c52cf29828b72c67a17a276f8353357ca33a09023a1fad1"
+content_hash = "sha256:2113dac24bc24d15a5c150e4b14f0dff44d29eeec829a71d09375766a9cacdfe"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1182,17 +1182,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2025.12.17"
+version = "2026.1.14"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2025.12.17-py3-none-any.whl", hash = "sha256:1a899ac5af9ca4c59a7a7944ec3fcf7ad7e40d5684b12eadcfbeee7c59d44123"},
-    {file = "pbs_installer-2025.12.17.tar.gz", hash = "sha256:cf32043fadd168c17a1b18c1c3f801090281bd5c9ce101e2deb7e0e51c8279dd"},
+    {file = "pbs_installer-2026.1.14-py3-none-any.whl", hash = "sha256:245c8016bb3d6abcf6f7f39f523be67c085f668f0cd497c427df6b673d8c6cb1"},
+    {file = "pbs_installer-2026.1.14.tar.gz", hash = "sha256:a668548459ce4a2d05ccd45cac10cb93e1ba10709ecfa7ff3d3b9c129bd243f5"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.26.4"
+version = "2.26.5"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1222,8 +1222,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.26.4-py3-none-any.whl", hash = "sha256:87def29545c0665501ded5b431a90554db37de510ab76cb9b9fb79273103e611"},
-    {file = "pdm-2.26.4.tar.gz", hash = "sha256:d1030f6bd8e9449b5791e7768f1a856cc54617ee7b00f56fa1a843a84ad77f6e"},
+    {file = "pdm-2.26.5-py3-none-any.whl", hash = "sha256:e416884db3e53724911782e93d27cc46c6ff761b65c7fd6b4fef4eaecb0069c7"},
+    {file = "pdm-2.26.5.tar.gz", hash = "sha256:357c6e88aab8a65dc8730d19ae683db61dc99ea0d4c5d3856eba64b9a19e29fb"},
 ]
 
 [[package]]
