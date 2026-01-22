@@ -9,7 +9,7 @@ authors = [
     { name = "Carsten Igel", email = "cig@bite-that-bit.de" },
 ]
 dependencies = [
-    "pdm>=2.26.4",
+    "pdm>=2.26.5",
     "annotated-types>=0.7.0",
     "typing-extensions>=4.15.0; python_version<='3.9'",
     "tomlkit>=0.14.0",
