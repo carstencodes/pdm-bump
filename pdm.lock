@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:2113dac24bc24d15a5c150e4b14f0dff44d29eeec829a71d09375766a9cacdfe"
+content_hash = "sha256:4adf18f8974e0921f987f8f87408b7926e7b06cb0445f1d594c93178482ddece"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1162,12 +1162,12 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "25.0"
+version = "26.0"
 requires_python = ">=3.8"
 summary = "Core utilities for Python packages"
 files = [
-    {file = "packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484"},
-    {file = "packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"},
+    {file = "packaging-26.0-py3-none-any.whl", hash = "sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529"},
+    {file = "packaging-26.0.tar.gz", hash = "sha256:00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4"},
 ]
 
 [[package]]
@@ -1192,7 +1192,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.26.5"
+version = "2.26.6"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1222,8 +1222,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.26.5-py3-none-any.whl", hash = "sha256:e416884db3e53724911782e93d27cc46c6ff761b65c7fd6b4fef4eaecb0069c7"},
-    {file = "pdm-2.26.5.tar.gz", hash = "sha256:357c6e88aab8a65dc8730d19ae683db61dc99ea0d4c5d3856eba64b9a19e29fb"},
+    {file = "pdm-2.26.6-py3-none-any.whl", hash = "sha256:39583edee738cc62b9ec2d5b4e434f44e501b55f609401a89732b5e8a451944f"},
+    {file = "pdm-2.26.6.tar.gz", hash = "sha256:771f95b9a484f9eb34dcf8d851be6ff95333e4f3c46189f9004cfd5cc2e925f9"},
 ]
 
 [[package]]
