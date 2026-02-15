@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:7478e3eadde5772965a3a4051bd88861ee60fe50df91a40e7348bea2b769bad9"
+content_hash = "sha256:68888a32569261528e4d956ae5f00c1a0cb04afaab3459031ab5f9dd19f22c57"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -634,12 +634,12 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.21.1"
+version = "3.24.1"
 requires_python = ">=3.10"
 summary = "A platform independent file lock."
 files = [
-    {file = "filelock-3.21.1-py3-none-any.whl", hash = "sha256:f3aa1887cdf3514b13a379b5835ff35327d7aa24a96db4453b97531c00476760"},
-    {file = "filelock-3.21.1.tar.gz", hash = "sha256:fd13d64b92f79605f30ffaa0a2accb793f178b8aebcf56be8f1cad922fd278ad"},
+    {file = "filelock-3.24.1-py3-none-any.whl", hash = "sha256:7c59f595e3cf4887dc95b403a896849da49ed183d7c9d7ee855646ca99f10698"},
+    {file = "filelock-3.24.1.tar.gz", hash = "sha256:3440181dd03f8904c108c8e9f5b11d1663e9fc960f1c837586a11f1c5c041e54"},
 ]
 
 [[package]]
@@ -1313,12 +1313,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.7.0"
+version = "4.9.1"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.7.0-py3-none-any.whl", hash = "sha256:1ed8db354e344c5bb6039cd727f096af975194b508e37177719d562b2b540ee6"},
-    {file = "platformdirs-4.7.0.tar.gz", hash = "sha256:fd1a5f8599c85d49b9ac7d6e450bc2f1aaf4a23f1fe86d09952fe20ad365cf36"},
+    {file = "platformdirs-4.9.1-py3-none-any.whl", hash = "sha256:61d8b967d34791c162d30d60737369cbbd77debad5b981c4bfda1842e71e0d66"},
+    {file = "platformdirs-4.9.1.tar.gz", hash = "sha256:f310f16e89c4e29117805d8328f7c10876eeff36c94eac879532812110f7d39f"},
 ]
 
 [[package]]
@@ -1881,16 +1881,16 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.35.0"
+version = "4.36.0"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
-    "cachetools>=6.2.5",
+    "cachetools>=7.0.1",
     "chardet>=5.2",
     "colorama>=0.4.6",
-    "filelock>=3.20.3",
+    "filelock>=3.24",
     "packaging>=26",
-    "platformdirs>=4.5.1",
+    "platformdirs>=4.9.1",
     "pluggy>=1.6",
     "pyproject-api>=1.10",
     "tomli>=2.4; python_version < \"3.11\"",
@@ -1898,8 +1898,8 @@ dependencies = [
     "virtualenv>=20.36.1",
 ]
 files = [
-    {file = "tox-4.35.0-py3-none-any.whl", hash = "sha256:282aa2e1f96328ad197ee09878ff241610426cd8ec01e62a04eb51c987da922d"},
-    {file = "tox-4.35.0.tar.gz", hash = "sha256:74d2fe33eb37233d506f854196bd7bd7e2fbb79e8d9b4bed214ab3da98740876"},
+    {file = "tox-4.36.0-py3-none-any.whl", hash = "sha256:5d5e00cf5c18d0a65f18fa2e4b4cad4f7415b589e29d1b40d62910e33433b572"},
+    {file = "tox-4.36.0.tar.gz", hash = "sha256:dfd56fd563d79b866fa4800a9ea75ec40b80fb14c6238e38e4949537b859aa0e"},
 ]
 
 [[package]]
