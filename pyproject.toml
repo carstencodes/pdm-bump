@@ -196,6 +196,6 @@ replace = "([#${2}](https://github.com/orhun/git-cliff/issues/${2}))"
 [dependency-groups]
 static-code-analysis = [
     "radon>=6.0.1",
-    "vulture>=2.14",
+    "vulture>=2.15",
     "bandit>=1.9.4",
 ]
