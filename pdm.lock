@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:9fc8a257aa5eef296a2d47edfeee977d12719f65aee0cb1ae8d7a01ca3c2cc40"
+content_hash = "sha256:45186de17263efe599ad8c3e14c14d10d9bd2aae25198889e055548db152f938"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -203,12 +203,12 @@ files = [
 
 [[package]]
 name = "cachetools"
-version = "7.0.2"
+version = "7.0.3"
 requires_python = ">=3.10"
 summary = "Extensible memoizing collections and decorators"
 files = [
-    {file = "cachetools-7.0.2-py3-none-any.whl", hash = "sha256:938dcad184827c5e94928c4fd5526e2b46692b7fb1ae94472da9131d0299343c"},
-    {file = "cachetools-7.0.2.tar.gz", hash = "sha256:7e7f09a4ca8b791d8bb4864afc71e9c17e607a28e6839ca1a644253c97dbeae0"},
+    {file = "cachetools-7.0.3-py3-none-any.whl", hash = "sha256:c128ffca156eef344c25fcd08a96a5952803786fa33097f5f2d49edf76f79d53"},
+    {file = "cachetools-7.0.3.tar.gz", hash = "sha256:8c246313b95849964e54a909c03b327a87ab0428b068fac10da7b105ca275ef6"},
 ]
 
 [[package]]
@@ -1303,12 +1303,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.9.2"
+version = "4.9.4"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.9.2-py3-none-any.whl", hash = "sha256:9170634f126f8efdae22fb58ae8a0eaa86f38365bc57897a6c4f781d1f5875bd"},
-    {file = "platformdirs-4.9.2.tar.gz", hash = "sha256:9a33809944b9db043ad67ca0db94b14bf452cc6aeaac46a88ea55b26e2e9d291"},
+    {file = "platformdirs-4.9.4-py3-none-any.whl", hash = "sha256:68a9a4619a666ea6439f2ff250c12a853cd1cbd5158d258bd824a7df6be2f868"},
+    {file = "platformdirs-4.9.4.tar.gz", hash = "sha256:1ec356301b7dc906d83f371c8f487070e99d3ccf9e501686456394622a01a934"},
 ]
 
 [[package]]
@@ -1885,24 +1885,25 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.47.3"
+version = "4.49.0"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
-    "cachetools>=7.0.1",
+    "cachetools>=7.0.3",
     "colorama>=0.4.6",
-    "filelock>=3.24.3",
+    "filelock>=3.25",
     "packaging>=26",
-    "platformdirs>=4.9.2",
+    "platformdirs>=4.9.4",
     "pluggy>=1.6",
     "pyproject-api>=1.10",
+    "tomli-w>=1.2",
     "tomli>=2.4; python_version < \"3.11\"",
     "typing-extensions>=4.15; python_version < \"3.11\"",
-    "virtualenv>=20.39",
+    "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.47.3-py3-none-any.whl", hash = "sha256:e447862a6821b421bbbfb8cbac071818c0a6884907a4c964d8322516d0b19b34"},
-    {file = "tox-4.47.3.tar.gz", hash = "sha256:57643508d4c218ad312457a3b0ce3135c50fa1f9f1e4d40867683d880cad1c37"},
+    {file = "tox-4.49.0-py3-none-any.whl", hash = "sha256:97cf3cea10c12442569a31bfa411600fbbfc8cb972ad4e48039599935c94a584"},
+    {file = "tox-4.49.0.tar.gz", hash = "sha256:2e01f09ae1226749466cbcd8c514fe988ffc8c76b5d523c7f9b745d1711a6e71"},
 ]
 
 [[package]]
