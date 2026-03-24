@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:fc97e8dafcaef18eb7f19ab85a722ea8595188145993aceac3ad10209b229327"
+content_hash = "sha256:52ec2253cd99a33ef6967f47663d77667c5588f916ba8fe8e077dad0c4bc694f"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -213,12 +213,12 @@ files = [
 
 [[package]]
 name = "certifi"
-version = "2026.1.4"
+version = "2026.2.25"
 requires_python = ">=3.7"
 summary = "Python package for providing Mozilla's CA Bundle."
 files = [
-    {file = "certifi-2026.1.4-py3-none-any.whl", hash = "sha256:9943707519e4add1115f44c2bc244f782c0249876bf51b6599fee1ffbedd685c"},
-    {file = "certifi-2026.1.4.tar.gz", hash = "sha256:ac726dd470482006e014ad384921ed6438c457018f4b3d204aea4281258b2120"},
+    {file = "certifi-2026.2.25-py3-none-any.whl", hash = "sha256:027692e4402ad994f1c42e52a4997a9763c646b73e4096e4d5d6db8af1d6f0fa"},
+    {file = "certifi-2026.2.25.tar.gz", hash = "sha256:e887ab5cee78ea814d3472169153c2d12cd43b14bd03329a39a9c6e2e80bfba7"},
 ]
 
 [[package]]
@@ -775,33 +775,33 @@ files = [
 
 [[package]]
 name = "hishel"
-version = "1.1.8"
-requires_python = ">=3.9"
+version = "1.1.9"
+requires_python = ">=3.10"
 summary = "Elegant HTTP Caching for Python"
 dependencies = [
     "msgpack>=1.1.2",
     "typing-extensions>=4.14.1",
 ]
 files = [
-    {file = "hishel-1.1.8-py3-none-any.whl", hash = "sha256:29e45e090c647920b666e9d2b21e494c97dc12f49e7d88fd31d9e4e7e4b75d4d"},
-    {file = "hishel-1.1.8.tar.gz", hash = "sha256:bcd15ad282bd530e97a676b2d16a58e5034750e8a6955e77babfea69fc5b4ad8"},
+    {file = "hishel-1.1.9-py3-none-any.whl", hash = "sha256:6b6f294cb7593f170a9bf874849cc85330ff81f5e35d2ca189548498fed10806"},
+    {file = "hishel-1.1.9.tar.gz", hash = "sha256:47248a50e4cff4fbaa141832782d8c07b2169914916f4bd792f37449176dfa23"},
 ]
 
 [[package]]
 name = "hishel"
-version = "1.1.8"
+version = "1.1.9"
 extras = ["httpx"]
-requires_python = ">=3.9"
+requires_python = ">=3.10"
 summary = "Elegant HTTP Caching for Python"
 dependencies = [
     "anyio>=4.9.0",
     "anysqlite>=0.0.5",
-    "hishel==1.1.8",
+    "hishel==1.1.9",
     "httpx>=0.28.1",
 ]
 files = [
-    {file = "hishel-1.1.8-py3-none-any.whl", hash = "sha256:29e45e090c647920b666e9d2b21e494c97dc12f49e7d88fd31d9e4e7e4b75d4d"},
-    {file = "hishel-1.1.8.tar.gz", hash = "sha256:bcd15ad282bd530e97a676b2d16a58e5034750e8a6955e77babfea69fc5b4ad8"},
+    {file = "hishel-1.1.9-py3-none-any.whl", hash = "sha256:6b6f294cb7593f170a9bf874849cc85330ff81f5e35d2ca189548498fed10806"},
+    {file = "hishel-1.1.9.tar.gz", hash = "sha256:47248a50e4cff4fbaa141832782d8c07b2169914916f4bd792f37449176dfa23"},
 ]
 
 [[package]]
@@ -851,15 +851,15 @@ files = [
 
 [[package]]
 name = "id"
-version = "1.5.0"
-requires_python = ">=3.8"
+version = "1.6.1"
+requires_python = ">=3.9"
 summary = "A tool for generating OIDC identities"
 dependencies = [
-    "requests",
+    "urllib3<3,>=2",
 ]
 files = [
-    {file = "id-1.5.0-py3-none-any.whl", hash = "sha256:f1434e1cef91f2cbb8a4ec64663d5a23b9ed43ef44c4c957d02583d61714c658"},
-    {file = "id-1.5.0.tar.gz", hash = "sha256:292cb8a49eacbbdbce97244f47a97b4c62540169c976552e497fd57df0734c1d"},
+    {file = "id-1.6.1-py3-none-any.whl", hash = "sha256:f5ec41ed2629a508f5d0988eda142e190c9c6da971100612c4de9ad9f9b237ca"},
+    {file = "id-1.6.1.tar.gz", hash = "sha256:d0732d624fb46fd4e7bc4e5152f00214450953b9e772c182c1c22964def1a069"},
 ]
 
 [[package]]
@@ -1200,17 +1200,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2026.1.14"
+version = "2026.3.20"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2026.1.14-py3-none-any.whl", hash = "sha256:245c8016bb3d6abcf6f7f39f523be67c085f668f0cd497c427df6b673d8c6cb1"},
-    {file = "pbs_installer-2026.1.14.tar.gz", hash = "sha256:a668548459ce4a2d05ccd45cac10cb93e1ba10709ecfa7ff3d3b9c129bd243f5"},
+    {file = "pbs_installer-2026.3.20-py3-none-any.whl", hash = "sha256:09f6363b490176952f2a3f62f673e5380cf3c470bbbf214b2f2027f33c4d5f22"},
+    {file = "pbs_installer-2026.3.20.tar.gz", hash = "sha256:6ba456ca6e0f47d8ce47d4ba8817bc69de8bf3fca819582073ead21a65e0d2a7"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.26.6"
+version = "2.26.7"
 requires_python = ">=3.9"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1240,8 +1240,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.26.6-py3-none-any.whl", hash = "sha256:39583edee738cc62b9ec2d5b4e434f44e501b55f609401a89732b5e8a451944f"},
-    {file = "pdm-2.26.6.tar.gz", hash = "sha256:771f95b9a484f9eb34dcf8d851be6ff95333e4f3c46189f9004cfd5cc2e925f9"},
+    {file = "pdm-2.26.7-py3-none-any.whl", hash = "sha256:f463847135b55a8c1b490a95ba944420609512d3a4d8f5661d42760a3dae0fbf"},
+    {file = "pdm-2.26.7.tar.gz", hash = "sha256:0a96a6fb4d60dfeacc1f68bf77efda39503833f6c01866cc8700ea403f0183b7"},
 ]
 
 [[package]]
@@ -1534,12 +1534,12 @@ files = [
 
 [[package]]
 name = "python-dotenv"
-version = "1.2.1"
-requires_python = ">=3.9"
+version = "1.2.2"
+requires_python = ">=3.10"
 summary = "Read key-value pairs from a .env file and set them as environment variables"
 files = [
-    {file = "python_dotenv-1.2.1-py3-none-any.whl", hash = "sha256:b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61"},
-    {file = "python_dotenv-1.2.1.tar.gz", hash = "sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6"},
+    {file = "python_dotenv-1.2.2-py3-none-any.whl", hash = "sha256:1d8214789a24de455a8b8bd8ae6fe3c6b69a5e3d64aa8a8e5d68e694bbcb285a"},
+    {file = "python_dotenv-1.2.2.tar.gz", hash = "sha256:2c371a91fbd7ba082c2c1dc1f8bf89ca22564a087c2c287cd9b662adde799cf3"},
 ]
 
 [[package]]
