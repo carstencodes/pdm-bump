@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:07780db325f497566420dfb31f18357a8dace595e0d64e44d2e9ce42c92d342d"
+content_hash = "sha256:b7a983da30e67bc39c84b10cca8a7fb3d9ce24961a9c20a09ba326d8a7523de9"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1520,7 +1520,7 @@ files = [
 
 [[package]]
 name = "python-discovery"
-version = "1.2.0"
+version = "1.2.1"
 requires_python = ">=3.8"
 summary = "Python interpreter discovery"
 dependencies = [
@@ -1528,8 +1528,8 @@ dependencies = [
     "platformdirs<5,>=4.3.6",
 ]
 files = [
-    {file = "python_discovery-1.2.0-py3-none-any.whl", hash = "sha256:1e108f1bbe2ed0ef089823d28805d5ad32be8e734b86a5f212bf89b71c266e4a"},
-    {file = "python_discovery-1.2.0.tar.gz", hash = "sha256:7d33e350704818b09e3da2bd419d37e21e7c30db6e0977bb438916e06b41b5b1"},
+    {file = "python_discovery-1.2.1-py3-none-any.whl", hash = "sha256:b6a957b24c1cd79252484d3566d1b49527581d46e789aaf43181005e56201502"},
+    {file = "python_discovery-1.2.1.tar.gz", hash = "sha256:180c4d114bff1c32462537eac5d6a332b768242b76b69c0259c7d14b1b680c9e"},
 ]
 
 [[package]]
@@ -1913,7 +1913,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.50.3"
+version = "4.51.0"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -1924,14 +1924,15 @@ dependencies = [
     "platformdirs>=4.9.4",
     "pluggy>=1.6",
     "pyproject-api>=1.10",
+    "python-discovery>=1.2.1",
     "tomli-w>=1.2",
     "tomli>=2.4; python_version < \"3.11\"",
     "typing-extensions>=4.15; python_version < \"3.11\"",
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.50.3-py3-none-any.whl", hash = "sha256:5e788a512bfe6f7447e0c8d7c1b666eb2e56e5e676c65717490423bec37d1a07"},
-    {file = "tox-4.50.3.tar.gz", hash = "sha256:c745641de6cc4f19d066bd9f98c1c25f7affb005b381b7f3694a1f142ea0946b"},
+    {file = "tox-4.51.0-py3-none-any.whl", hash = "sha256:df848c4d9864ec6333c6e2b427fdc182b9f1d840d2bed072997bd48104269182"},
+    {file = "tox-4.51.0.tar.gz", hash = "sha256:e3967c0c2d7318d0b14a38d8cbb6ec2d12008574d612c1774fd00d376c7d5e6a"},
 ]
 
 [[package]]
