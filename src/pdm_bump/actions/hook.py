@@ -150,7 +150,7 @@ class HookExecutor(HookExecutorBase[tuple[_Executable, Version]]):
         --------
 
         """
-        (executor, version) = context
+        executor, version = context
 
         pre_call_ctx: "PreHookContext" = PreHookContext(
             self.__vcs_provider, version

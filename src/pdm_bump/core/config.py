@@ -10,6 +10,7 @@
 # Refer to LICENSE for more information
 #
 """"""
+
 from enum import Enum
 from functools import cached_property
 from typing import TYPE_CHECKING, Any, Final, Optional, Protocol

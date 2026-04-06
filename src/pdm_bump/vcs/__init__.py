@@ -12,7 +12,6 @@
 
 """"""
 
-
 # Justification: load module for decoupling
 from . import gitcli  # noqa: F401
 from .core import (

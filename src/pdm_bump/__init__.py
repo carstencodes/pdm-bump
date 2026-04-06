@@ -11,7 +11,6 @@
 #
 """"""
 
-
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as __get_version
 from typing import Final

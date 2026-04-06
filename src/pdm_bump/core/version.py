@@ -11,7 +11,6 @@
 #
 """"""
 
-
 # Implementation of the PEP 440 version.
 from dataclasses import dataclass, field
 from functools import total_ordering
@@ -31,9 +30,9 @@ class VersionParserError(ValueError):
     pass  # pylint: disable=W0107
 
 
-NonNegative = Ge(0)
+NonNegative = Ge(0)  # pylint: disable=C0103
 
-NonNegativeInteger = Annotated[int, NonNegative]
+NonNegativeInteger = Annotated[int, NonNegative]  # pylint: disable=C0103
 
 
 @final

@@ -11,7 +11,6 @@
 #
 """"""
 
-
 from traceback import format_exc as get_traceback
 from typing import TYPE_CHECKING, final
 
