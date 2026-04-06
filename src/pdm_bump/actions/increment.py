@@ -11,7 +11,6 @@
 #
 """"""
 
-
 import sys
 from abc import abstractmethod
 from dataclasses import asdict as dataclass_to_dict

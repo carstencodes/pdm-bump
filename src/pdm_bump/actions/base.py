@@ -11,7 +11,6 @@
 #
 """"""
 
-
 from abc import abstractmethod
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Protocol, cast
