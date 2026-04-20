@@ -668,12 +668,12 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.28.0"
+version = "3.29.0"
 requires_python = ">=3.10"
 summary = "A platform independent file lock."
 files = [
-    {file = "filelock-3.28.0-py3-none-any.whl", hash = "sha256:de9af6712788e7171df1b28b15eba2446c69721433fa427a9bee07b17820a9db"},
-    {file = "filelock-3.28.0.tar.gz", hash = "sha256:4ed1010aae813c4ee8d9c660e4792475ee60c4a0ba76073ceaf862bd317e3ca6"},
+    {file = "filelock-3.29.0-py3-none-any.whl", hash = "sha256:96f5f6344709aa1572bbf631c640e4ebeeb519e08da902c39a001882f30ac258"},
+    {file = "filelock-3.29.0.tar.gz", hash = "sha256:69974355e960702e789734cb4871f884ea6fe50bd8404051a3530bc07809cf90"},
 ]
 
 [[package]]
@@ -791,7 +791,7 @@ files = [
 
 [[package]]
 name = "hishel"
-version = "1.1.9"
+version = "1.1.10"
 requires_python = ">=3.10"
 summary = "Elegant HTTP Caching for Python"
 dependencies = [
@@ -799,25 +799,25 @@ dependencies = [
     "typing-extensions>=4.14.1",
 ]
 files = [
-    {file = "hishel-1.1.9-py3-none-any.whl", hash = "sha256:6b6f294cb7593f170a9bf874849cc85330ff81f5e35d2ca189548498fed10806"},
-    {file = "hishel-1.1.9.tar.gz", hash = "sha256:47248a50e4cff4fbaa141832782d8c07b2169914916f4bd792f37449176dfa23"},
+    {file = "hishel-1.1.10-py3-none-any.whl", hash = "sha256:b95be0afeff0e9d1644323ce48d81d914e346db45aec24b69ccfb9df39476fc9"},
+    {file = "hishel-1.1.10.tar.gz", hash = "sha256:d10172df9e8ceb1f6e7ba0b832a27b1f2db4acc32880a7134e40dec60089de38"},
 ]
 
 [[package]]
 name = "hishel"
-version = "1.1.9"
+version = "1.1.10"
 extras = ["httpx"]
 requires_python = ">=3.10"
 summary = "Elegant HTTP Caching for Python"
 dependencies = [
     "anyio>=4.9.0",
     "anysqlite>=0.0.5",
-    "hishel==1.1.9",
+    "hishel==1.1.10",
     "httpx>=0.28.1",
 ]
 files = [
-    {file = "hishel-1.1.9-py3-none-any.whl", hash = "sha256:6b6f294cb7593f170a9bf874849cc85330ff81f5e35d2ca189548498fed10806"},
-    {file = "hishel-1.1.9.tar.gz", hash = "sha256:47248a50e4cff4fbaa141832782d8c07b2169914916f4bd792f37449176dfa23"},
+    {file = "hishel-1.1.10-py3-none-any.whl", hash = "sha256:b95be0afeff0e9d1644323ce48d81d914e346db45aec24b69ccfb9df39476fc9"},
+    {file = "hishel-1.1.10.tar.gz", hash = "sha256:d10172df9e8ceb1f6e7ba0b832a27b1f2db4acc32880a7134e40dec60089de38"},
 ]
 
 [[package]]
@@ -1240,12 +1240,12 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2026.3.25"
+version = "2026.4.7"
 requires_python = ">=3.8"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2026.3.25-py3-none-any.whl", hash = "sha256:f22cdc8be34fcce056f416907397ba91a2611b34d6963097da8b138ed3ddcd5b"},
-    {file = "pbs_installer-2026.3.25.tar.gz", hash = "sha256:79913a8de3809bbb010cd2788d9d9b31e8eae77bc21846302dda8210d4d40c2a"},
+    {file = "pbs_installer-2026.4.7-py3-none-any.whl", hash = "sha256:462ff5173665251d99013ceef9c9b3b6330f9000e4e05a3b45b3acb457a486f3"},
+    {file = "pbs_installer-2026.4.7.tar.gz", hash = "sha256:0c0a7d44f125bac96de094b8208c76b891ee859c71accce1c0e9ec4d83828de8"},
 ]
 
 [[package]]
@@ -1851,16 +1851,16 @@ files = [
 
 [[package]]
 name = "rich"
-version = "14.3.3"
-requires_python = ">=3.8.0"
+version = "15.0.0"
+requires_python = ">=3.9.0"
 summary = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 dependencies = [
     "markdown-it-py>=2.2.0",
     "pygments<3.0.0,>=2.13.0",
 ]
 files = [
-    {file = "rich-14.3.3-py3-none-any.whl", hash = "sha256:793431c1f8619afa7d3b52b2cdec859562b950ea0d4b6b505397612db8d5362d"},
-    {file = "rich-14.3.3.tar.gz", hash = "sha256:b8daa0b9e4eef54dd8cf7c86c03713f53241884e814f4e2f5fb342fe520f639b"},
+    {file = "rich-15.0.0-py3-none-any.whl", hash = "sha256:33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb"},
+    {file = "rich-15.0.0.tar.gz", hash = "sha256:edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36"},
 ]
 
 [[package]]
