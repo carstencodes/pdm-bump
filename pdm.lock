@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:c142a446853471c2e7bc093effbed03d5646d932adca78ef7e3db146e551da4c"
+content_hash = "sha256:c4ea8360bb17f20e48b701d2f93138d2be172f7f71c02437f66f94b42ce84362"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -2028,12 +2028,12 @@ files = [
 
 [[package]]
 name = "tomlkit"
-version = "0.14.0"
+version = "0.15.0"
 requires_python = ">=3.9"
 summary = "Style preserving TOML library"
 files = [
-    {file = "tomlkit-0.14.0-py3-none-any.whl", hash = "sha256:592064ed85b40fa213469f81ac584f67a4f2992509a7c3ea2d632208623a3680"},
-    {file = "tomlkit-0.14.0.tar.gz", hash = "sha256:cf00efca415dbd57575befb1f6634c4f42d2d87dbba376128adb42c121b87064"},
+    {file = "tomlkit-0.15.0-py3-none-any.whl", hash = "sha256:4dbc8f0fc024412b57ced8757ac7461305126a648ff8c2c807fcb8e133a78738"},
+    {file = "tomlkit-0.15.0.tar.gz", hash = "sha256:7d1a9ecba3086638211b13814ea79c90dd54dd11993564376f3aa92271f5c7a3"},
 ]
 
 [[package]]
