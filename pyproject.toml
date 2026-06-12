@@ -52,7 +52,7 @@ formatting = [
 ]
 release = [
     "gitlint>=0.19.1",
-    "pip-audit>=2.10.0",
+    "pip-audit>=2.10.1",
 ]
 checkstyle = [
     "flake8>=7.3.0",
