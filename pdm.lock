@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:bfd3e3ce9c0726e6c473711f2286a6477e3bed68c9a8f9aba301747e79bd0abc"
+content_hash = "sha256:2db4c22094b71645a31de2c5140cde884822fbda88d4209b404d9f02bd2d2630"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1540,15 +1540,15 @@ files = [
 
 [[package]]
 name = "pyproject-metadata"
-version = "0.11.0"
+version = "0.12.1"
 requires_python = ">=3.8"
 summary = "PEP 621 metadata parsing"
 dependencies = [
     "packaging>=23.2",
 ]
 files = [
-    {file = "pyproject_metadata-0.11.0-py3-none-any.whl", hash = "sha256:85bbecca8694e2c00f63b492c96921d6c228454057c88e7c352b2077fcaa4096"},
-    {file = "pyproject_metadata-0.11.0.tar.gz", hash = "sha256:c72fa49418bb7c5a10f25e050c418009898d1c051721d19f98a6fb6da59a66cf"},
+    {file = "pyproject_metadata-0.12.1-py3-none-any.whl", hash = "sha256:f7162d580a96386a8eb096da06215f981f547d1490f03055ef99e323bc2da427"},
+    {file = "pyproject_metadata-0.12.1.tar.gz", hash = "sha256:8809a4df6fe08279b39a8890669506ed3158e0617855ac9aff098fcbe772ae4c"},
 ]
 
 [[package]]
