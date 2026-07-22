@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.0"
-content_hash = "sha256:51f8c6adc6bfa845a392e22e262a4868fbc95f05341722bfc62d214a8f33d12b"
+content_hash = "sha256:f8a4be776ba64167d680b359b18f30abc5da8111ff8fff46a7e1c4ac267a42a8"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -710,12 +710,12 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.31.0"
+version = "3.32.0"
 requires_python = ">=3.10"
 summary = "A platform independent file lock."
 files = [
-    {file = "filelock-3.31.0-py3-none-any.whl", hash = "sha256:739b73e580fe88bb78d830aeddbc492519ece3d97ac8368de13a2032c61010c1"},
-    {file = "filelock-3.31.0.tar.gz", hash = "sha256:c188cbc4307c18894c5424fa73f97ea7fa127ddf62192487546da3a214d0a381"},
+    {file = "filelock-3.32.0-py3-none-any.whl", hash = "sha256:d396bea984af47333ef05e50eae7eff88c84256de6112aea0ec48a233c064fe3"},
+    {file = "filelock-3.32.0.tar.gz", hash = "sha256:7be2ad23a14607ccc71808e68fe30848aeace7058ace17852f68e2a68e310402"},
 ]
 
 [[package]]
@@ -1417,12 +1417,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.10.1"
+version = "4.11.0"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.10.1-py3-none-any.whl", hash = "sha256:0e4eff26be2d75293977f7cddc153fd9b8eaa7fb0c7b64ffe4076cb443117443"},
-    {file = "platformdirs-4.10.1.tar.gz", hash = "sha256:ceab4084426fe6319ce18e86deada8ab1b7487c7aee7040c55e277c9ae793695"},
+    {file = "platformdirs-4.11.0-py3-none-any.whl", hash = "sha256:360ccded2b7fce0af0ff80cc8f5942a1c5d99b0e856033acb030bfc634709e74"},
+    {file = "platformdirs-4.11.0.tar.gz", hash = "sha256:0555d18370482847566ffabcaa53ad7c6c1c29f195989ae1ed634a05f76ea1e0"},
 ]
 
 [[package]]
@@ -1522,7 +1522,7 @@ files = [
 
 [[package]]
 name = "pyproject-api"
-version = "1.10.1"
+version = "1.11.0"
 requires_python = ">=3.10"
 summary = "API to interact with the python pyproject.toml based projects"
 dependencies = [
@@ -1530,8 +1530,8 @@ dependencies = [
     "tomli>=2.3; python_version < \"3.11\"",
 ]
 files = [
-    {file = "pyproject_api-1.10.1-py3-none-any.whl", hash = "sha256:fa9e6f66c35b5017e909825d8f2b5d5482ea699d7be809d21c03bd1f7317f36a"},
-    {file = "pyproject_api-1.10.1.tar.gz", hash = "sha256:c2b2726bd7aa9217b6c50b621fef5b2ae5def4d55b779c9e0694c15e0a8517ba"},
+    {file = "pyproject_api-1.11.0-py3-none-any.whl", hash = "sha256:860060c8832dce983b5eec6f41c4c43eb3ec06ff7332387a63acdf5ca27b68d8"},
+    {file = "pyproject_api-1.11.0.tar.gz", hash = "sha256:b8807d85a293e6c9f133e6575946fed45f1d42b22d58c780b33aa2421a799549"},
 ]
 
 [[package]]
@@ -1606,7 +1606,7 @@ files = [
 
 [[package]]
 name = "python-discovery"
-version = "1.4.4"
+version = "1.5.0"
 requires_python = ">=3.8"
 summary = "Python interpreter discovery"
 dependencies = [
@@ -1614,8 +1614,8 @@ dependencies = [
     "platformdirs<5,>=4.3.6",
 ]
 files = [
-    {file = "python_discovery-1.4.4-py3-none-any.whl", hash = "sha256:abebe9120b43453b68c908acfb1e72a19d1a959ed2cb620ad38fc57d08056dbe"},
-    {file = "python_discovery-1.4.4.tar.gz", hash = "sha256:5cad33982d412c1f3ffb8f9ca4ea292c9680bca3942451d30b69c37fce53a4a3"},
+    {file = "python_discovery-1.5.0-py3-none-any.whl", hash = "sha256:70c4fc61b4e7404e44f01d6fc44a715c4d685ca6cea83d295922f05891877c98"},
+    {file = "python_discovery-1.5.0.tar.gz", hash = "sha256:3e014c6327154d3dda27939a9a0dc9c5c000439f1906d3f303b48f984bd2ecef"},
 ]
 
 [[package]]
@@ -2043,7 +2043,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.57.0"
+version = "4.58.0"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -2061,8 +2061,8 @@ dependencies = [
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.57.0-py3-none-any.whl", hash = "sha256:ede907fa911b55cbf1e7dc823a5b455a164755a172124675b811210676ba31c2"},
-    {file = "tox-4.57.0.tar.gz", hash = "sha256:b2f758011dfbad7be4b4cc39d2cae21deeb3c3c186e6d7a92d7630eade4218cf"},
+    {file = "tox-4.58.0-py3-none-any.whl", hash = "sha256:dcae21f5f015f3a67658e35644cce0d1aa0dedcd06f3927f95d84e1717f6cea5"},
+    {file = "tox-4.58.0.tar.gz", hash = "sha256:ab0b126a04dd56bc18e6d216386db09335247f2289b54cf534deb5c4ae3a8d2e"},
 ]
 
 [[package]]
@@ -2125,7 +2125,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "21.6.1"
+version = "21.7.0"
 requires_python = ">=3.9"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2137,8 +2137,8 @@ dependencies = [
     "typing-extensions>=4.13.2; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-21.6.1-py3-none-any.whl", hash = "sha256:afe991df855715a2b2f60edfcc0107ef95a79fdfd8cb4cdaa71603d1c12e463b"},
-    {file = "virtualenv-21.6.1.tar.gz", hash = "sha256:15f978b7cd329f24855ff4a0c4b4899cc7678589f49adbdcbbb4d3232e641128"},
+    {file = "virtualenv-21.7.0-py3-none-any.whl", hash = "sha256:a8370c1c5530fbabf955e40b8fbbc68a431648b10f9433faa587db30a06e51dd"},
+    {file = "virtualenv-21.7.0.tar.gz", hash = "sha256:7f9519b9432ff11b6e1a3e94061664efc2ff99ea21780e3cf4f6bd0a5da8b37c"},
 ]
 
 [[package]]
