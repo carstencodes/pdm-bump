@@ -47,7 +47,7 @@ formatting = [
     "black>=26.5.1",
     "isort>=8.0.1",
     "licenseheaders>=0.8.8",
-    "autoflake>=2.3.3",
+    "autoflake>=2.4.0",
     "pyment>=0.3.3",
 ]
 release = [
