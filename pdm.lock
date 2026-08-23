@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:e27af7d2cacf590612cb1e2f7c105f76fafbaac9d26c40abde7592bfc9856edb"
+content_hash = "sha256:b9a6cb3b503587273e1ee8c02299cbc0008bb7781c11c8fc2cd92ab2983544e5"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -152,7 +152,7 @@ files = [
 
 [[package]]
 name = "autoflake"
-version = "2.3.3"
+version = "2.4.0"
 requires_python = ">=3.10"
 summary = "Removes unused imports and unused variables"
 dependencies = [
@@ -160,8 +160,8 @@ dependencies = [
     "tomli>=2.0.1; python_version < \"3.11\"",
 ]
 files = [
-    {file = "autoflake-2.3.3-py3-none-any.whl", hash = "sha256:a51a3412aff16135ee5b3ec25922459fef10c1f23ce6d6c4977188df859e8b53"},
-    {file = "autoflake-2.3.3.tar.gz", hash = "sha256:c24809541e23999f7a7b0d2faadf15deb0bc04cdde49728a2fd943a0c8055504"},
+    {file = "autoflake-2.4.0-py3-none-any.whl", hash = "sha256:85df69176550d5e070bdf4a12a1bcdad062998ed458b20a605630e74b758c7ce"},
+    {file = "autoflake-2.4.0.tar.gz", hash = "sha256:ef7c496d9bce9d2cef049f24e482d1d3090c37fbd44e5e85dfb00db3c78ee16c"},
 ]
 
 [[package]]
