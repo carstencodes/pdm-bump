@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:a3a6bcf715cb3554ae067f420effbcf373ead932054264a76d92d5db9e0b650b"
+content_hash = "sha256:ef672db17d501d010841c3d9c2703cd8be2651e6b7714ad6c4fcd90752f80487"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1498,12 +1498,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.11.4"
+version = "4.11.5"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.11.4-py3-none-any.whl", hash = "sha256:e34ff91a24bcddc6d939b878bdf3f5c437c9c46fe9e212b1bf455fdf1ee57586"},
-    {file = "platformdirs-4.11.4.tar.gz", hash = "sha256:f3373be828247211d0febabea97e238c3dfde8a60b3c90c32756fb52cb21556d"},
+    {file = "platformdirs-4.11.5-py3-none-any.whl", hash = "sha256:89f8d42695853b89c7170bd49bc3dc593f98a71e695ede88e06a3b247bc4563b"},
+    {file = "platformdirs-4.11.5.tar.gz", hash = "sha256:e8b31f4f8bcbbedef91a6b57a706255e4f148d2a4e01648382a0a47342539173"},
 ]
 
 [[package]]
@@ -1687,15 +1687,15 @@ files = [
 
 [[package]]
 name = "python-discovery"
-version = "1.5.3"
+version = "1.6.0"
 requires_python = ">=3.8"
 summary = "Python interpreter discovery"
 dependencies = [
     "filelock>=3.15.4",
 ]
 files = [
-    {file = "python_discovery-1.5.3-py3-none-any.whl", hash = "sha256:8305296358f1aa2ed302a25b84be7df84fef8ca47c7dce2da63cb7325333044e"},
-    {file = "python_discovery-1.5.3.tar.gz", hash = "sha256:e500eb24025fb7c4876c1fdcfbafd9028a10c71b661aee38cb6fb0de594518c1"},
+    {file = "python_discovery-1.6.0-py3-none-any.whl", hash = "sha256:d4e244cf17b8b29819ed78003d55fbacf86eda23425b075454fff9271b79377a"},
+    {file = "python_discovery-1.6.0.tar.gz", hash = "sha256:6393b4eae1be8b2182670635e7baff89ac21cb9f8e86fd1ff40c7b1144febb4c"},
 ]
 
 [[package]]
@@ -2123,7 +2123,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.60.1"
+version = "4.61.1"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -2141,8 +2141,8 @@ dependencies = [
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.60.1-py3-none-any.whl", hash = "sha256:6f23a6417ad761b17c047e14b6e278968c09eb9b1fc00025269f82ec8327bc75"},
-    {file = "tox-4.60.1.tar.gz", hash = "sha256:2611b77ebe06fa571ae2f4176eaf644115d08891befb9c7cb705cb038d5ab38e"},
+    {file = "tox-4.61.1-py3-none-any.whl", hash = "sha256:90bf9cf074d38ab87bff1753183d96c07e9e99d04acc2230d21f42f7aa89d1c6"},
+    {file = "tox-4.61.1.tar.gz", hash = "sha256:d41ff6eb434d71763740ec90d869cb82688e6ff9204c913d8bea13fb75fc8f9a"},
 ]
 
 [[package]]
@@ -2205,7 +2205,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "21.7.5"
+version = "21.7.7"
 requires_python = ">=3.9"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2213,12 +2213,12 @@ dependencies = [
     "filelock<4,>=3.24.2; python_version >= \"3.10\"",
     "filelock<=3.19.1,>=3.16.1; python_version < \"3.10\"",
     "platformdirs<5,>=3.9.1",
-    "python-discovery>=1.4.2",
+    "python-discovery>=1.6",
     "typing-extensions>=4.13.2; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-21.7.5-py3-none-any.whl", hash = "sha256:e36ca889510ab6cb0b1dca93c59e5431dd4422a3c88f487358d470c90af8c07a"},
-    {file = "virtualenv-21.7.5.tar.gz", hash = "sha256:a73c4246fba3c8901ff9717399f466e00eeca5a3834981f1a6ebb4f1e94de2f8"},
+    {file = "virtualenv-21.7.7-py3-none-any.whl", hash = "sha256:67a6a68fef3ad8ca16b8b89f33fd8f97996cc0bf0db31629d07ecf8dec539a2c"},
+    {file = "virtualenv-21.7.7.tar.gz", hash = "sha256:6874376f99ba6b8d4e3ee8bde67f9285412400c7d5b29ba41ee6daa5e0221bdc"},
 ]
 
 [[package]]
