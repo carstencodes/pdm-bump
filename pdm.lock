@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:bfe7ff1fca9584768c6a226635511cbc3f2d11edee05cb0b6871d9d751c2a4ad"
+content_hash = "sha256:4c7b33bfc4c4fc94baa7796d1a8224017868d8414c606b49aee7711a611910ff"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -740,12 +740,12 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "3.32.5"
+version = "3.32.6"
 requires_python = ">=3.10"
 summary = "A platform independent file lock."
 files = [
-    {file = "filelock-3.32.5-py3-none-any.whl", hash = "sha256:142cd9fa77a872c5e78c62329a0d15278fadc686eb89e760017968961a4fd6b2"},
-    {file = "filelock-3.32.5.tar.gz", hash = "sha256:f6a6a28f743f9b95ce19db5abe0f376f75eb56517dff21e1a4751e2657d3e83d"},
+    {file = "filelock-3.32.6-py3-none-any.whl", hash = "sha256:3f16ecd0117feae0dfc147e8c62eb5daeccd8bd800378c3ddf416de9b4feb6b1"},
+    {file = "filelock-3.32.6.tar.gz", hash = "sha256:a3f55a18af3652a94d8f47d6055df434f254ca1d02ef2524850c6d249ca2512c"},
 ]
 
 [[package]]
@@ -1536,12 +1536,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.11.5"
+version = "4.11.8"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.11.5-py3-none-any.whl", hash = "sha256:89f8d42695853b89c7170bd49bc3dc593f98a71e695ede88e06a3b247bc4563b"},
-    {file = "platformdirs-4.11.5.tar.gz", hash = "sha256:e8b31f4f8bcbbedef91a6b57a706255e4f148d2a4e01648382a0a47342539173"},
+    {file = "platformdirs-4.11.8-py3-none-any.whl", hash = "sha256:52f2f181bbfde907966932cc8312d967d02976422d66d537ea16092b8e291081"},
+    {file = "platformdirs-4.11.8.tar.gz", hash = "sha256:f23abafea7dd4276d1f29104b83598d7dcc567cafd07c9c951e66665645437fc"},
 ]
 
 [[package]]
@@ -2161,7 +2161,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.61.2"
+version = "4.61.4"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -2179,8 +2179,8 @@ dependencies = [
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.61.2-py3-none-any.whl", hash = "sha256:262efa52b735004dcef04ae4c934614ec4e5c61319a14d1e762c18db7fdb82c3"},
-    {file = "tox-4.61.2.tar.gz", hash = "sha256:463b6eeaaf0929d60b4f7a87b26f4a7a764fe9832a74bf50b4e9d259b6a8e905"},
+    {file = "tox-4.61.4-py3-none-any.whl", hash = "sha256:1ec27a26f485c408a3f128722959086099894955d1eb74ab973e233bd362e99e"},
+    {file = "tox-4.61.4.tar.gz", hash = "sha256:d3fa82dc2fe847fe45b576ed0614e850a674aadec3a664f409e2bf295c473e20"},
 ]
 
 [[package]]
@@ -2243,7 +2243,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "21.7.7"
+version = "21.7.9"
 requires_python = ">=3.9"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2255,8 +2255,8 @@ dependencies = [
     "typing-extensions>=4.13.2; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-21.7.7-py3-none-any.whl", hash = "sha256:67a6a68fef3ad8ca16b8b89f33fd8f97996cc0bf0db31629d07ecf8dec539a2c"},
-    {file = "virtualenv-21.7.7.tar.gz", hash = "sha256:6874376f99ba6b8d4e3ee8bde67f9285412400c7d5b29ba41ee6daa5e0221bdc"},
+    {file = "virtualenv-21.7.9-py3-none-any.whl", hash = "sha256:ba3b0bb41063c848d84d76a9fe3fb7711aaa0f2fe78708e8f3cd9714770e4eac"},
+    {file = "virtualenv-21.7.9.tar.gz", hash = "sha256:a7e42d81d779dec8afd7dc4be71640fb959ea861bccfa5980cb4ad9f92e30675"},
 ]
 
 [[package]]
