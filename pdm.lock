@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:4c7b33bfc4c4fc94baa7796d1a8224017868d8414c606b49aee7711a611910ff"
+content_hash = "sha256:0807e08653560deec5ed8a54b758a9c516e137079f7895468f4b66dd9e44ab6f"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -22,17 +22,17 @@ files = [
 
 [[package]]
 name = "anyio"
-version = "4.14.2"
+version = "4.15.1"
 requires_python = ">=3.10"
 summary = "High-level concurrency and networking framework on top of asyncio or Trio"
 dependencies = [
     "exceptiongroup>=1.0.2; python_version < \"3.11\"",
     "idna>=2.8",
-    "typing-extensions>=4.5; python_version < \"3.13\"",
+    "typing-extensions>=4.16.0; python_version < \"3.15\"",
 ]
 files = [
-    {file = "anyio-4.14.2-py3-none-any.whl", hash = "sha256:9f505dda5ac9f0c8309b5e8bd445a8c2bf7246f3ce950121e45ea15bc41d1494"},
-    {file = "anyio-4.14.2.tar.gz", hash = "sha256:cfa139f3ed1a23ee8f88a145ddb5ac7605b8bbfd8592baacd7ce3d8bb4313c7f"},
+    {file = "anyio-4.15.1-py3-none-any.whl", hash = "sha256:6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101"},
+    {file = "anyio-4.15.1.tar.gz", hash = "sha256:9f28306018cbd6d329e64a36d58256edff76dd996fe423bc957326e578b82a94"},
 ]
 
 [[package]]
@@ -1405,17 +1405,17 @@ files = [
 
 [[package]]
 name = "pbs-installer"
-version = "2026.8.25"
+version = "2026.9.1"
 requires_python = ">=3.9"
 summary = "Installer for Python Build Standalone"
 files = [
-    {file = "pbs_installer-2026.8.25-py3-none-any.whl", hash = "sha256:2ef248b8689e676b5f52bda96e0b91f29db1f351ac793d9d610cfde030ea165b"},
-    {file = "pbs_installer-2026.8.25.tar.gz", hash = "sha256:55716bb41a8f86afee5812485ae71e96dcd3499aad6cb7fa75d7825993e15728"},
+    {file = "pbs_installer-2026.9.1-py3-none-any.whl", hash = "sha256:d2c320a11e0313f559f4338fad3f698345d200d0506053c75d266730b2507dcb"},
+    {file = "pbs_installer-2026.9.1.tar.gz", hash = "sha256:b21eb21a53557d197899e1bf3d8b7f4f264feb1c546327106fdfcc967cb3a704"},
 ]
 
 [[package]]
 name = "pdm"
-version = "2.29.0"
+version = "2.29.1"
 requires_python = ">=3.10"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1445,8 +1445,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.29.0-py3-none-any.whl", hash = "sha256:3abe1e0c6ca3b042bd9fb3d566e0f5d87f4fcc3459d3551d86840ca9a8d8ccc6"},
-    {file = "pdm-2.29.0.tar.gz", hash = "sha256:28c520267a15d7a3921b934ec4bfc2d1dc18379fbb653bb20d8e840b2788be6b"},
+    {file = "pdm-2.29.1-py3-none-any.whl", hash = "sha256:6c6c536679cc6ff2cc7defba8b6e85fc8317e1e747b53f6e4e4a9bb3460980eb"},
+    {file = "pdm-2.29.1.tar.gz", hash = "sha256:6bb5d893d301edb2b83d46042039634bf36c96c57cc7edad22a59521a41df9f8"},
 ]
 
 [[package]]
