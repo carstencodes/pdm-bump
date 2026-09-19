@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:28d4c1cc121a69f530474790c3aabc7ef15032ec0bc188af4231cdc35da5206f"
+content_hash = "sha256:684c440541b10b939fdc0ab81bcf9aa4ad459fb799ba592ba3bf8f9a6c3efb16"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -2161,7 +2161,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.62.0"
+version = "4.63.0"
 requires_python = ">=3.10"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -2179,8 +2179,8 @@ dependencies = [
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.62.0-py3-none-any.whl", hash = "sha256:99979ebae1d657706cb84f176fbdf012d606bf16c014b4be6c90af8b736515ff"},
-    {file = "tox-4.62.0.tar.gz", hash = "sha256:4095724c046c32c52e24066f2e55006f3ac4480e733d144e03d81f2f3ece040f"},
+    {file = "tox-4.63.0-py3-none-any.whl", hash = "sha256:e8c560a9124e127c5e0547912d2ae1ef948dbba2fdea0b8d506e609a126b2e47"},
+    {file = "tox-4.63.0.tar.gz", hash = "sha256:fb7105ef125b371e31797cfa615e5a160de3d8ef29b86dca7fcbd9048da3a9d8"},
 ]
 
 [[package]]
@@ -2243,7 +2243,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "21.7.15"
+version = "21.8.1"
 requires_python = ">=3.9"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2255,8 +2255,8 @@ dependencies = [
     "typing-extensions>=4.13.2; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-21.7.15-py3-none-any.whl", hash = "sha256:b7fa004650941c5f4b8035c981673ba2fc88189543c86db05ace77878804202d"},
-    {file = "virtualenv-21.7.15.tar.gz", hash = "sha256:072c16d3d1d796cb6a851145d2eae314f8434bd625a55f18b8b72b29890cc366"},
+    {file = "virtualenv-21.8.1-py3-none-any.whl", hash = "sha256:0685ab90c9c3748dd6c99631207bda9fb359c72c28337047e719c83fb41a7a59"},
+    {file = "virtualenv-21.8.1.tar.gz", hash = "sha256:529a4c883b4efa067b98cfb61b64cdc0e453d01800ef5b5a29d0a9c514499a4f"},
 ]
 
 [[package]]
