@@ -55,7 +55,7 @@ release = [
     "pip-audit>=2.10.1",
 ]
 checkstyle = [
-    "flake8>=7.3.0",
+    "flake8>=7.4.1",
     "flake518>=1.6.0",
     "mypy>=2.3.1",
     "pylint>=4.0.8",
