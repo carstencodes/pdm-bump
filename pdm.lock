@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:f5e072e060b1bbd11ed82a8ccb9ecb9a39ff1691798fc42ea5be4292d030f733"
+content_hash = "sha256:19846d6cda4f6d9bf416b0a9c140c00cf0e6692fe56fe3b8ea3bed54cf48379b"
 
 [[metadata.targets]]
 requires_python = ">=3.10"
@@ -1536,12 +1536,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.11.15"
+version = "4.12.0"
 requires_python = ">=3.10"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.11.15-py3-none-any.whl", hash = "sha256:84508421c77d3c6462e71dd8c0d2776c2ace0e94eb006dc4fd383bc1dcf5a176"},
-    {file = "platformdirs-4.11.15.tar.gz", hash = "sha256:d7419e973b2b740d428200130f80c0e79304d1c71081001db911e15b26a3a6d4"},
+    {file = "platformdirs-4.12.0-py3-none-any.whl", hash = "sha256:f6fb2960f2f2eb0870f820f7e49e49e6c0f0589c637f34d33b260b07591327c9"},
+    {file = "platformdirs-4.12.0.tar.gz", hash = "sha256:095be5c143382b1bee917c4f3e9987a0d8d6a582261f1d061ad0c403b7695b5b"},
 ]
 
 [[package]]
@@ -1599,7 +1599,7 @@ files = [
 
 [[package]]
 name = "pylint"
-version = "4.0.8"
+version = "4.0.9"
 requires_python = ">=3.10.0"
 summary = "python code static checker"
 dependencies = [
@@ -1616,8 +1616,8 @@ dependencies = [
     "typing-extensions>=3.10; python_version < \"3.10\"",
 ]
 files = [
-    {file = "pylint-4.0.8-py3-none-any.whl", hash = "sha256:3341c08c0aabaa4adc71516de0969f3ba5c692b56c75af4dcb4d242823fbe363"},
-    {file = "pylint-4.0.8.tar.gz", hash = "sha256:1c1b2128bde5ff5e966801413080b6384d42a5782718d528c906dbb6beab94ed"},
+    {file = "pylint-4.0.9-py3-none-any.whl", hash = "sha256:c4ba5bbaf1e70ecf05f08cd7d6091ea04824b79a2b2d9f5b10dc25fc34cb1124"},
+    {file = "pylint-4.0.9.tar.gz", hash = "sha256:6f1305780229ae720e89b8aff2b3ff857cbb268fbab98c8b586960267667ad34"},
 ]
 
 [[package]]
