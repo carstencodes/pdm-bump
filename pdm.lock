@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:b1cd7b8bc458e3a74834fe6c8fb36cc66b4722ed13ac4f1b36d7353c43b30603"
+content_hash = "sha256:b8341ff77de194113a38d6cc181e1e043ca0f1ea353a7cc01e15c6684165645b"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -1429,7 +1429,7 @@ files = [
 
 [[package]]
 name = "pdm"
-version = "2.29.4"
+version = "2.29.5"
 requires_python = ">=3.10"
 summary = "A modern Python package and dependency manager supporting the latest PEP standards"
 dependencies = [
@@ -1458,8 +1458,8 @@ dependencies = [
     "virtualenv>=20",
 ]
 files = [
-    {file = "pdm-2.29.4-py3-none-any.whl", hash = "sha256:599a299d7fb35195d41610ee8341f65c75c5c97dde9f8cfcf573790b3d1b0cd9"},
-    {file = "pdm-2.29.4.tar.gz", hash = "sha256:48d013ba869b85538fea268107cd7a2c18fd91a6abf785fa4d7ed5951808582d"},
+    {file = "pdm-2.29.5-py3-none-any.whl", hash = "sha256:78f6efa8359735002b6331183af7c4004098361d360843f0d54a5a6f92c8d9f3"},
+    {file = "pdm-2.29.5.tar.gz", hash = "sha256:39048cbf7f34cf586e2905b99a05f633fc892753d443181151787725542ee19c"},
 ]
 
 [[package]]
@@ -1549,12 +1549,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.13.7"
+version = "4.14.0"
 requires_python = ">=3.11"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.13.7-py3-none-any.whl", hash = "sha256:47664602fbecad0a6efa561fb690d20dbc26875fe8aedf65ba362935df619bbb"},
-    {file = "platformdirs-4.13.7.tar.gz", hash = "sha256:f7f351c027d6632c30471124e1fdb6ac0fef9ccc5cbac1b34cb333431b1fc3e1"},
+    {file = "platformdirs-4.14.0-py3-none-any.whl", hash = "sha256:1dadfc59a8a5d7565b3d9270ae8fa71c065595352c4277b41c11ee6c222c4b91"},
+    {file = "platformdirs-4.14.0.tar.gz", hash = "sha256:83f009c1e8c5fc36869b5171755b291887bd2cade7965233cdfabd23d754720b"},
 ]
 
 [[package]]
