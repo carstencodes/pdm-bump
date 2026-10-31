@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:b8341ff77de194113a38d6cc181e1e043ca0f1ea353a7cc01e15c6684165645b"
+content_hash = "sha256:708e3dd8c5440f97bb3b6f24297015fe86b26b1503212ca1bd37c46d9ed860df"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -765,17 +765,17 @@ files = [
 
 [[package]]
 name = "flake8"
-version = "7.4.1"
-requires_python = ">=3.10"
+version = "7.5.0"
+requires_python = ">=3.11"
 summary = "the modular source code checker: pep8 pyflakes and co"
 dependencies = [
     "mccabe<0.8.0,>=0.7.0",
     "pycodestyle<2.16.0,>=2.15.0",
-    "pyflakes<4.1.0,>=4.0.0",
+    "pyflakes<4.2.0,>=4.1.0",
 ]
 files = [
-    {file = "flake8-7.4.1-py2.py3-none-any.whl", hash = "sha256:78480274a6d7289d9cb8eafeda241fac57d4ea687d26e32dfdca37b72cdeddad"},
-    {file = "flake8-7.4.1.tar.gz", hash = "sha256:84ea5afcaf344487b0ea5baaebb8100f4cfaebc01f755998f75876664029f587"},
+    {file = "flake8-7.5.0-py2.py3-none-any.whl", hash = "sha256:637ea1a443a78ed6ee461725cdf71ca93bc5cde0abf25436dbebdc3880b4e078"},
+    {file = "flake8-7.5.0.tar.gz", hash = "sha256:0dab7566341aca0d80aa29b5812bdadf256caa6a63e6068e49ac2649918236a4"},
 ]
 
 [[package]]
@@ -1592,12 +1592,12 @@ files = [
 
 [[package]]
 name = "pyflakes"
-version = "4.0.0"
-requires_python = ">=3.10"
+version = "4.1.0"
+requires_python = ">=3.11"
 summary = "passive checker of Python programs"
 files = [
-    {file = "pyflakes-4.0.0-py2.py3-none-any.whl", hash = "sha256:0f7b7a78e8fcffd78b205200f045a70911f4179be1b42eac82c3323e0bf5c8aa"},
-    {file = "pyflakes-4.0.0.tar.gz", hash = "sha256:492b27735181e3d4a6acfc08738948b666bf3e696781854ea6e0d8540d566d52"},
+    {file = "pyflakes-4.1.0-py2.py3-none-any.whl", hash = "sha256:b2e05e6bac8e49b67be2a6ffa63422c60f7193fc72e8180255907b41ec997dc1"},
+    {file = "pyflakes-4.1.0.tar.gz", hash = "sha256:592beb57058eb82eb190fb7514f2081c555c51000b029ff71286a681e6cf2f83"},
 ]
 
 [[package]]
