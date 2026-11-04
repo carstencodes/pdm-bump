@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:10c5a2443aafbddda4a6a4712cd905e82e74c7fbb07eeac8313d266c7d666bd3"
+content_hash = "sha256:9ab84813da3e8510cd92389331cfb18ca70607aeee0bdba4bde44fc4b2601a83"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -401,12 +401,12 @@ files = [
 
 [[package]]
 name = "classify-imports"
-version = "4.2.0"
-requires_python = ">=3.7"
+version = "4.5.0"
+requires_python = ">=3.10"
 summary = "Utilities for refactoring imports in python-like syntax."
 files = [
-    {file = "classify_imports-4.2.0-py2.py3-none-any.whl", hash = "sha256:dbbc264b70a470ed8c6c95976a11dfb8b7f63df44ed1af87328bbed2663f5161"},
-    {file = "classify_imports-4.2.0.tar.gz", hash = "sha256:7abfb7ea92149b29d046bd34573d247ba6e68cc28100c801eba4af17964fc40e"},
+    {file = "classify_imports-4.5.0-py2.py3-none-any.whl", hash = "sha256:04f37f789241f2f35cb04b63de8f77b502405bba144402a97b75542582fbdcdc"},
+    {file = "classify_imports-4.5.0.tar.gz", hash = "sha256:83af69ba9d4d05dd15146848d7b2cfa900a8f5cc81f26693688af73e8b199497"},
 ]
 
 [[package]]
@@ -780,16 +780,16 @@ files = [
 
 [[package]]
 name = "flake8-type-checking"
-version = "3.2.0"
-requires_python = ">=3.10"
+version = "3.3.0"
+requires_python = ">=3.11"
 summary = "A flake8 plugin for managing type-checking imports & forward references"
 dependencies = [
     "classify-imports",
     "flake8",
 ]
 files = [
-    {file = "flake8_type_checking-3.2.0-py3-none-any.whl", hash = "sha256:3475f77c03a414725a2d5cb11b8308514fab4d568b06025981742dd36cde9dc7"},
-    {file = "flake8_type_checking-3.2.0.tar.gz", hash = "sha256:0532ac5e8c7d5edf64861731c4bb72a86c9004cf46fe73a1f7bd8dc83b840e92"},
+    {file = "flake8_type_checking-3.3.0-py3-none-any.whl", hash = "sha256:19b36f0d32d2dbb4b6a361906180249ce81d32d14957dec948f38d4b8f5cc792"},
+    {file = "flake8_type_checking-3.3.0.tar.gz", hash = "sha256:e0b9b1ffc824aaa1e10b9f7b5f0f040a331062b16ca0c499257bb881c215b83a"},
 ]
 
 [[package]]
