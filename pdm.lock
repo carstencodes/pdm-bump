@@ -5,7 +5,7 @@
 groups = ["default", "checkstyle", "formatting", "release", "static-code-analysis", "test"]
 strategy = []
 lock_version = "4.5.1"
-content_hash = "sha256:7f7d3a67e2e836922def2515b17ee0242cc18b98fcefd87672d22236d085cac5"
+content_hash = "sha256:208da164b121452600862ef75af77bab5cd5c9c4487688626282969ff5f8e8e0"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -275,12 +275,12 @@ files = [
 
 [[package]]
 name = "cachetools"
-version = "8.0.2"
+version = "8.0.3"
 requires_python = ">=3.11"
 summary = "Extensible memoizing collections and decorators"
 files = [
-    {file = "cachetools-8.0.2-py3-none-any.whl", hash = "sha256:502bf3c17c6e35d78ccdaa70da8c7001b28634541f5cde0dee33c93bb252277d"},
-    {file = "cachetools-8.0.2.tar.gz", hash = "sha256:30ac523adfc118b51d2b2e7bad8a0ddb31370dfe2700c7f10ca224f36ccf81e0"},
+    {file = "cachetools-8.0.3-py3-none-any.whl", hash = "sha256:08bc12eeb7c7ab68abbe2d64d07fd7923ff532e32ff04ae27d22add1c5e8a5f9"},
+    {file = "cachetools-8.0.3.tar.gz", hash = "sha256:79245d0d90464e29355f13658cd769e57d98ed06242d3c6fbd71796ca0938ef9"},
 ]
 
 [[package]]
@@ -727,12 +727,12 @@ files = [
 
 [[package]]
 name = "filelock"
-version = "4.3.1"
+version = "4.3.2"
 requires_python = ">=3.11"
 summary = "A platform independent file lock."
 files = [
-    {file = "filelock-4.3.1-py3-none-any.whl", hash = "sha256:79e43df8e9fe509cd83a3899a7c186c8077cbbe4d200a1ed3705c2f3bb6bc487"},
-    {file = "filelock-4.3.1.tar.gz", hash = "sha256:4c5ee627c401f1863ac6a0de9a14a28d3bb5f8c730b45e2fd6e5dbc79cf34b9e"},
+    {file = "filelock-4.3.2-py3-none-any.whl", hash = "sha256:02a8801bc6b2a80921bf3d7895c63084d53bae2a3c86783adce5ae2b89a1825b"},
+    {file = "filelock-4.3.2.tar.gz", hash = "sha256:4f0a21c70447782453c06bb20a9863ee385ead1abaef22049af79289496851b3"},
 ]
 
 [[package]]
@@ -1387,12 +1387,12 @@ files = [
 
 [[package]]
 name = "packaging"
-version = "26.3"
-requires_python = ">=3.9"
+version = "26.4"
+requires_python = ">=3.10"
 summary = "Core utilities for Python packages"
 files = [
-    {file = "packaging-26.3-py3-none-any.whl", hash = "sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"},
-    {file = "packaging-26.3.tar.gz", hash = "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79"},
+    {file = "packaging-26.4-py3-none-any.whl", hash = "sha256:81383611a09c1bc0b08b76e0fd5829d7c6824c65b27a6aee339da133f4233ea2"},
+    {file = "packaging-26.4.tar.gz", hash = "sha256:c4b671c41ddb9bf26e543c37723610d28fb6bf7affc4da17cf048d419d2c062a"},
 ]
 
 [[package]]
@@ -1552,12 +1552,12 @@ files = [
 
 [[package]]
 name = "platformdirs"
-version = "4.14.8"
+version = "4.14.9"
 requires_python = ">=3.11"
 summary = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
 files = [
-    {file = "platformdirs-4.14.8-py3-none-any.whl", hash = "sha256:1e34af590de4d978631b751eb2202f2fee4497537a17c1720b12fcf57b331392"},
-    {file = "platformdirs-4.14.8.tar.gz", hash = "sha256:96893d686e84e9e6f358a9ea41a8de544df66dbf2ba6cda250e7dc73acf85b9b"},
+    {file = "platformdirs-4.14.9-py3-none-any.whl", hash = "sha256:d0d3a23e7ff282cfa94b77f5a22b81030dcb68ba0430f90c74f4bd8d090782ea"},
+    {file = "platformdirs-4.14.9.tar.gz", hash = "sha256:c6b188e03ffd4dfe1bf8c4bcb47cd94711af244a9852dbff60297bd753684d5d"},
 ]
 
 [[package]]
@@ -1740,15 +1740,15 @@ files = [
 
 [[package]]
 name = "python-discovery"
-version = "1.9.7"
+version = "1.9.8"
 requires_python = ">=3.9"
 summary = "Python interpreter discovery"
 dependencies = [
     "filelock>=3.16.1",
 ]
 files = [
-    {file = "python_discovery-1.9.7-py3-none-any.whl", hash = "sha256:3add4a4dfc794f8e4a8c0fa0d9d6563172196d68709071a627e89fc36af39177"},
-    {file = "python_discovery-1.9.7.tar.gz", hash = "sha256:cea89e8a8b86e19731c67f8393f34eb1a2f96c9f97f3e406929a99c646a2358d"},
+    {file = "python_discovery-1.9.8-py3-none-any.whl", hash = "sha256:4e0c3349272923b6f58db8c5dad111b09dec9d3e2c97f9b79023f8b2e9acf7ab"},
+    {file = "python_discovery-1.9.8.tar.gz", hash = "sha256:5d66dd004e6972687438a799fa0895b7a900c1b7324a525196f1826bf7cebb03"},
 ]
 
 [[package]]
@@ -2194,7 +2194,7 @@ files = [
 
 [[package]]
 name = "tox"
-version = "4.67.16"
+version = "4.67.17"
 requires_python = ">=3.11"
 summary = "tox is a generic virtualenv management and test command line tool"
 dependencies = [
@@ -2211,8 +2211,8 @@ dependencies = [
     "virtualenv>=21.1",
 ]
 files = [
-    {file = "tox-4.67.16-py3-none-any.whl", hash = "sha256:daae3d97a74096cc4f18399dc09dd2bb767470336e02a0de3232a4d7bb546baa"},
-    {file = "tox-4.67.16.tar.gz", hash = "sha256:5aebaa21a648bb4c129724a2e7aeb4ce951f0d93a37f8709b630719fd5b78ab5"},
+    {file = "tox-4.67.17-py3-none-any.whl", hash = "sha256:0bdd50bf5ef104cbaeaafdaa134188b554d6e5a426dd5fc381cb1ca245e823e5"},
+    {file = "tox-4.67.17.tar.gz", hash = "sha256:8b170aa8d97cd3020f221fb876902aa70878b9fcbdbd1440ab3a33502b6c4d4e"},
 ]
 
 [[package]]
@@ -2275,7 +2275,7 @@ files = [
 
 [[package]]
 name = "virtualenv"
-version = "21.15.13"
+version = "21.15.14"
 requires_python = ">=3.9"
 summary = "Virtual Python Environment builder"
 dependencies = [
@@ -2288,8 +2288,8 @@ dependencies = [
     "typing-extensions>=4.16; python_version < \"3.11\"",
 ]
 files = [
-    {file = "virtualenv-21.15.13-py3-none-any.whl", hash = "sha256:2744de3b2ba59027ed7eb87c773d4907f56287f4db23b459e8172dcdb41c208d"},
-    {file = "virtualenv-21.15.13.tar.gz", hash = "sha256:f3ad23551343034e613f9c4d8279f282958a19729f5fc2bcb758afcf95fe3a01"},
+    {file = "virtualenv-21.15.14-py3-none-any.whl", hash = "sha256:816503d7826a2269abc03f7f0dd48ffd3b63db1958a7a3cbeea5a70dd7fe0ff1"},
+    {file = "virtualenv-21.15.14.tar.gz", hash = "sha256:6c6e7aaf88064767c75c32a9df92eaa425cee5db4cc21caf031a78d89375d57f"},
 ]
 
 [[package]]
